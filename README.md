@@ -1,3 +1,3 @@
-# dgs-frontend
-Disc Golf Stats frontend
+# dgs-web
+Disc Golf Stats web frontend
 
