@@ -1,43 +1,47 @@
 import React, { Component } from 'react'
-import Typography from '@material-ui/core/Typography'
+
+import ScoreCard from './ScoreCard'
+
+const games = [{
+  id: 123,
+  course: {
+    name: "Puolarmaari",
+    pars: [3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3],
+    total: 60,
+  },
+  startDate: null,
+  endDate: "2019-02-16 09:22",
+  scores: [
+    {
+      firstName: "Seppo",
+      strokes: [3,3,3,2,3,0,0,0,3,2,3,3,3,3,3,3,3,2,3,3],
+      obs: [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+      total: 48,
+      toPar: -3
+    },
+    {
+      firstName: "Teppo",
+      strokes: [3,3,4,2,3,3,3,3,3,2,3,3,3,6,3,3,3,2,3,3],
+      obs: [0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+      total: 61,
+      toPar: 1
+    }
+  ],
+  temperature: 1,
+  conditions: ["snow"],
+  highScorers: ["Teppo"],
+  illegalScorers: [],
+  comment: "Fun :D",
+  contestName: null,
+}]
 
 class Games extends Component {
   render() {
     return (
       <div>
-        <h2>HELLO</h2>
-        <p>Cras facilisis urna ornare ex volutpat, et
-        convallis erat elementum. Ut aliquam, ipsum vitae
-        gravida suscipit, metus dui bibendum est, eget rhoncus nibh
-        metus nec massa. Maecenas hendrerit laoreet augue
-        nec molestie. Cum sociis natoque penatibus et magnis
-        dis parturient montes, nascetur ridiculus mus.</p>
-
-        <p>Duis a turpis sed lacus dapibus elementum sed eu lectus.</p>
-        <Typography paragraph>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
-          incididunt ut labore et dolore magna aliqua. Rhoncus dolor purus non enim praesent
-          elementum facilisis leo vel. Risus at ultrices mi tempus imperdiet. Semper risus in
-          hendrerit gravida rutrum quisque non tellus. Convallis convallis tellus id interdum
-          velit laoreet id donec ultrices. Odio morbi quis commodo odio aenean sed adipiscing.
-          Amet nisl suscipit adipiscing bibendum est ultricies integer quis. Cursus euismod quis
-          viverra nibh cras. Metus vulputate eu scelerisque felis imperdiet proin fermentum leo.
-          Mauris commodo quis imperdiet massa tincidunt. Cras tincidunt lobortis feugiat vivamus
-          at augue. At augue eget arcu dictum varius duis at consectetur lorem. Velit sed
-          ullamcorper morbi tincidunt. Lorem donec massa sapien faucibus et molestie ac.
-        </Typography>
-        <Typography paragraph>
-          Consequat mauris nunc congue nisi vitae suscipit. Fringilla est ullamcorper eget nulla
-          facilisi etiam dignissim diam. Pulvinar elementum integer enim neque volutpat ac
-          tincidunt. Ornare suspendisse sed nisi lacus sed viverra tellus. Purus sit amet volutpat
-          consequat mauris. Elementum eu facilisis sed odio morbi. Euismod lacinia at quis risus
-          sed vulputate odio. Morbi tincidunt ornare massa eget egestas purus viverra accumsan in.
-          In hendrerit gravida rutrum quisque non tellus orci ac. Pellentesque nec nam aliquam sem
-          et tortor. Habitant morbi tristique senectus et. Adipiscing elit duis tristique
-          sollicitudin nibh sit. Ornare aenean euismod elementum nisi quis eleifend. Commodo
-          viverra maecenas accumsan lacus vel facilisis. Nulla posuere sollicitudin aliquam
-          ultrices sagittis orci a.
-        </Typography>
+        {games.map(game => (
+          <ScoreCard game={game} key={game.id}/>
+        ))}
       </div>
     )
   }
