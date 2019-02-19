@@ -1,5 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import { Route, NavLink, HashRouter } from 'react-router-dom'
+
 import AppBar from '@material-ui/core/AppBar'
 import CssBaseline from '@material-ui/core/CssBaseline'
 import Divider from '@material-ui/core/Divider'
@@ -16,12 +18,9 @@ import MenuIcon from '@material-ui/icons/Menu'
 import Toolbar from '@material-ui/core/Toolbar'
 import Typography from '@material-ui/core/Typography'
 import { withStyles } from '@material-ui/core/styles'
-import { Route, NavLink, HashRouter } from 'react-router-dom'
 
 import Games from './Games'
 import Players from './Players'
-
-import '../css/drawer.css'
 
 const drawerWidth = 240
 
@@ -54,6 +53,9 @@ const styles = theme => ({
     flexGrow: 1,
     padding: theme.spacing.unit * 3,
   },
+  navLink: {
+    textDecoration: 'none',
+  },
 })
 
 class ResponsiveDrawer extends React.Component {
@@ -73,8 +75,8 @@ class ResponsiveDrawer extends React.Component {
         <div className={classes.toolbar} />
         <Divider />
         <List>
-          {['Games', 'Players', 'Courses', 'Graphs', 'Competitions'].map((text, index) => (
-            <NavLink to={"/" + text.toLowerCase()} className="navigationLink">
+          {['Games', 'Players', 'Courses'].map((text, index) => (
+            <NavLink to={"/" + text.toLowerCase()} className={classes.navLink} key={index}>
               <ListItem button key={text}>
                 <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
                 <ListItemText primary={text} />
@@ -84,8 +86,8 @@ class ResponsiveDrawer extends React.Component {
         </List>
         <Divider />
         <List>
-          {['Info'].map((text, index) => (
-            <NavLink to={"/" + text.toLowerCase()} className="navigationLink">
+          {['Graphs', 'Competitions', 'Info'].map((text, index) => (
+            <NavLink to={"/" + text.toLowerCase()} className={classes.navLink} key={index}>
               <ListItem button key={text}>
                 <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
                 <ListItemText primary={text} />
@@ -119,7 +121,6 @@ class ResponsiveDrawer extends React.Component {
             {/* The implementation can be swapped with js to avoid SEO duplication of links. */}
             <Hidden smUp implementation="css">
               <Drawer
-                container={this.props.container}
                 variant="temporary"
                 anchor={theme.direction === 'rtl' ? 'right' : 'left'}
                 open={this.state.mobileOpen}
@@ -159,9 +160,6 @@ class ResponsiveDrawer extends React.Component {
 
 ResponsiveDrawer.propTypes = {
   classes: PropTypes.object.isRequired,
-  // Injected by the documentation to work in an iframe.
-  // You won't need it on your project.
-  container: PropTypes.object,
   theme: PropTypes.object.isRequired,
 }
 
