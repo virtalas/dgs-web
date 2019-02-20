@@ -10,13 +10,16 @@ import Typography from '@material-ui/core/Typography'
 import '../css/ScoreCardScrollable.css'
 import '../css/ScoreCard.css'
 
+const maxMobileWidth = window.innerWidth
+const maxDesktopWidth = 700
+
 const styles = theme => ({
   root: {
     // minWidth: '100%',
-    maxWidth: 700,
+    maxWidth: Math.min(maxMobileWidth, maxDesktopWidth),
     width: '100%',
     // margin: '0 auto',
-    marginTop: theme.spacing.unit * 3,
+    margin: theme.spacing.unit * 3,
     overflowX: 'hidden',
     position: 'relative'
   },
@@ -101,7 +104,7 @@ function ScoreCard(props) {
       </table>
       <div className="middle">
         <table>
-          <tr><td>3</td><td>3</td><td>3</td><td>3</td><td>3</td><td>3</td><td>3</td><td>3</td><td>3</td><td>3</td><td>3</td><td>3</td><td>3</td><td>3</td><td>3</td><td>3</td><td>3</td><td>3</td><td>3</td><td>3</td><td>3</td><td>3</td><td>3</td><td>3</td><td>3</td><td>3</td><td>3</td><td>3</td><td>3</td><td>3</td></tr>
+          <tr><td>1</td><td>3</td><td>3</td><td>3</td><td>3</td><td>3</td><td>3</td><td>3</td><td>3</td><td>3</td><td>3</td><td>3</td><td>3</td><td>3</td><td>3</td><td>3</td><td>3</td><td>3</td><td>3</td><td>3</td><td>3</td><td>3</td><td>3</td><td>3</td><td>3</td><td>3</td><td>3</td><td>3</td><td>3</td><td>4</td></tr>
           <tr><td>3</td><td>3</td><td>3</td><td>3</td><td>3</td><td>3</td><td>3</td><td>3</td><td>3</td><td>3</td><td>3</td><td>3</td><td>3</td><td>3</td><td>3</td><td>3</td><td>3</td><td>3</td><td>3</td><td>3</td><td>3</td><td>3</td><td>3</td><td>3</td><td>3</td><td>3</td><td>3</td><td>3</td><td>3</td><td>3</td></tr>
         </table>
       </div>
