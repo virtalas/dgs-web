@@ -5,6 +5,7 @@ import ScoreCard from './ScoreCard'
 const games = [{
   id: 123,
   course: {
+    id: 5,
     name: "Puolarmaari",
     pars: [3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3],
     total: 60,
@@ -13,14 +14,20 @@ const games = [{
   endDate: "2019-02-16 09:22",
   scores: [
     {
-      firstName: "Seppo",
+      player: {
+        id: 3,
+        firstName: "Seppo",
+      },
       strokes: [3,3,3,2,3,0,0,0,3,2,3,3,3,3,3,3,3,2,3,3],
       obs: [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
       total: 48,
       toPar: -3
     },
     {
-      firstName: "Teppo",
+      player: {
+        id: 3,
+        firstName: "Teppo",
+      },
       strokes: [3,3,4,2,3,3,3,3,3,2,3,3,3,6,3,3,3,2,3,3],
       obs: [0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
       total: 61,

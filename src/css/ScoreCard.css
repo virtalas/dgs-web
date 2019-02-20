@@ -1,0 +1,37 @@
+/* .middle {
+  display: block;
+  overflow-x: scroll;
+  white-space: nowrap;
+  float: left;
+  margin: 0 auto;
+}
+
+.left {
+  float: left;
+}
+
+.right {
+  float: right;
+}
+
+.wrap {
+  overflow-x: scroll;
+} */
+
+.wrap {
+  display: flex;
+  flex-wrap: nowrap;
+}
+
+.left {
+  flex: 0 0 100px;
+}
+
+.middle {
+  /* flex: 0 1 200px; */
+  overflow: scroll;
+}
+
+.right {
+  flex: 0 0 100px;
+}
