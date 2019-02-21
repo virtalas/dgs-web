@@ -6,16 +6,18 @@ import Typography from '@material-ui/core/Typography'
 
 import '../css/ScoreCard.css'
 
-const maxMobileWidth = window.innerWidth
+const horizontalMargin = 1 // vw
+const maxMobileWidth = window.innerWidth - 0.01 * horizontalMargin * 2 * window.innerWidth
 const maxDesktopWidth = 700
 
 const styles = theme => ({
   root: {
     maxWidth: Math.min(maxMobileWidth, maxDesktopWidth),
     width: '100%',
-    margin: theme.spacing.unit * 3,
+    marginTop: theme.spacing.unit * 3,
+    marginLeft: 'auto',
+    marginRight: 'auto',
     overflowX: 'hidden',
-    position: 'relative'
   },
 })
 
@@ -32,7 +34,7 @@ function ScoreCard(props) {
 
   const playerNames = game.scores.map((playerScores, index) => (
     <tr key={index}>
-      <td className="stickyColumn">{playerScores.player.firstName}</td>
+      <td align="left">{playerScores.player.firstName}</td>
     </tr>
   ))
 
@@ -56,10 +58,10 @@ function ScoreCard(props) {
       <table className="left">
         <tbody>
           <tr>
-            <td>Hole</td>
+            <td align="left">Hole</td>
           </tr>
           <tr>
-            <td>PAR</td>
+            <td align="left">PAR</td>
           </tr>
           {playerNames}
         </tbody>
