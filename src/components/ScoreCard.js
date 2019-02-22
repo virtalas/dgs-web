@@ -59,9 +59,21 @@ function ScoreCard(props) {
 
   const playerNames = game.scores.map((playerScores, index) => (
     <tr key={index}>
-      <td align="left" className={index + 1 === game.scores.length ? "bottomCell" : ""}>{playerScores.player.firstName}</td>
+      <td align="left" className={index + 1 === game.scores.length ? "bottomCell" : ""}>
+        {playerScores.player.firstName}
+      </td>
     </tr>
   ))
+
+  const createObMarkers = (obStrokes) => {
+    const markers = []
+    for (let i = 0; i < obStrokes; i += 1) {
+      markers.push(
+        <span className="ob" key={i} />
+      )
+    }
+    return (<div className="obWrapperWrapper"><div className="obWrapper">{markers}</div></div>)
+  }
 
   const playerStrokes = (playerScores, index) => (
     <tr key={index}>
@@ -94,7 +106,10 @@ function ScoreCard(props) {
         }
 
         return (
-          <td className={scoreClass + " bottomCell"} key={index}>{strokeCount === 0 ? "-" : strokeCount}</td>
+          <td className={scoreClass + " bottomCell"} key={index}>
+            {strokeCount === 0 ? "-" : strokeCount}
+            {obStrokes > 0 ? createObMarkers(obStrokes) : null}
+          </td>
         )
       })}
       <td className="bottomCell">{playerScores.total}</td>
