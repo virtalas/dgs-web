@@ -1,21 +1,87 @@
+/*
+  Flex to make the middle table horizontally scrollable.
+*/
+
 .wrap {
   display: flex;
   flex-wrap: nowrap;
+  padding: 2px;
 }
 
 .left {
-  flex: 0 0 100px;
+  flex: 0 0 60px;
+  z-index: 1; /* Have the middle table 'slide under' the side tables */
+  margin-right: -1px; /* Have the name column border over the middle table while scrolling */
 }
 
 .middle {
+  flex: 0 1 700px;
   overflow: scroll;
+  z-index: 0; /* Have the middle table 'slide under' the side tables */
+  /* display: table; */
+}
+
+.middle table {
+  width: 100%;
+}
+
+.middle td {
+  min-width: 24px;
 }
 
 .right {
-  flex: 0 0 100px;
+  flex: 0 0 40px;
+  z-index: 1; /* Have the middle table 'slide under' the side tables */
+  margin-left: -1px; /* Have the par column border over the middle table while scrolling */
 }
 
 ::-webkit-scrollbar {
-    width: 0px;  /* remove scrollbar space */
-    background: transparent;  /* optional: just make scrollbar invisible */
+  width: 0px;  /* remove scrollbar space */
+  /* make scrollbar invisible: */
+  /* background: transparent; */
+}
+
+/*
+  Style for score card.
+*/
+
+.scoreCardTitle {
+  color: white;
+}
+
+.wrap table {
+  border-collapse: collapse;
+  /* margin-left: -1px;
+  margin-right: -1px; */
+}
+
+.wrap td {
+  border: 1px solid #000000;
+  /* border: 1px solid lightgrey; */
+  height: 23px;
+	/* font-weight: lighter; */
+}
+
+.wrap td.holeInOne {
+  background-color: red;
+}
+
+.wrap td.eagle {
+  background-color: yellow;
+}
+
+.wrap td.birdie {
+  background-color: #00FF00;
+}
+
+.wrap td.par {
+  background-color: #A7C942;
+}
+
+.wrap td.bogey {
+  background-color: orange;
+}
+
+.wrap td.overBogey {
+  background-color: #8E668E;
 }

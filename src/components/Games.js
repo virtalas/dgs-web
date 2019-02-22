@@ -9,7 +9,7 @@ const games = [{
   course: {
     id: 5,
     name: "Puolarmaari",
-    pars: [3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3],
+    pars: [3,3,3,3,3,3,3,3,3,3,3,3,3,3,4,3,3,3,3,3],
     total: 60,
   },
   startDate: null,
@@ -20,7 +20,7 @@ const games = [{
         id: 3,
         firstName: "Seppo",
       },
-      strokes: [3,3,3,2,3,0,0,0,3,2,3,3,3,3,3,3,3,2,3,3],
+      strokes: [3,3,3,2,3,0,0,0,3,2,3,3,1,3,3,3,3,2,3,3],
       obs: [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
       total: 48,
       toPar: -3
@@ -30,14 +30,15 @@ const games = [{
         id: 3,
         firstName: "Teppo",
       },
-      strokes: [3,3,4,2,3,3,3,3,3,2,3,3,3,6,3,3,3,2,3,3],
+      strokes: [3,3,4,2,3,3,3,3,3,2,3,6,3,3,2,3,3,2,3,3],
       obs: [0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
       total: 61,
       toPar: 1
     }
   ],
   temperature: 1,
-  conditions: ["snow"],
+  weatherConditions: ["snow", "rain"],
+  conditions: ["LED"],
   highScorers: ["Teppo"],
   illegalScorers: [],
   comment: "Fun :D",
@@ -75,7 +76,8 @@ const games = [{
     }
   ],
   temperature: 1,
-  conditions: ["snow"],
+  weatherConditions: [],
+  conditions: ["LED"],
   highScorers: ["Teppo"],
   illegalScorers: [],
   comment: "Fun :D",
@@ -112,8 +114,9 @@ const games = [{
       toPar: 1
     }
   ],
-  temperature: 1,
-  conditions: ["snow"],
+  temperature: null,
+  weatherConditions: ["snow", "rain"],
+  conditions: ["LED"],
   highScorers: ["Teppo"],
   illegalScorers: [],
   comment: "Fun :D",
@@ -151,7 +154,8 @@ const games = [{
     }
   ],
   temperature: 1,
-  conditions: ["snow"],
+  weatherConditions: ["snow"],
+  conditions: ["LED"],
   highScorers: ["Teppo"],
   illegalScorers: [],
   comment: "Fun :D",
@@ -189,7 +193,8 @@ const games = [{
     }
   ],
   temperature: 1,
-  conditions: ["snow"],
+  weatherConditions: ["snow", "rain"],
+  conditions: ["LED"],
   highScorers: ["Teppo"],
   illegalScorers: [],
   comment: "Fun :D",
@@ -227,7 +232,8 @@ const games = [{
     }
   ],
   temperature: 1,
-  conditions: ["snow"],
+  weatherConditions: ["snow", "rain"],
+  conditions: ["LED"],
   highScorers: ["Teppo"],
   illegalScorers: [],
   comment: "Fun :D",
@@ -265,7 +271,8 @@ const games = [{
     }
   ],
   temperature: 1,
-  conditions: ["snow"],
+  weatherConditions: ["snow", "rain"],
+  conditions: ["LED"],
   highScorers: ["Teppo"],
   illegalScorers: [],
   comment: "Fun :D",

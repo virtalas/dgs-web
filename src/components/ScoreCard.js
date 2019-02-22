@@ -3,22 +3,43 @@ import PropTypes from 'prop-types'
 import { withStyles } from '@material-ui/core/styles'
 import Paper from '@material-ui/core/Paper'
 import Typography from '@material-ui/core/Typography'
-
+import Card from '@material-ui/core/Card'
 import '../css/ScoreCard.css'
 
-const horizontalMargin = 1 // vw
-const maxMobileWidth = window.innerWidth - 0.01 * horizontalMargin * 2 * window.innerWidth
-const maxDesktopWidth = 700
+// Card constants
+const horizontalMargin = 1 // vw amount of margin/space from the sides of the screen
+const maxMobileCardWidth = window.innerWidth - 0.01 * horizontalMargin * 2 * window.innerWidth
+const maxDesktopCardWidth = 700
+
+// Card content constants
+const contentHorizontalMargin = 2 // vw amount of margin/space from the sides of the card
+const maxMobileContentWidth = maxMobileCardWidth - 0.01 * contentHorizontalMargin * 2 * maxMobileCardWidth
+const maxDesktopContentWidth = maxDesktopCardWidth - 0.01 * contentHorizontalMargin * 2 * maxDesktopCardWidth
 
 const styles = theme => ({
-  root: {
-    maxWidth: Math.min(maxMobileWidth, maxDesktopWidth),
+  card: {
+    maxWidth: Math.min(maxMobileCardWidth, maxDesktopCardWidth),
     width: '100%',
     marginTop: theme.spacing.unit * 3,
     marginLeft: 'auto',
     marginRight: 'auto',
     overflowX: 'hidden',
+    backgroundColor: '#3087C1',
   },
+  content: {
+    maxWidth: Math.min(maxMobileContentWidth, maxDesktopContentWidth),
+    width: '100%',
+    marginLeft: 'auto',
+    marginRight: 'auto',
+    marginTop: theme.spacing.unit,
+    marginBottom: theme.spacing.unit,
+  },
+  paper: {
+    marginBottom: 10,
+  },
+  title: {
+    color: 'white',
+  }
 })
 
 function ScoreCard(props) {
@@ -40,9 +61,38 @@ function ScoreCard(props) {
 
   const playerStrokes = (playerScores, index) => (
     <tr key={index}>
-      {playerScores.strokes.map((strokeCount, index) => (
-        <td className={classes.cell} key={index}>{strokeCount}</td>
-      ))}
+      {playerScores.strokes.map((strokeCount, index) => {
+        const holePar = game.course.pars[index]
+        const obStrokes = playerScores.obs[index]
+        let scoreClass
+
+        switch (strokeCount) {
+          case 0:
+            scoreClass = ""
+            break;
+          case 1:
+            scoreClass = "holeInOne"
+            break;
+          case holePar - obStrokes - 2:
+            scoreClass = "eagle"
+            break;
+          case holePar - obStrokes - 1:
+            scoreClass = "birdie"
+            break;
+          case holePar - obStrokes:
+            scoreClass = "par"
+            break;
+          case holePar - obStrokes + 1:
+            scoreClass = "bogey"
+            break;
+          default:
+            scoreClass = "overBogey"
+        }
+
+        return (
+          <td className={scoreClass} key={index}>{strokeCount === 0 ? "-" : strokeCount}</td>
+        )
+      })}
       <td>{playerScores.total}</td>
     </tr>
   )
@@ -95,13 +145,31 @@ function ScoreCard(props) {
     </div>
   )
 
+  const temperature = (
+    <span>
+      {game.temperature ? game.temperature + "°C" : null}
+      {game.temperature && game.weatherConditions.length > 0 ? "," : null}
+    </span>
+  )
+
+  const weatherConditions = game.weatherConditions.map((condition, index) => (
+    <span key={index}>{index + 2 === game.weatherConditions.length ? condition + ", " : condition}</span>
+  ))
+
   return (
-    <Paper className={classes.root}>
-      <Typography variant="h6">{game.course.name}</Typography>
-      <Typography variant="subtitle1">{game.endDate}</Typography>
-      {scoreTable}
-      <Typography align="left">Comment: {game.comment}</Typography>
-    </Paper>
+    <Card className={classes.card}>
+      <div className={classes.content}>
+        <Typography variant="h6" className={classes.title}>{game.course.name}</Typography>
+        <Typography variant="subtitle1" className={classes.title}>{game.endDate}</Typography>
+        <Paper className={classes.paper}>
+          {scoreTable}
+        </Paper>
+        <Paper className={classes.paper}>
+          <Typography align="left" component="p">Weather: {temperature} {weatherConditions}</Typography>
+          <Typography align="left" component="p">Comment: {game.comment}</Typography>
+        </Paper>
+      </div>
+    </Card>
   )
 }
 
