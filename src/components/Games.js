@@ -57,7 +57,7 @@ const games = [{
     {
       player: {
         id: 3,
-        firstName: "Seppo",
+        firstName: "Seppomoinen",
       },
       strokes: [3,3,3,2,3,0,0,0,3,2,3,3,3,3,3,3,3,2,3,3],
       obs: [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
@@ -80,7 +80,7 @@ const games = [{
   conditions: ["LED"],
   highScorers: ["Teppo"],
   illegalScorers: [],
-  comment: "Fun :D",
+  comment: "Fun :D Erittäin antoisa kierros. Fun :D Erittäin antoisa kierros. Fun :D Erittäin antoisa kierros. Fun :D Erittäin antoisa kierros. Fun :D Erittäin antoisa kierros. Fun :D Erittäin antoisa kierros. Fun :D Erittäin antoisa kierros. Fun :D Erittäin antoisa kierros. Fun :D Erittäin antoisa kierros. Fun :D Erittäin antoisa kierros. Fun :D Erittäin antoisa kierros. Fun :D Erittäin antoisa kierros. Fun :D Erittäin antoisa kierros. Fun :D Erittäin antoisa kierros. Fun :D Erittäin antoisa kierros. Fun :D Erittäin antoisa kierros. Fun :D Erittäin antoisa kierros. Fun :D Erittäin antoisa kierros. Fun :D Erittäin antoisa kierros. Fun :D Erittäin antoisa kierros.",
   contestName: null,
 },{
   id: 125,
@@ -270,12 +270,12 @@ const games = [{
       toPar: 1
     }
   ],
-  temperature: 1,
-  weatherConditions: ["snow", "rain"],
+  temperature: null,
+  weatherConditions: [],
   conditions: ["LED"],
   highScorers: ["Teppo"],
   illegalScorers: [],
-  comment: "Fun :D",
+  comment: "",
   contestName: null,
 }]
 

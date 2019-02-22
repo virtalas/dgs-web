@@ -34,8 +34,12 @@ const styles = theme => ({
     marginTop: theme.spacing.unit,
     marginBottom: theme.spacing.unit,
   },
+  scoreTablePaper: {
+    marginBottom: 10,
+  },
   paper: {
     marginBottom: 10,
+    padding: 6
   },
   title: {
     color: 'white',
@@ -145,28 +149,28 @@ function ScoreCard(props) {
     </div>
   )
 
-  const temperature = (
+  const weather = (
     <span>
+      {game.temperature || game.weatherConditions.length > 0 ? "Weather: " : null}
       {game.temperature ? game.temperature + "°C" : null}
-      {game.temperature && game.weatherConditions.length > 0 ? "," : null}
+      {game.temperature && game.weatherConditions.length > 0 ? ", " : null}
+      {game.weatherConditions.map((condition, index) => (
+        <span key={index}>{index + 2 === game.weatherConditions.length ? condition + ", " : condition}</span>
+      ))}
     </span>
   )
-
-  const weatherConditions = game.weatherConditions.map((condition, index) => (
-    <span key={index}>{index + 2 === game.weatherConditions.length ? condition + ", " : condition}</span>
-  ))
 
   return (
     <Card className={classes.card}>
       <div className={classes.content}>
         <Typography variant="h6" className={classes.title}>{game.course.name}</Typography>
         <Typography variant="subtitle1" className={classes.title}>{game.endDate}</Typography>
-        <Paper className={classes.paper}>
+        <Paper className={classes.scoreTablePaper}>
           {scoreTable}
         </Paper>
         <Paper className={classes.paper}>
-          <Typography align="left" component="p">Weather: {temperature} {weatherConditions}</Typography>
-          <Typography align="left" component="p">Comment: {game.comment}</Typography>
+          <Typography align="left" variant="body1">{weather}</Typography>
+          <Typography align="left" variant="body1">{game.comment}</Typography>
         </Paper>
       </div>
     </Card>
