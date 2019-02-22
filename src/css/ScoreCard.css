@@ -61,6 +61,7 @@
   border: 1px solid #000000;
   height: 26px;
 	font-weight: lighter;
+  overflow: hidden; /* Stop ob stroke markers from bleeding outside cells */
 }
 
 /*
@@ -125,12 +126,13 @@
   border-radius: 50%;
   display: inline-block;
   vertical-align: top;
-  /* position: absolute; */
 }
 
 .wrap div.obWrapper {
   background-color: red;
   position: absolute;
+  top: -3px;
+  left: 0;
   width: 100%;
   height: 7px;
 }
