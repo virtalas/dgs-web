@@ -50,7 +50,7 @@ function ScoreCard(props) {
   const { classes, game } = props
 
   const holeNumbers = game.course.pars.map((par, index) => (
-    <td key={index}>{index + 1}</td>
+    <td className="topCell" key={index}>{index + 1}</td>
   ))
 
   const coursePars = game.course.pars.map((par, index) => (
@@ -59,7 +59,7 @@ function ScoreCard(props) {
 
   const playerNames = game.scores.map((playerScores, index) => (
     <tr key={index}>
-      <td align="left">{playerScores.player.firstName}</td>
+      <td align="left" className={index + 1 === game.scores.length ? "bottomCell" : ""}>{playerScores.player.firstName}</td>
     </tr>
   ))
 
@@ -94,16 +94,16 @@ function ScoreCard(props) {
         }
 
         return (
-          <td className={scoreClass} key={index}>{strokeCount === 0 ? "-" : strokeCount}</td>
+          <td className={scoreClass + " bottomCell"} key={index}>{strokeCount === 0 ? "-" : strokeCount}</td>
         )
       })}
-      <td>{playerScores.total}</td>
+      <td className="bottomCell">{playerScores.total}</td>
     </tr>
   )
 
   const playerToPars = game.scores.map((playerScores, index) => (
     <tr key={index}>
-      <td>{playerScores.toPar > 0 ? "+" + playerScores.toPar : playerScores.toPar}</td>
+      <td className="bottomCell">{playerScores.toPar > 0 ? "+" + playerScores.toPar : playerScores.toPar}</td>
     </tr>
   ))
 
@@ -112,7 +112,7 @@ function ScoreCard(props) {
       <table className="left">
         <tbody>
           <tr>
-            <td align="left">Hole</td>
+            <td align="left" className="topCell">Hole</td>
           </tr>
           <tr>
             <td align="left">PAR</td>
@@ -125,7 +125,7 @@ function ScoreCard(props) {
           <tbody>
             <tr>
               {holeNumbers}
-              <td>Total</td>
+              <td className="topCell">Total</td>
             </tr>
             <tr>
               {coursePars}
@@ -138,7 +138,7 @@ function ScoreCard(props) {
       <table className="right">
         <tbody>
           <tr>
-            <td>Par</td>
+            <td className="topCell">Par</td>
           </tr>
           <tr>
             <td>0</td>
