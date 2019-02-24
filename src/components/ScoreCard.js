@@ -166,13 +166,18 @@ function ScoreCard(props) {
 
   const weather = (
     <span>
-      {game.temperature || game.weatherConditions.length > 0 ? "Weather: " : null}
+      {/* game.temperature || game.weatherConditions.length > 0 ? "Weather: " : null */}
       {game.temperature ? game.temperature + "°C" : null}
       {game.temperature && game.weatherConditions.length > 0 ? ", " : null}
       {game.weatherConditions.map((condition, index) => (
         <span key={index}>{index + 2 === game.weatherConditions.length ? condition + ", " : condition}</span>
       ))}
     </span>
+  )
+
+  // paper for each
+  const conditions = (
+    <div></div>
   )
 
   return (
