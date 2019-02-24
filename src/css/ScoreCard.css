@@ -64,6 +64,10 @@
   overflow: hidden; /* Stop ob stroke markers from bleeding outside cells */
 }
 
+.chipRow {
+  line-height: 28px; /* Affects spacing between chips when wrapped to two rows. */
+}
+
 /*
   Remove outermost borders from all tables.
 */

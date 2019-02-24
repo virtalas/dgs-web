@@ -4,6 +4,9 @@ import { withStyles } from '@material-ui/core/styles'
 import Paper from '@material-ui/core/Paper'
 import Typography from '@material-ui/core/Typography'
 import Card from '@material-ui/core/Card'
+import Chip from '@material-ui/core/Chip'
+import Avatar from '@material-ui/core/Avatar'
+
 import '../css/ScoreCard.css'
 
 // Card constants
@@ -20,11 +23,15 @@ const styles = theme => ({
   card: {
     maxWidth: Math.min(maxMobileCardWidth, maxDesktopCardWidth),
     width: '100%',
-    marginTop: theme.spacing.unit * 3,
+    marginTop: theme.spacing.unit * 4,
     marginLeft: 'auto',
     marginRight: 'auto',
+    marginBottom: theme.spacing.unit * 4,
     overflowX: 'hidden',
     backgroundColor: '#3087C1',
+  },
+  title: {
+    color: 'white',
   },
   content: {
     maxWidth: Math.min(maxMobileContentWidth, maxDesktopContentWidth),
@@ -37,14 +44,30 @@ const styles = theme => ({
   scoreTablePaper: {
     marginBottom: 10,
   },
-  paper: {
+  infoPaper: {
     marginBottom: 10,
-    padding: 6
+    padding: 6,
+    textAlign: 'left',
   },
-  title: {
-    color: 'white',
-  }
+  chip: {
+    height: 22,
+    marginRight: 5,
+  },
+  chipTag: {
+    height: 22,
+    width: "100%",
+    fontSize: '97%',
+    cursor: 'pointer',
+  },
+  comment: {
+    marginTop: 5,
+  },
 })
+
+function handleClick() {
+  // TODO: Direct to player's page
+  alert('You clicked the Chip.')
+}
 
 function ScoreCard(props) {
   const { classes, game } = props
@@ -164,21 +187,47 @@ function ScoreCard(props) {
     </div>
   )
 
-  const weather = (
-    <span>
-      {/* game.temperature || game.weatherConditions.length > 0 ? "Weather: " : null */}
-      {game.temperature ? game.temperature + "°C" : null}
-      {game.temperature && game.weatherConditions.length > 0 ? ", " : null}
+  const conditions = (
+    <div className="chipRow">
+      {game.temperature ? <Chip className={classes.chip} label={game.temperature + "°C"} /> : null}
       {game.weatherConditions.map((condition, index) => (
-        <span key={index}>{index + 2 === game.weatherConditions.length ? condition + ", " : condition}</span>
+        <Chip className={classes.chip} label={condition} key={index} />
       ))}
-    </span>
+      {game.conditions.map((condition, index) => (
+        <Chip className={classes.chip} label={condition} key={index} />
+      ))}
+    </div>
   )
 
-  // paper for each
-  const conditions = (
-    <div></div>
+  const illegalAndHighScorers = (
+    <div className="chipRow">
+      {game.highScorers.map((name, index) => (
+        <Chip
+          classes={{ avatar: classes.chipTag }}
+          avatar={<Chip label="High score" />}
+          label={name}
+          variant="outlined"
+          color="primary"
+          onClick={handleClick}
+          className={classes.chip}
+          key={index} />
+      ))}
+      {game.illegalScorers.map((name, index) => (
+        <Chip
+          classes={{ avatar: classes.chipTag }}
+          avatar={<Chip label="Illegal game" />}
+          label={name}
+          variant="outlined"
+          color="secondary"
+          onClick={handleClick}
+          className={classes.chip}
+          key={index} />
+      ))}
+    </div>
   )
+
+  const shouldShowInfoPaper = game.temperature || game.weatherConditions.length || game.conditions.length ||
+                              game.highScorers.length || game.illegalScorers.length || game.comment || game.contestName
 
   return (
     <Card className={classes.card}>
@@ -188,10 +237,13 @@ function ScoreCard(props) {
         <Paper className={classes.scoreTablePaper}>
           {scoreTable}
         </Paper>
-        <Paper className={classes.paper}>
-          <Typography align="left" variant="body1">{weather}</Typography>
-          <Typography align="left" variant="body1">{game.comment}</Typography>
-        </Paper>
+        {shouldShowInfoPaper ? (
+          <Paper className={classes.infoPaper}>
+            {conditions}
+            {illegalAndHighScorers}
+            <Typography className={classes.comment} align="left" variant="body1">{game.comment}</Typography>
+          </Paper>
+        ) : null}
       </div>
     </Card>
   )
