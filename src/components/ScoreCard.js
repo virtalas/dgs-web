@@ -52,12 +52,23 @@ const styles = theme => ({
     height: 22,
     marginRight: 5,
   },
-  chipTag: {
+  highScoreChip: {
     height: 22,
     width: "100%",
     fontSize: '97%',
     cursor: 'pointer',
-    // backgroundColor:
+    backgroundColor: '#4353b3',
+    color: 'white',
+    marginLeft: -1,
+  },
+  illegalChip: {
+    height: 22,
+    width: "100%",
+    fontSize: '97%',
+    cursor: 'pointer',
+    backgroundColor: '#f2105a',
+    color: 'white',
+    marginLeft: -1,
   },
   comment: {
     marginTop: 5,
@@ -204,8 +215,8 @@ function ScoreCard(props) {
     <div className="chipRow">
       {game.highScorers.map((name, index) => (
         <Chip
-          classes={{ avatar: classes.chipTag }}
-          avatar={<Chip label="High score" />}
+          classes={{ icon: classes.highScoreChip }}
+          icon={<Chip label="High score" />}
           label={name}
           variant="outlined"
           color="primary"
@@ -215,8 +226,8 @@ function ScoreCard(props) {
       ))}
       {game.illegalScorers.map((name, index) => (
         <Chip
-          classes={{ avatar: classes.chipTag }}
-          avatar={<Chip label="Illegal game" />}
+          classes={{ icon: classes.illegalChip }}
+          icon={<Chip label="Illegal game" />}
           label={name}
           variant="outlined"
           color="secondary"

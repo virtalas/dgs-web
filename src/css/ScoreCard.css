@@ -137,6 +137,8 @@
 
 .wrap div.obContainer {
   position: relative;
+  text-align: left;
+  margin-left: 1px;
 }
 
 .obCount {
