@@ -124,6 +124,8 @@
   border-radius: 50%;
   display: inline-block;
   vertical-align: top;
+  margin-right: 1px;
+  margin-left: 1px;
 }
 
 .wrap div.obWrapper {
@@ -133,6 +135,10 @@
   width: 100%;
 }
 
-.wrap div.obWrapperWrapper {
+.wrap div.obContainer {
   position: relative;
+}
+
+.obCount {
+  font-size: 80%;
 }

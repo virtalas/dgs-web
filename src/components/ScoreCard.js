@@ -5,7 +5,6 @@ import Paper from '@material-ui/core/Paper'
 import Typography from '@material-ui/core/Typography'
 import Card from '@material-ui/core/Card'
 import Chip from '@material-ui/core/Chip'
-import Avatar from '@material-ui/core/Avatar'
 
 import '../css/ScoreCard.css'
 
@@ -58,6 +57,7 @@ const styles = theme => ({
     width: "100%",
     fontSize: '97%',
     cursor: 'pointer',
+    // backgroundColor:
   },
   comment: {
     marginTop: 5,
@@ -95,7 +95,7 @@ function ScoreCard(props) {
         <span className="ob" key={i} />
       )
     }
-    return (<div className="obWrapperWrapper"><div className="obWrapper">{markers}</div></div>)
+    return (<div className="obContainer"><div className="obWrapper">{markers}</div></div>)
   }
 
   const playerStrokes = (playerScores, index) => (
@@ -131,6 +131,7 @@ function ScoreCard(props) {
         return (
           <td className={scoreClass + " bottomCell"} key={index}>
             {strokeCount === 0 ? "-" : strokeCount}
+            {/* obStrokes ? (<span className="obCount">{"+" + obStrokes}</span>) : null */}
             {obStrokes > 0 ? createObMarkers(obStrokes) : null}
           </td>
         )
