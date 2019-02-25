@@ -8,16 +8,21 @@ import Divider from '@material-ui/core/Divider'
 import Drawer from '@material-ui/core/Drawer'
 import Hidden from '@material-ui/core/Hidden'
 import IconButton from '@material-ui/core/IconButton'
-import InboxIcon from '@material-ui/icons/MoveToInbox'
 import List from '@material-ui/core/List'
 import ListItem from '@material-ui/core/ListItem'
 import ListItemIcon from '@material-ui/core/ListItemIcon'
 import ListItemText from '@material-ui/core/ListItemText'
-import MailIcon from '@material-ui/icons/Mail'
 import MenuIcon from '@material-ui/icons/Menu'
 import Toolbar from '@material-ui/core/Toolbar'
 import Typography from '@material-ui/core/Typography'
 import { withStyles } from '@material-ui/core/styles'
+
+import GroupIcon from '@material-ui/icons/Group'
+import GolfCourseIcon from '@material-ui/icons/GolfCourse'
+import PlaceIcon from '@material-ui/icons/Place'
+import InsertChartIcon from '@material-ui/icons/InsertChart'
+import InfoIcon from '@material-ui/icons/Info'
+import BallotIcon from '@material-ui/icons/Ballot'
 
 import Games from './Games'
 import Players from './Players'
@@ -75,25 +80,45 @@ class ResponsiveDrawer extends React.Component {
         <div className={classes.toolbar} />
         <Divider />
         <List>
-          {['Games', 'Players', 'Courses'].map((text, index) => (
-            <NavLink to={"/" + text.toLowerCase()} className={classes.navLink} key={index}>
-              <ListItem button key={text}>
-                <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
-                <ListItemText primary={text} />
-              </ListItem>
-            </NavLink>
-          ))}
+          <NavLink to="/games" className={classes.navLink}>
+            <ListItem button>
+              <ListItemIcon><GolfCourseIcon /></ListItemIcon>
+              <ListItemText primary="Games" />
+            </ListItem>
+          </NavLink>
+          <NavLink to="/players" className={classes.navLink}>
+            <ListItem button>
+              <ListItemIcon><GroupIcon /></ListItemIcon>
+              <ListItemText primary="Players" />
+            </ListItem>
+          </NavLink>
+          <NavLink to="/courses" className={classes.navLink}>
+            <ListItem button>
+              <ListItemIcon><PlaceIcon /></ListItemIcon>
+              <ListItemText primary="Courses" />
+            </ListItem>
+          </NavLink>
         </List>
         <Divider />
         <List>
-          {['Graphs', 'Competitions', 'Info'].map((text, index) => (
-            <NavLink to={"/" + text.toLowerCase()} className={classes.navLink} key={index}>
-              <ListItem button key={text}>
-                <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
-                <ListItemText primary={text} />
-              </ListItem>
-            </NavLink>
-          ))}
+          <NavLink to="/graphs" className={classes.navLink}>
+            <ListItem button>
+              <ListItemIcon><InsertChartIcon /></ListItemIcon>
+              <ListItemText primary="Graphs" />
+            </ListItem>
+          </NavLink>
+          <NavLink to="/competitions" className={classes.navLink}>
+            <ListItem button>
+              <ListItemIcon><BallotIcon /></ListItemIcon>
+              <ListItemText primary="Competitions" />
+            </ListItem>
+          </NavLink>
+          <NavLink to="/info" className={classes.navLink}>
+            <ListItem button>
+              <ListItemIcon><InfoIcon /></ListItemIcon>
+              <ListItemText primary="Info" />
+            </ListItem>
+          </NavLink>
         </List>
       </div>
     )
