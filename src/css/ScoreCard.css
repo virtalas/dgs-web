@@ -1,4 +1,5 @@
 /*
+  Positioning.
   Flex to make the middle table horizontally scrollable.
 */
 
@@ -46,12 +47,8 @@
 }
 
 /*
-  Style for score card.
+  Style for score card tables.
 */
-
-.wrap .scoreCardTitle {
-  color: white;
-}
 
 .wrap table {
   border-collapse: collapse;
@@ -62,10 +59,6 @@
   height: 26px;
 	font-weight: lighter;
   overflow: hidden; /* Stop ob stroke markers from bleeding outside cells */
-}
-
-.chipRow {
-  line-height: 28px; /* Affects spacing between chips when wrapped to two rows. */
 }
 
 /*
@@ -116,6 +109,10 @@
   background-color: #A37BA3;
 }
 
+/*
+  OB marker.
+*/
+
 .wrap span.ob {
   z-index: 10;
   height: 5px;
@@ -141,6 +138,7 @@
   margin-left: 1px;
 }
 
+/* Style for displaying ob as eg 3+1 */
 .obCount {
   font-size: 80%;
 }

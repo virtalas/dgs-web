@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 
-import ScoreCard from './ScoreCard'
+import GameCard from './GameCard'
 
 import '../css/Games.css'
 
@@ -284,7 +284,7 @@ class Games extends Component {
     return (
       <div className="gamesContainer">
         {games.map(game => (
-          <ScoreCard game={game} key={game.id}/>
+          <GameCard game={game} key={game.id}/>
         ))}
       </div>
     )
