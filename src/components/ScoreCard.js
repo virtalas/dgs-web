@@ -106,7 +106,7 @@ function ScoreCard(props) {
           <tbody>
             <tr>
               {holeNumbers}
-              <td className="topCell">Total</td>
+              <td className="topCell totalCell">Total</td>
             </tr>
             <tr>
               {coursePars}

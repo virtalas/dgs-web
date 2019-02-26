@@ -15,10 +15,6 @@
   margin-right: -1px; /* Have the name column border over the middle table while scrolling */
 }
 
-.wrap .left td {
-  padding-left: 2px;
-}
-
 .wrap .middle {
   flex: 0 1 700px;
   overflow: scroll;
@@ -36,14 +32,13 @@
 
 .wrap .right {
   flex: 0 0 40px;
+  min-width: 40px; /* for Safari */
   z-index: 1; /* Have the middle table 'slide under' the side tables */
-  margin-left: -1px; /* Have the par column border over the middle table while scrolling */
+  margin-left: -1px; /* Have the par column border over the middle table while scrolling, while not having double width border between middle & right tables. */
 }
 
 ::-webkit-scrollbar {
   width: 0px;  /* remove scrollbar space */
-  /* make scrollbar invisible: */
-  /* background: transparent; */
 }
 
 /*
@@ -59,6 +54,17 @@
   height: 26px;
 	font-weight: lighter;
   overflow: hidden; /* Stop ob stroke markers from bleeding outside cells */
+}
+
+.wrap .left td {
+  /* Also pushes par column to the edge in Safari */
+  padding-right: 8px;
+  padding-left: 5px;
+}
+
+.wrap td.totalCell {
+  padding-left: 2px;
+  padding-right: 3px;
 }
 
 /*
