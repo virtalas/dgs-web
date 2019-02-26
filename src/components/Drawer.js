@@ -18,11 +18,11 @@ import Typography from '@material-ui/core/Typography'
 import { withStyles } from '@material-ui/core/styles'
 
 import GroupIcon from '@material-ui/icons/Group'
-import GolfCourseIcon from '@material-ui/icons/GolfCourse'
 import PlaceIcon from '@material-ui/icons/Place'
 import InsertChartIcon from '@material-ui/icons/InsertChart'
 import InfoIcon from '@material-ui/icons/Info'
 import BallotIcon from '@material-ui/icons/Ballot'
+import DiscGolfBasket from './DiscGolfBasket'
 
 import Games from './Games'
 import Players from './Players'
@@ -82,7 +82,7 @@ class ResponsiveDrawer extends React.Component {
         <List>
           <NavLink to="/games" className={classes.navLink}>
             <ListItem button>
-              <ListItemIcon><GolfCourseIcon /></ListItemIcon>
+              <ListItemIcon><DiscGolfBasket /></ListItemIcon>
               <ListItemText primary="Games" />
             </ListItem>
           </NavLink>
