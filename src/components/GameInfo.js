@@ -50,7 +50,7 @@ function GameInfo(props) {
 
   const conditions = (
     <div className="chipRow">
-      {game.temperature ? <Chip className={classes.chip} label={game.temperature + "°C"} /> : null}
+      {game.temperature ? <Chip className={classes.chip} label={game.temperature + " °C"} /> : null}
       {game.weatherConditions.map((condition, index) => (
         <Chip className={classes.chip} label={condition} key={index} />
       ))}
