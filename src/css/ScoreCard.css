@@ -120,7 +120,6 @@
 */
 
 .wrap span.ob {
-  z-index: 10;
   height: 5px;
   width: 5px;
   background-color: black;
@@ -133,8 +132,8 @@
 
 .wrap div.obWrapper {
   position: absolute;
-  top: -2.5px;
-  left: 0;
+  top: -3px; /* -3 perfect for Safari */
+  left: 0px;
   width: 100%;
 }
 
