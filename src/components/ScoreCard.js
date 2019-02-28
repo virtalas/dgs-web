@@ -32,12 +32,19 @@ function ScoreCard(props) {
 
   const createObMarkers = (obStrokes) => {
     const markers = []
-    for (let i = 0; i < obStrokes; i += 1) {
+    // Render max three ob markers
+    for (let i = 0; i < Math.min(obStrokes, 3); i += 1) {
       markers.push(
         <span className="ob" key={i} />
       )
     }
-    return (<div className="obContainer"><div className="obWrapper">{markers}</div></div>)
+    return (
+      <div className="obContainer">
+        <div className="obWrapper">
+          {markers}
+        </div>
+      </div>
+    )
   }
 
   const playerStrokes = (playerScores, index) => (

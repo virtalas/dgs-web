@@ -42,7 +42,6 @@ const styles = theme => ({
 
 function handleClick() {
   // TODO: Direct to player's page
-  alert('You clicked the Chip.')
 }
 
 function GameInfo(props) {
