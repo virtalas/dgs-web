@@ -44,6 +44,8 @@ const styles = theme => ({
 function GameCard(props) {
   const { classes, game } = props
 
+  // TODO: if startDate != null, render "1.1.1111 9.30 - 10.45"
+
   return (
     <Card className={classes.card}>
       <div className={classes.content}>

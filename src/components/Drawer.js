@@ -24,8 +24,8 @@ import InfoIcon from '@material-ui/icons/Info'
 import BallotIcon from '@material-ui/icons/Ballot'
 import DiscGolfBasket from './DiscGolfBasket'
 
-import Games from './Games'
-import Players from './Players'
+import Games from './games/Games'
+import Players from './players/Players'
 
 const drawerWidth = 240
 

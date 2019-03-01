@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 
 import GameCard from './GameCard'
 
-import '../css/Games.css'
+import '../../css/Games.css'
 
 const games = [{
   id: 123,
