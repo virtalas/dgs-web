@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { Route, NavLink, HashRouter } from 'react-router-dom'
+import { Route, NavLink, HashRouter, Redirect, Switch } from 'react-router-dom'
 
 import AppBar from '@material-ui/core/AppBar'
 import CssBaseline from '@material-ui/core/CssBaseline'
@@ -75,7 +75,7 @@ class ResponsiveDrawer extends React.Component {
   render() {
     const { classes, theme } = this.props
 
-    const drawer = (
+    const navButtonList = (
       <div>
         <div className={classes.toolbar} />
         <Divider />
@@ -123,52 +123,61 @@ class ResponsiveDrawer extends React.Component {
       </div>
     )
 
-    return (
-      <HashRouter>
+    const appBar = (
+      <AppBar position="fixed" className={classes.appBar}>
+        <Toolbar>
+          <IconButton
+            color="inherit"
+            aria-label="Open drawer"
+            onClick={this.handleDrawerToggle}
+            className={classes.menuButton}
+          >
+            <MenuIcon />
+          </IconButton>
+          <Typography variant="h6" color="inherit" noWrap>
+            Disc Golf Stats
+          </Typography>
+        </Toolbar>
+      </AppBar>
+    )
+
+    const navDrawer = (
+      <nav className={classes.drawer}>
+        {/* The implementation can be swapped with js to avoid SEO duplication of links. */}
+        <Hidden smUp implementation="css">
+          <Drawer
+            variant="temporary"
+            anchor={theme.direction === 'rtl' ? 'right' : 'left'}
+            open={this.state.mobileOpen}
+            onClose={this.handleDrawerToggle}
+            classes={{
+              paper: classes.drawerPaper,
+            }}
+          >
+            {navButtonList}
+          </Drawer>
+        </Hidden>
+        <Hidden xsDown implementation="css">
+          <Drawer
+            classes={{
+              paper: classes.drawerPaper,
+            }}
+            variant="permanent"
+            open
+          >
+            {navButtonList}
+          </Drawer>
+        </Hidden>
+      </nav>
+    )
+
+    const DefaultContainer = () => {
+      console.log("DefaultContainer")
+      return (
         <div className={classes.root}>
           <CssBaseline />
-          <AppBar position="fixed" className={classes.appBar}>
-            <Toolbar>
-              <IconButton
-                color="inherit"
-                aria-label="Open drawer"
-                onClick={this.handleDrawerToggle}
-                className={classes.menuButton}
-              >
-                <MenuIcon />
-              </IconButton>
-              <Typography variant="h6" color="inherit" noWrap>
-                Disc Golf Stats
-              </Typography>
-            </Toolbar>
-          </AppBar>
-          <nav className={classes.drawer}>
-            {/* The implementation can be swapped with js to avoid SEO duplication of links. */}
-            <Hidden smUp implementation="css">
-              <Drawer
-                variant="temporary"
-                anchor={theme.direction === 'rtl' ? 'right' : 'left'}
-                open={this.state.mobileOpen}
-                onClose={this.handleDrawerToggle}
-                classes={{
-                  paper: classes.drawerPaper,
-                }}
-              >
-                {drawer}
-              </Drawer>
-            </Hidden>
-            <Hidden xsDown implementation="css">
-              <Drawer
-                classes={{
-                  paper: classes.drawerPaper,
-                }}
-                variant="permanent"
-                open
-              >
-                {drawer}
-              </Drawer>
-            </Hidden>
-          </nav>
+          {appBar}
+          {navDrawer}
           <main className={classes.content}>
             <div className={classes.toolbar} />
             <div className="content">
@@ -178,6 +187,30 @@ class ResponsiveDrawer extends React.Component {
             </div>
           </main>
         </div>
+      )
+    }
+
+    // Placeholder component:
+    const NewGame = () => {
+      console.log("NewGame")
+      return (
+        <div>New Game!</div>
+      )
+    }
+
+    const NewGameContainer = () => (
+      <div>
+        <Route exact path="/" render={() => <Redirect to="/games/new" />} />
+        <Route path="/games/new" component={NewGame} />
+      </div>
+    )
+
+    return (
+      <HashRouter>
+        <Switch>
+          <Route exact path="/(games)/(new)" component={NewGameContainer}/>
+          <Route component={DefaultContainer}/>
+        </Switch>
       </HashRouter>
     )
   }
