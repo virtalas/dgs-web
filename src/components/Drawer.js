@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { Route, NavLink, HashRouter, Redirect, Switch } from 'react-router-dom'
+import { Route, NavLink, HashRouter, Switch, withRouter } from 'react-router-dom'
 
 import AppBar from '@material-ui/core/AppBar'
 import CssBaseline from '@material-ui/core/CssBaseline'
@@ -15,6 +15,8 @@ import ListItemText from '@material-ui/core/ListItemText'
 import MenuIcon from '@material-ui/icons/Menu'
 import Toolbar from '@material-ui/core/Toolbar'
 import Typography from '@material-ui/core/Typography'
+import Fab from '@material-ui/core/Fab'
+import AddIcon from '@material-ui/icons/Add'
 import { withStyles } from '@material-ui/core/styles'
 
 import GroupIcon from '@material-ui/icons/Group'
@@ -60,6 +62,11 @@ const styles = theme => ({
   },
   navLink: {
     textDecoration: 'none',
+  },
+  fab: {
+    position: 'fixed',
+    bottom: theme.spacing.unit * 3,
+    right: theme.spacing.unit * 3,
   },
 })
 
@@ -171,8 +178,8 @@ class ResponsiveDrawer extends React.Component {
       </nav>
     )
 
-    const DefaultContainer = () => {
-      console.log("DefaultContainer")
+    const DefaultContainer = withRouter(() => {
+      console.log(this.props.location)
       return (
         <div className={classes.root}>
           <CssBaseline />
@@ -184,31 +191,34 @@ class ResponsiveDrawer extends React.Component {
               <Route exact path="/" component={Games}/>
               <Route path="/games" component={Games}/>
               <Route path="/players" component={Players}/>
+
+              {/* this.props.location === "/games" ? (
+                <NavLink to="/games/new" className={classes.navLink}>
+                  <Fab color="primary" aria-label="Add" className={classes.fab}>
+                    <AddIcon />
+                  </Fab>
+                </NavLink>
+              ) : null */}
+              <NavLink to="/games/new" className={classes.navLink}>
+                <Fab color="primary" aria-label="Add" className={classes.fab}>
+                  <AddIcon />
+                </Fab>
+              </NavLink>
             </div>
           </main>
         </div>
       )
-    }
+    })
 
     // Placeholder component:
-    const NewGame = () => {
-      console.log("NewGame")
-      return (
-        <div>New Game!</div>
-      )
-    }
-
-    const NewGameContainer = () => (
-      <div>
-        <Route exact path="/" render={() => <Redirect to="/games/new" />} />
-        <Route path="/games/new" component={NewGame} />
-      </div>
+    const NewGame = () => (
+      <div>New Game!</div>
     )
 
     return (
       <HashRouter>
         <Switch>
-          <Route exact path="/(games)/(new)" component={NewGameContainer}/>
+          <Route path="/games/new" component={NewGame}/>
           <Route component={DefaultContainer}/>
         </Switch>
       </HashRouter>
