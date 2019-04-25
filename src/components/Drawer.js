@@ -226,5 +226,6 @@ class ResponsiveDrawer extends React.Component {
   }
 }
 
-// The component needs to be exported with withRouter() to access props.location.
+export { ResponsiveDrawer } // Used for testing.
+// The component needs to be exported with withRouter() to access props.location:
 export default withRouter(withStyles(styles, { withTheme: true })(ResponsiveDrawer))
