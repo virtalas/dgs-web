@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { Route, NavLink, HashRouter, Switch, withRouter } from 'react-router-dom'
+import { Route, NavLink, withRouter } from 'react-router-dom'
 
 import AppBar from '@material-ui/core/AppBar'
 import CssBaseline from '@material-ui/core/CssBaseline'
@@ -16,9 +16,9 @@ import MenuIcon from '@material-ui/icons/Menu'
 import Toolbar from '@material-ui/core/Toolbar'
 import Typography from '@material-ui/core/Typography'
 import Fab from '@material-ui/core/Fab'
-import AddIcon from '@material-ui/icons/Add'
 import { withStyles } from '@material-ui/core/styles'
 
+import AddIcon from '@material-ui/icons/Add'
 import GroupIcon from '@material-ui/icons/Group'
 import PlaceIcon from '@material-ui/icons/Place'
 import InsertChartIcon from '@material-ui/icons/InsertChart'
@@ -71,6 +71,12 @@ const styles = theme => ({
 })
 
 class ResponsiveDrawer extends React.Component {
+  static propTypes = {
+    location: PropTypes.object.isRequired,
+    classes: PropTypes.object.isRequired,
+    theme: PropTypes.object.isRequired,
+  }
+
   state = {
     mobileOpen: false,
   }
@@ -80,7 +86,7 @@ class ResponsiveDrawer extends React.Component {
   }
 
   render() {
-    const { classes, theme } = this.props
+    const { classes, theme, location } = this.props
 
     const navButtonList = (
       <div>
@@ -178,57 +184,47 @@ class ResponsiveDrawer extends React.Component {
       </nav>
     )
 
-    const DefaultContainer = withRouter(() => {
-      console.log(this.props.location)
-      return (
-        <div className={classes.root}>
-          <CssBaseline />
-          {appBar}
-          {navDrawer}
-          <main className={classes.content}>
-            <div className={classes.toolbar} />
-            <div className="content">
-              <Route exact path="/" component={Games}/>
-              <Route path="/games" component={Games}/>
-              <Route path="/players" component={Players}/>
+    let newButtonPath = null
+    let newButtonColor = null
+    switch (location.pathname) {
+      case '/games':
+        newButtonPath = '/games/new'
+        newButtonColor = 'primary'
+        break
+      case '/courses':
+        newButtonPath = '/courses/new'
+        newButtonColor = 'secondary'
+        break
+      default:
+        break
+    }
+    const shouldRenderNewButton = newButtonPath !== null
 
-              {/* this.props.location === "/games" ? (
-                <NavLink to="/games/new" className={classes.navLink}>
-                  <Fab color="primary" aria-label="Add" className={classes.fab}>
-                    <AddIcon />
-                  </Fab>
-                </NavLink>
-              ) : null */}
-              <NavLink to="/games/new" className={classes.navLink}>
-                <Fab color="primary" aria-label="Add" className={classes.fab}>
+    return (
+      <div className={classes.root}>
+        <CssBaseline />
+        {appBar}
+        {navDrawer}
+        <main className={classes.content}>
+          <div className={classes.toolbar} />
+          <div className="content">
+            <Route exact path="/" component={Games}/>
+            <Route path="/games" component={Games}/>
+            <Route path="/players" component={Players}/>
+
+            {shouldRenderNewButton ? (
+              <NavLink to={newButtonPath} className={classes.navLink}>
+                <Fab color={newButtonColor} aria-label="Add" className={classes.fab}>
                   <AddIcon />
                 </Fab>
               </NavLink>
-            </div>
-          </main>
-        </div>
-      )
-    })
-
-    // Placeholder component:
-    const NewGame = () => (
-      <div>New Game!</div>
-    )
-
-    return (
-      <HashRouter>
-        <Switch>
-          <Route path="/games/new" component={NewGame}/>
-          <Route component={DefaultContainer}/>
-        </Switch>
-      </HashRouter>
+            ) : null}
+          </div>
+        </main>
+      </div>
     )
   }
 }
 
-ResponsiveDrawer.propTypes = {
-  classes: PropTypes.object.isRequired,
-  theme: PropTypes.object.isRequired,
-}
-
-export default withStyles(styles, { withTheme: true })(ResponsiveDrawer)
+// The component needs to be exported with withRouter() to access props.location.
+export default withRouter(withStyles(styles, { withTheme: true })(ResponsiveDrawer))

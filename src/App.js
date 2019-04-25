@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import Drawer from './components/Drawer'
+import Router from './components/Router'
 
 import './css/App.css'
 
@@ -9,7 +9,7 @@ class App extends Component {
   render() {
     return (
       <div className="App">
-        <Drawer />
+        <Router />
       </div>
     )
   }
