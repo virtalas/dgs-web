@@ -3,6 +3,7 @@ import { shallow } from 'enzyme'
 import { expect } from 'chai'
 
 import { Route, NavLink, HashRouter, Router } from 'react-router-dom'
+import Fab from '@material-ui/core/Fab'
 
 import Drawer from './Drawer'
 import { ResponsiveDrawer } from './Drawer'
@@ -11,11 +12,11 @@ import Players from './players/Players'
 
 describe.only('<Drawer />', () => {
 
-  it('renders content', () => {
-    const location = {pathname: "/"}
-    const classes = {toolbar: ""}
-    const theme = {direction: ""}
+  const location = {pathname: '/'}
+  const classes = {toolbar: ''}
+  const theme = {direction: ''}
 
+  it('renders content', () => {
     const drawer = shallow(<ResponsiveDrawer location={location} classes={classes} theme={theme} />)
 
     expect(drawer.find(Route).at(0).props().component).to.equal(Games)
@@ -29,7 +30,23 @@ describe.only('<Drawer />', () => {
 
   })
 
+  it('renders new game button when on games page', () => {
+    location.pathname = '/games'
+    const drawer = shallow(<ResponsiveDrawer location={location} classes={classes} theme={theme} />)
+    expect(drawer.find(Fab).parent().props().to).to.equal('/games/new')
+  })
+
+  it('renders new course button when on courses page', () => {
+    location.pathname = '/courses'
+    const drawer = shallow(<ResponsiveDrawer location={location} classes={classes} theme={theme} />)
+    expect(drawer.find(Fab).parent().props().to).to.equal('/courses/new')
+  })
+
   it('renders correct component when navigating', () => {
-    // TODO: press navLink
+    location.pathname = '/games'
+    const drawer = shallow(<ResponsiveDrawer location={location} classes={classes} theme={theme} />)
+
+    drawer.find(NavLink).at(1).simulate('click')
+    // TODO check that Games component renderes
   })
 })
