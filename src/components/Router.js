@@ -2,19 +2,15 @@ import React from 'react'
 import { Route, HashRouter, Switch } from 'react-router-dom'
 
 import Drawer from './Drawer'
+import ScoreInputPage from './games/ScoreInputPage'
 
 class Router extends React.Component {
 
   render() {
-    // Placeholder component:
-    const NewGame = () => (
-      <div>New Game!</div>
-    )
-
     return (
       <HashRouter>
         <Switch>
-          <Route path="/games/new" component={NewGame}/>
+          <Route path="/games/new" component={ScoreInputPage}/>
           <Route component={Drawer}/>
         </Switch>
       </HashRouter>
