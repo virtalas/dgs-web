@@ -4,6 +4,10 @@ import { makeStyles } from '@material-ui/styles'
 import HoleInfoBar from './HoleInfoBar'
 import PlayerScoreList from './PlayerScoreList'
 
+// Mock data:
+const players1 = ['Teppo', 'Seppo', 'Matti']
+const players2 = ['Teppo', 'Seppo', 'Matti', 'Heikki', 'Toljanteri', 'Kaapo', 'Ilmari', 'Teppo', 'Seppo', 'Matti', 'Heikki', 'Toljanteri', 'Kaapo', 'Ilmari']
+
 const useStyles = makeStyles((theme) => ({
   root: {
   },
@@ -15,7 +19,7 @@ function ScoreInputPage() {
   return (
     <div className={classes.root}>
       <HoleInfoBar />
-      <PlayerScoreList />
+      <PlayerScoreList players={players2} />
     </div>
   )
 }

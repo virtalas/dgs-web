@@ -20,7 +20,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-function HoleInfoBar() {
+function HoleInfoBar(props) {
   const classes = useStyles()
   const [anchorEl, setAnchorEl] = React.useState(null);
 
@@ -31,6 +31,7 @@ function HoleInfoBar() {
   function handleClose() {
     setAnchorEl(null);
   }
+
   return (
     <div className={classes.root}>
       <AppBar position="fixed">
