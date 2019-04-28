@@ -5,8 +5,6 @@ import Paper from '@material-ui/core/Paper'
 import Typography from '@material-ui/core/Typography'
 import Chip from '@material-ui/core/Chip'
 
-import '../../css/GameInfo.css'
-
 const styles = theme => ({
   infoPaper: {
     marginBottom: 10,
@@ -16,6 +14,9 @@ const styles = theme => ({
   chip: {
     height: 22,
     marginRight: 5,
+  },
+  chipRow: {
+    lineHeight: '28px', // Affects spacing between chips when wrapped to two rows.
   },
   highScoreChip: {
     height: 22,
@@ -48,7 +49,7 @@ function GameInfo(props) {
   const { classes, game } = props
 
   const conditions = (
-    <div className="chipRow">
+    <div className={classes.chipRow}>
       {game.temperature ? <Chip className={classes.chip} label={game.temperature + " °C"} /> : null}
       {game.weatherConditions.map((condition, index) => (
         <Chip className={classes.chip} label={condition} key={index} />
@@ -60,7 +61,7 @@ function GameInfo(props) {
   )
 
   const illegalAndHighScorers = (
-    <div className="chipRow">
+    <div className={classes.chipRow}>
       {game.highScorers.map((name, index) => (
         <Chip
           classes={{ icon: classes.highScoreChip }}

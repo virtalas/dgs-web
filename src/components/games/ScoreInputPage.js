@@ -5,6 +5,7 @@ import HoleInfoBar from './HoleInfoBar'
 import PlayerScoreList from './PlayerScoreList'
 
 // Mock data:
+// TODO: käytä Games.js mockdatan scores-kohtaa!
 const players1 = ['Teppo', 'Seppo', 'Matti']
 const players2 = ['Teppo', 'Seppo', 'Matti', 'Heikki', 'Toljanteri', 'Kaapo', 'Ilmari', 'Teppo', 'Seppo', 'Matti', 'Heikki', 'Toljanteri', 'Kaapo', 'Ilmari']
 

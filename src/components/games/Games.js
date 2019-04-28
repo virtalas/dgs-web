@@ -2,8 +2,6 @@ import React, { Component } from 'react'
 
 import GameCard from './GameCard'
 
-import '../../css/Games.css'
-
 const games = [{
   id: 123,
   course: {
@@ -282,7 +280,7 @@ const games = [{
 class Games extends Component {
   render() {
     return (
-      <div className="gamesContainer">
+      <div>
         {games.map(game => (
           <GameCard game={game} key={game.id}/>
         ))}
