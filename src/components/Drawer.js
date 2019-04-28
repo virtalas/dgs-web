@@ -187,6 +187,7 @@ class ResponsiveDrawer extends React.Component {
     let newButtonPath = null
     let newButtonColor = null
     switch (location.pathname) {
+      case '/':
       case '/games':
         newButtonPath = '/games/new'
         newButtonColor = 'primary'

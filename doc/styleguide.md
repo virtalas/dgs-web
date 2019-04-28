@@ -1,6 +1,7 @@
 ## Style guide
 
 * No trailing semicolons
-* Put CSS in a separate file whenever possible, otherwise use `withStyles` (also OK with material UI components)
+* No CSS files, use `makeStyles()`
 * Indentation: two spaces
 * Use "" with JSX code, '' with normal JavaScript code
+* No double newlines
