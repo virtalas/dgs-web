@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React from 'react'
 import Router from './components/Router'
 
 import createMuiTheme from "@material-ui/core/styles/createMuiTheme";
@@ -16,14 +16,12 @@ const theme = createMuiTheme({
 
 // TODO: handle login, pass signed in player info as props
 
-class App extends Component {
-  render() {
-    return (
-      <ThemeProvider theme={theme}>
-        <Router />
-      </ThemeProvider>
-    )
-  }
+const App: React.FC<{}> = () => {
+  return (
+    <ThemeProvider theme={theme}>
+      <Router />
+    </ThemeProvider>
+  )
 }
 
 export default App

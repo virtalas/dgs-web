@@ -6,7 +6,7 @@ import PlayerScoreList from './PlayerScoreList'
 
 // Mock data:
 // TODO: käytä Games.js mockdatan scores-kohtaa!
-const scores = [
+const scores: PlayerScores[] = [
   {
     player: {
       id: 3,
@@ -34,7 +34,9 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-function ScoreInputPage() {
+interface Props {}
+
+const ScoreInputPage: React.FC<Props> = () => {
   const classes = useStyles()
 
   return (

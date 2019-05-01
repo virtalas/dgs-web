@@ -1,24 +1,28 @@
 import React from 'react'
-import PropTypes from 'prop-types'
-import { withStyles } from '@material-ui/core/styles'
+import { makeStyles } from '@material-ui/styles'
 import Paper from '@material-ui/core/Paper'
 
 import '../../css/ScoreCard.css'
 
-const styles = theme => ({
+const useStyles = makeStyles((theme) => ({
   rootPaper: {
     marginBottom: 10,
   },
-})
+}))
 
-function ScoreCard(props) {
-  const { classes, game } = props
+interface Props {
+  game: Game,
+}
 
-  const holeNumbers = game.course.pars.map((par, index) => (
+const ScoreCard: React.FC<Props> = (props) => {
+  const classes = useStyles()
+  const { game } = props
+
+  const holeNumbers = game.course.pars.map((par: number, index: number) => (
     <td className="topCell" key={index}>{index + 1}</td>
   ))
 
-  const coursePars = game.course.pars.map((par, index) => (
+  const coursePars = game.course.pars.map((par: number, index: number) => (
     <td key={index}>{par}</td>
   ))
 
@@ -30,7 +34,7 @@ function ScoreCard(props) {
     </tr>
   ))
 
-  const createObMarkers = (obStrokes) => {
+  const createObMarkers = (obStrokes: number) => {
     const markers = []
     // Render max three ob markers
     for (let i = 0; i < Math.min(obStrokes, 3); i += 1) {
@@ -47,9 +51,9 @@ function ScoreCard(props) {
     )
   }
 
-  const playerStrokes = (playerScores, index) => (
+  const playerStrokes = (playerScores: PlayerScores, index: number) => (
     <tr key={index}>
-      {playerScores.strokes.map((strokeCount, index) => {
+      {playerScores.strokes.map((strokeCount: number, index: number) => {
         const holePar = game.course.pars[index]
         const obStrokes = playerScores.obs[index]
         let scoreClass
@@ -144,9 +148,4 @@ function ScoreCard(props) {
   )
 }
 
-ScoreCard.propTypes = {
-  classes: PropTypes.object.isRequired,
-  game: PropTypes.object.isRequired,
-}
-
-export default withStyles(styles)(ScoreCard)
+export default ScoreCard

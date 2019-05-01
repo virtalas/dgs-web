@@ -1,8 +1,8 @@
-import React, { Component } from 'react'
+import React from 'react'
 
 import GameCard from './GameCard'
 
-const games = [{
+const games: Game[] = [{
   id: 123,
   course: {
     id: 5,
@@ -277,16 +277,14 @@ const games = [{
   contestName: null,
 }]
 
-class Games extends Component {
-  render() {
-    return (
-      <div>
-        {games.map(game => (
-          <GameCard game={game} key={game.id}/>
-        ))}
-      </div>
-    )
-  }
+const Games: React.FC<{}> = () => {
+  return (
+    <div>
+      {games.map(game => (
+        <GameCard game={game} key={game.id}/>
+      ))}
+    </div>
+  )
 }
 
 export default Games

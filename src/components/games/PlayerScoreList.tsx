@@ -42,14 +42,16 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-function PlayerScoreList(props) {
+interface Props {
+  scores: PlayerScores[],
+}
+
+const PlayerScoreList: React.FC<Props> = (props) => {
   const classes = useStyles()
   const { scores } = props
-  const [checked, setChecked] = useState(
-    true
-  )
+  const [checked, setChecked] = useState(true)
 
-  const handleToggle = (value) => {
+  const handleToggle = (value: any) => {
     console.log(value)
     // setChecked(!value)
   }
