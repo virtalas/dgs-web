@@ -70,10 +70,8 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-// TODO: how to do this correctly
 interface Props {
-  theme: any,
-  location: any
+  location: Location
 }
 
 const ResponsiveDrawer: React.FC<Props> = (props) => {
@@ -82,11 +80,10 @@ const ResponsiveDrawer: React.FC<Props> = (props) => {
   const [mobileOpen, setMobileOpen] = useState(false)
 
   const handleDrawerToggle = () => {
-    // this.setState(state => ({ mobileOpen: !state.mobileOpen }))
     setMobileOpen(!mobileOpen)
   }
 
-  const { theme, location } = props
+  const { location } = props
 
   const navButtonList = (
     <div>
@@ -160,14 +157,16 @@ const ResponsiveDrawer: React.FC<Props> = (props) => {
       <Hidden smUp implementation="css">
         <Drawer
           variant="temporary"
-          anchor={theme.direction === 'rtl' ? 'right' : 'left'}
+          anchor="left"
           open={mobileOpen}
           onClose={handleDrawerToggle}
           classes={{
             paper: classes.drawerPaper,
           }}
         >
-          {navButtonList}
+          <div onClick={handleDrawerToggle}>
+            {navButtonList}
+          </div>
         </Drawer>
       </Hidden>
       <Hidden xsDown implementation="css">
