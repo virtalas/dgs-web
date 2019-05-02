@@ -41,7 +41,7 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 interface Props {
-  game: any // TODO
+  game: Game
 }
 
 const GameInfo: React.FC<Props> = (props) => {

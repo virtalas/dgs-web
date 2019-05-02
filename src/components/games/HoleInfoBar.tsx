@@ -27,7 +27,7 @@ const HoleInfoBar: React.FC<Props> = (props) => {
   const [anchorEl, setAnchorEl] = React.useState<EventTarget | null>(null)
 
   const handleClick = (event: MouseEvent): void => {
-    setAnchorEl(event.currentTarget) // TODO does it work? why 'as any' necessary?
+    setAnchorEl(event.currentTarget)
   }
 
   const handleClose = () => {
