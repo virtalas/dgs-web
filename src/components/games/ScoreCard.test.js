@@ -1,6 +1,7 @@
 import React from 'react'
-import { shallow } from 'enzyme'
 import { expect } from 'chai'
+
+import { createShallow } from '@material-ui/core/test-utils'
 
 import ScoreCard from './ScoreCard'
 
@@ -50,7 +51,7 @@ describe.only('<ScoreCard />', () => {
       comment: "Fun :D",
       contestName: null,
     }
-    scoreCard = shallow(<ScoreCard game={game} />).dive()
+    scoreCard = createShallow()(<ScoreCard game={game} />)
   })
 
   it('renders content', () => {
@@ -88,7 +89,7 @@ describe.only('<ScoreCard />', () => {
     game.scores[0].obs = [0,0,0,0,0,0,0,0,0]
     game.scores[1].strokes = [3,3,3,3,3,3,3,3,3]
     game.scores[1].obs = [0,0,0,0,0,0,0,0,0]
-    scoreCard = shallow(<ScoreCard game={game} />).dive()
+    scoreCard = createShallow()(<ScoreCard game={game} />)
 
     // Correct number of rows & columns
     expect(scoreCard.find('.left tr')).to.have.lengthOf(4)

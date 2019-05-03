@@ -2,7 +2,7 @@ import React from 'react'
 import { expect } from 'chai'
 
 import Typography from '@material-ui/core/Typography'
-import { createShallow } from '@material-ui/core/test-utils';
+import { createShallow } from '@material-ui/core/test-utils'
 
 import GameCard from './GameCard'
 import ScoreCard from './ScoreCard'
@@ -60,7 +60,6 @@ describe.only('<GameCard />', () => {
   })
 
   it('renders content', () => {
-    console.log(gameCard.debug())
     expect(gameCard.find(Typography).at(0).dive().dive().text()).contain(game.course.name)
     expect(gameCard.find(Typography).at(1).dive().dive().text()).contain(game.endDate)
     expect(gameCard.find(ScoreCard)).to.have.lengthOf(1)
