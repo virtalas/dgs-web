@@ -34,11 +34,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-interface Props {
-
-}
-
-const BlueCard: React.FC<Props> = (props) => {
+const BlueCard: React.FC<{}> = (props) => {
   const classes = useStyles()
   return (
     <Card className={classes.card}>
