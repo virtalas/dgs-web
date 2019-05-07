@@ -1,8 +1,8 @@
-import React, { Component } from 'react'
+import React from 'react'
 import Router from './components/Router'
 
-import createMuiTheme from "@material-ui/core/styles/createMuiTheme";
-import ThemeProvider from "@material-ui/styles/ThemeProvider";
+import createMuiTheme from "@material-ui/core/styles/createMuiTheme"
+import ThemeProvider from "@material-ui/styles/ThemeProvider"
 
 import './css/App.css'
 
@@ -12,18 +12,16 @@ const theme = createMuiTheme({
   typography: {
     useNextVariants: true, // Use new typography v2
   },
-});
+})
 
 // TODO: handle login, pass signed in player info as props
 
-class App extends Component {
-  render() {
-    return (
-      <ThemeProvider theme={theme}>
-        <Router />
-      </ThemeProvider>
-    )
-  }
+const App: React.FC<{}> = () => {
+  return (
+    <ThemeProvider theme={theme}>
+      <Router />
+    </ThemeProvider>
+  )
 }
 
 export default App

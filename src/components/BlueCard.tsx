@@ -1,6 +1,5 @@
 import React from 'react'
-import PropTypes from 'prop-types'
-import { withStyles } from '@material-ui/core/styles'
+import { makeStyles } from '@material-ui/styles'
 import Card from '@material-ui/core/Card'
 
 // Card constants
@@ -13,7 +12,7 @@ const contentHorizontalMargin = 2 // vw amount of margin/space from the sides of
 const maxMobileContentWidth = maxMobileCardWidth - 0.01 * contentHorizontalMargin * 2 * maxMobileCardWidth
 const maxDesktopContentWidth = maxDesktopCardWidth - 0.01 * contentHorizontalMargin * 2 * maxDesktopCardWidth
 
-const styles = theme => ({
+const useStyles = makeStyles((theme) => ({
   card: {
     maxWidth: Math.min(maxMobileCardWidth, maxDesktopCardWidth),
     width: '100%',
@@ -33,10 +32,10 @@ const styles = theme => ({
     marginBottom: theme.spacing.unit,
     textAlign: 'center',
   },
-})
+}))
 
-function BlueCard(props) {
-  const { classes } = props
+const BlueCard: React.FC<{}> = (props) => {
+  const classes = useStyles()
   return (
     <Card className={classes.card}>
       <div className={classes.content}>
@@ -46,8 +45,4 @@ function BlueCard(props) {
   )
 }
 
-BlueCard.propTypes = {
-  classes: PropTypes.object.isRequired,
-}
-
-export default withStyles(styles)(BlueCard)
+export default BlueCard

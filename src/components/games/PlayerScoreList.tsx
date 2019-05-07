@@ -25,10 +25,6 @@ const useStyles = makeStyles((theme) => ({
   strokeInput: {
     background: '0 0',
     lineHeight: 1,
-    // TODO: check how to:
-    // fontFamily: "-apple-system,'Helvetica Neue',Helvetica,Arial,'Lucida Grande',sans-serif",
-    // webkitFontSmoothing: 'antialiased',
-    /*-webkit-appearance: none;*/
     border: 0,
     color: '#1f1f21',
     fontSize: 25,
@@ -39,17 +35,20 @@ const useStyles = makeStyles((theme) => ({
     paddingTop: 4,
     margin: 'auto',
     width: 40,
+    outline: 'none',
   },
 }))
 
-function PlayerScoreList(props) {
+interface Props {
+  scores: PlayerScores[],
+}
+
+const PlayerScoreList: React.FC<Props> = (props) => {
   const classes = useStyles()
   const { scores } = props
-  const [checked, setChecked] = useState(
-    true
-  )
+  const [checked, setChecked] = useState(true)
 
-  const handleToggle = (value) => {
+  const handleToggle = (value: any) => {
     console.log(value)
     // setChecked(!value)
   }
@@ -63,7 +62,7 @@ function PlayerScoreList(props) {
       <div className={classes.circle}>
         <input
           className={classes.strokeInput}
-          onChange={event => handleToggle(checked)}
+          onChange={event => console.log(event.target.value)}
           type="number"
           value="0"
           min="0"

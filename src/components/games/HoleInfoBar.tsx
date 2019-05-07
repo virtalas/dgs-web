@@ -20,16 +20,18 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-function HoleInfoBar(props) {
-  const classes = useStyles()
-  const [anchorEl, setAnchorEl] = React.useState(null);
+interface Props {}
 
-  function handleClick(event) {
-    setAnchorEl(event.currentTarget);
+const HoleInfoBar: React.FC<Props> = (props) => {
+  const classes = useStyles()
+  const [anchorEl, setAnchorEl] = React.useState<EventTarget | null>(null)
+
+  const handleClick = (event: MouseEvent): void => {
+    setAnchorEl(event.currentTarget)
   }
 
-  function handleClose() {
-    setAnchorEl(null);
+  const handleClose = () => {
+    setAnchorEl(null)
   }
 
   return (
@@ -45,12 +47,12 @@ function HoleInfoBar(props) {
           <IconButton
             aria-owns={anchorEl ? 'simple-menu' : undefined}
             aria-haspopup="true"
-            onClick={handleClick}
+            onClick={handleClick as any}
             className={classes.menuButton}
           >
             <MenuIcon />
           </IconButton>
-          <Menu id="simple-menu" anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleClose}>
+          <Menu id="simple-menu" anchorEl={anchorEl as any} open={Boolean(anchorEl)} onClose={handleClose}>
             <MenuItem onClick={handleClose}>Profile</MenuItem>
             <MenuItem onClick={handleClose}>My account</MenuItem>
             <MenuItem onClick={handleClose}>Logout</MenuItem>

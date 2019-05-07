@@ -1,11 +1,10 @@
 import React from 'react'
-import PropTypes from 'prop-types'
-import { withStyles } from '@material-ui/core/styles'
+import { makeStyles } from '@material-ui/styles'
 import Paper from '@material-ui/core/Paper'
 import Typography from '@material-ui/core/Typography'
 import Chip from '@material-ui/core/Chip'
 
-const styles = theme => ({
+const useStyles = makeStyles((theme) => ({
   infoPaper: {
     marginBottom: 10,
     padding: 6,
@@ -39,22 +38,25 @@ const styles = theme => ({
   comment: {
     marginTop: 5,
   },
-})
+}))
 
-function handleClick() {
-  // TODO: Direct to player's page
+interface Props {
+  game: Game
 }
 
-function GameInfo(props) {
-  const { classes, game } = props
+const GameInfo: React.FC<Props> = (props) => {
+  const classes = useStyles()
+  const { game } = props
+
+  const handleClick = () => { } // TODO: Direct to player's page
 
   const conditions = (
     <div className={classes.chipRow}>
       {game.temperature ? <Chip className={classes.chip} label={game.temperature + " °C"} /> : null}
-      {game.weatherConditions.map((condition, index) => (
+      {game.weatherConditions.map((condition: Condition, index: number) => (
         <Chip className={classes.chip} label={condition} key={index} />
       ))}
-      {game.conditions.map((condition, index) => (
+      {game.conditions.map((condition: Condition, index: number) => (
         <Chip className={classes.chip} label={condition} key={index} />
       ))}
     </div>
@@ -62,9 +64,9 @@ function GameInfo(props) {
 
   const illegalAndHighScorers = (
     <div className={classes.chipRow}>
-      {game.highScorers.map((name, index) => (
+      {game.highScorers.map((name: string, index: number) => (
         <Chip
-          classes={{ icon: classes.highScoreChip }}
+          classes={{ icon: classes.highScoreChip } as any}
           icon={<Chip label="High score" />}
           label={name}
           variant="outlined"
@@ -73,9 +75,9 @@ function GameInfo(props) {
           className={classes.chip}
           key={index} />
       ))}
-      {game.illegalScorers.map((name, index) => (
+      {game.illegalScorers.map((name: string, index: number) => (
         <Chip
-          classes={{ icon: classes.illegalChip }}
+          classes={{ icon: classes.illegalChip } as any}
           icon={<Chip label="Illegal game" />}
           label={name}
           variant="outlined"
@@ -103,9 +105,4 @@ function GameInfo(props) {
   )
 }
 
-GameInfo.propTypes = {
-  classes: PropTypes.object.isRequired,
-  game: PropTypes.object.isRequired,
-}
-
-export default withStyles(styles)(GameInfo)
+export default GameInfo

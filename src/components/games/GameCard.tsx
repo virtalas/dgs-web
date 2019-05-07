@@ -1,20 +1,24 @@
 import React from 'react'
-import PropTypes from 'prop-types'
-import { withStyles } from '@material-ui/core/styles'
+import { makeStyles } from '@material-ui/styles'
 import Typography from '@material-ui/core/Typography'
 
 import ScoreCard from './ScoreCard'
 import GameInfo from './GameInfo'
 import BlueCard from '../BlueCard'
 
-const styles = theme => ({
+const useStyles = makeStyles((theme) => ({
   title: {
     color: 'white',
   },
-})
+}))
 
-function GameCard(props) {
-  const { classes, game } = props
+interface Props {
+  game: Game,
+}
+
+const GameCard: React.FC<Props> = (props) => {
+  const classes = useStyles()
+  const { game } = props
 
   // TODO: if startDate != null, render "1.1.1111 9.30 - 10.45"
 
@@ -28,9 +32,4 @@ function GameCard(props) {
   )
 }
 
-GameCard.propTypes = {
-  classes: PropTypes.object.isRequired,
-  game: PropTypes.object.isRequired,
-}
-
-export default withStyles(styles)(GameCard)
+export default GameCard

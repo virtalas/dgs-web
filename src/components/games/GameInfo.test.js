@@ -1,9 +1,9 @@
 import React from 'react'
-import { shallow } from 'enzyme'
 import { expect } from 'chai'
 
 import Chip from '@material-ui/core/Chip'
 import Typography from '@material-ui/core/Typography'
+import { createShallow } from '@material-ui/core/test-utils'
 
 import GameInfo from './GameInfo'
 
@@ -53,11 +53,11 @@ describe.only('<GameInfo />', () => {
       comment: "Fun :D",
       contestName: null,
     }
-    info = shallow(<GameInfo game={game} />).dive()
+    info = createShallow()(<GameInfo game={game} />)
   })
 
   it('renders content', () => {
-    expect(info.find('.chipRow')).to.have.lengthOf(2) // Chips are rendered in two rows
+    expect(info.find('[className^="Hook-chipRow"]')).to.have.lengthOf(2) // Chips are rendered in two rows
     expect(info.find(Chip)).to.have.lengthOf(6) // There should be 6 Chips in total
 
     // Contents
@@ -78,7 +78,7 @@ describe.only('<GameInfo />', () => {
     game.illegalScorers = []
     game.comment = null
     game.contestName = null
-    info = shallow(<GameInfo game={game} />).dive()
+    info = createShallow()(<GameInfo game={game} />)
 
     expect(info.find('.chipRow').at(1).children()).to.have.lengthOf(0) // High / illegal scorers row has 0 Chips
     expect(info.find(Chip)).to.have.lengthOf(1)
@@ -92,7 +92,7 @@ describe.only('<GameInfo />', () => {
     game.illegalScorers = []
     game.comment = null
     game.contestName = null
-    info = shallow(<GameInfo game={game} />).dive()
+    info = createShallow()(<GameInfo game={game} />)
 
     expect(info.children()).to.have.lengthOf(0)
   })
