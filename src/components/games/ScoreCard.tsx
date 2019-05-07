@@ -2,11 +2,132 @@ import React from 'react'
 import { makeStyles } from '@material-ui/styles'
 import Paper from '@material-ui/core/Paper'
 
-import '../../css/ScoreCard.css'
-
 const useStyles = makeStyles((theme) => ({
   rootPaper: {
     marginBottom: 10,
+  },
+  /*
+    Positioning.
+    Flex to make the middle table horizontally scrollable.
+  */
+  mainWrapper: {
+    display: 'flex',
+    flexWrap: 'nowrap',
+    padding: 2,
+    '& td': {
+      border: '1px solid #000000',
+      height: 26,
+      fontWeight: 'lighter',
+      overflow: 'hidden', /* Stop ob stroke markers from bleeding outside cells. */
+    },
+    '& table': {
+      borderCollapse: 'collapse',
+    }
+  },
+  leftTable: {
+    flex: '0 0 60px',
+    zIndex: 1, /* Have the middle table 'slide under' the side tables. */
+    marginRight: -1, /* Have the name column border over the middle table while scrolling. */
+    '& td': {
+      borderLeft: 0,
+      /* Also pushes par column to the edge in Safari: */
+      paddingRight: 8,
+      paddingLeft: 5,
+    }
+  },
+  middleContainer: {
+    flex: '0 1 700px',
+    overflow: 'scroll',
+    zIndex: 0, /* Have the middle table 'slide under' the side tables. */
+    marginBottom: -15, /* Get rid of extra space under the middle table. */
+    '& table': {
+      width: '100%',
+      '& td': {
+        minWidth: 26,
+      }
+    },
+    '&::-webkit-scrollbar': {
+      width: 0,  /* Remove scrollbar space. */
+      height: 0,
+    },
+  },
+  rightTable: {
+    flex: '0 0 40px',
+    minWidth: 40, /* for Safari */
+    zIndex: 1, /* Have the middle table 'slide under' the side tables. */
+    marginLeft: -1, /* Have the par column border over the middle table while scrolling, while not having double width border between middle & right tables. */
+    '& td': {
+      borderRight: 0,
+    }
+  },
+  /*
+    Cell specific fixes.
+  */
+  totalCell: {
+    paddingLeft: 2,
+    paddingRight: 3,
+  },
+  /*
+    Row specific fixes.
+  */
+  topRow: {
+    '& td': {
+      borderTop: 0,
+    }
+  },
+  bottomRow: {
+    '& td': {
+      borderBottom: 0,
+    }
+  },
+  /*
+    Score colors.
+  */
+  holeInOne: {
+    backgroundColor: '#F75151',
+  },
+  eagle: {
+    backgroundColor: '#FFFF00',
+  },
+  birdie: {
+    backgroundColor: '#00F700',
+  },
+  par: {
+    backgroundColor: '#A7C942',
+  },
+  bogey: {
+    backgroundColor: '#FFA500',
+  },
+  overBogey: {
+    backgroundColor: '#A37BA3',
+  },
+  /*
+    OB marker.
+  */
+  ob: {
+    height: 5,
+    width: 5,
+    backgroundColor: 'black',
+    borderRadius: '50%',
+    display: 'inline-block',
+    verticalAlign: 'top',
+    marginRight: 1,
+    marginLeft: 1,
+  },
+  obWrapper: {
+    position: 'absolute',
+    top: -3, /* -3 perfect for Safari */
+    left: 0,
+    width: '100%',
+  },
+  obContainer: {
+    position: 'relative',
+    textAlign: 'left',
+    marginLeft: 1,
+  },
+  /* Style for displaying ob as eg 3+1: */
+  obCount: {
+    fontSize: '80%',
   },
 }))
 
@@ -19,7 +140,7 @@ const ScoreCard: React.FC<Props> = (props) => {
   const { game } = props
 
   const holeNumbers = game.course.pars.map((par: number, index: number) => (
-    <td className="topCell" key={index}>{index + 1}</td>
+    <td key={index}>{index + 1}</td>
   ))
 
   const coursePars = game.course.pars.map((par: number, index: number) => (
@@ -27,8 +148,8 @@ const ScoreCard: React.FC<Props> = (props) => {
   ))
 
   const playerNames = game.scores.map((playerScores, index) => (
-    <tr key={index}>
-      <td align="left" className={index + 1 === game.scores.length ? "bottomCell" : ""}>
+    <tr className={index + 1 === game.scores.length ? classes.bottomRow : ""} key={index}>
+      <td align="left">
         {playerScores.player.firstName}
       </td>
     </tr>
@@ -39,12 +160,12 @@ const ScoreCard: React.FC<Props> = (props) => {
     // Render max three ob markers
     for (let i = 0; i < Math.min(obStrokes, 3); i += 1) {
       markers.push(
-        <span className="ob" key={i} />
+        <span className={classes.ob} key={i} />
       )
     }
     return (
-      <div className="obContainer">
-        <div className="obWrapper">
+      <div className={classes.obContainer}>
+        <div className={classes.obWrapper}>
           {markers}
         </div>
       </div>
@@ -52,7 +173,7 @@ const ScoreCard: React.FC<Props> = (props) => {
   }
 
   const playerStrokes = (playerScores: PlayerScores, index: number) => (
-    <tr key={index}>
+    <tr className={classes.bottomRow} key={index}>
       {playerScores.strokes.map((strokeCount: number, index: number) => {
         const holePar = game.course.pars[index]
         const obStrokes = playerScores.obs[index]
@@ -63,48 +184,48 @@ const ScoreCard: React.FC<Props> = (props) => {
             scoreClass = ""
             break;
           case 1:
-            scoreClass = "holeInOne"
+            scoreClass = classes.holeInOne
             break;
           case holePar - obStrokes - 2:
-            scoreClass = "eagle"
+            scoreClass = classes.eagle
             break;
           case holePar - obStrokes - 1:
-            scoreClass = "birdie"
+            scoreClass = classes.birdie
             break;
           case holePar - obStrokes:
-            scoreClass = "par"
+            scoreClass = classes.par
             break;
           case holePar - obStrokes + 1:
-            scoreClass = "bogey"
+            scoreClass = classes.bogey
             break;
           default:
-            scoreClass = "overBogey"
+            scoreClass = classes.overBogey
         }
 
         return (
-          <td className={scoreClass + " bottomCell"} key={index}>
+          <td className={scoreClass} key={index}>
             {strokeCount === 0 ? "-" : strokeCount}
             {/* obStrokes ? (<span className="obCount">{"+" + obStrokes}</span>) : null */}
             {obStrokes > 0 ? createObMarkers(obStrokes) : null}
           </td>
         )
       })}
-      <td className="bottomCell">{playerScores.total}</td>
+      <td>{playerScores.total}</td>
     </tr>
   )
 
   const playerToPars = game.scores.map((playerScores, index) => (
-    <tr key={index}>
-      <td className="bottomCell">{playerScores.toPar > 0 ? "+" + playerScores.toPar : playerScores.toPar}</td>
+    <tr className={classes.bottomRow} key={index}>
+      <td>{playerScores.toPar > 0 ? "+" + playerScores.toPar : playerScores.toPar}</td>
     </tr>
   ))
 
   const scoreTable = (
-    <div className="wrap">
-      <table className="left">
+    <div className={classes.mainWrapper}>
+      <table className={classes.leftTable}>
         <tbody>
-          <tr>
-            <td align="left" className="topCell">Hole</td>
+          <tr className={classes.topRow}>
+            <td align="left">Hole</td>
           </tr>
           <tr>
             <td align="left">PAR</td>
@@ -112,12 +233,12 @@ const ScoreCard: React.FC<Props> = (props) => {
           {playerNames}
         </tbody>
       </table>
-      <div className="middle">
+      <div className={classes.middleContainer}>
         <table>
           <tbody>
-            <tr>
+            <tr className={classes.topRow}>
               {holeNumbers}
-              <td className="topCell totalCell">Total</td>
+              <td className={classes.totalCell}>Total</td>
             </tr>
             <tr>
               {coursePars}
@@ -127,10 +248,10 @@ const ScoreCard: React.FC<Props> = (props) => {
           </tbody>
         </table>
       </div>
-      <table className="right">
+      <table className={classes.rightTable}>
         <tbody>
-          <tr>
-            <td className="topCell">Par</td>
+          <tr className={classes.topRow}>
+            <td>Par</td>
           </tr>
           <tr>
             <td>0</td>

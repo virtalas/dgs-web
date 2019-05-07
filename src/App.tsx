@@ -4,8 +4,6 @@ import Router from './components/Router'
 import createMuiTheme from "@material-ui/core/styles/createMuiTheme"
 import ThemeProvider from "@material-ui/styles/ThemeProvider"
 
-import './css/App.css'
-
 // Temporary solution for using @material-ui/styles (will be unneeded in Material UI v4):
 // https://github.com/mui-org/material-ui/issues/14271
 const theme = createMuiTheme({
