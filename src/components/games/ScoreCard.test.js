@@ -56,31 +56,31 @@ describe.only('<ScoreCard />', () => {
 
   it('renders content', () => {
     // Correct number of rows & columns
-    expect(scoreCard.find('.left tr')).to.have.lengthOf(4)
-    expect(scoreCard.find('.left td')).to.have.lengthOf(4)
-    expect(scoreCard.find('.middle tr')).to.have.lengthOf(4)
-    expect(scoreCard.find('.middle td')).to.have.lengthOf(21 * 4)
-    expect(scoreCard.find('.right tr')).to.have.lengthOf(4)
-    expect(scoreCard.find('.right td')).to.have.lengthOf(4)
+    expect(scoreCard.find('[className^="Hook-leftTable"]').find('tr')).to.have.lengthOf(4)
+    expect(scoreCard.find('[className^="Hook-leftTable"]').find('td')).to.have.lengthOf(4)
+    expect(scoreCard.find('[className^="Hook-middleContainer"]').find('tr')).to.have.lengthOf(4)
+    expect(scoreCard.find('[className^="Hook-middleContainer"]').find('td')).to.have.lengthOf(21 * 4)
+    expect(scoreCard.find('[className^="Hook-rightTable"]').find('tr')).to.have.lengthOf(4)
+    expect(scoreCard.find('[className^="Hook-rightTable"]').find('td')).to.have.lengthOf(4)
 
     // Correct contents
 
-    const leftCells = scoreCard.find('.left td').map(column => column.text())
+    const leftCells = scoreCard.find('[className^="Hook-leftTable"]').find('td').map(column => column.text())
     expect(leftCells[0]).contain("Hole")
     expect(leftCells[1]).contain("PAR")
     expect(leftCells[2]).contain("Seppo")
     expect(leftCells[3]).contain("Teppo")
 
-    const middleCells = scoreCard.find('.middle td').map(column => column.text())
+    const middleCells = scoreCard.find('[className^="Hook-middleContainer"]').find('td').map(column => column.text())
     checkMiddleCellContents(middleCells, game)
 
-    const rightCells = scoreCard.find('.right td').map(column => column.text())
+    const rightCells = scoreCard.find('[className^="Hook-rightTable"]').find('td').map(column => column.text())
     expect(rightCells[0]).contain("Par")
     expect(rightCells[1]).contain("0")
     expect(rightCells[2]).contain("+4")
     expect(rightCells[3]).contain("-2")
 
-    expect(scoreCard.find('.ob')).to.have.lengthOf(10) // Render only max three ob markers per cell
+    expect(scoreCard.find('[className^="Hook-ob-"]')).to.have.lengthOf(10) // Render only max three ob markers per cell
   })
 
   it('renders different hole counts correctly', () => {
@@ -92,81 +92,81 @@ describe.only('<ScoreCard />', () => {
     scoreCard = createShallow()(<ScoreCard game={game} />)
 
     // Correct number of rows & columns
-    expect(scoreCard.find('.left tr')).to.have.lengthOf(4)
-    expect(scoreCard.find('.left td')).to.have.lengthOf(4)
-    expect(scoreCard.find('.middle tr')).to.have.lengthOf(4)
-    expect(scoreCard.find('.middle td')).to.have.lengthOf(10 * 4) // Only 9+1 insted of 20+1
-    expect(scoreCard.find('.right tr')).to.have.lengthOf(4)
-    expect(scoreCard.find('.right td')).to.have.lengthOf(4)
+    expect(scoreCard.find('[className^="Hook-leftTable"]').find('tr')).to.have.lengthOf(4)
+    expect(scoreCard.find('[className^="Hook-leftTable"]').find('td')).to.have.lengthOf(4)
+    expect(scoreCard.find('[className^="Hook-middleContainer"]').find('tr')).to.have.lengthOf(4)
+    expect(scoreCard.find('[className^="Hook-middleContainer"]').find('td')).to.have.lengthOf(10 * 4) // Only 9+1 insted of 20+1
+    expect(scoreCard.find('[className^="Hook-rightTable"]').find('tr')).to.have.lengthOf(4)
+    expect(scoreCard.find('[className^="Hook-rightTable"]').find('td')).to.have.lengthOf(4)
 
     // Correct contents
 
-    const leftCells = scoreCard.find('.left td').map(column => column.text())
+    const leftCells = scoreCard.find('[className^="Hook-leftTable"]').find('td').map(column => column.text())
     expect(leftCells[0]).contain("Hole")
     expect(leftCells[1]).contain("PAR")
     expect(leftCells[2]).contain("Seppo")
     expect(leftCells[3]).contain("Teppo")
 
-    const middleCells = scoreCard.find('.middle td').map(column => column.text())
+    const middleCells = scoreCard.find('[className^="Hook-middleContainer"]').find('td').map(column => column.text())
     checkMiddleCellContents(middleCells, game)
 
-    const rightCells = scoreCard.find('.right td').map(column => column.text())
+    const rightCells = scoreCard.find('[className^="Hook-rightTable"]').find('td').map(column => column.text())
     expect(rightCells[0]).contain("Par")
     expect(rightCells[1]).contain("0")
     expect(rightCells[2]).contain("+4")
     expect(rightCells[3]).contain("-2")
 
-    expect(scoreCard.find('.ob')).to.have.lengthOf(0)
+    expect(scoreCard.find('[className^="Hook-ob-"]')).to.have.lengthOf(0)
   })
 
   it('renders colors according to score and hole par', () => {
-    const middleCells = scoreCard.find('.middle td')
+    const middleCells = scoreCard.find('[className^="Hook-middleContainer"]').find('td')
     let offset = game.course.pars.length * 2 + 2
 
     // Player #1
-    expect(middleCells.at(offset++).hasClass('par')).to.equal(true)
-    expect(middleCells.at(offset++).hasClass('bogey')).to.equal(true)
-    expect(middleCells.at(offset++).hasClass('overBogey')).to.equal(true)
-    expect(middleCells.at(offset++).hasClass('overBogey')).to.equal(true)
-    expect(middleCells.at(offset++).hasClass('overBogey')).to.equal(true)
-    expect(middleCells.at(offset++).hasClass('par')).to.equal(true)
+    expect(/^Hook-par/.test(middleCells.at(offset++).prop('className'))).to.equal(true)
+    expect(/^Hook-bogey/.test(middleCells.at(offset++).prop('className'))).to.equal(true)
+    expect(/^Hook-overBogey/.test(middleCells.at(offset++).prop('className'))).to.equal(true)
+    expect(/^Hook-overBogey/.test(middleCells.at(offset++).prop('className'))).to.equal(true)
+    expect(/^Hook-overBogey/.test(middleCells.at(offset++).prop('className'))).to.equal(true)
+    expect(/^Hook-par/.test(middleCells.at(offset++).prop('className'))).to.equal(true)
     expect(middleCells.at(offset++).hasClass('')).to.equal(true)
     expect(middleCells.at(offset++).hasClass('')).to.equal(true)
-    expect(middleCells.at(offset++).hasClass('par')).to.equal(true)
-    expect(middleCells.at(offset++).hasClass('birdie')).to.equal(true)
-    expect(middleCells.at(offset++).hasClass('par')).to.equal(true)
-    expect(middleCells.at(offset++).hasClass('par')).to.equal(true)
-    expect(middleCells.at(offset++).hasClass('holeInOne')).to.equal(true)
-    expect(middleCells.at(offset++).hasClass('par')).to.equal(true)
-    expect(middleCells.at(offset++).hasClass('birdie')).to.equal(true)
-    expect(middleCells.at(offset++).hasClass('par')).to.equal(true)
-    expect(middleCells.at(offset++).hasClass('par')).to.equal(true)
-    expect(middleCells.at(offset++).hasClass('birdie')).to.equal(true)
-    expect(middleCells.at(offset++).hasClass('par')).to.equal(true)
-    expect(middleCells.at(offset++).hasClass('par')).to.equal(true)
+    expect(/^Hook-par/.test(middleCells.at(offset++).prop('className'))).to.equal(true)
+    expect(/^Hook-birdie/.test(middleCells.at(offset++).prop('className'))).to.equal(true)
+    expect(/^Hook-par/.test(middleCells.at(offset++).prop('className'))).to.equal(true)
+    expect(/^Hook-par/.test(middleCells.at(offset++).prop('className'))).to.equal(true)
+    expect(/^Hook-holeInOne/.test(middleCells.at(offset++).prop('className'))).to.equal(true)
+    expect(/^Hook-par/.test(middleCells.at(offset++).prop('className'))).to.equal(true)
+    expect(/^Hook-birdie/.test(middleCells.at(offset++).prop('className'))).to.equal(true)
+    expect(/^Hook-par/.test(middleCells.at(offset++).prop('className'))).to.equal(true)
+    expect(/^Hook-par/.test(middleCells.at(offset++).prop('className'))).to.equal(true)
+    expect(/^Hook-birdie/.test(middleCells.at(offset++).prop('className'))).to.equal(true)
+    expect(/^Hook-par/.test(middleCells.at(offset++).prop('className'))).to.equal(true)
+    expect(/^Hook-par/.test(middleCells.at(offset++).prop('className'))).to.equal(true)
     offset++
 
     // Player #2
-    expect(middleCells.at(offset++).hasClass('par')).to.equal(true)
-    expect(middleCells.at(offset++).hasClass('par')).to.equal(true)
-    expect(middleCells.at(offset++).hasClass('bogey')).to.equal(true)
-    expect(middleCells.at(offset++).hasClass('birdie')).to.equal(true)
-    expect(middleCells.at(offset++).hasClass('bogey')).to.equal(true)
-    expect(middleCells.at(offset++).hasClass('par')).to.equal(true)
-    expect(middleCells.at(offset++).hasClass('par')).to.equal(true)
-    expect(middleCells.at(offset++).hasClass('par')).to.equal(true)
-    expect(middleCells.at(offset++).hasClass('par')).to.equal(true)
-    expect(middleCells.at(offset++).hasClass('birdie')).to.equal(true)
-    expect(middleCells.at(offset++).hasClass('par')).to.equal(true)
-    expect(middleCells.at(offset++).hasClass('overBogey')).to.equal(true)
-    expect(middleCells.at(offset++).hasClass('par')).to.equal(true)
-    expect(middleCells.at(offset++).hasClass('par')).to.equal(true)
-    expect(middleCells.at(offset++).hasClass('eagle')).to.equal(true)
-    expect(middleCells.at(offset++).hasClass('par')).to.equal(true)
-    expect(middleCells.at(offset++).hasClass('par')).to.equal(true)
-    expect(middleCells.at(offset++).hasClass('birdie')).to.equal(true)
-    expect(middleCells.at(offset++).hasClass('birdie')).to.equal(true)
-    expect(middleCells.at(offset++).hasClass('birdie')).to.equal(true)
+    expect(/^Hook-par/.test(middleCells.at(offset++).prop('className'))).to.equal(true)
+    expect(/^Hook-par/.test(middleCells.at(offset++).prop('className'))).to.equal(true)
+    expect(/^Hook-bogey/.test(middleCells.at(offset++).prop('className'))).to.equal(true)
+    expect(/^Hook-birdie/.test(middleCells.at(offset++).prop('className'))).to.equal(true)
+    expect(/^Hook-bogey/.test(middleCells.at(offset++).prop('className'))).to.equal(true)
+    expect(/^Hook-par/.test(middleCells.at(offset++).prop('className'))).to.equal(true)
+    expect(/^Hook-par/.test(middleCells.at(offset++).prop('className'))).to.equal(true)
+    expect(/^Hook-par/.test(middleCells.at(offset++).prop('className'))).to.equal(true)
+    expect(/^Hook-par/.test(middleCells.at(offset++).prop('className'))).to.equal(true)
+    expect(/^Hook-birdie/.test(middleCells.at(offset++).prop('className'))).to.equal(true)
+    expect(/^Hook-par/.test(middleCells.at(offset++).prop('className'))).to.equal(true)
+    expect(/^Hook-overBogey/.test(middleCells.at(offset++).prop('className'))).to.equal(true)
+    expect(/^Hook-par/.test(middleCells.at(offset++).prop('className'))).to.equal(true)
+    expect(/^Hook-par/.test(middleCells.at(offset++).prop('className'))).to.equal(true)
+    expect(/^Hook-eagle/.test(middleCells.at(offset++).prop('className'))).to.equal(true)
+    expect(/^Hook-par/.test(middleCells.at(offset++).prop('className'))).to.equal(true)
+    expect(/^Hook-par/.test(middleCells.at(offset++).prop('className'))).to.equal(true)
+    expect(/^Hook-birdie/.test(middleCells.at(offset++).prop('className'))).to.equal(true)
+    expect(/^Hook-birdie/.test(middleCells.at(offset++).prop('className'))).to.equal(true)
+    expect(/^Hook-birdie/.test(middleCells.at(offset++).prop('className'))).to.equal(true)
   })
 })
 
