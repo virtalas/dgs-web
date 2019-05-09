@@ -41,16 +41,18 @@ const useStyles = makeStyles((theme) => ({
 
 interface Props {
   scores: PlayerScores[],
+  holeNumber: number,
+  onScoreChange: (newScores: PlayerScores[]) => void,
 }
 
 const PlayerScoreList: React.FC<Props> = (props) => {
   const classes = useStyles()
-  const { scores } = props
-  const [checked, setChecked] = useState(true)
+  const { scores, holeNumber, onScoreChange } = props
 
-  const handleToggle = (value: any) => {
-    console.log(value)
-    // setChecked(!value)
+  const handleStrokeChange = (playerId: string, stroke: number) => {
+    const playerIndex = scores.findIndex(playerScores => playerScores.player.id === playerId)
+    scores[playerIndex].strokes[holeNumber - 1] = stroke
+    onScoreChange(scores)
   }
 
   const rows = scores.map((scoreInfo, index) => (
@@ -62,21 +64,19 @@ const PlayerScoreList: React.FC<Props> = (props) => {
       <div className={classes.circle}>
         <input
           className={classes.strokeInput}
-          onChange={event => console.log(event.target.value)}
+          onChange={event => {
+            handleStrokeChange(scoreInfo.player.id, parseInt(event.target.value))
+            event.target.blur()
+          }}
           type="number"
-          value="0"
+          value={scoreInfo.strokes[holeNumber - 1]} 
           min="0"
           max="99"
+          onFocus={e => e.target.value = ''}
           inputMode="numeric"
           pattern="[0-9]*">
         </input>
       </div>
-      <ListItemSecondaryAction>
-        {/*<Switch
-          onChange={event => handleToggle(checked)}
-          checked={checked}
-        />*/}
-      </ListItemSecondaryAction>
     </ListItem>
   ))
 

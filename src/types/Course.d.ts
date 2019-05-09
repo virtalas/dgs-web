@@ -1,5 +1,5 @@
 interface Course {
-  id: number,
+  id: string,
   name: string,
   pars: number[],
   total: number,

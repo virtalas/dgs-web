@@ -3,9 +3,9 @@ import React from 'react'
 import GameCard from './GameCard'
 
 const games: Game[] = [{
-  id: 123,
+  id: "123sdfsdf",
   course: {
-    id: 5,
+    id: "fds3ury83ofh",
     name: "Puolarmaari",
     pars: [3,3,3,3,3,3,3,3,3,3,3,3,3,3,4,3,3,3,3,3],
     total: 60,
@@ -15,7 +15,7 @@ const games: Game[] = [{
   scores: [
     {
       player: {
-        id: 3,
+        id: "jf8pf8spö3",
         firstName: "Seppo",
       },
       strokes: [3,3,3,2,3,3,0,0,3,2,3,3,1,3,3,3,3,2,3,3],
@@ -25,7 +25,7 @@ const games: Game[] = [{
     },
     {
       player: {
-        id: 3,
+        id: "fh83p98slhs",
         firstName: "Teppo",
       },
       strokes: [3,3,4,2,3,3,3,3,3,2,3,6,3,3,2,3,3,2,2,2],
@@ -42,9 +42,9 @@ const games: Game[] = [{
   comment: "Fun :D",
   contestName: null,
 },{
-  id: 124,
+  id: "124fefs3r3gs",
   course: {
-    id: 5,
+    id: "uflshf8sls",
     name: "Puolarmaari",
     pars: [3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3],
     total: 60,
@@ -54,7 +54,7 @@ const games: Game[] = [{
   scores: [
     {
       player: {
-        id: 3,
+        id: "fnslh3f8l3ifslf",
         firstName: "Seppomoinen",
       },
       strokes: [3,3,3,2,3,0,0,0,3,2,3,3,3,3,3,3,3,2,3,3],
@@ -64,7 +64,7 @@ const games: Game[] = [{
     },
     {
       player: {
-        id: 3,
+        id: "jfispo3uf9slefi",
         firstName: "Teppo",
       },
       strokes: [3,3,4,2,3,3,3,3,3,2,3,3,3,6,3,3,3,2,3,3],
@@ -81,9 +81,9 @@ const games: Game[] = [{
   comment: "Fun :D Erittäin antoisa kierros. Fun :D Erittäin antoisa kierros. Fun :D Erittäin antoisa kierros. Fun :D Erittäin antoisa kierros. Fun :D Erittäin antoisa kierros. Fun :D Erittäin antoisa kierros. Fun :D Erittäin antoisa kierros. Fun :D Erittäin antoisa kierros. Fun :D Erittäin antoisa kierros. Fun :D Erittäin antoisa kierros. Fun :D Erittäin antoisa kierros. Fun :D Erittäin antoisa kierros. Fun :D Erittäin antoisa kierros. Fun :D Erittäin antoisa kierros. Fun :D Erittäin antoisa kierros. Fun :D Erittäin antoisa kierros. Fun :D Erittäin antoisa kierros. Fun :D Erittäin antoisa kierros. Fun :D Erittäin antoisa kierros. Fun :D Erittäin antoisa kierros.",
   contestName: null,
 },{
-  id: 125,
+  id: "1253rffsfsesfe",
   course: {
-    id: 5,
+    id: "j8fslof8sl3",
     name: "Tali",
     pars: [3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3],
     total: 60,
@@ -93,7 +93,7 @@ const games: Game[] = [{
   scores: [
     {
       player: {
-        id: 3,
+        id: "ja38ofus8los",
         firstName: "Seppo",
       },
       strokes: [3,3,3,2,3,0,0,0,3,2,3,3,3,3,3,2,3,3],
@@ -103,7 +103,7 @@ const games: Game[] = [{
     },
     {
       player: {
-        id: 3,
+        id: "jfl38suf8sofls",
         firstName: "Teppo",
       },
       strokes: [3,3,4,2,3,3,3,3,3,2,3,3,3,3,3,2,3,3],
@@ -120,9 +120,9 @@ const games: Game[] = [{
   comment: "Fun :D",
   contestName: null,
 },{
-  id: 126,
+  id: "1263fs9kföi39öps",
   course: {
-    id: 5,
+    id: "jfs9ö3fus9ljfsi",
     name: "Shorty",
     pars: [3,3,3,3,3,3,3,3,3,3,3,3,3,3],
     total: 60,
@@ -132,7 +132,7 @@ const games: Game[] = [{
   scores: [
     {
       player: {
-        id: 3,
+        id: "jfiljfseo9fjls3f",
         firstName: "Seppo",
       },
       strokes: [3,3,3,2,3,0,0,3,3,3,3,2,3,3],
@@ -142,7 +142,7 @@ const games: Game[] = [{
     },
     {
       player: {
-        id: 3,
+        id: "fi3sofjlls8ifjsilf",
         firstName: "Teppo",
       },
       strokes: [3,3,4,2,3,3,3,6,3,3,3,2,3,3],
@@ -159,9 +159,9 @@ const games: Game[] = [{
   comment: "Fun :D",
   contestName: null,
 },{
-  id: 127,
+  id: "fsefsef4f127",
   course: {
-    id: 5,
+    id: "flsul8lsejiflse",
     name: "Puolarmaari",
     pars: [3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3],
     total: 60,
@@ -171,7 +171,7 @@ const games: Game[] = [{
   scores: [
     {
       player: {
-        id: 3,
+        id: "nfsiefhjiflsji",
         firstName: "Seppo",
       },
       strokes: [3,3,3,2,3,0,0,0,3,2,3,3,3,3,3,3,3,2,3,3],
@@ -181,7 +181,7 @@ const games: Game[] = [{
     },
     {
       player: {
-        id: 3,
+        id: "fslf3i8o398ufslf",
         firstName: "Teppo",
       },
       strokes: [3,3,4,2,3,3,3,3,3,2,3,3,3,6,3,3,3,2,3,3],
@@ -198,9 +198,9 @@ const games: Game[] = [{
   comment: "Fun :D",
   contestName: null,
 },{
-  id: 128,
+  id: "d3f3fg128",
   course: {
-    id: 5,
+    id: "nfuslefh8lsje",
     name: "Puolarmaari",
     pars: [3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3],
     total: 60,
@@ -210,7 +210,7 @@ const games: Game[] = [{
   scores: [
     {
       player: {
-        id: 3,
+        id: "jfisöuf9sl3fij",
         firstName: "Seppo",
       },
       strokes: [3,3,3,2,3,0,0,0,3,2,3,3,3,3,3,3,3,2,3,3],
@@ -220,7 +220,7 @@ const games: Game[] = [{
     },
     {
       player: {
-        id: 3,
+        id: "fnuslfu48ljsr",
         firstName: "Teppo",
       },
       strokes: [3,3,4,2,3,3,3,3,3,2,3,3,3,6,3,3,3,2,3,3],
@@ -237,9 +237,9 @@ const games: Game[] = [{
   comment: "Fun :D",
   contestName: null,
 },{
-  id: 129,
+  id: "fj3ifolsu8lfu48ls",
   course: {
-    id: 5,
+    id: "j9göu8rlgudlig",
     name: "Puolarmaari",
     pars: [3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3],
     total: 60,
@@ -249,7 +249,7 @@ const games: Game[] = [{
   scores: [
     {
       player: {
-        id: 3,
+        id: "hgfsu4pu83slofj",
         firstName: "Seppo",
       },
       strokes: [3,3,3,2,3,0,0,0,3,2,3,3,3,3,3,3,3,2,3,3],
@@ -259,7 +259,7 @@ const games: Game[] = [{
     },
     {
       player: {
-        id: 3,
+        id: "jfs83oju8soög",
         firstName: "Teppo",
       },
       strokes: [3,3,4,2,3,3,3,3,3,2,3,3,3,6,3,3,3,2,3,3],

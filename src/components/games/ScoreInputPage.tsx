@@ -1,32 +1,50 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { makeStyles } from '@material-ui/styles'
 
 import HoleInfoBar from './HoleInfoBar'
 import PlayerScoreList from './PlayerScoreList'
 
 // Mock data:
-const scores: PlayerScores[] = [
-  {
-    player: {
-      id: 3,
-      firstName: "Seppo",
-    },
-    strokes: [3,3,3,2,3,3,0,0,3,2,3,3,1,3,3,3,3,2,3,3],
-    obs: [0,1,2,3,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-    total: 49,
-    toPar: 4,
+const gameMock: Game = {
+  id: "123sdfsdf",
+  course: {
+    id: "fds3ury83ofh",
+    name: "Puolarmaari",
+    pars: [3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 4, 3, 3, 3, 3, 3],
+    total: 60,
   },
-  {
-    player: {
-      id: 3,
-      firstName: "Teppo",
+  startDate: null,
+  endDate: "2019-02-16 09:22",
+  scores: [
+    {
+      player: {
+        id: "jf8pf8spö3",
+        firstName: "Seppo",
+      },
+      strokes: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      obs: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      total: 0,
+      toPar: 0
     },
-    strokes: [3,3,4,2,3,3,3,3,3,2,3,6,3,3,2,3,3,2,2,2],
-    obs: [0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-    total: 58,
-    toPar: -2,
-  }
-]
+    {
+      player: {
+        id: "fh83p98slhs",
+        firstName: "Teppo",
+      },
+      strokes: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      obs: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      total: 0,
+      toPar: 0
+    }
+  ],
+  temperature: null,
+  weatherConditions: [],
+  conditions: [],
+  highScorers: [],
+  illegalScorers: [],
+  comment: null,
+  contestName: null,
+}
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -38,10 +56,25 @@ interface Props {}
 const ScoreInputPage: React.FC<Props> = () => {
   const classes = useStyles()
 
+  // TODO
+  // Create a new game by POST.
+  // Returns an empty game with scores.
+  // OR fetch the game to continue inputting scores.
+  const [game, setGame] = useState(gameMock)
+  const [holeNum, setHoleNum] = useState(1) // Always start from hole one.
+
+  const updateScores = (newScores: PlayerScores[]) => {
+    setGame({
+      ...game,
+      scores: newScores,
+    })
+  }
+
   return (
     <div className={classes.root}>
       <HoleInfoBar />
-      <PlayerScoreList scores={scores} />
+      <PlayerScoreList scores={game.scores} holeNumber={holeNum} onScoreChange={updateScores} />
+      {/* Bottom navigation component (scores, hole info, map, game) */}
     </div>
   )
 }

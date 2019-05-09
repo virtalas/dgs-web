@@ -1,5 +1,5 @@
 interface Game {
-  id: number,
+  id: string,
   course: Course,
   startDate: string | null,
   endDate: string,

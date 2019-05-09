@@ -1,4 +1,4 @@
 interface Player {
-  id: number,
+  id: string,
   firstName: string,
 }
