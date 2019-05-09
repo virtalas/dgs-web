@@ -1,4 +1,7 @@
 # dgs-web
+
+[![Build Status](https://travis-ci.org/virtalas/dgs-web.svg?branch=master)](https://travis-ci.org/virtalas/dgs-web)
+
 Disc Golf Stats web frontend built with ReactJS for [dgs-api](https://github.com/kajte/dgs-api).
 
 ### Installation
