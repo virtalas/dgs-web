@@ -1,9 +1,9 @@
 import React from 'react'
 
-const Players: React.FC<{}> = () => {
+const Courses: React.FC<{}> = () => {
   return (
-    <div id="playersPage">
-      <h2>Players</h2>
+    <div id="coursesPage">
+      <h2>Courses</h2>
       <p>Cras facilisis urna ornare ex volutpat, et
       convallis erat elementum. Ut aliquam, ipsum vitae
       gravida suscipit, metus dui bibendum est, eget rhoncus nibh
@@ -16,4 +16,4 @@ const Players: React.FC<{}> = () => {
   )
 }
 
-export default Players
+export default Courses

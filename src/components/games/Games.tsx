@@ -279,7 +279,7 @@ const games: Game[] = [{
 
 const Games: React.FC<{}> = () => {
   return (
-    <div>
+    <div id="gamesPage">
       {games.map(game => (
         <GameCard game={game} key={game.id}/>
       ))}

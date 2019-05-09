@@ -28,6 +28,10 @@ import DiscGolfBasket from './DiscGolfBasket'
 
 import Games from './games/Games'
 import Players from './players/Players'
+import Courses from './courses/Courses'
+import Graphs from './graphs/Graphs'
+import Competitions from './competitions/Competitions'
+import Info from './info/Info'
 
 const drawerWidth = 240
 
@@ -209,12 +213,16 @@ const ResponsiveDrawer: React.FC<Props> = (props) => {
       <main className={classes.content}>
         <div className={classes.toolbar} />
         <div className="content">
-          <Route exact path="/" component={Games}/>
-          <Route path="/games" component={Games}/>
-          <Route path="/players" component={Players}/>
+          <Route exact path="/" component={Games} />
+          <Route path="/games" component={Games} />
+          <Route path="/players" component={Players} />
+          <Route path="/courses" component={Courses} />
+          <Route path="/graphs" component={Graphs} />
+          <Route path="/competitions" component={Competitions} />
+          <Route path="/info" component={Info} />
 
           {shouldRenderNewButton ? (
-            <NavLink to={newButtonPath} className={classes.navLink}>
+            <NavLink to={newButtonPath} className={classes.navLink} id="newButton">
               {/* Usage of 'any': https://material-ui.com/guides/typescript/#usage-of-component-property */}
               <Fab color={newButtonColor as any} aria-label="Add" className={classes.fab}>
                 <AddIcon />
