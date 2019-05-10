@@ -27,12 +27,6 @@ describe('Drawer', function () {
     cy.get('#infoPage')
   })
 
-  it('navigates to new game page', function () {
-    cy.visit('/games')
-    cy.get('#newButton').click({ force: true })
-    // TODO: when implemented
-  })
-
   it('navigates to new course page', function () {
     cy.visit('/courses')
     cy.get('#newButton').click({ force: true })

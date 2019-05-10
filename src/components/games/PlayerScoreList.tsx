@@ -1,9 +1,8 @@
-import React, { useState } from 'react'
+import React from 'react'
 
 import { makeStyles } from '@material-ui/styles'
 import List from '@material-ui/core/List'
 import ListItem from '@material-ui/core/ListItem'
-import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction'
 import ListItemText from '@material-ui/core/ListItemText'
 import ListSubheader from '@material-ui/core/ListSubheader'
 import Paper from '@material-ui/core/Paper'
@@ -43,15 +42,17 @@ interface Props {
   scores: PlayerScores[],
   holeNumber: number,
   onScoreChange: (newScores: PlayerScores[]) => void,
+  updating: boolean,
 }
 
 const PlayerScoreList: React.FC<Props> = (props) => {
   const classes = useStyles()
-  const { scores, holeNumber, onScoreChange } = props
+  const { scores, holeNumber, onScoreChange, updating } = props
 
-  const handleStrokeChange = (playerId: string, stroke: number) => {
+  const handleStrokeChange = (playerId: string, event: React.ChangeEvent<HTMLInputElement>) => {
     const playerIndex = scores.findIndex(playerScores => playerScores.player.id === playerId)
-    scores[playerIndex].strokes[holeNumber - 1] = stroke
+    scores[playerIndex].strokes[holeNumber - 1] = parseInt(event.target.value)
+    event.target.blur() // Unfocus/blur the field after inputting a number.
     onScoreChange(scores)
   }
 
@@ -64,15 +65,12 @@ const PlayerScoreList: React.FC<Props> = (props) => {
       <div className={classes.circle}>
         <input
           className={classes.strokeInput}
-          onChange={event => {
-            handleStrokeChange(scoreInfo.player.id, parseInt(event.target.value))
-            event.target.blur()
-          }}
-          type="number"
+          onChange={event => handleStrokeChange(scoreInfo.player.id, event)}
+          type="tel"
           value={scoreInfo.strokes[holeNumber - 1]} 
           min="0"
           max="99"
-          onFocus={e => e.target.value = ''}
+          onFocus={e => e.target.value = '' /* Clear the field when it comes into focus. */}
           inputMode="numeric"
           pattern="[0-9]*">
         </input>
@@ -86,7 +84,9 @@ const PlayerScoreList: React.FC<Props> = (props) => {
         <Paper>
           <List>
             {rows}
-            <ListSubheader>Scores were last sent X minutes ago.</ListSubheader>
+            <ListSubheader>
+              {updating ? 'Syncing game...' : 'The game was synced X minutes ago.'}
+            </ListSubheader>
           </List>
         </Paper>
       </BlueCard>
