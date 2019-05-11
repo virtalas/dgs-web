@@ -7,13 +7,21 @@ import RestoreIcon from '@material-ui/icons/Restore'
 import FavoriteIcon from '@material-ui/icons/Favorite'
 import LocationOnIcon from '@material-ui/icons/LocationOn'
 import CircularProgress from '@material-ui/core/CircularProgress'
+import Fab from '@material-ui/core/Fab'
 
 import HoleInfoBar from './HoleInfoBar'
 import PlayerScoreList from './PlayerScoreList'
 import gamesService from '../../services/gamesService'
 
+const scoreInputViewTab = 0
+const holeInfoViewTab = 1
+const mapViewTab = 2
+const gameInfoViewTab = 3
+
 const useStyles = makeStyles((theme) => ({
   bottomNav: {
+    width: '100%',
+    position: 'fixed',
     bottom: 0,
   },
   progress: {
@@ -23,8 +31,6 @@ const useStyles = makeStyles((theme) => ({
     bottom: 0,
     left: 0,
     right: 0,
-    height: '30%',
-    width: '50%',
   },
   progressContainer: {
     position: 'absolute',
@@ -32,6 +38,12 @@ const useStyles = makeStyles((theme) => ({
     left: 0,
     height: '100%',
     width: '100%',
+  },
+  prevHole: {
+
+  },
+  nextHole: {
+
   },
 }))
 
@@ -42,13 +54,11 @@ const ScoreInputPage: React.FC<{}> = (props: any) => {
   const [game, setGame] = useState()
   const [holeNum, setHoleNum] = useState(1) // TODO: Use findIndex() to start from first 0 stroked hole
   const [updating, setUpdating] = useState(false)
-  const [value, setValue] = React.useState(0)
+  const [tab, setTab] = React.useState(0)
 
   useEffect(() => {
     gamesService.getGame(gameId).then((fetchedGame) => {
-      setTimeout(function () {
-        setGame(fetchedGame)
-      }, 5000);
+      setGame(fetchedGame)
     })
   }, [gameId])
   
@@ -68,37 +78,57 @@ const ScoreInputPage: React.FC<{}> = (props: any) => {
     })
   }
 
-  if (game !== undefined) {
-    return (
-      <div>
-        <HoleInfoBar />
-        <PlayerScoreList
-          scores={game.scores}
-          holeNumber={holeNum}
-          onScoreChange={updateScores}
-          updating={updating}
-        />
-        {/* Prev/Next hole buttons */}
-        <BottomNavigation
-          value={value}
-          onChange={(event, newValue) => setValue(newValue)}
-          showLabels
-          className={classes.bottomNav}
-        >
-          <BottomNavigationAction label="Scores" icon={<RestoreIcon />} />
-          <BottomNavigationAction label="Hole info" icon={<FavoriteIcon />} />
-          <BottomNavigationAction label="Map" icon={<LocationOnIcon />} />
-          <BottomNavigationAction label="Game info" icon={<LocationOnIcon />} />
-        </BottomNavigation>
-      </div>
-    )
-  } else {
+  if (game === undefined) {
     return (
       <div className={classes.progressContainer}>
         <CircularProgress className={classes.progress} />
       </div>
     )
   }
+
+  const scoreInputView = (
+    <div>
+      <PlayerScoreList
+        scores={game.scores}
+        holeNumber={holeNum}
+        onScoreChange={updateScores}
+        updating={updating}
+      />
+      <Fab color="primary" aria-label="Add" className={classes.prevHole}>
+        p
+      </Fab>
+      <Fab color="primary" aria-label="Add" className={classes.nextHole}>
+        n
+      </Fab>
+    </div>
+  )
+
+  let activeView
+  switch (tab) {
+    case scoreInputViewTab:
+      activeView = scoreInputView
+      break
+    default:
+      break
+  }
+
+  return (
+    <div>
+      <HoleInfoBar showInfo={tab !== gameInfoViewTab} />
+      {activeView}
+      <BottomNavigation
+        value={tab}
+        onChange={(event, newTab) => setTab(newTab)}
+        showLabels
+        className={classes.bottomNav}
+      >
+        <BottomNavigationAction label="Scores" icon={<RestoreIcon />} />
+        <BottomNavigationAction label="Hole info" icon={<FavoriteIcon />} />
+        <BottomNavigationAction label="Map" icon={<LocationOnIcon />} />
+        <BottomNavigationAction label="Game info" icon={<LocationOnIcon />} />
+      </BottomNavigation>
+    </div>
+  )
 }
 
 export default ScoreInputPage

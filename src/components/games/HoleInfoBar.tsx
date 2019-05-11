@@ -20,10 +20,13 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-interface Props {}
+interface Props {
+  showInfo: boolean,
+}
 
 const HoleInfoBar: React.FC<Props> = (props) => {
   const classes = useStyles()
+  const { showInfo } = props
   const [anchorEl, setAnchorEl] = React.useState<EventTarget | null>(null)
 
   const handleClick = (event: MouseEvent): void => {
@@ -39,10 +42,10 @@ const HoleInfoBar: React.FC<Props> = (props) => {
       <AppBar position="fixed">
         <Toolbar>
           <Typography variant="h6" color="inherit">
-            Hole X
+            {showInfo ? 'Hole X' : null}
           </Typography>
           <Typography variant="h6" color="inherit" className={classes.par}>
-            Par X
+            {showInfo ? 'Par X' : null}
           </Typography>
           <IconButton
             aria-owns={anchorEl ? 'simple-menu' : undefined}
