@@ -4,7 +4,7 @@ import Typography from '@material-ui/core/Typography'
 
 import ScoreCard from './ScoreCard'
 import GameInfo from './GameInfo'
-import BlueCard from '../BlueCard'
+import BlueCard from './BlueCard'
 
 const useStyles = makeStyles((theme) => ({
   title: {

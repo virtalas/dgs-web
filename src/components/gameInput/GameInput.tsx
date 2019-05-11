@@ -7,25 +7,16 @@ import RestoreIcon from '@material-ui/icons/Restore'
 import FavoriteIcon from '@material-ui/icons/Favorite'
 import LocationOnIcon from '@material-ui/icons/LocationOn'
 import CircularProgress from '@material-ui/core/CircularProgress'
-import Fab from '@material-ui/core/Fab'
-import Button from '@material-ui/core/Button'
-import Grid from '@material-ui/core/Grid'
 
 import HoleInfoBar from './HoleInfoBar'
-import PlayerScoreList from './PlayerScoreList'
+import StrokeInput from './HoleNavigation'
+import PlayerStrokeList from './PlayerStrokeInput'
 import gamesService from '../../services/gamesService'
 
 const scoreInputViewTab = 0
 const holeInfoViewTab = 1
 const mapViewTab = 2
 const gameInfoViewTab = 3
-
-const buttonHeight = 110
-const buttonEdgeMargin = 2
-const buttonBottomMargin = 12
-
-const parButtonWidth = 80
-const parButtonHeight = 40
 
 const useStyles = makeStyles((theme) => ({
   bottomNav: {
@@ -48,31 +39,9 @@ const useStyles = makeStyles((theme) => ({
     height: '100%',
     width: '100%',
   },
-  prevHole: {
-    position: 'fixed',
-    bottom: buttonBottomMargin + '%',
-    left: buttonEdgeMargin + '%',
-    height: buttonHeight,
-    width: buttonHeight,
-  },
-  nextHole: {
-    position: 'fixed',
-    bottom: buttonBottomMargin + '%',
-    right: buttonEdgeMargin + '%',
-    height: buttonHeight,
-    width: buttonHeight,
-  },
-  par: {
-    margin: 'auto',
-    position: 'fixed',
-    left: window.innerWidth / 2 - parButtonWidth / 2, // Place it in the center.
-    bottom: buttonBottomMargin + '%',
-    width: parButtonWidth,
-    height: parButtonHeight,
-  }
 }))
 
-const ScoreInputPage: React.FC<{}> = (props: any) => {
+const GameInput: React.FC<{}> = (props: any) => {
   const classes = useStyles()
   const gameId = props.match.params.gameid // Props type as any to avoid props.match type problem.
   
@@ -103,6 +72,7 @@ const ScoreInputPage: React.FC<{}> = (props: any) => {
     })
   }
 
+  // Show loading screen while fetching game:
   if (game === undefined) {
     return (
       <div className={classes.progressContainer}>
@@ -113,21 +83,13 @@ const ScoreInputPage: React.FC<{}> = (props: any) => {
 
   const scoreInputView = (
     <div>
-      <PlayerScoreList
+      <PlayerStrokeList
         scores={game.scores}
         holeNumber={holeNum}
         onScoreChange={updateScores}
         updating={updating}
       />
-      <Fab color="primary" aria-label="Add" className={classes.prevHole}>
-        ◀
-      </Fab>
-      <Button variant="contained" size="medium" color="primary" className={classes.par}>
-        Par
-        </Button>
-      <Fab color="primary" aria-label="Add" className={classes.nextHole}>
-        ▶
-      </Fab>
+      <StrokeInput holeNum={holeNum} />
     </div>
   )
 
@@ -135,6 +97,12 @@ const ScoreInputPage: React.FC<{}> = (props: any) => {
   switch (tab) {
     case scoreInputViewTab:
       activeView = scoreInputView
+      break
+    case holeInfoViewTab:
+      // TODO
+      break
+    case mapViewTab:
+      // TODO
       break
     default:
       break
@@ -159,4 +127,4 @@ const ScoreInputPage: React.FC<{}> = (props: any) => {
   )
 }
 
-export default ScoreInputPage
+export default GameInput

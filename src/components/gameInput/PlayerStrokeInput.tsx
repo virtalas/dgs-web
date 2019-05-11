@@ -7,7 +7,7 @@ import ListItemText from '@material-ui/core/ListItemText'
 import ListSubheader from '@material-ui/core/ListSubheader'
 import Paper from '@material-ui/core/Paper'
 
-import BlueCard from '../BlueCard'
+import BlueCard from '../gameCard/BlueCard'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -45,7 +45,7 @@ interface Props {
   updating: boolean,
 }
 
-const PlayerScoreList: React.FC<Props> = (props) => {
+const PlayerStrokeInput: React.FC<Props> = (props) => {
   const classes = useStyles()
   const { scores, holeNumber, onScoreChange, updating } = props
 
@@ -94,4 +94,4 @@ const PlayerScoreList: React.FC<Props> = (props) => {
   )
 }
 
-export default PlayerScoreList
+export default PlayerStrokeInput

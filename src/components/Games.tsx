@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 
-import GameCard from './GameCard'
-import gamesService from '../../services/gamesService'
+import GameCard from './gameCard/GameCard'
+import gamesService from '../services/gamesService'
 
 const Games: React.FC<{}> = () => {
   const [games, setGames] = useState<Game[]>([])

@@ -26,7 +26,7 @@ import InfoIcon from '@material-ui/icons/Info'
 import BallotIcon from '@material-ui/icons/Ballot'
 import DiscGolfBasket from './DiscGolfBasket'
 
-import Games from './games/Games'
+import Games from './Games'
 import Players from './players/Players'
 import Courses from './courses/Courses'
 import Graphs from './graphs/Graphs'
