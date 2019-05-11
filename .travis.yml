@@ -15,7 +15,7 @@ cache:
     - ~/.cache
 before_script:
   - npm install wait-on
-  - npm start & wait-on https://localhost:3000
+  - npm start & wait-on http://localhost:3000
 install:
   - npm ci
 script:
