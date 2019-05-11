@@ -6,6 +6,7 @@ import BottomNavigationAction from '@material-ui/core/BottomNavigationAction'
 import RestoreIcon from '@material-ui/icons/Restore'
 import FavoriteIcon from '@material-ui/icons/Favorite'
 import LocationOnIcon from '@material-ui/icons/LocationOn'
+import CircularProgress from '@material-ui/core/CircularProgress'
 
 import HoleInfoBar from './HoleInfoBar'
 import PlayerScoreList from './PlayerScoreList'
@@ -14,7 +15,24 @@ import gamesService from '../../services/gamesService'
 const useStyles = makeStyles((theme) => ({
   bottomNav: {
     bottom: 0,
-  }
+  },
+  progress: {
+    margin: 'auto',
+    position: 'absolute',
+    top: 0,
+    bottom: 0,
+    left: 0,
+    right: 0,
+    height: '30%',
+    width: '50%',
+  },
+  progressContainer: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    height: '100%',
+    width: '100%',
+  },
 }))
 
 const ScoreInputPage: React.FC<{}> = (props: any) => {
@@ -28,7 +46,9 @@ const ScoreInputPage: React.FC<{}> = (props: any) => {
 
   useEffect(() => {
     gamesService.getGame(gameId).then((fetchedGame) => {
-      setGame(fetchedGame)
+      setTimeout(function () {
+        setGame(fetchedGame)
+      }, 5000);
     })
   }, [gameId])
   
@@ -61,9 +81,7 @@ const ScoreInputPage: React.FC<{}> = (props: any) => {
         {/* Prev/Next hole buttons */}
         <BottomNavigation
           value={value}
-          onChange={(event, newValue) => {
-            setValue(newValue);
-          }}
+          onChange={(event, newValue) => setValue(newValue)}
           showLabels
           className={classes.bottomNav}
         >
@@ -75,7 +93,11 @@ const ScoreInputPage: React.FC<{}> = (props: any) => {
       </div>
     )
   } else {
-    return (<div>Loading...</div>) // TODO: Better loading screen
+    return (
+      <div className={classes.progressContainer}>
+        <CircularProgress className={classes.progress} />
+      </div>
+    )
   }
 }
 
