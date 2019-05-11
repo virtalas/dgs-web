@@ -8,6 +8,8 @@ import FavoriteIcon from '@material-ui/icons/Favorite'
 import LocationOnIcon from '@material-ui/icons/LocationOn'
 import CircularProgress from '@material-ui/core/CircularProgress'
 import Fab from '@material-ui/core/Fab'
+import Button from '@material-ui/core/Button'
+import Grid from '@material-ui/core/Grid'
 
 import HoleInfoBar from './HoleInfoBar'
 import PlayerScoreList from './PlayerScoreList'
@@ -17,6 +19,10 @@ const scoreInputViewTab = 0
 const holeInfoViewTab = 1
 const mapViewTab = 2
 const gameInfoViewTab = 3
+
+const buttonHeight = 110
+const buttonEdgeMargin = 2
+const buttonBottomMargin = 12
 
 const useStyles = makeStyles((theme) => ({
   bottomNav: {
@@ -40,16 +46,31 @@ const useStyles = makeStyles((theme) => ({
     width: '100%',
   },
   prevHole: {
-
+    position: 'fixed',
+    bottom: buttonBottomMargin + '%',
+    left: buttonEdgeMargin + '%',
+    height: buttonHeight,
+    width: buttonHeight,
   },
   nextHole: {
-
+    position: 'fixed',
+    bottom: buttonBottomMargin + '%',
+    right: buttonEdgeMargin + '%',
+    height: buttonHeight,
+    width: buttonHeight,
   },
+  par: {
+    margin: 'auto',
+    position: 'fixed',
+    left: '50%',
+    right: '50%',
+    bottom: buttonBottomMargin + '%',
+  }
 }))
 
 const ScoreInputPage: React.FC<{}> = (props: any) => {
   const classes = useStyles()
-  const gameId = props.match.params.gameid // Props type as any to avoid props.match problem.
+  const gameId = props.match.params.gameid // Props type as any to avoid props.match type problem.
   
   const [game, setGame] = useState()
   const [holeNum, setHoleNum] = useState(1) // TODO: Use findIndex() to start from first 0 stroked hole
@@ -95,10 +116,13 @@ const ScoreInputPage: React.FC<{}> = (props: any) => {
         updating={updating}
       />
       <Fab color="primary" aria-label="Add" className={classes.prevHole}>
-        p
+        ◀
       </Fab>
+      <Button variant="contained" size="medium" color="primary" className={classes.par}>
+        Par
+        </Button>
       <Fab color="primary" aria-label="Add" className={classes.nextHole}>
-        n
+        ▶
       </Fab>
     </div>
   )
