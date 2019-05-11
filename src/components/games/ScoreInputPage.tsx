@@ -24,6 +24,9 @@ const buttonHeight = 110
 const buttonEdgeMargin = 2
 const buttonBottomMargin = 12
 
+const parButtonWidth = 80
+const parButtonHeight = 40
+
 const useStyles = makeStyles((theme) => ({
   bottomNav: {
     width: '100%',
@@ -62,9 +65,10 @@ const useStyles = makeStyles((theme) => ({
   par: {
     margin: 'auto',
     position: 'fixed',
-    left: '50%',
-    right: '50%',
+    left: window.innerWidth / 2 - parButtonWidth / 2, // Place it in the center.
     bottom: buttonBottomMargin + '%',
+    width: parButtonWidth,
+    height: parButtonHeight,
   }
 }))
 
