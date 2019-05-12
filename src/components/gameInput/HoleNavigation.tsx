@@ -3,10 +3,12 @@ import React from 'react'
 import Fab from '@material-ui/core/Fab'
 import Button from '@material-ui/core/Button'
 import { makeStyles } from '@material-ui/styles'
+import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos'
+import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIos'
 
 const buttonHeight = 110
 const buttonEdgeMargin = 2
-const buttonBottomMargin = 12
+const buttonBottomMargin = 13
 
 const parButtonWidth = 80
 const parButtonHeight = 40
@@ -38,22 +40,27 @@ const useStyles = makeStyles((theme) => ({
 
 interface Props {
   holeNum: number,
+  showPar: boolean,
+  onPrevHole: Function,
+  onNextHole: Function,
 }
 
 const HoleNavigation: React.FC<Props> = (props) => {
   const classes = useStyles()
+  const { showPar, onPrevHole, onNextHole } = props
 
   return (
     <div>
-      <Fab color="primary" aria-label="Add" className={classes.prevHole}>
-        ◀
+      <Fab color="primary" aria-label="Add" className={classes.prevHole} onClick={() => onPrevHole()}>
+        <ArrowBackIosIcon />
       </Fab>
-      <Button variant="contained" size="medium" color="primary" className={classes.par}>
-        Par
+      {showPar ? (
+        <Button variant="contained" size="medium" color="primary" className={classes.par}>
+          Par
         </Button>
-      {/* TODO: Big hole number. */}
-      <Fab color="primary" aria-label="Add" className={classes.nextHole}>
-        ▶
+      ) : null}
+      <Fab color="primary" aria-label="Add" className={classes.nextHole} onClick={() => onNextHole()}>
+        <ArrowForwardIosIcon />
       </Fab>
     </div>
   )

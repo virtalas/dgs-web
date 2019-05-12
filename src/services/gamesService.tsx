@@ -3,7 +3,7 @@ const mockGame: Game = {
   course: {
     id: "fds3ury83ofh",
     name: "Puolarmaari",
-    pars: [3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 4, 3, 3, 3, 3, 3],
+    pars: [3, 4, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 4, 3, 3, 3, 3, 3],
     total: 60,
   },
   startDate: null,

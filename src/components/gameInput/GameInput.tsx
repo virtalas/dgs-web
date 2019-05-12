@@ -3,14 +3,15 @@ import React, { useState, useEffect } from 'react'
 import { makeStyles } from '@material-ui/styles'
 import BottomNavigation from '@material-ui/core/BottomNavigation'
 import BottomNavigationAction from '@material-ui/core/BottomNavigationAction'
-import RestoreIcon from '@material-ui/icons/Restore'
-import FavoriteIcon from '@material-ui/icons/Favorite'
+import DescriptionIcon from '@material-ui/icons/Description'
+import InfoIcon from '@material-ui/icons/Info'
+import EditIcon from '@material-ui/icons/Edit'
 import LocationOnIcon from '@material-ui/icons/LocationOn'
 import CircularProgress from '@material-ui/core/CircularProgress'
 
 import HoleInfoBar from './HoleInfoBar'
-import StrokeInput from './HoleNavigation'
-import PlayerStrokeList from './PlayerStrokeInput'
+import HoleNavigation from './HoleNavigation'
+import PlayerStrokeInput from './PlayerStrokeInput'
 import gamesService from '../../services/gamesService'
 
 const scoreInputViewTab = 0
@@ -72,6 +73,22 @@ const GameInput: React.FC<{}> = (props: any) => {
     })
   }
 
+  const handlePrevHole = () => {
+    if (holeNum > 1) {
+      setHoleNum(holeNum - 1)
+      handleHoleChange()
+    }
+  }
+
+  const handleNextHole = () => {
+    if (holeNum === game.course.pars.length) {
+      setTab(gameInfoViewTab)
+    } else {
+      setHoleNum(holeNum + 1)
+    }
+    handleHoleChange()
+  }
+
   // Show loading screen while fetching game:
   if (game === undefined) {
     return (
@@ -83,13 +100,29 @@ const GameInput: React.FC<{}> = (props: any) => {
 
   const scoreInputView = (
     <div>
-      <PlayerStrokeList
+      <PlayerStrokeInput
         scores={game.scores}
         holeNumber={holeNum}
         onScoreChange={updateScores}
         updating={updating}
       />
-      <StrokeInput holeNum={holeNum} />
+      <HoleNavigation
+        holeNum={holeNum}
+        showPar={true}
+        onPrevHole={handlePrevHole}
+        onNextHole={handleNextHole}
+      />
+    </div>
+  )
+
+  const holeInfoView = (
+    <div>
+      <HoleNavigation
+        holeNum={holeNum}
+        showPar={true}
+        onPrevHole={handlePrevHole}
+        onNextHole={handleNextHole}
+      />
     </div>
   )
 
@@ -99,7 +132,7 @@ const GameInput: React.FC<{}> = (props: any) => {
       activeView = scoreInputView
       break
     case holeInfoViewTab:
-      // TODO
+      activeView = holeInfoView
       break
     case mapViewTab:
       // TODO
@@ -110,7 +143,11 @@ const GameInput: React.FC<{}> = (props: any) => {
 
   return (
     <div>
-      <HoleInfoBar showInfo={tab !== gameInfoViewTab} />
+      <HoleInfoBar
+        showInfo={tab !== gameInfoViewTab}
+        holeNum={holeNum}
+        par={game.course.pars[holeNum - 1]}
+      />
       {activeView}
       <BottomNavigation
         value={tab}
@@ -118,10 +155,10 @@ const GameInput: React.FC<{}> = (props: any) => {
         showLabels
         className={classes.bottomNav}
       >
-        <BottomNavigationAction label="Scores" icon={<RestoreIcon />} />
-        <BottomNavigationAction label="Hole info" icon={<FavoriteIcon />} />
+        <BottomNavigationAction label="Scores" icon={<EditIcon />} />
+        <BottomNavigationAction label="Hole info" icon={<InfoIcon />} />
         <BottomNavigationAction label="Map" icon={<LocationOnIcon />} />
-        <BottomNavigationAction label="Game info" icon={<LocationOnIcon />} />
+        <BottomNavigationAction label="Game info" icon={<DescriptionIcon />} />
       </BottomNavigation>
     </div>
   )
