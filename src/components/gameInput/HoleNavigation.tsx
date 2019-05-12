@@ -43,11 +43,12 @@ interface Props {
   showPar: boolean,
   onPrevHole: Function,
   onNextHole: Function,
+  onPar?: Function,
 }
 
 const HoleNavigation: React.FC<Props> = (props) => {
   const classes = useStyles()
-  const { showPar, onPrevHole, onNextHole } = props
+  const { showPar, onPrevHole, onNextHole, onPar } = props
 
   return (
     <div>
@@ -55,7 +56,17 @@ const HoleNavigation: React.FC<Props> = (props) => {
         <ArrowBackIosIcon />
       </Fab>
       {showPar ? (
-        <Button variant="contained" size="medium" color="primary" className={classes.par}>
+        <Button
+          variant="contained"
+          size="medium"
+          color="primary"
+          className={classes.par}
+          onClick={() => {
+            if (typeof onPar !== 'undefined') {
+              onPar()
+            }
+          }}
+        >
           Par
         </Button>
       ) : null}

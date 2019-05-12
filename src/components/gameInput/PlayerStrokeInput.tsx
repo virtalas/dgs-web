@@ -5,13 +5,10 @@ import List from '@material-ui/core/List'
 import ListItem from '@material-ui/core/ListItem'
 import ListItemText from '@material-ui/core/ListItemText'
 import ListSubheader from '@material-ui/core/ListSubheader'
-import Paper from '@material-ui/core/Paper'
-
-import BlueCard from '../gameCard/BlueCard'
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    paddingTop: theme.spacing.unit * 7,
+    paddingTop: theme.spacing.unit * 8,
   },
   circle: {
     width: 40,
@@ -36,6 +33,9 @@ const useStyles = makeStyles((theme) => ({
     width: 40,
     outline: 'none',
   },
+  syncText: {
+    textAlign: 'center',
+  }
 }))
 
 interface Props {
@@ -59,7 +59,7 @@ const PlayerStrokeInput: React.FC<Props> = (props) => {
   const rows = scores.map((scoreInfo, index) => (
     <ListItem key={index}>
       <ListItemText primary={scoreInfo.player.firstName} />
-      <ListItemText primary="-3" />
+      <ListItemText primary="-X" />
       <ListItemText primary="OB:" />
       <ListItemText primary="Throws:" />
       <div className={classes.circle}>
@@ -80,16 +80,12 @@ const PlayerStrokeInput: React.FC<Props> = (props) => {
 
   return (
     <div className={classes.root}>
-      <BlueCard>
-        <Paper>
-          <List>
-            {rows}
-            <ListSubheader>
-              {updating ? 'Syncing game...' : 'The game was synced X minutes ago.'}
-            </ListSubheader>
-          </List>
-        </Paper>
-      </BlueCard>
+      <List>
+        {rows}
+        <ListSubheader className={classes.syncText}>
+          {updating ? 'Syncing game...' : 'The game was synced X minutes ago.'}
+        </ListSubheader>
+      </List>
     </div>
   )
 }

@@ -73,20 +73,28 @@ const GameInput: React.FC<{}> = (props: any) => {
     })
   }
 
-  const handlePrevHole = () => {
+  const handlePrevHoleClick = () => {
     if (holeNum > 1) {
       setHoleNum(holeNum - 1)
       handleHoleChange()
     }
   }
 
-  const handleNextHole = () => {
+  const handleNextHoleClick = () => {
     if (holeNum === game.course.pars.length) {
       setTab(gameInfoViewTab)
     } else {
       setHoleNum(holeNum + 1)
     }
     handleHoleChange()
+  }
+
+  const handleParClick = () => {
+    const updatedScores: PlayerScores[] = game.scores
+    updatedScores.forEach((playerScores: PlayerScores) => {
+      playerScores.strokes[holeNum - 1] = game.course.pars[holeNum - 1]
+    })
+    updateScores(updatedScores)
   }
 
   // Show loading screen while fetching game:
@@ -109,8 +117,9 @@ const GameInput: React.FC<{}> = (props: any) => {
       <HoleNavigation
         holeNum={holeNum}
         showPar={true}
-        onPrevHole={handlePrevHole}
-        onNextHole={handleNextHole}
+        onPrevHole={handlePrevHoleClick}
+        onNextHole={handleNextHoleClick}
+        onPar={handleParClick}
       />
     </div>
   )
@@ -119,10 +128,22 @@ const GameInput: React.FC<{}> = (props: any) => {
     <div>
       <HoleNavigation
         holeNum={holeNum}
-        showPar={true}
-        onPrevHole={handlePrevHole}
-        onNextHole={handleNextHole}
+        showPar={false}
+        onPrevHole={handlePrevHoleClick}
+        onNextHole={handleNextHoleClick}
       />
+    </div>
+  )
+
+  const mapView = (
+    <div>
+      <br /><br /><br /><br /><br />No course map added.
+    </div>
+  )
+
+  const gameInfoView = (
+    <div>
+      <br /><br /><br /><br /><br />(Preview of game card)<br />[Send game]
     </div>
   )
 
@@ -135,7 +156,10 @@ const GameInput: React.FC<{}> = (props: any) => {
       activeView = holeInfoView
       break
     case mapViewTab:
-      // TODO
+      activeView = mapView
+      break
+    case gameInfoViewTab:
+      activeView = gameInfoView
       break
     default:
       break
