@@ -52,7 +52,13 @@ const HoleNavigation: React.FC<Props> = (props) => {
 
   return (
     <div>
-      <Fab color="primary" aria-label="Add" className={classes.prevHole} onClick={() => onPrevHole()}>
+      <Fab
+        disableRipple
+        color="primary"
+        aria-label="Add"
+        className={classes.prevHole}
+        onClick={() => onPrevHole()}
+      >
         <ArrowBackIosIcon />
       </Fab>
       {showPar ? (
@@ -70,7 +76,13 @@ const HoleNavigation: React.FC<Props> = (props) => {
           Par
         </Button>
       ) : null}
-      <Fab color="primary" aria-label="Add" className={classes.nextHole} onClick={() => onNextHole()}>
+      <Fab
+        disableRipple
+        color="primary"
+        aria-label="Add"
+        className={classes.nextHole}
+        onClick={() => onNextHole()}
+      >
         <ArrowForwardIosIcon />
       </Fab>
     </div>

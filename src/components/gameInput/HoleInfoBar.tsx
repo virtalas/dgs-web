@@ -58,9 +58,8 @@ const HoleInfoBar: React.FC<Props> = (props) => {
             <MenuIcon />
           </IconButton>
           <Menu id="simple-menu" anchorEl={anchorEl as any} open={Boolean(anchorEl)} onClose={handleClose}>
-            <MenuItem onClick={handleClose}>Profile</MenuItem>
-            <MenuItem onClick={handleClose}>My account</MenuItem>
-            <MenuItem onClick={handleClose}>Logout</MenuItem>
+            <MenuItem onClick={handleClose}>Back</MenuItem>
+            <MenuItem onClick={handleClose}>Cancel game</MenuItem>
           </Menu>
         </Toolbar>
       </AppBar>

@@ -314,9 +314,16 @@ const mockGames: Game[] = [{
   contestName: null,
 }]
 
-const getAllGamesByMonth = async (month: number): Promise<Game[]> => {
+const mockYears = [2015, 2019, 2016, 2017, 2018]
+
+const getGamesByMonth = async (year: number, month: number): Promise<Game[]> => {
   // TODO: Replace mock data with API call.
   return mockGames
+}
+
+const getYears = async (): Promise<number[]> => {
+  // TODO: Replace mock data with API call.
+  return mockYears.sort((a, b) => b - a)
 }
 
 const createGame = async (): Promise<Game> => {
@@ -335,7 +342,8 @@ const updateGame = async (game: Game): Promise<Game> => {
 }
 
 export default {
-  getAllGamesByMonth,
+  getGamesByMonth,
+  getYears,
   createGame,
   getGame,
   updateGame,

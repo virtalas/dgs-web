@@ -23,6 +23,7 @@ const NewGame: React.FC<{}> = () => {
   return (
     <div id="newGamePage">
       <p>Choose course:</p>
+      <p>Choose layout:</p>
       <p>Choose players:</p>
       <Button variant="contained" color="primary" onClick={handleStartButtonClick}>
         Start a new game

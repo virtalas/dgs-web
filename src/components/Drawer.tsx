@@ -27,6 +27,7 @@ import BallotIcon from '@material-ui/icons/Ballot'
 import DiscGolfBasket from './DiscGolfBasket'
 
 import Games from './Games'
+import NewGame from './gameInput/NewGame'
 import Players from './players/Players'
 import Courses from './courses/Courses'
 import Graphs from './graphs/Graphs'
@@ -214,7 +215,8 @@ const ResponsiveDrawer: React.FC<Props> = (props) => {
         <div className={classes.toolbar} />
         <div className="content">
           <Route exact path="/" component={Games} />
-          <Route path="/games" component={Games} />
+          <Route exact path="/games" component={Games} />
+          <Route exact path="/games/new" component={NewGame} />
           <Route path="/players" component={Players} />
           <Route path="/courses" component={Courses} />
           <Route path="/graphs" component={Graphs} />
