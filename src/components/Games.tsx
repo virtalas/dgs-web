@@ -13,17 +13,17 @@ const useStyles = makeStyles((theme) => ({
     paddingTop: theme.spacing.unit * 2,
     margin: 0,
     marginBottom: -theme.spacing.unit * 3,
-    width: '100%',
+    width: '99%', // 100% causes sideways scrollability
   },
   bottomControls: {
     paddingBottom: theme.spacing.unit * 12,
     margin: 0,
-    width: '100%',
+    width: '99%', // 100% causes sideways scrollability
   },
-  monthButton: {
+  monthNavigationButton: {
     height: buttonHeight,
   },
-  monthSelect: {
+  select: {
     height: buttonHeight,
   },
 }))
@@ -35,20 +35,24 @@ const Games: React.FC<{}> = () => {
   const currentMonth = new Date().getMonth()
 
   const [games, setGames] = useState<Game[]>([])
-  const [month, setCurrentMonth] = useState<number>(currentMonth)
-  const [year, setCurrentYear] = useState<number>(currentYear)
-  const [years, setYears] = useState<number[]>([year])
+  const [selectedMonth, setSelectedMonth] = useState<number>(currentMonth)
+  const [selectedYear, setSelectedYear] = useState<number>(currentYear)
+  const [yearsThatHaveGames, setYearsThatHaveGames] = useState<number[]>([currentYear])
   
   // useEffect(func, []) works like componentDidMount.
   useEffect(() => {
-    gamesService.getYears().then((fethedYears) => setYears(fethedYears))
-    gamesService.getGamesByMonth(year, month).then((fetchedGames) => {
+    gamesService.getYearsThatHaveGames().then(years => setYearsThatHaveGames(years))
+    gamesService.getGames(selectedYear, selectedMonth).then(fetchedGames => {
       // TODO: Change games to array: const games = ["2019-04": [games...], "2019-05": [games...]]
       setGames(fetchedGames)
     })
-  }, [year, month]) // Will be rerun each time 'year' or 'month' change.
+  }, [selectedYear, selectedMonth]) // Will be rerun each time 'selectedYear' or 'selectedMonth' change.
 
   const handlePrevMonth = () => {
+    // TODO
+  }
+
+  const handleNextMonth = () => {
     // TODO
   }
 
@@ -57,7 +61,7 @@ const Games: React.FC<{}> = () => {
   }
 
   var monthOptions: any = []
-  const lastSelectableMonth = currentYear === year ? currentMonth : 11
+  const lastSelectableMonth = currentYear === selectedYear ? currentMonth : 11
   for (var i = lastSelectableMonth; i >= 0 ; i--) {
     const monthName = new Date(1, i, 1).toLocaleString('en-us', { month: 'long' })
     monthOptions.push(<MenuItem value={i} key={i}>{monthName}</MenuItem>)
@@ -76,28 +80,29 @@ const Games: React.FC<{}> = () => {
         <Button
           variant="outlined"
           size="small"
-          className={classes.monthButton}
+          className={classes.monthNavigationButton}
           onClick={handlePrevMonth}
+          disabled={selectedYear === yearsThatHaveGames[0] && selectedMonth === 0}
         >
           ≪
         </Button>
       </Grid>
       <Grid item>
         <Select
-          value={year}
-          className={classes.monthSelect}
+          value={selectedYear}
+          className={classes.select}
           onChange={handleMonthChange}
           input={<OutlinedInput labelWidth={0} name="age" id="outlined-age-simple" />}
         >
-          {years.map(year => (
+          {yearsThatHaveGames.map(year => (
             <MenuItem value={year} key={year}>{year}</MenuItem>
           ))}
         </Select>
       </Grid>
       <Grid item>
         <Select
-          value={month}
-          className={classes.monthSelect}
+          value={selectedMonth}
+          className={classes.select}
           onChange={handleMonthChange}
           input={<OutlinedInput labelWidth={0} name="age" id="outlined-age-simple" />}
         >
@@ -108,8 +113,9 @@ const Games: React.FC<{}> = () => {
         <Button
           variant="outlined"
           size="small"
-          className={classes.monthButton}
-          onClick={handlePrevMonth}
+          className={classes.monthNavigationButton}
+          onClick={handleNextMonth}
+          disabled={selectedYear === currentYear && selectedMonth === currentMonth}
         >
           ≫
         </Button>
