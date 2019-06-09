@@ -8,15 +8,22 @@ import MenuIcon from '@material-ui/icons/Menu'
 import Menu from '@material-ui/core/Menu'
 import MenuItem from '@material-ui/core/MenuItem'
 
+import { gameInputBlue } from './GameInput'
+
 const useStyles = makeStyles((theme) => ({
-  root: {
-  },
   menuButton: {
     marginRight: 0,
     color: 'white',
   },
   par: {
     margin: 'auto'
+  },
+  appBar: {
+    background: '#437FB3',
+  },
+  // App Bar color:
+  palette: {
+    primary1Color: gameInputBlue,
   },
 }))
 
@@ -40,7 +47,7 @@ const HoleInfoBar: React.FC<Props> = (props) => {
   }
 
   return (
-    <div className={classes.root}>
+    <div>
       <AppBar position="fixed">
         <Toolbar>
           <Typography variant="h6" color="inherit">

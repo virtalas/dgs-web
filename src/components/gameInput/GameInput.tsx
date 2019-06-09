@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react'
+import SwipeableViews from 'react-swipeable-views'
 
 import { makeStyles } from '@material-ui/styles'
 import BottomNavigation from '@material-ui/core/BottomNavigation'
@@ -13,11 +14,16 @@ import HoleInfoBar from './HoleInfoBar'
 import HoleNavigation from './HoleNavigation'
 import PlayerStrokeInput from './PlayerStrokeInput'
 import gamesService from '../../services/gamesService'
+import Pagination from '../Pagination'
+
+export const gameInputBlue = '#437FB3'
 
 const scoreInputViewTab = 0
 const holeInfoViewTab = 1
 const mapViewTab = 2
 const gameInfoViewTab = 3
+
+// TODO: change tab bar color to gameInputBlue
 
 const useStyles = makeStyles((theme) => ({
   bottomNav: {
@@ -46,10 +52,10 @@ const GameInput: React.FC<{}> = (props: any) => {
   const classes = useStyles()
   const gameId = props.match.params.gameid // Props type as any to avoid props.match type problem.
   
-  const [game, setGame] = useState()
+  const [game, setGame] = useState<Game>()
   const [holeNum, setHoleNum] = useState(1) // TODO: Use findIndex() to start from first 0 stroked hole
   const [updating, setUpdating] = useState(false)
-  const [tab, setTab] = React.useState(0)
+  const [tab, setTab] = React.useState(scoreInputViewTab)
 
   useEffect(() => {
     gamesService.getGame(gameId).then((fetchedGame) => {
@@ -62,13 +68,14 @@ const GameInput: React.FC<{}> = (props: any) => {
       ...game,
       scores: newScores,
     }
-    setGame(newGame)
+    setGame(newGame as Game)
   }
 
   const handleHoleChange = () => {
+    if (game === undefined) return
     // TODO: Call updateGame only if 1 second has passed since last update
     setUpdating(true)
-    gamesService.updateGame(game).then(() => {
+    gamesService.updateGame(game as Game).then(() => {
       setUpdating(false)
     })
   }
@@ -81,6 +88,7 @@ const GameInput: React.FC<{}> = (props: any) => {
   }
 
   const handleNextHoleClick = () => {
+    if (game === undefined) return
     if (holeNum === game.course.pars.length) {
       setTab(gameInfoViewTab)
     } else {
@@ -90,6 +98,7 @@ const GameInput: React.FC<{}> = (props: any) => {
   }
 
   const handleParClick = () => {
+    if (game === undefined) return
     const updatedScores: PlayerScores[] = game.scores
     updatedScores.forEach((playerScores: PlayerScores) => {
       playerScores.strokes[holeNum - 1] = game.course.pars[holeNum - 1]
@@ -106,24 +115,29 @@ const GameInput: React.FC<{}> = (props: any) => {
     )
   }
 
+  // TODO: If desktop, render <HoleNavigation>
   const scoreInputView = (
     <div>
-      <PlayerStrokeInput
-        scores={game.scores}
-        holeNumber={holeNum}
-        onScoreChange={updateScores}
-        updating={updating}
-      />
-      <HoleNavigation
-        holeNum={holeNum}
-        showPar={true}
-        onPrevHole={handlePrevHoleClick}
-        onNextHole={handleNextHoleClick}
-        onPar={handleParClick}
+      <SwipeableViews resistance onChangeIndex={(index: number) => setHoleNum(index + 1)}>
+        {game.course.pars.map((par, index) => (
+          <PlayerStrokeInput
+            key={index}
+            scores={game.scores}
+            holeNumber={index + 1}
+            onScoreChange={updateScores}
+            updating={updating}
+          />
+        ))}
+      </SwipeableViews>
+      <Pagination
+        dots={game.course.pars.length}
+        index={holeNum - 1}
+        onChangeIndex={(index: number) => setHoleNum(index + 1)}
       />
     </div>
   )
 
+  // TODO: Use SwipeableViews
   const holeInfoView = (
     <div>
       <HoleNavigation
@@ -135,12 +149,14 @@ const GameInput: React.FC<{}> = (props: any) => {
     </div>
   )
 
+  // TODO
   const mapView = (
     <div>
       <br /><br /><br /><br /><br />No course map added.
     </div>
   )
 
+  // TODO
   const gameInfoView = (
     <div>
       <br /><br /><br /><br /><br />(Preview of game card)<br />[Send game]

@@ -21,6 +21,7 @@ const GameCard: React.FC<Props> = (props) => {
   const { game } = props
 
   // TODO: if startDate != null, render "1.1.1111 9.30 - 10.45"
+  // TODO: if game.creator == user, show "..."-button in the right upper corner
 
   return (
     <BlueCard>
