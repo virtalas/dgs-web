@@ -8,9 +8,8 @@ import gamesService from '../services/gamesService'
 
 const buttonHeight = 45
 
-// TODO: December is first on mobile
-// TODO: Lose focus on Select after choosing month/year, use SelectField:
-// https://www.npmjs.com/package/material-ui-selectfield
+// TODO: December is in the wrong place on safari
+// TODO: Lose focus on Select after choosing month/year
 
 const useStyles = makeStyles((theme) => ({
   topControls: {

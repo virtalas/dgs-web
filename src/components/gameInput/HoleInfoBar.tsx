@@ -1,4 +1,6 @@
 import React from 'react'
+import { NavLink } from 'react-router-dom'
+
 import { makeStyles } from '@material-ui/styles'
 import AppBar from '@material-ui/core/AppBar'
 import Toolbar from '@material-ui/core/Toolbar'
@@ -19,7 +21,10 @@ const useStyles = makeStyles((theme) => ({
     margin: 'auto'
   },
   appBar: {
-    background: '#437FB3',
+    background: gameInputBlue,
+  },
+  navLink: {
+    textDecoration: 'none',
   },
 }))
 
@@ -44,7 +49,7 @@ const HoleInfoBar: React.FC<Props> = (props) => {
 
   return (
     <div>
-      <AppBar position="fixed">
+      <AppBar position="fixed" className={classes.appBar}>
         <Toolbar>
           <Typography variant="h6" color="inherit">
             {showInfo ? 'Hole ' + holeNum : null}
@@ -60,9 +65,11 @@ const HoleInfoBar: React.FC<Props> = (props) => {
           >
             <MenuIcon />
           </IconButton>
-          <Menu id="simple-menu" anchorEl={anchorEl as any} open={Boolean(anchorEl)} onClose={handleClose}>
-            <MenuItem onClick={handleClose}>Back</MenuItem>
-            <MenuItem onClick={handleClose}>Cancel game</MenuItem>
+          <Menu anchorEl={anchorEl as any} open={Boolean(anchorEl)} onClose={handleClose}>
+            <NavLink to="/" className={classes.navLink}>
+              <MenuItem onClick={handleClose}>Home page</MenuItem>
+            </NavLink>
+            <MenuItem onClick={handleClose}>Delete game</MenuItem>
           </Menu>
         </Toolbar>
       </AppBar>
