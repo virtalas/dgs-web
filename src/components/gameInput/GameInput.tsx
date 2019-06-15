@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import SwipeableViews from 'react-swipeable-views'
+import { isMobile } from 'react-device-detect'
 
 import { makeStyles } from '@material-ui/styles'
 import BottomNavigation from '@material-ui/core/BottomNavigation'
@@ -14,7 +15,6 @@ import HoleInfoBar from './HoleInfoBar'
 import HoleNavigation from './HoleNavigation'
 import PlayerStrokeInput from './PlayerStrokeInput'
 import gamesService from '../../services/gamesService'
-import Pagination from '../Pagination'
 
 export const gameInputBlue = '#437FB3'
 
@@ -24,8 +24,12 @@ const mapViewTab = 2
 const gameInfoViewTab = 3
 
 // TODO: change tab bar color to gameInputBlue
+// TODO: SwipeableViews: When swiping starts, show big transparent grey hole number in the middle of the page. When swiping stops fade with animation after ~0.5 seconds.
 
 const useStyles = makeStyles((theme) => ({
+  swipeableView: {
+    height: window.innerHeight,
+  },
   bottomNav: {
     width: '100%',
     position: 'fixed',
@@ -115,37 +119,48 @@ const GameInput: React.FC<{}> = (props: any) => {
     )
   }
 
-  // TODO: If desktop, render <HoleNavigation>
+  // Render hole navigation buttons for desktop.
+  const holeNavigation = isMobile ? null : (
+    <HoleNavigation
+      holeNum={holeNum}
+      showPar={false}
+      onPrevHole={handlePrevHoleClick}
+      onNextHole={handleNextHoleClick}
+    />
+  )
+
   const scoreInputView = (
     <div>
-      <SwipeableViews resistance onChangeIndex={(index: number) => setHoleNum(index + 1)}>
+      <SwipeableViews
+        className={classes.swipeableView}
+        resistance
+        onChangeIndex={(index: number) => setHoleNum(index + 1)}
+      >
         {game.course.pars.map((par, index) => (
           <PlayerStrokeInput
-            key={index}
             scores={game.scores}
             holeNumber={index + 1}
             onScoreChange={updateScores}
             updating={updating}
+            key={index}
           />
         ))}
       </SwipeableViews>
-      <Pagination
-        dots={game.course.pars.length}
-        index={holeNum - 1}
-        onChangeIndex={(index: number) => setHoleNum(index + 1)}
-      />
+      {holeNavigation}
     </div>
   )
 
   // TODO: Use SwipeableViews
   const holeInfoView = (
     <div>
-      <HoleNavigation
-        holeNum={holeNum}
-        showPar={false}
-        onPrevHole={handlePrevHoleClick}
-        onNextHole={handleNextHoleClick}
-      />
+      <SwipeableViews
+        className={classes.swipeableView}
+        resistance
+        onChangeIndex={(index: number) => setHoleNum(index + 1)}
+      >
+        <div>Coming soon</div>
+      </SwipeableViews>
+      {holeNavigation}
     </div>
   )
 

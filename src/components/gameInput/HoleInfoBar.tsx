@@ -21,10 +21,6 @@ const useStyles = makeStyles((theme) => ({
   appBar: {
     background: '#437FB3',
   },
-  // App Bar color:
-  palette: {
-    primary1Color: gameInputBlue,
-  },
 }))
 
 interface Props {

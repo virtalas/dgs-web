@@ -1,7 +1,7 @@
 import React from 'react'
 import { makeStyles } from '@material-ui/styles'
 
-import { gameInputBlue } from './gameInput/GameInput'
+import { gameInputBlue } from './GameInput'
 
 // Modified from:
 // https://github.com/oliviertassinari/react-swipeable-views/blob/master/docs/src/modules/components/PaginationDot.js
