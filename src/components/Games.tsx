@@ -5,10 +5,12 @@ import { makeStyles } from '@material-ui/styles'
 
 import GameCard from './gameCard/GameCard'
 import gamesService from '../services/gamesService'
+import { dateFrom } from '../utils/DateUtil'
 
 const buttonHeight = 45
 
 // TODO: December is in the wrong place on safari.
+// TODO: Fix Select width to the width of the longest month name.
 // TODO: Highlight selected year/month when Select opened.
 // TODO: Lose focus on Select after choosing month/year, eg:
 // https://stackoverflow.com/questions/54325908/change-outline-for-outlinedinput-with-react-material-ui
@@ -59,17 +61,17 @@ const Games: React.FC<{}> = () => {
   const classes = useStyles()
 
   const currentYear = new Date().getFullYear()
-  const currentMonth = new Date().getMonth()
+  const currentMonth = new Date().getMonth() // 0 = January
 
   const [games, setGames] = useState<Game[]>([])
   const [fetchedMonths, setFetchedMonths] = useState<number[]>([]) // To store information about empty months
-  const [selectedMonth, setSelectedMonth] = useState<number>(currentMonth)
+  const [selectedMonth, setSelectedMonth] = useState<number>(currentMonth) // 0 = January
   const [selectedYear, setSelectedYear] = useState<number>(currentYear)
   const [yearsThatHaveGames, setYearsThatHaveGames] = useState<number[]>([currentYear])
   const [isLoading, setIsLoading] = useState<Boolean>(false)
 
-  const gamesToShow = games.filter(game => new Date(game.endDate).getMonth() === selectedMonth
-      && new Date(game.endDate).getFullYear() === selectedYear)
+  const gamesToShow = games.filter(game => dateFrom(game.endDate).getMonth() === selectedMonth
+    && dateFrom(game.endDate).getFullYear() === selectedYear)
   
   // useEffect works like componentDidMount.
   // Will be rerun each time 'selectedYear' or 'selectedMonth' change.
@@ -100,9 +102,10 @@ const Games: React.FC<{}> = () => {
   }
 
   var monthOptions: any = []
-  const lastSelectableMonth = currentYear === selectedYear ? currentMonth : 11
+  const lastSelectableMonth = currentYear === selectedYear ? currentMonth : 11 // 0 = January
   for (var i = lastSelectableMonth; i >= 0 ; i--) {
-    const monthName = new Date(1, i, 1).toLocaleString('en-us', { month: 'long' })
+    // 0 = January, 1st day has to be 1
+    const monthName = new Date(Date.UTC(0, i, 1)).toLocaleString('en-us', { month: 'long' })
     monthOptions.push(<MenuItem value={i} key={i}>{monthName}</MenuItem>)
   }
 
@@ -162,7 +165,6 @@ const Games: React.FC<{}> = () => {
     </Grid>
   )
   
-  // TODO: 'No games' text.
   return (
     <div id="gamesPage">
       <div className={classes.topControls}>

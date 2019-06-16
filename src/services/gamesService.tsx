@@ -1,3 +1,5 @@
+import { dateFrom } from '../utils/DateUtil'
+
 const mockGame: Game = {
   id: "123sdfsdf",
   course: {
@@ -397,8 +399,8 @@ const mockMonths = [0, 2, 3, 4, 5, 6, 8]
 
 const getGames = async (year: number, month: number): Promise<Game[]> => {
   // TODO: Replace mock data with API call.
-  return mockGames.filter(game => new Date(game.endDate).getMonth() === month
-      && new Date(game.endDate).getFullYear() === year)
+  return mockGames.filter(game => dateFrom(game.endDate).getMonth() === month
+      && dateFrom(game.endDate).getFullYear() === year)
 }
 
 const getYearsThatHaveGames = async (): Promise<number[]> => {
