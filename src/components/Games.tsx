@@ -1,15 +1,17 @@
 import React, { useState, useEffect } from 'react'
 
-import { Grid, Button, Select, MenuItem, OutlinedInput } from '@material-ui/core';
-import { makeStyles } from '@material-ui/styles';
+import { Grid, Button, Select, MenuItem, OutlinedInput, CircularProgress } from '@material-ui/core'
+import { makeStyles } from '@material-ui/styles'
 
 import GameCard from './gameCard/GameCard'
 import gamesService from '../services/gamesService'
 
 const buttonHeight = 45
 
-// TODO: December is in the wrong place on safari
-// TODO: Lose focus on Select after choosing month/year
+// TODO: December is in the wrong place on safari.
+// TODO: Highlight selected year/month when Select opened.
+// TODO: Lose focus on Select after choosing month/year, eg:
+// https://stackoverflow.com/questions/54325908/change-outline-for-outlinedinput-with-react-material-ui
 
 const useStyles = makeStyles((theme) => ({
   topControls: {
@@ -29,6 +31,28 @@ const useStyles = makeStyles((theme) => ({
   select: {
     height: buttonHeight,
   },
+  noGames: {
+    color: 'grey',
+    margin: 0,
+    position: 'absolute',
+    top: '50%',
+    marginTop: -10, // Align with progress spinner
+    left: '50%',
+    marginLeft: -35, // Align with progress spinner
+    transform: 'translate(-50 %, -50 %)',
+  },
+  progress: {
+    margin: 'auto',
+    position: 'absolute',
+    top: 0,
+    bottom: 0,
+    left: 0,
+    right: 0,
+  },
+  centerContainer: {
+    height: theme.spacing.unit * 30,
+    position: 'relative',
+  },
 }))
 
 const Games: React.FC<{}> = () => {
@@ -38,29 +62,41 @@ const Games: React.FC<{}> = () => {
   const currentMonth = new Date().getMonth()
 
   const [games, setGames] = useState<Game[]>([])
+  const [fetchedMonths, setFetchedMonths] = useState<number[]>([]) // To store information about empty months
   const [selectedMonth, setSelectedMonth] = useState<number>(currentMonth)
   const [selectedYear, setSelectedYear] = useState<number>(currentYear)
   const [yearsThatHaveGames, setYearsThatHaveGames] = useState<number[]>([currentYear])
+  const [isLoading, setIsLoading] = useState<Boolean>(false)
+
+  const gamesToShow = games.filter(game => new Date(game.endDate).getMonth() === selectedMonth
+      && new Date(game.endDate).getFullYear() === selectedYear)
   
-  // useEffect(func, []) works like componentDidMount.
+  // useEffect works like componentDidMount.
+  // Will be rerun each time 'selectedYear' or 'selectedMonth' change.
   useEffect(() => {
+    if (fetchedMonths.includes(selectedMonth)) return
+    setIsLoading(true)
+    setFetchedMonths(months => months.concat([selectedMonth]))
     gamesService.getYearsThatHaveGames().then(years => setYearsThatHaveGames(years))
     gamesService.getGames(selectedYear, selectedMonth).then(fetchedGames => {
-      // TODO: Change games to array: const games = ["2019-04": [games...], "2019-05": [games...]]
-      setGames(fetchedGames)
+      // Simulate network delay.
+      setTimeout(function () {
+        setGames(games => games.concat(fetchedGames))
+        setIsLoading(false)
+      }, 1500);
     })
-  }, [selectedYear, selectedMonth]) // Will be rerun each time 'selectedYear' or 'selectedMonth' change.
+  }, [selectedYear, selectedMonth])
 
-  const handlePrevMonth = () => {
-    // TODO
+  // TODO: change to next/prev year instead of disabling button
+  const handlePrevMonth = () => setSelectedMonth(month => month - 1)
+  const handleNextMonth = () => setSelectedMonth(month => month + 1)
+  const handleMonthChange = (event: React.ChangeEvent<{ value: unknown }>) => {
+    setSelectedMonth(event.target.value as number)
   }
-
-  const handleNextMonth = () => {
+  const handleYearChange = (event: React.ChangeEvent<{ value: unknown }>) => {
     // TODO
-  }
-
-  const handleMonthChange = () => {
-    // TODO
+    // setSelectedYear(event.target.value as number)
+    // setFetchedMonths([])
   }
 
   var monthOptions: any = []
@@ -94,8 +130,8 @@ const Games: React.FC<{}> = () => {
         <Select
           value={selectedYear}
           className={classes.select}
-          onChange={handleMonthChange}
-          input={<OutlinedInput labelWidth={0} name="age" id="outlined-age-simple" />}
+          onChange={handleYearChange}
+          input={<OutlinedInput labelWidth={0} />}
         >
           {yearsThatHaveGames.map(year => (
             <MenuItem value={year} key={year}>{year}</MenuItem>
@@ -107,7 +143,7 @@ const Games: React.FC<{}> = () => {
           value={selectedMonth}
           className={classes.select}
           onChange={handleMonthChange}
-          input={<OutlinedInput labelWidth={0} name="age" id="outlined-age-simple" />}
+          input={<OutlinedInput labelWidth={0} />}
         >
           {monthOptions}
         </Select>
@@ -132,12 +168,24 @@ const Games: React.FC<{}> = () => {
       <div className={classes.topControls}>
         {pageControls}
       </div>
-      {games.map(game => (
+      {gamesToShow.map(game => (
         <GameCard game={game} key={game.id}/>
       ))}
-      <div className={classes.bottomControls}>
-        {pageControls}
-      </div>
+      {gamesToShow.length === 0 && isLoading ? (
+        <div className={classes.centerContainer}>
+          <CircularProgress className={classes.progress} />
+        </div>
+      ) : null}
+      {gamesToShow.length === 0 && !isLoading ? (
+        <div className={classes.centerContainer}>
+          <div className={classes.noGames}>No games</div>
+        </div>
+      ) : null}
+      {gamesToShow.length > 2 ? (
+        <div className={classes.bottomControls}>
+          {pageControls}
+        </div>
+      ) : null}
     </div>
   )
 }

@@ -48,16 +48,24 @@ const GameInfo: React.FC<Props> = (props) => {
   const classes = useStyles()
   const { game } = props
 
-  const handleClick = () => { } // TODO: Direct to player's page
+  const handlePlayerClipClick = () => {
+    // TODO
+    alert('Coming soon: Go to clicked player\'s page!')
+  }
+
+  const handleConditionChipClick = () => {
+    // TODO
+    alert('Coming soon: Search games by clicked condition!')
+  }
 
   const conditions = (
     <div className={classes.chipRow}>
-      {game.temperature ? <Chip className={classes.chip} label={game.temperature + " °C"} /> : null}
+      {game.temperature ? <Chip className={classes.chip} label={game.temperature + " °C"} onClick={handleConditionChipClick} /> : null}
       {game.weatherConditions.map((condition: Condition, index: number) => (
-        <Chip className={classes.chip} label={condition} key={index} />
+        <Chip className={classes.chip} label={condition} onClick={handleConditionChipClick} key={index} />
       ))}
       {game.conditions.map((condition: Condition, index: number) => (
-        <Chip className={classes.chip} label={condition} key={index} />
+        <Chip className={classes.chip} label={condition} onClick={handleConditionChipClick} key={index} />
       ))}
     </div>
   )
@@ -71,7 +79,7 @@ const GameInfo: React.FC<Props> = (props) => {
           label={name}
           variant="outlined"
           color="primary"
-          onClick={handleClick}
+          onClick={handlePlayerClipClick}
           className={classes.chip}
           key={index} />
       ))}
@@ -82,7 +90,7 @@ const GameInfo: React.FC<Props> = (props) => {
           label={name}
           variant="outlined"
           color="secondary"
-          onClick={handleClick}
+          onClick={handlePlayerClipClick}
           className={classes.chip}
           key={index} />
       ))}

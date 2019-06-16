@@ -234,7 +234,85 @@ const mockGames: Game[] = [{
   illegalScorers: [],
   comment: "Fun :D",
   contestName: null,
-}, {
+  }, {
+    id: "d3f3fg128",
+    course: {
+      id: "nfuslefh8lsje",
+      name: "Kivikko",
+      pars: [3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3],
+      total: 60,
+    },
+    startDate: null,
+    endDate: "2019-05-16 09:22",
+    scores: [
+      {
+        player: {
+          id: "jfisöuf9sl3fij",
+          firstName: "Seppo",
+        },
+        strokes: [3, 3, 3, 2, 3, 0, 0, 0, 3, 2, 3, 3, 3, 3, 3, 3, 3, 2, 3, 3],
+        obs: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        total: 48,
+        toPar: -3
+      },
+      {
+        player: {
+          id: "fnuslfu48ljsr",
+          firstName: "Teppo",
+        },
+        strokes: [3, 3, 4, 2, 3, 3, 3, 3, 3, 2, 3, 3, 3, 6, 3, 3, 3, 2, 3, 3],
+        obs: [0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        total: 61,
+        toPar: 1
+      }
+    ],
+    temperature: 1,
+    weatherConditions: ["snow", "rain"],
+    conditions: ["LED"],
+    highScorers: ["Teppo"],
+    illegalScorers: [],
+    comment: "Fun :D",
+    contestName: null,
+  }, {
+    id: "fj3ifolsu8lfu48ls",
+    course: {
+      id: "j9göu8rlgudlig",
+      name: "Tali",
+      pars: [3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3],
+      total: 60,
+    },
+    startDate: null,
+    endDate: "2019-04-16 09:22",
+    scores: [
+      {
+        player: {
+          id: "hgfsu4pu83slofj",
+          firstName: "Seppo",
+        },
+        strokes: [3, 3, 3, 2, 3, 0, 0, 0, 3, 2, 3, 3, 3, 3, 3, 3, 3, 2, 3, 3],
+        obs: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        total: 48,
+        toPar: -3
+      },
+      {
+        player: {
+          id: "jfs83oju8soög",
+          firstName: "Teppo",
+        },
+        strokes: [3, 3, 4, 2, 3, 3, 3, 3, 3, 2, 3, 3, 3, 6, 3, 3, 3, 2, 3, 3],
+        obs: [0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        total: 61,
+        toPar: 1
+      }
+    ],
+    temperature: null,
+    weatherConditions: [],
+    conditions: [],
+    highScorers: [],
+    illegalScorers: [],
+    comment: "",
+    contestName: null,
+  }, {
   id: "d3f3fg128",
   course: {
     id: "nfuslefh8lsje",
@@ -319,7 +397,8 @@ const mockMonths = [0, 2, 3, 4, 5, 6, 8]
 
 const getGames = async (year: number, month: number): Promise<Game[]> => {
   // TODO: Replace mock data with API call.
-  return mockGames
+  return mockGames.filter(game => new Date(game.endDate).getMonth() === month
+      && new Date(game.endDate).getFullYear() === year)
 }
 
 const getYearsThatHaveGames = async (): Promise<number[]> => {
