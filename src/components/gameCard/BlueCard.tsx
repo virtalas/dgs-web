@@ -37,7 +37,7 @@ const useStyles = makeStyles((theme) => ({
 const BlueCard: React.FC<{}> = (props) => {
   const classes = useStyles()
   return (
-    <Card className={classes.card}>
+    <Card className={classes.card} raised={true}>
       <div className={classes.content}>
         {props.children}
       </div>

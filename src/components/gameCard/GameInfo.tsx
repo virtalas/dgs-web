@@ -103,7 +103,7 @@ const GameInfo: React.FC<Props> = (props) => {
   return (
     <div>
       {shouldShowInfoPaper ? (
-        <Paper className={classes.infoPaper}>
+        <Paper className={classes.infoPaper} elevation={0}>
           {conditions}
           {illegalAndHighScorers}
           <Typography className={classes.comment} align="left" variant="body1">{game.comment}</Typography>

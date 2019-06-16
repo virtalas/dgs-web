@@ -263,7 +263,7 @@ const ScoreCard: React.FC<Props> = (props) => {
   )
 
   return (
-    <Paper className={classes.rootPaper}>
+    <Paper className={classes.rootPaper} elevation={0} >
       {scoreTable}
     </Paper>
   )
