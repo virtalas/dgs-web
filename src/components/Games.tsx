@@ -9,23 +9,28 @@ import { dateFrom } from '../utils/DateUtil'
 
 const buttonHeight = 45
 
-// TODO: December is in the wrong place on safari.
-// TODO: Fix Select width to the width of the longest month name.
+// TODO: When the device is rotated, don't open the drawer -> show whole score card instead
+// TODO: Fetch prev and next month as well.
 // TODO: Highlight selected year/month when Select opened.
 // TODO: Lose focus on Select after choosing month/year, eg:
 // https://stackoverflow.com/questions/54325908/change-outline-for-outlinedinput-with-react-material-ui
 
 const useStyles = makeStyles((theme) => ({
+  root: {
+    // No vertical scrolling even if views overflow:
+    overflow: 'hidden',
+    width: window.innerWidth,
+  },
   topControls: {
     paddingTop: theme.spacing.unit * 2,
     margin: 0,
     marginBottom: -theme.spacing.unit * 3,
-    width: '99%', // 100% causes sideways scrollability
+    width: '100%',
   },
   bottomControls: {
     paddingBottom: theme.spacing.unit * 12,
     margin: 0,
-    width: '99%', // 100% causes sideways scrollability
+    width: '100%',
   },
   monthNavigationButton: {
     height: buttonHeight,
@@ -115,10 +120,11 @@ const Games: React.FC<{}> = () => {
       container
       direction="row"
       justify="center"
-      alignItems="flex-start"
+      alignItems="center"
+      wrap="nowrap"
       spacing={8}
     >
-      <Grid item>
+      <Grid item zeroMinWidth>
         <Button
           variant="outlined"
           size="small"
@@ -129,7 +135,7 @@ const Games: React.FC<{}> = () => {
           ≪
         </Button>
       </Grid>
-      <Grid item>
+      <Grid item zeroMinWidth>
         <Select
           value={selectedYear}
           className={classes.select}
@@ -141,7 +147,7 @@ const Games: React.FC<{}> = () => {
           ))}
         </Select>
       </Grid>
-      <Grid item>
+      <Grid item zeroMinWidth>
         <Select
           value={selectedMonth}
           className={classes.select}
@@ -151,7 +157,7 @@ const Games: React.FC<{}> = () => {
           {monthOptions}
         </Select>
       </Grid>
-      <Grid item>
+      <Grid item zeroMinWidth>
         <Button
           variant="outlined"
           size="small"
@@ -166,7 +172,7 @@ const Games: React.FC<{}> = () => {
   )
   
   return (
-    <div id="gamesPage">
+    <div id="gamesPage" className={classes.root}>
       <div className={classes.topControls}>
         {pageControls}
       </div>

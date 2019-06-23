@@ -26,6 +26,7 @@ const gameInfoViewTab = 3
 // TODO: Swipeable views buggy: change tab to other tabs, then back and swipe: unexpected behaviour
 // TODO: change tab bar (& app bar) color to gameInputBlue
 // TODO: SwipeableViews: When swiping starts, show big transparent grey hole number in the middle of the page. When swiping stops fade with animation after ~0.5 seconds.
+// TODO Consider?: Group feature: When saving the game, choose which groups it belongs to
 
 const useStyles = makeStyles((theme) => ({
   swipeableView: {
