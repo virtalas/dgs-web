@@ -50,8 +50,10 @@ const PlayerStrokeInput: React.FC<Props> = (props) => {
   const { scores, holeNumber, onScoreChange, updating } = props
 
   const handleStrokeChange = (playerId: string, event: React.ChangeEvent<HTMLInputElement>) => {
+    let strokes = parseInt(event.target.value)
+    strokes = isNaN(strokes) ? 0 : strokes
     const playerIndex = scores.findIndex(playerScores => playerScores.player.id === playerId)
-    scores[playerIndex].strokes[holeNumber - 1] = parseInt(event.target.value)
+    scores[playerIndex].strokes[holeNumber - 1] = strokes
     event.target.blur() // Unfocus/blur the field after inputting a number.
     onScoreChange(scores)
   }
@@ -71,6 +73,7 @@ const PlayerStrokeInput: React.FC<Props> = (props) => {
           min="0"
           max="99"
           onFocus={e => e.target.value = '' /* Clear the field when it comes into focus. */}
+          onBlur={event => handleStrokeChange(scoreInfo.player.id, event)}
           inputMode="numeric"
           pattern="[0-9]*">
         </input>
