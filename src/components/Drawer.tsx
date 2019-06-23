@@ -41,7 +41,7 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
   },
   drawer: {
-    [theme.breakpoints.up('sm')]: {
+    [theme.breakpoints.up('md')]: {
       width: drawerWidth,
       flexShrink: 0,
     },
@@ -53,7 +53,7 @@ const useStyles = makeStyles((theme) => ({
   },
   menuButton: {
     marginRight: 20,
-    [theme.breakpoints.up('sm')]: {
+    [theme.breakpoints.up('md')]: {
       display: 'none',
     },
   },
@@ -159,7 +159,7 @@ const ResponsiveDrawer: React.FC<Props> = (props) => {
   const navDrawer = (
     <nav className={classes.drawer}>
       {/* The implementation can be swapped with js to avoid SEO duplication of links. */}
-      <Hidden smUp implementation="css">
+      <Hidden mdUp implementation="css">
         <Drawer
           variant="temporary"
           anchor="left"
@@ -174,13 +174,13 @@ const ResponsiveDrawer: React.FC<Props> = (props) => {
           </div>
         </Drawer>
       </Hidden>
-      <Hidden xsDown implementation="css">
+      <Hidden smDown implementation="css">
         <Drawer
+          variant="permanent"
+          open
           classes={{
             paper: classes.drawerPaper,
           }}
-          variant="permanent"
-          open
         >
           {navButtonList}
         </Drawer>
