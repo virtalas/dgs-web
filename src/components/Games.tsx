@@ -59,6 +59,7 @@ const useStyles = makeStyles((theme) => ({
   centerContainer: {
     height: theme.spacing.unit * 30,
     position: 'relative',
+    zIndex: -1, // Don't block navigation controls.
   },
 }))
 
