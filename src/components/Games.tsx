@@ -6,12 +6,15 @@ import { makeStyles } from '@material-ui/styles'
 import GameCard from './gameCard/GameCard'
 import gamesService from '../services/gamesService'
 import { dateFrom } from '../utils/DateUtil'
+import { addOrientationListener } from '../utils/OrientationListener'
 
 const buttonHeight = 45
+let rootWidth: number
 
-// TODO: When the device is rotated, don't open the drawer -> show whole score card instead
+// TODO IN PROGRESS: When the device is rotated, don't open the drawer -> show whole score card instead
 // TODO: Fetch prev and next month as well.
 // TODO: Highlight selected year/month when Select opened.
+// TODO: Use buttons for score instead of keyboard?
 // TODO: Lose focus on Select after choosing month/year, eg:
 // https://stackoverflow.com/questions/54325908/change-outline-for-outlinedinput-with-react-material-ui
 
@@ -19,7 +22,7 @@ const useStyles = makeStyles((theme) => ({
   root: {
     // No vertical scrolling even if views overflow:
     overflow: 'hidden',
-    width: window.innerWidth,
+    width: rootWidth,
   },
   topControls: {
     paddingTop: theme.spacing.unit * 2,
@@ -77,7 +80,13 @@ const Games: React.FC<{}> = () => {
   const [isLoading, setIsLoading] = useState<Boolean>(false)
 
   const gamesToShow = games.filter(game => dateFrom(game.endDate).getMonth() === selectedMonth
-    && dateFrom(game.endDate).getFullYear() === selectedYear)
+      && dateFrom(game.endDate).getFullYear() === selectedYear)
+
+  const [orientation, orientationChange] = useState<Boolean>(true)
+  addOrientationListener(() => {
+    rootWidth = window.innerWidth
+    orientationChange(!orientation)
+  })
   
   // useEffect works like componentDidMount.
   // Will be rerun each time 'selectedYear' or 'selectedMonth' change.
@@ -171,14 +180,14 @@ const Games: React.FC<{}> = () => {
       </Grid>
     </Grid>
   )
-  
+
   return (
     <div id="gamesPage" className={classes.root}>
       <div className={classes.topControls}>
         {pageControls}
       </div>
       {gamesToShow.map(game => (
-        <GameCard game={game} key={game.id}/>
+        <GameCard game={game} key={game.id} />
       ))}
       {gamesToShow.length === 0 && isLoading ? (
         <div className={classes.centerContainer}>
