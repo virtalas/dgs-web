@@ -7,6 +7,10 @@ const mockGame: Game = {
     name: "Puolarmaari",
     pars: [3, 4, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 4, 3, 3, 3, 3, 3],
     total: 60,
+    layouts: [
+      { id: 'fdg', active: true, name: '2020 layout'},
+      { id: 'fdfsdg', active: false, name: '2019 layout'}
+    ],
   },
   startDate: null,
   endDate: "2020-08-13 09:22",
@@ -48,6 +52,10 @@ const mockGames: Game[] = [{
     name: "Puolarmaari",
     pars: [3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 4, 3, 3, 3, 3, 3],
     total: 60,
+    layouts: [
+      { id: 'fdg', active: true, name: '2020 layout'},
+      { id: 'fdfsdg', active: false, name: '2019 layout'}
+    ],
   },
   startDate: null,
   endDate: "2020-08-12 09:22",
@@ -87,6 +95,10 @@ const mockGames: Game[] = [{
     name: "Puolarmaari",
     pars: [3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3],
     total: 60,
+    layouts: [
+      { id: 'fdg', active: true, name: '2020 layout'},
+      { id: 'fdfsdg', active: false, name: '2019 layout'}
+    ],
   },
   startDate: null,
   endDate: "2020-08-11 09:22",
@@ -126,6 +138,10 @@ const mockGames: Game[] = [{
     name: "Tali",
     pars: [3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3],
     total: 60,
+    layouts: [
+      { id: 'fdg', active: true, name: '2020 layout'},
+      { id: 'fdfsdg', active: false, name: '2019 layout'}
+    ],
   },
   startDate: null,
   endDate: "2020-08-10 09:22",
@@ -165,6 +181,10 @@ const mockGames: Game[] = [{
     name: "Shorty",
     pars: [3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3],
     total: 60,
+    layouts: [
+      { id: 'fdg', active: true, name: '2020 layout'},
+      { id: 'fdfsdg', active: false, name: '2019 layout'}
+    ],
   },
   startDate: null,
   endDate: "2020-08-09 09:22",
@@ -204,6 +224,10 @@ const mockGames: Game[] = [{
     name: "Puolarmaari",
     pars: [3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3],
     total: 60,
+    layouts: [
+      { id: 'fdg', active: true, name: '2020 layout'},
+      { id: 'fdfsdg', active: false, name: '2019 layout'}
+    ],
   },
   startDate: null,
   endDate: "2020-08-08 09:22",
@@ -243,6 +267,10 @@ const mockGames: Game[] = [{
       name: "Kivikko",
       pars: [3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3],
       total: 60,
+    layouts: [
+      { id: 'fdg', active: true, name: '2020 layout'},
+      { id: 'fdfsdg', active: false, name: '2019 layout'}
+    ],
     },
     startDate: null,
     endDate: "2020-06-13 09:22",
@@ -282,6 +310,10 @@ const mockGames: Game[] = [{
       name: "Tali",
       pars: [3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3],
       total: 60,
+    layouts: [
+      { id: 'fdg', active: true, name: '2020 layout'},
+      { id: 'fdfsdg', active: false, name: '2019 layout'}
+    ],
     },
     startDate: null,
     endDate: "2020-05-13 09:22",
@@ -321,6 +353,10 @@ const mockGames: Game[] = [{
     name: "Puolarmaari",
     pars: [3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3],
     total: 60,
+    layouts: [
+      { id: 'fdg', active: true, name: '2020 layout'},
+      { id: 'fdfsdg', active: false, name: '2019 layout'}
+    ],
   },
   startDate: null,
   endDate: "2020-05-13 09:22",
@@ -360,6 +396,10 @@ const mockGames: Game[] = [{
     name: "Puolarmaari",
     pars: [3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3],
     total: 60,
+    layouts: [
+      { id: 'fdg', active: true, name: '2020 layout'},
+      { id: 'fdfsdg', active: false, name: '2019 layout'}
+    ],
   },
   startDate: null,
   endDate: "2020-05-13 09:22",

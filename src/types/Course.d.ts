@@ -3,4 +3,5 @@ interface Course {
   name: string,
   pars: number[],
   total: number,
+  layouts: Layout[],
 }

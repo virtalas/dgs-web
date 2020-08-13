@@ -27,7 +27,7 @@ const NewGame: React.FC<{}> = () => {
   const [redirect, setRedirect] = useState(false)
   const [newGameId, setNewGameId] = useState('')
 
-  const [course, setCourse] = useState<Course>({id: 'Loading...', name: '', pars: [], total: 0})
+  const [course, setCourse] = useState<Course>({id: 'Loading...', name: '', pars: [], total: 0, layouts: []})
   const [courses, setCourses] = useState<Course[]>([course])
 
   // Fetch courses.
@@ -36,13 +36,6 @@ const NewGame: React.FC<{}> = () => {
     setCourse(courses[0]) // Courses should be ordered by popularity (at least initially).
   })
 
-  // useEffect works like componentDidMount.
-  // Will be rerun each time 'course' changes.
-  useEffect(() => {
-    // TODO: Fetch layouts for selected course.
-    // TODO: The active layout(?) should be selected automatically.
-  }, [course])
-
   const handleStartButtonClick = async () => {
     // Create a new game, then redirect to '/games/:newGameId/input'.
     const newGame = await gamesService.createGame()
@@ -50,12 +43,14 @@ const NewGame: React.FC<{}> = () => {
     setRedirect(true)
   }
 
-  const handleCourseChange = async (event: React.ChangeEvent<{ value: unknown }>) => {
-
-  }
-
   if (redirect) {
     return <Redirect to={'/games/' + newGameId + "/input"} />
+  }
+
+  const handleCourseChange = (event: React.ChangeEvent<{ value: unknown }>, value: any) => {
+    const selectedCourse = value.props.value
+    setCourse(selectedCourse) // TODO: not working
+    console.log(selectedCourse)
   }
 
   // TODO: change input variant to outlined. Currently not working.
@@ -64,12 +59,14 @@ const NewGame: React.FC<{}> = () => {
       <FormControl variant="outlined" className={classes.formControl}>
         <InputLabel>Course</InputLabel>
         <Select
-          value={course.id}
+          value={course}
           onChange={handleCourseChange}
           variant="outlined"
         >
           {courses.map((course, index) => (
-            <MenuItem value={course.id} key={index}>{course.name}</MenuItem>
+            // TODO: fix ts-ignore? passing object to select value causes an error.
+            // @ts-ignore
+            <MenuItem value={course} key={index}>{course.name}</MenuItem>
           ))}
         </Select>
       </FormControl>
