@@ -19,7 +19,7 @@ const useStyles = makeStyles((theme) => ({
   root: {
     // No vertical scrolling even if views overflow:
     overflow: 'hidden',
-    width: window.innerWidth,
+    width: '100%',
   },
   topControls: {
     paddingTop: theme.spacing.unit * 2,
@@ -78,7 +78,7 @@ const Games: React.FC<{}> = () => {
 
   const gamesToShow = games.filter(game => dateFrom(game.endDate).getMonth() === selectedMonth
     && dateFrom(game.endDate).getFullYear() === selectedYear)
-  
+
   // useEffect works like componentDidMount.
   // Will be rerun each time 'selectedYear' or 'selectedMonth' change.
   useEffect(() => {
@@ -171,7 +171,7 @@ const Games: React.FC<{}> = () => {
       </Grid>
     </Grid>
   )
-  
+
   return (
     <div id="gamesPage" className={classes.root}>
       <div className={classes.topControls}>
