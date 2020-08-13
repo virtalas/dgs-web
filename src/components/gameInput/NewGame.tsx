@@ -27,14 +27,19 @@ const NewGame: React.FC<{}> = () => {
   const [redirect, setRedirect] = useState(false)
   const [newGameId, setNewGameId] = useState('')
 
-  const [course, setCourse] = useState<Course>({id: 'Loading...', name: '', pars: [], total: 0, layouts: []})
+  const [course, setCourse] = useState<Course>({id: '', name: 'Loading...', pars: [], total: 0, layouts: []})
+  const [layout, setLayout] = useState<Layout>({id: '', name: 'Loading...', active: false})
   const [courses, setCourses] = useState<Course[]>([course])
 
-  // Fetch courses.
-  coursesService.getCourses().then(courses => {
-    setCourses(courses)
-    setCourse(courses[0]) // Courses should be ordered by popularity (at least initially).
-  })
+  useEffect(() => {
+    // Fetch courses.
+    coursesService.getCourses().then(courses => {
+      setCourses(courses)
+      setCourse(courses[0]) // Courses should be ordered by popularity (at least initially).
+      const activeLayout = courses[0].layouts.find(layout => layout.active) as Layout
+      setLayout(activeLayout)
+    })
+  }, [])
 
   const handleStartButtonClick = async () => {
     // Create a new game, then redirect to '/games/:newGameId/input'.
@@ -48,28 +53,51 @@ const NewGame: React.FC<{}> = () => {
   }
 
   const handleCourseChange = (event: React.ChangeEvent<{ value: unknown }>, value: any) => {
-    const selectedCourse = value.props.value
-    setCourse(selectedCourse) // TODO: not working
-    console.log(selectedCourse)
+    const selectedCourseId = value.props.value
+    const selectedCourse = courses.find(course => course.id === selectedCourseId) as Course
+    setCourse(selectedCourse)
   }
+
+  const handleLayoutChange = (event: React.ChangeEvent<{ value: unknown }>, value: any) => {
+    // TODO
+  }
+
+  const courseSelect = (
+    <FormControl variant="outlined" className={classes.formControl}>
+      <InputLabel>Course</InputLabel>
+      <Select
+        value={course.id}
+        onChange={handleCourseChange}
+        variant="outlined"
+      >
+        {courses.map((course, index) => (
+          <MenuItem value={course.id} key={index}>{course.name}</MenuItem>
+        ))}
+      </Select>
+    </FormControl>
+  )
+
+  const layoutSelect = (
+    <FormControl variant="outlined" className={classes.formControl}>
+      <InputLabel>Layout</InputLabel>
+      <Select
+        value={layout.id}
+        onChange={handleLayoutChange}
+        variant="outlined"
+      >
+        {course.layouts.map((layout, index) => (
+          <MenuItem value={layout.id} key={index}>{layout.name}</MenuItem>
+        ))}
+      </Select>
+    </FormControl>
+  )
 
   // TODO: change input variant to outlined. Currently not working.
   return (
     <div id="newGamePage" className={classes.page}>
-      <FormControl variant="outlined" className={classes.formControl}>
-        <InputLabel>Course</InputLabel>
-        <Select
-          value={course}
-          onChange={handleCourseChange}
-          variant="outlined"
-        >
-          {courses.map((course, index) => (
-            // TODO: fix ts-ignore? passing object to select value causes an error.
-            // @ts-ignore
-            <MenuItem value={course} key={index}>{course.name}</MenuItem>
-          ))}
-        </Select>
-      </FormControl>
+      {courseSelect}
+      <br />
+      {layoutSelect}
       <p>Choose layout:</p>
       <p>Choose players:</p>
       <Button variant="contained" color="primary" onClick={handleStartButtonClick}>
