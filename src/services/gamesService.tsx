@@ -9,7 +9,7 @@ const mockGame: Game = {
     total: 60,
   },
   startDate: null,
-  endDate: "2019-02-16 09:22",
+  endDate: "2020-08-13 09:22",
   scores: [
     {
       player: {
@@ -50,7 +50,7 @@ const mockGames: Game[] = [{
     total: 60,
   },
   startDate: null,
-  endDate: "2019-02-16 09:22",
+  endDate: "2020-08-12 09:22",
   scores: [
     {
       player: {
@@ -89,7 +89,7 @@ const mockGames: Game[] = [{
     total: 60,
   },
   startDate: null,
-  endDate: "2019-02-16 09:22",
+  endDate: "2020-08-11 09:22",
   scores: [
     {
       player: {
@@ -128,7 +128,7 @@ const mockGames: Game[] = [{
     total: 60,
   },
   startDate: null,
-  endDate: "2019-02-16 09:22",
+  endDate: "2020-08-10 09:22",
   scores: [
     {
       player: {
@@ -167,7 +167,7 @@ const mockGames: Game[] = [{
     total: 60,
   },
   startDate: null,
-  endDate: "2019-02-16 09:22",
+  endDate: "2020-08-09 09:22",
   scores: [
     {
       player: {
@@ -206,7 +206,7 @@ const mockGames: Game[] = [{
     total: 60,
   },
   startDate: null,
-  endDate: "2019-02-16 09:22",
+  endDate: "2020-08-08 09:22",
   scores: [
     {
       player: {
@@ -245,7 +245,7 @@ const mockGames: Game[] = [{
       total: 60,
     },
     startDate: null,
-    endDate: "2019-05-16 09:22",
+    endDate: "2020-06-13 09:22",
     scores: [
       {
         player: {
@@ -284,7 +284,7 @@ const mockGames: Game[] = [{
       total: 60,
     },
     startDate: null,
-    endDate: "2019-04-16 09:22",
+    endDate: "2020-05-13 09:22",
     scores: [
       {
         player: {
@@ -323,7 +323,7 @@ const mockGames: Game[] = [{
     total: 60,
   },
   startDate: null,
-  endDate: "2019-02-16 09:22",
+  endDate: "2020-05-13 09:22",
   scores: [
     {
       player: {
@@ -362,7 +362,7 @@ const mockGames: Game[] = [{
     total: 60,
   },
   startDate: null,
-  endDate: "2019-02-16 09:22",
+  endDate: "2020-05-13 09:22",
   scores: [
     {
       player: {
