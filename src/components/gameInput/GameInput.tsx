@@ -57,7 +57,7 @@ const useStyles = makeStyles((theme) => ({
 const GameInput: React.FC<{}> = (props: any) => {
   const classes = useStyles()
   const gameId = props.match.params.gameid // Props type as any to avoid props.match type problem.
-  
+
   const [game, setGame] = useState<Game>()
   const [holeNum, setHoleNum] = useState(1) // TODO: Use findIndex() to start from first 0 stroked hole
   const [updating, setUpdating] = useState(false)
@@ -68,7 +68,7 @@ const GameInput: React.FC<{}> = (props: any) => {
       setGame(fetchedGame)
     })
   }, [gameId])
-  
+
   const updateScores = (newScores: PlayerScores[]) => {
     const newGame = {
       ...game,
@@ -152,7 +152,6 @@ const GameInput: React.FC<{}> = (props: any) => {
     </div>
   )
 
-  // TODO: Use SwipeableViews
   const holeInfoView = (
     <div>
       <SwipeableViews
