@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Redirect } from 'react-router'
 import { makeStyles } from '@material-ui/styles'
 
@@ -9,6 +9,7 @@ import FormControl from '@material-ui/core/FormControl'
 import InputLabel from '@material-ui/core/InputLabel'
 
 import gamesService from '../../services/gamesService'
+import coursesService from '../../services/coursesService'
 
 const useStyles = makeStyles((theme) => ({
   formControl: {
@@ -26,7 +27,21 @@ const NewGame: React.FC<{}> = () => {
   const [redirect, setRedirect] = useState(false)
   const [newGameId, setNewGameId] = useState('')
 
-  const [course, setCourse] = useState<Course>()
+  const [course, setCourse] = useState<Course>({id: 'Loading...', name: '', pars: [], total: 0})
+  const [courses, setCourses] = useState<Course[]>([course])
+
+  // Fetch courses.
+  coursesService.getCourses().then(courses => {
+    setCourses(courses)
+    setCourse(courses[0]) // Courses should be ordered by popularity (at least initially).
+  })
+
+  // useEffect works like componentDidMount.
+  // Will be rerun each time 'course' changes.
+  useEffect(() => {
+    // TODO: Fetch layouts for selected course.
+    // TODO: The active layout(?) should be selected automatically.
+  }, [course])
 
   const handleStartButtonClick = async () => {
     // Create a new game, then redirect to '/games/:newGameId/input'.
@@ -47,18 +62,15 @@ const NewGame: React.FC<{}> = () => {
   return (
     <div id="newGamePage" className={classes.page}>
       <FormControl variant="outlined" className={classes.formControl}>
-        <InputLabel>Age</InputLabel>
+        <InputLabel>Course</InputLabel>
         <Select
-          value={course?.name}
+          value={course.id}
           onChange={handleCourseChange}
           variant="outlined"
         >
-          <MenuItem value="">
-            <em>None</em>
-          </MenuItem>
-          <MenuItem value={10}>Ten</MenuItem>
-          <MenuItem value={20}>Twenty</MenuItem>
-          <MenuItem value={30}>Thirty</MenuItem>
+          {courses.map((course, index) => (
+            <MenuItem value={course.id} key={index}>{course.name}</MenuItem>
+          ))}
         </Select>
       </FormControl>
       <p>Choose layout:</p>
