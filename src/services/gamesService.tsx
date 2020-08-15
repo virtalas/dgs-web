@@ -7,6 +7,10 @@ const mockGame: Game = {
     name: "Puolarmaari",
     pars: [3, 4, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 4, 3, 3, 3, 3, 3],
     total: 60,
+    layouts: [
+      { id: 'fdg', active: true, name: '2020 layout'},
+      { id: 'fdfsdg', active: false, name: '2019 layout'}
+    ],
   },
   startDate: null,
   endDate: "2020-08-13 09:22",
@@ -15,6 +19,7 @@ const mockGame: Game = {
       player: {
         id: "jf8pf8spö3",
         firstName: "Seppo",
+        guest: false,
       },
       strokes: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
       obs: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -25,6 +30,7 @@ const mockGame: Game = {
       player: {
         id: "fh83p98slhs",
         firstName: "Teppo",
+        guest: false,
       },
       strokes: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
       obs: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -48,6 +54,10 @@ const mockGames: Game[] = [{
     name: "Puolarmaari",
     pars: [3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 4, 3, 3, 3, 3, 3],
     total: 60,
+    layouts: [
+      { id: 'fdg', active: true, name: '2020 layout'},
+      { id: 'fdfsdg', active: false, name: '2019 layout'}
+    ],
   },
   startDate: null,
   endDate: "2020-08-12 09:22",
@@ -56,6 +66,7 @@ const mockGames: Game[] = [{
       player: {
         id: "jf8pf8spö3",
         firstName: "Seppo",
+        guest: false,
       },
       strokes: [3, 3, 3, 2, 3, 3, 0, 0, 3, 2, 3, 3, 1, 3, 3, 3, 3, 2, 3, 3],
       obs: [0, 1, 2, 3, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -66,6 +77,7 @@ const mockGames: Game[] = [{
       player: {
         id: "fh83p98slhs",
         firstName: "Teppo",
+        guest: false,
       },
       strokes: [3, 3, 4, 2, 3, 3, 3, 3, 3, 2, 3, 6, 3, 3, 2, 3, 3, 2, 2, 2],
       obs: [0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -87,6 +99,10 @@ const mockGames: Game[] = [{
     name: "Puolarmaari",
     pars: [3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3],
     total: 60,
+    layouts: [
+      { id: 'fdg', active: true, name: '2020 layout'},
+      { id: 'fdfsdg', active: false, name: '2019 layout'}
+    ],
   },
   startDate: null,
   endDate: "2020-08-11 09:22",
@@ -95,6 +111,7 @@ const mockGames: Game[] = [{
       player: {
         id: "fnslh3f8l3ifslf",
         firstName: "Seppomoinen",
+        guest: false,
       },
       strokes: [3, 3, 3, 2, 3, 0, 0, 0, 3, 2, 3, 3, 3, 3, 3, 3, 3, 2, 3, 3],
       obs: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -105,6 +122,7 @@ const mockGames: Game[] = [{
       player: {
         id: "jfispo3uf9slefi",
         firstName: "Teppo",
+        guest: false,
       },
       strokes: [3, 3, 4, 2, 3, 3, 3, 3, 3, 2, 3, 3, 3, 6, 3, 3, 3, 2, 3, 3],
       obs: [0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -126,6 +144,10 @@ const mockGames: Game[] = [{
     name: "Tali",
     pars: [3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3],
     total: 60,
+    layouts: [
+      { id: 'fdg', active: true, name: '2020 layout'},
+      { id: 'fdfsdg', active: false, name: '2019 layout'}
+    ],
   },
   startDate: null,
   endDate: "2020-08-10 09:22",
@@ -134,6 +156,7 @@ const mockGames: Game[] = [{
       player: {
         id: "ja38ofus8los",
         firstName: "Seppo",
+        guest: false,
       },
       strokes: [3, 3, 3, 2, 3, 0, 0, 0, 3, 2, 3, 3, 3, 3, 3, 2, 3, 3],
       obs: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -144,6 +167,7 @@ const mockGames: Game[] = [{
       player: {
         id: "jfl38suf8sofls",
         firstName: "Teppo",
+        guest: false,
       },
       strokes: [3, 3, 4, 2, 3, 3, 3, 3, 3, 2, 3, 3, 3, 3, 3, 2, 3, 3],
       obs: [0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -165,6 +189,10 @@ const mockGames: Game[] = [{
     name: "Shorty",
     pars: [3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3],
     total: 60,
+    layouts: [
+      { id: 'fdg', active: true, name: '2020 layout'},
+      { id: 'fdfsdg', active: false, name: '2019 layout'}
+    ],
   },
   startDate: null,
   endDate: "2020-08-09 09:22",
@@ -173,6 +201,7 @@ const mockGames: Game[] = [{
       player: {
         id: "jfiljfseo9fjls3f",
         firstName: "Seppo",
+        guest: false,
       },
       strokes: [3, 3, 3, 2, 3, 0, 0, 3, 3, 3, 3, 2, 3, 3],
       obs: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -183,6 +212,7 @@ const mockGames: Game[] = [{
       player: {
         id: "fi3sofjlls8ifjsilf",
         firstName: "Teppo",
+        guest: false,
       },
       strokes: [3, 3, 4, 2, 3, 3, 3, 6, 3, 3, 3, 2, 3, 3],
       obs: [0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -204,6 +234,10 @@ const mockGames: Game[] = [{
     name: "Puolarmaari",
     pars: [3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3],
     total: 60,
+    layouts: [
+      { id: 'fdg', active: true, name: '2020 layout'},
+      { id: 'fdfsdg', active: false, name: '2019 layout'}
+    ],
   },
   startDate: null,
   endDate: "2020-08-08 09:22",
@@ -212,6 +246,7 @@ const mockGames: Game[] = [{
       player: {
         id: "nfsiefhjiflsji",
         firstName: "Seppo",
+        guest: false,
       },
       strokes: [3, 3, 3, 2, 3, 0, 0, 0, 3, 2, 3, 3, 3, 3, 3, 3, 3, 2, 3, 3],
       obs: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -222,6 +257,7 @@ const mockGames: Game[] = [{
       player: {
         id: "fslf3i8o398ufslf",
         firstName: "Teppo",
+        guest: false,
       },
       strokes: [3, 3, 4, 2, 3, 3, 3, 3, 3, 2, 3, 3, 3, 6, 3, 3, 3, 2, 3, 3],
       obs: [0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -243,6 +279,10 @@ const mockGames: Game[] = [{
       name: "Kivikko",
       pars: [3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3],
       total: 60,
+    layouts: [
+      { id: 'fdg', active: true, name: '2020 layout'},
+      { id: 'fdfsdg', active: false, name: '2019 layout'}
+    ],
     },
     startDate: null,
     endDate: "2020-06-13 09:22",
@@ -251,6 +291,7 @@ const mockGames: Game[] = [{
         player: {
           id: "jfisöuf9sl3fij",
           firstName: "Seppo",
+          guest: false,
         },
         strokes: [3, 3, 3, 2, 3, 0, 0, 0, 3, 2, 3, 3, 3, 3, 3, 3, 3, 2, 3, 3],
         obs: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -261,6 +302,7 @@ const mockGames: Game[] = [{
         player: {
           id: "fnuslfu48ljsr",
           firstName: "Teppo",
+          guest: false,
         },
         strokes: [3, 3, 4, 2, 3, 3, 3, 3, 3, 2, 3, 3, 3, 6, 3, 3, 3, 2, 3, 3],
         obs: [0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -282,6 +324,10 @@ const mockGames: Game[] = [{
       name: "Tali",
       pars: [3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3],
       total: 60,
+    layouts: [
+      { id: 'fdg', active: true, name: '2020 layout'},
+      { id: 'fdfsdg', active: false, name: '2019 layout'}
+    ],
     },
     startDate: null,
     endDate: "2020-05-13 09:22",
@@ -290,6 +336,7 @@ const mockGames: Game[] = [{
         player: {
           id: "hgfsu4pu83slofj",
           firstName: "Seppo",
+          guest: false,
         },
         strokes: [3, 3, 3, 2, 3, 0, 0, 0, 3, 2, 3, 3, 3, 3, 3, 3, 3, 2, 3, 3],
         obs: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -300,6 +347,7 @@ const mockGames: Game[] = [{
         player: {
           id: "jfs83oju8soög",
           firstName: "Teppo",
+          guest: false,
         },
         strokes: [3, 3, 4, 2, 3, 3, 3, 3, 3, 2, 3, 3, 3, 6, 3, 3, 3, 2, 3, 3],
         obs: [0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -321,6 +369,10 @@ const mockGames: Game[] = [{
     name: "Puolarmaari",
     pars: [3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3],
     total: 60,
+    layouts: [
+      { id: 'fdg', active: true, name: '2020 layout'},
+      { id: 'fdfsdg', active: false, name: '2019 layout'}
+    ],
   },
   startDate: null,
   endDate: "2020-05-13 09:22",
@@ -329,6 +381,7 @@ const mockGames: Game[] = [{
       player: {
         id: "jfisöuf9sl3fij",
         firstName: "Seppo",
+        guest: false,
       },
       strokes: [3, 3, 3, 2, 3, 0, 0, 0, 3, 2, 3, 3, 3, 3, 3, 3, 3, 2, 3, 3],
       obs: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -339,6 +392,7 @@ const mockGames: Game[] = [{
       player: {
         id: "fnuslfu48ljsr",
         firstName: "Teppo",
+        guest: false,
       },
       strokes: [3, 3, 4, 2, 3, 3, 3, 3, 3, 2, 3, 3, 3, 6, 3, 3, 3, 2, 3, 3],
       obs: [0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -360,6 +414,10 @@ const mockGames: Game[] = [{
     name: "Puolarmaari",
     pars: [3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3],
     total: 60,
+    layouts: [
+      { id: 'fdg', active: true, name: '2020 layout'},
+      { id: 'fdfsdg', active: false, name: '2019 layout'}
+    ],
   },
   startDate: null,
   endDate: "2020-05-13 09:22",
@@ -368,6 +426,7 @@ const mockGames: Game[] = [{
       player: {
         id: "hgfsu4pu83slofj",
         firstName: "Seppo",
+        guest: false,
       },
       strokes: [3, 3, 3, 2, 3, 0, 0, 0, 3, 2, 3, 3, 3, 3, 3, 3, 3, 2, 3, 3],
       obs: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -378,6 +437,7 @@ const mockGames: Game[] = [{
       player: {
         id: "jfs83oju8soög",
         firstName: "Teppo",
+        guest: false,
       },
       strokes: [3, 3, 4, 2, 3, 3, 3, 3, 3, 2, 3, 3, 3, 6, 3, 3, 3, 2, 3, 3],
       obs: [0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -408,7 +468,7 @@ const getYearsThatHaveGames = async (): Promise<number[]> => {
   return mockYears.sort((a, b) => b - a)
 }
 
-const createGame = async (): Promise<Game> => {
+const createGame = async (course: Course, layout: Layout, players: Player[]): Promise<Game> => {
   // TODO: Replace mock data with API call.
   return mockGame
 }
