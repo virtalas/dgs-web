@@ -468,7 +468,7 @@ const getYearsThatHaveGames = async (): Promise<number[]> => {
   return mockYears.sort((a, b) => b - a)
 }
 
-const createGame = async (): Promise<Game> => {
+const createGame = async (course: Course, players: Player[]): Promise<Game> => {
   // TODO: Replace mock data with API call.
   return mockGame
 }

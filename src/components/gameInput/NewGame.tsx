@@ -18,6 +18,7 @@ import Checkbox from '@material-ui/core/Checkbox'
 
 import gamesService from '../../services/gamesService'
 import coursesService from '../../services/coursesService'
+import playersService from '../../services/playersService'
 
 const useStyles = makeStyles((theme) => ({
   formControl: {
@@ -65,33 +66,33 @@ const NewGame: React.FC<{}> = () => {
   const [newGameId, setNewGameId] = useState('')
 
   const [dialogOpen, setDialogOpen] = useState(false)
+  const [gameCreatable, setGameCreatable] = useState(false)
   const [course, setCourse] = useState<Course>({id: '', name: 'Loading...', pars: [], total: 0, layouts: []})
   const [layout, setLayout] = useState<Layout>({id: '', name: 'Loading...', active: false})
-  const [selectedPlayers, setSelectedPlayers] = useState<Player[]>([user]) // Pre-select the user as a player.
+  const [players, setPlayers] = useState<Player[]>([user]) // Pre-select the user as a player.
 
   const [courses, setCourses] = useState<Course[]>([course])
-  const [players, setPlayers] = useState<Player[]>([user])
+  const [allPlayers, setAllPlayers] = useState<Player[]>([user])
 
   useEffect(() => {
     // Fetch courses.
-    coursesService.getCourses().then(courses => {
-      setCourses(courses)
-      setCourse(courses[0]) // Courses should be ordered by popularity (at least initially).
-      const activeLayout = courses[0].layouts.find(layout => layout.active) as Layout
+    coursesService.getCourses().then(fetchedCourses => {
+      setCourses(fetchedCourses)
+      setCourse(fetchedCourses[0]) // Courses should be ordered by popularity (at least initially).
+      const activeLayout = fetchedCourses[0].layouts.find(layout => layout.active) as Layout
       setLayout(activeLayout)
+      setGameCreatable(true) // Even if the fetching of players fails, one player (user) and a course is enough.
     })
     // Fetch players.
-    // TODO
-    // playersService.getPlayers().then(players => {
-    //   setPlayers(players)
-    //
-    // })
-    setPlayers([user, {id: 'fgdghh', firstName: 'Seppo', guest: false}, {id: 'hfyj', firstName: 'Matti', guest: false}])
+    playersService.getAllPlayers().then(fetchedPlayers => {
+      fetchedPlayers.push(user) // TODO: Temp for mock data. Remove when 'user' ie logged in player is handeled.
+      setAllPlayers(fetchedPlayers)
+    })
   }, [])
 
   const handleStartButtonClick = async () => {
     // Create a new game, then redirect to '/games/:newGameId/input'.
-    const newGame = await gamesService.createGame()
+    const newGame = await gamesService.createGame(course, players)
     setNewGameId(newGame.id)
     setRedirect(true)
   }
@@ -112,15 +113,16 @@ const NewGame: React.FC<{}> = () => {
 
   const handlePlayersChange = (event: React.ChangeEvent<{ value: unknown }>, value: any) => {
     const selectedPlayerId = value.props.value
-    const selectedPlayer = players.find(player => player.id === selectedPlayerId) as Player
+    const selectedPlayer = allPlayers.find(player => player.id === selectedPlayerId) as Player
 
-    let updatedSelectedPlayers
-    if (selectedPlayers.includes(selectedPlayer)) { // Remove if clicked again
-      updatedSelectedPlayers = selectedPlayers.filter(player => player.id !== selectedPlayerId)
+    let updatedPlayers
+    if (players.includes(selectedPlayer)) { // Remove if clicked again
+      updatedPlayers = players.filter(player => player.id !== selectedPlayerId)
     } else { // Add
-      updatedSelectedPlayers = [...selectedPlayers, selectedPlayer]
+      updatedPlayers = [...players, selectedPlayer]
     }
-    setSelectedPlayers(updatedSelectedPlayers)
+    setPlayers(updatedPlayers)
+    setGameCreatable(updatedPlayers.length >= 1)
   }
 
   const handleAddGuest = () => {
@@ -160,11 +162,11 @@ const NewGame: React.FC<{}> = () => {
 
   // TODO: Add space for displaying guest players
   const playerChips = (
-    <FormControl className={classes.formControl} error={selectedPlayers.length === 0}>
+    <FormControl className={classes.formControl} error={players.length === 0}>
       <InputLabel id="demo-mutiple-chip-label">Players</InputLabel>
       <Select
         multiple
-        value={selectedPlayers}
+        value={players}
         onChange={handlePlayersChange}
         input={<Input id="select-multiple-chip" />}
         renderValue={selected => (
@@ -176,9 +178,9 @@ const NewGame: React.FC<{}> = () => {
         )}
         MenuProps={MenuProps}
       >
-        {players.map((player) => (
+        {allPlayers.map((player) => (
           <MenuItem key={player.id} value={player.id}>
-            <Checkbox checked={selectedPlayers.indexOf(player) > -1} color="primary" />
+            <Checkbox checked={players.indexOf(player) > -1} color="primary" />
             <ListItemText primary={player.firstName} />
           </MenuItem>
         ))}
@@ -218,7 +220,7 @@ const NewGame: React.FC<{}> = () => {
       <br/>
       {addGuestButton}
       <br/>
-      <Button variant="contained" color="primary" onClick={handleStartButtonClick}>
+      <Button variant="contained" color="primary" onClick={handleStartButtonClick} disabled={!gameCreatable}>
         New game
       </Button>
     </div>
