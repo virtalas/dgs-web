@@ -19,6 +19,7 @@ import Checkbox from '@material-ui/core/Checkbox'
 import TextField from '@material-ui/core/TextField'
 import InputAdornment from '@material-ui/core/InputAdornment'
 import AccountCircle from '@material-ui/icons/AccountCircle'
+import ListSubheader from '@material-ui/core/ListSubheader'
 
 import gamesService from '../../services/gamesService'
 import coursesService from '../../services/coursesService'
@@ -112,20 +113,20 @@ const NewGame: React.FC<{}> = () => {
   }
 
   const handleCourseChange = (event: React.ChangeEvent<{ value: unknown }>, value: any) => {
-    const selectedCourseId = value.props.value
+    const selectedCourseId = value.props.value as string
     const selectedCourse = courses.find(course => course.id === selectedCourseId) as Course
     setCourse(selectedCourse)
     selectActiveLayout(selectedCourse)
   }
 
   const handleLayoutChange = (event: React.ChangeEvent<{ value: unknown }>, value: any) => {
-    const selectedLayoutId = value.props.value
+    const selectedLayoutId = value.props.value as string
     const selectedLayout = course.layouts.find(layout => layout.id === selectedLayoutId) as Layout
     setLayout(selectedLayout)
   }
 
   const handlePlayersChange = (event: React.ChangeEvent<{ value: unknown }>, value: any) => {
-    const selectedPlayerId = value.props.value
+    const selectedPlayerId = value.props.value as string
     const selectedPlayer = allPlayers.find(player => player.id === selectedPlayerId) as Player
 
     let updatedPlayers
@@ -142,7 +143,7 @@ const NewGame: React.FC<{}> = () => {
     setDialogOpen(false)
     // Add guest to players with empty ID. Backend should then later create the player when creating the game.
     const newGuest = {
-      id: '',
+      id: 'temp-id-' + guestName, // Unique ID needed for updating the selection list.
       firstName: guestName,
       guest: true,
     }
@@ -188,7 +189,7 @@ const NewGame: React.FC<{}> = () => {
     </FormControl>
   )
 
-  // TODO: Add space for displaying guest players
+  const guests = allPlayers.filter(player => player.guest)
   const playerChips = (
     <FormControl className={classes.formControl} error={players.length === 0}>
       <InputLabel id="demo-mutiple-chip-label">Players</InputLabel>
@@ -206,10 +207,19 @@ const NewGame: React.FC<{}> = () => {
         )}
         MenuProps={MenuProps}
       >
-        {allPlayers.map((player) => (
+        {allPlayers.filter(player => !player.guest).map((player) => (
           <MenuItem key={player.id} value={player.id}>
             <Checkbox checked={players.indexOf(player) > -1} color="primary" />
             <ListItemText primary={player.firstName} />
+          </MenuItem>
+        ))}
+        {guests.length !== 0 ? (
+          <ListSubheader>Guests</ListSubheader>
+        ) : null}
+        {guests.map((guest) => (
+          <MenuItem key={guest.id} value={guest.id}>
+            <Checkbox checked={players.indexOf(guest) > -1} color="primary" />
+            <ListItemText primary={guest.firstName} />
           </MenuItem>
         ))}
       </Select>
@@ -254,6 +264,7 @@ const NewGame: React.FC<{}> = () => {
   )
 
   // TODO: Change input variant to outlined. Currently not working.
+  // TODO: 'Course', 'Layout', and 'Players' InputLabels are offset.
   return (
     <div id="newGamePage" className={classes.page}>
       {courseSelect}
