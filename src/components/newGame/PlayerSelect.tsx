@@ -75,6 +75,7 @@ const PlayerSelect: React.FC<Props> = (props) => {
     </MenuItem>
   ))
 
+  // TODO: Bigger list height so no need for scrolling.
   return (
     <FormControl className={formControlStyle} error={players.length === 0}>
       <InputLabel id="demo-mutiple-chip-label">Players</InputLabel>

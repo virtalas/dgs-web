@@ -61,6 +61,7 @@ const NewGuestButton: React.FC<Props> = (props) => {
     setAllPlayers([...allPlayers, newGuest])
   }
 
+  // TODO: On mobile, popup size changes when error appears.
   const dialogContent = (
     <DialogContent>
       <form className={classes.dialogContainer}>
