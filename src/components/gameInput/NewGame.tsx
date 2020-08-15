@@ -6,6 +6,7 @@ import Button from '@material-ui/core/Button'
 import Select from '@material-ui/core/Select'
 import MenuItem from '@material-ui/core/MenuItem'
 import FormControl from '@material-ui/core/FormControl'
+import FormHelperText from '@material-ui/core/FormHelperText'
 import InputLabel from '@material-ui/core/InputLabel'
 import Input from '@material-ui/core/Input'
 import Chip from '@material-ui/core/Chip'
@@ -15,6 +16,9 @@ import DialogActions from '@material-ui/core/DialogActions'
 import DialogContent from '@material-ui/core/DialogContent'
 import ListItemText from '@material-ui/core/ListItemText'
 import Checkbox from '@material-ui/core/Checkbox'
+import TextField from '@material-ui/core/TextField'
+import InputAdornment from '@material-ui/core/InputAdornment'
+import AccountCircle from '@material-ui/icons/AccountCircle'
 
 import gamesService from '../../services/gamesService'
 import coursesService from '../../services/coursesService'
@@ -67,6 +71,9 @@ const NewGame: React.FC<{}> = () => {
 
   const [dialogOpen, setDialogOpen] = useState(false)
   const [gameCreatable, setGameCreatable] = useState(false)
+  const [guestNameError, setGuestNameError] = useState(false)
+  const [guestName, setGuestName] = useState('')
+
   const [course, setCourse] = useState<Course>({id: '', name: 'Loading...', pars: [], total: 0, layouts: []})
   const [layout, setLayout] = useState<Layout>({id: '', name: 'Loading...', active: false})
   const [players, setPlayers] = useState<Player[]>([user]) // Pre-select the user as a player.
@@ -74,17 +81,20 @@ const NewGame: React.FC<{}> = () => {
   const [courses, setCourses] = useState<Course[]>([course])
   const [allPlayers, setAllPlayers] = useState<Player[]>([user])
 
+  function selectActiveLayout(forCourse: Course) {
+    setLayout(forCourse.layouts.find(layout => layout.active) as Layout)
+  }
+
   useEffect(() => {
     // Fetch courses.
     coursesService.getCourses().then(fetchedCourses => {
       setCourses(fetchedCourses)
       setCourse(fetchedCourses[0]) // Courses should be ordered by popularity (at least initially).
-      const activeLayout = fetchedCourses[0].layouts.find(layout => layout.active) as Layout
-      setLayout(activeLayout)
+      selectActiveLayout(fetchedCourses[0])
       setGameCreatable(true) // Even if the fetching of players fails, one player (user) and a course is enough.
     })
     // Fetch players.
-    playersService.getAllPlayers().then(fetchedPlayers => {
+    playersService.getPlayers().then(fetchedPlayers => {
       fetchedPlayers.push(user) // TODO: Temp for mock data. Remove when 'user' ie logged in player is handeled.
       setAllPlayers(fetchedPlayers)
     })
@@ -92,7 +102,7 @@ const NewGame: React.FC<{}> = () => {
 
   const handleStartButtonClick = async () => {
     // Create a new game, then redirect to '/games/:newGameId/input'.
-    const newGame = await gamesService.createGame(course, players)
+    const newGame = await gamesService.createGame(course, layout, players)
     setNewGameId(newGame.id)
     setRedirect(true)
   }
@@ -105,10 +115,13 @@ const NewGame: React.FC<{}> = () => {
     const selectedCourseId = value.props.value
     const selectedCourse = courses.find(course => course.id === selectedCourseId) as Course
     setCourse(selectedCourse)
+    selectActiveLayout(selectedCourse)
   }
 
   const handleLayoutChange = (event: React.ChangeEvent<{ value: unknown }>, value: any) => {
-    // TODO
+    const selectedLayoutId = value.props.value
+    const selectedLayout = course.layouts.find(layout => layout.id === selectedLayoutId) as Layout
+    setLayout(selectedLayout)
   }
 
   const handlePlayersChange = (event: React.ChangeEvent<{ value: unknown }>, value: any) => {
@@ -127,7 +140,22 @@ const NewGame: React.FC<{}> = () => {
 
   const handleAddGuest = () => {
     setDialogOpen(false)
-    // TODO: Add guest to players without ID. Backend should then later create the player.
+    // Add guest to players with empty ID. Backend should then later create the player when creating the game.
+    const newGuest = {
+      id: '',
+      firstName: guestName,
+      guest: true,
+    }
+    setPlayers([...players, newGuest])
+    setAllPlayers([...allPlayers, newGuest])
+  }
+
+  const handleGuestNameChange = (event: React.ChangeEvent<{ value: unknown }>) => {
+    setGuestName(event.target.value as string)
+    // Check for availability (no identical names allowed)
+    playersService.playerNameAvailable(event.target.value as string).then((available: boolean) => {
+      setGuestNameError(!available)
+    })
   }
 
   const courseSelect = (
@@ -154,7 +182,7 @@ const NewGame: React.FC<{}> = () => {
         variant="outlined"
       >
         {course.layouts.map((layout, index) => (
-          <MenuItem value={layout.id} key={index}>{layout.name}</MenuItem>
+          <MenuItem value={layout.id} key={index}>{layout.name}{layout.active ? ' (current)' : ''}</MenuItem>
         ))}
       </Select>
     </FormControl>
@@ -185,6 +213,7 @@ const NewGame: React.FC<{}> = () => {
           </MenuItem>
         ))}
       </Select>
+      <FormHelperText>{players.length === 0 ? 'Choose at least one player' : ''}</FormHelperText>
     </FormControl>
   )
 
@@ -195,14 +224,28 @@ const NewGame: React.FC<{}> = () => {
         <DialogTitle>New guest</DialogTitle>
         <DialogContent>
           <form className={classes.dialogContainer}>
-            Name:
+            <TextField
+              id="standard-basic"
+              label="Name"
+              error={guestNameError}
+              value={guestName}
+              helperText={guestNameError ? 'There already exists a guest with this name' : 'Check for existing guests first'}
+              onChange={handleGuestNameChange}
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <AccountCircle />
+                  </InputAdornment>
+                ),
+              }}
+            />
           </form>
         </DialogContent>
         <DialogActions>
           <Button onClick={() => setDialogOpen(false)} color="primary">
             Cancel
           </Button>
-          <Button onClick={handleAddGuest} color="primary">
+          <Button onClick={handleAddGuest} color="primary" disabled={guestNameError}>
             Ok
           </Button>
         </DialogActions>
@@ -210,10 +253,11 @@ const NewGame: React.FC<{}> = () => {
     </div>
   )
 
-  // TODO: change input variant to outlined. Currently not working.
+  // TODO: Change input variant to outlined. Currently not working.
   return (
     <div id="newGamePage" className={classes.page}>
       {courseSelect}
+      <br/>
       {layoutSelect}
       <br/>
       {playerChips}
