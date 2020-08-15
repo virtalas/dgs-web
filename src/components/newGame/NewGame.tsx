@@ -88,20 +88,6 @@ const NewGame: React.FC<{}> = () => {
     setLayout(selectedLayout)
   }
 
-  const handlePlayersChange = (event: React.ChangeEvent<{ value: unknown }>, value: any) => {
-    const selectedPlayerId = value.props.value as string
-    const selectedPlayer = allPlayers.find(player => player.id === selectedPlayerId) as Player
-
-    let updatedPlayers
-    if (players.includes(selectedPlayer)) { // Remove if clicked again
-      updatedPlayers = players.filter(player => player.id !== selectedPlayerId)
-    } else { // Add
-      updatedPlayers = [...players, selectedPlayer]
-    }
-    setPlayers(updatedPlayers)
-    setGameCreatable(updatedPlayers.length >= 1)
-  }
-
   const courseSelect = (
     <FormControl variant="outlined" className={classes.formControl}>
       <InputLabel>Course</InputLabel>
@@ -143,8 +129,9 @@ const NewGame: React.FC<{}> = () => {
       <PlayerSelect
         formControlStyle={classes.formControl}
         players={players}
-        handlePlayersChange={handlePlayersChange}
+        setPlayers={setPlayers}
         allPlayers={allPlayers}
+        setGameCreatable={setGameCreatable}
       />
       <br/>
       <NewGuestButton

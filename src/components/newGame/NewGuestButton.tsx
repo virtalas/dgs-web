@@ -40,10 +40,12 @@ const NewGuestButton: React.FC<Props> = (props) => {
   }
 
   const handleGuestNameChange = (event: React.ChangeEvent<{ value: unknown }>) => {
-    setGuestName(event.target.value as string)
-    // Check for availability (no identical names allowed)
-    playersService.playerNameAvailable(event.target.value as string).then((available: boolean) => {
-      setGuestNameError(!available)
+    const inputtedName = event.target.value as string
+    setGuestName(inputtedName)
+    // Check for availability (no identical names allowed):
+    playersService.playerNameAvailable(inputtedName).then((available: boolean) => {
+      // Also check locally (newly added guests):
+      setGuestNameError(allPlayers.filter(player => player.firstName === inputtedName).length > 0 || !available)
     })
   }
 
@@ -68,7 +70,7 @@ const NewGuestButton: React.FC<Props> = (props) => {
           error={guestNameError}
           value={guestName}
           helperText={guestNameError ?
-            'There already exists a guest with this name' : 'Check for existing guests first'}
+            'There already exists a player with this name' : 'Check for existing guests first'}
           onChange={handleGuestNameChange}
           InputProps={{
             startAdornment: (

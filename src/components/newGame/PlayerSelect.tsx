@@ -36,15 +36,44 @@ const MenuProps = {
 interface Props {
   formControlStyle: string,
   players: Player[],
-  handlePlayersChange: (event: React.ChangeEvent<{ value: unknown; }>, value: any) => void,
+  setPlayers: any,
   allPlayers: Player[],
+  setGameCreatable: any,
 }
 
 const PlayerSelect: React.FC<Props> = (props) => {
   const classes = useStyles()
-  const { formControlStyle, players, handlePlayersChange, allPlayers } = props
+  const { formControlStyle, players, setPlayers, allPlayers, setGameCreatable } = props
 
   const guests = allPlayers.filter(player => player.guest)
+
+  const handlePlayersChange = (event: React.ChangeEvent<{ value: unknown }>, value: any) => {
+    const selectedPlayerId = value.props.value as string
+    const selectedPlayer = allPlayers.find(player => player.id === selectedPlayerId) as Player
+
+    let updatedPlayers
+    if (players.includes(selectedPlayer)) { // Remove if clicked again
+      updatedPlayers = players.filter(player => player.id !== selectedPlayerId)
+    } else { // Add
+      updatedPlayers = [...players, selectedPlayer]
+    }
+    setPlayers(updatedPlayers)
+    setGameCreatable(updatedPlayers.length >= 1)
+  }
+
+  const playerList = allPlayers.filter(player => !player.guest).map((player) => (
+    <MenuItem key={player.id} value={player.id}>
+      <Checkbox checked={players.indexOf(player) > -1} color="primary" />
+      <ListItemText primary={player.firstName} />
+    </MenuItem>
+  ))
+
+  const guestList = guests.map((guest) => (
+    <MenuItem key={guest.id} value={guest.id}>
+      <Checkbox checked={players.indexOf(guest) > -1} color="primary" />
+      <ListItemText primary={guest.firstName} />
+    </MenuItem>
+  ))
 
   return (
     <FormControl className={formControlStyle} error={players.length === 0}>
@@ -63,21 +92,11 @@ const PlayerSelect: React.FC<Props> = (props) => {
         )}
         MenuProps={MenuProps}
       >
-        {allPlayers.filter(player => !player.guest).map((player) => (
-          <MenuItem key={player.id} value={player.id}>
-            <Checkbox checked={players.indexOf(player) > -1} color="primary" />
-            <ListItemText primary={player.firstName} />
-          </MenuItem>
-        ))}
+        {playerList}
         {guests.length !== 0 ? (
           <ListSubheader>Guests</ListSubheader>
         ) : null}
-        {guests.map((guest) => (
-          <MenuItem key={guest.id} value={guest.id}>
-            <Checkbox checked={players.indexOf(guest) > -1} color="primary" />
-            <ListItemText primary={guest.firstName} />
-          </MenuItem>
-        ))}
+        {guestList}
       </Select>
       <FormHelperText>{players.length === 0 ? 'Choose at least one player' : ''}</FormHelperText>
     </FormControl>
