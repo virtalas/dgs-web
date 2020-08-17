@@ -1,7 +1,7 @@
 import React from 'react'
 import { Route, HashRouter, Switch } from 'react-router-dom'
 
-import Drawer from './Drawer'
+import BasePage from './BasePage'
 import GameInput from './gameInput/GameInput'
 
 const Router: React.FC<{}> = () => {
@@ -9,7 +9,7 @@ const Router: React.FC<{}> = () => {
     <HashRouter>
       <Switch>
         <Route path="/games/:gameid/input" component={GameInput}/>
-        <Route component={Drawer}/>
+        <Route component={BasePage}/>
       </Switch>
     </HashRouter>
   )
