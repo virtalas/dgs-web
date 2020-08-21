@@ -470,6 +470,7 @@ const getYearsThatHaveGames = async (): Promise<number[]> => {
 
 const createGame = async (course: Course, layout: Layout, players: Player[]): Promise<Game> => {
   // TODO: Replace mock data with API call.
+  // Note: If the layout is not active, the active layout should be updated to be the chosen layout.
   return mockGame
 }
 
