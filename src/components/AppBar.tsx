@@ -17,7 +17,7 @@ const useStyles = makeStyles((theme) => ({
   appBar: {
     marginLeft: drawerWidth,
     zIndex: theme.zIndex.drawer + 1,
-    background: '#5cb85c',
+    background: '#5cb85c',　// theme.palette.augmentColor({ main: '#5cb85c' }) ?
     height: appBarHeight,
   },
   menuButton: {
