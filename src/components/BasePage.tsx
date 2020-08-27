@@ -86,6 +86,7 @@ const BasePage: React.FC<Props> = (props) => {
           <Route path="/competitions" component={Competitions} />
           <Route path="/info" component={Info} />
 
+          {/* TODO: Add a Fab button to continue inputting ongoing game */}
           {shouldRenderNewButton ? (
             <NavLink to={newButtonPath} className={classes.navLink} id="newButton">
               {/* Usage of 'any': https://material-ui.com/guides/typescript/#usage-of-component-property */}
