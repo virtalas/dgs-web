@@ -4,6 +4,8 @@ import Paper from '@material-ui/core/Paper'
 import Typography from '@material-ui/core/Typography'
 import Chip from '@material-ui/core/Chip'
 
+const chipHeight = 22
+
 const useStyles = makeStyles((theme) => ({
   infoPaper: {
     marginBottom: 10,
@@ -11,29 +13,31 @@ const useStyles = makeStyles((theme) => ({
     textAlign: 'left',
   },
   chip: {
-    height: 22,
+    height: chipHeight,
     marginRight: 5,
   },
   chipRow: {
     lineHeight: '28px', // Affects spacing between chips when wrapped to two rows.
   },
   highScoreChip: {
-    height: 22,
-    width: "100%",
+    height: chipHeight,
+    width: 90,
     fontSize: '97%',
     cursor: 'pointer',
     backgroundColor: '#4353b3',
     color: 'white',
-    marginLeft: -1,
+    position: 'relative',
+    left: -5,
   },
   illegalChip: {
-    height: 22,
-    width: "100%",
+    height: chipHeight,
+    width: 100,
     fontSize: '97%',
     cursor: 'pointer',
     backgroundColor: '#f2105a',
     color: 'white',
-    marginLeft: -1,
+    position: 'relative',
+    left: -5,
   },
   comment: {
     marginTop: 5,

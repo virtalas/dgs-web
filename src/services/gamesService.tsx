@@ -89,7 +89,7 @@ const mockGames: Game[] = [{
   weatherConditions: ["snow", "rain"],
   conditions: ["LED"],
   highScorers: ["Teppo"],
-  illegalScorers: ["Seppo"],
+  illegalScorers: ["Seppoilijaliini"],
   comment: "Fun :D",
   contestName: null,
 }, {

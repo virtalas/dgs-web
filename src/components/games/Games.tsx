@@ -79,7 +79,7 @@ const Games: React.FC<{}> = () => {
       setTimeout(function () {
         setGames(games => games.concat(fetchedGames))
         setIsLoading(false)
-      }, 1500);
+      }, 500);
     })
   }, [selectedYear, selectedMonth, fetchedMonths])
 
