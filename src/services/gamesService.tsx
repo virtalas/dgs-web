@@ -454,7 +454,7 @@ const mockGames: Game[] = [{
   contestName: null,
 }]
 
-const mockYears = [2015, 2019, 2016, 2017, 2018]
+const mockYears = [2015, 2019, 2016, 2017, 2018, 2020]
 const mockMonths = [0, 2, 3, 4, 5, 6, 8]
 
 const getGames = async (year: number, month: number): Promise<Game[]> => {
