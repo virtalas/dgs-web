@@ -4,12 +4,12 @@ import { LocationDescriptor } from 'history'
 
 import CssBaseline from '@material-ui/core/CssBaseline'
 import Fab from '@material-ui/core/Fab'
-import { makeStyles } from '@material-ui/styles'
+import { makeStyles } from '@material-ui/core/styles'
 
 import AddIcon from '@material-ui/icons/Add'
 
 import AppBar from './AppBar'
-import Games from './Games'
+import Games from './games/Games'
 import NewGame from './newGame/NewGame'
 import Players from './players/Players'
 import Courses from './courses/Courses'
@@ -34,8 +34,8 @@ const useStyles = makeStyles((theme) => ({
   },
   fab: {
     position: 'fixed',
-    bottom: theme.spacing.unit * 3,
-    right: theme.spacing.unit * 3,
+    bottom: theme.spacing(3),
+    right: theme.spacing(3),
     zIndex: 2,
   },
 }))

@@ -6,14 +6,7 @@ import ThemeProvider from "@material-ui/styles/ThemeProvider"
 
 import Login from './components/login/Login'
 
-// TODO: remove
-// Temporary solution for using @material-ui/styles (will be unneeded in Material UI v4):
-// https://github.com/mui-org/material-ui/issues/14271
-const theme = createMuiTheme({
-  typography: {
-    useNextVariants: true, // Use new typography v2
-  },
-})
+const theme = createMuiTheme({})
 
 // TODO: handle login, pass signed in player info as props
 

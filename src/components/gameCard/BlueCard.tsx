@@ -1,5 +1,5 @@
 import React from 'react'
-import { makeStyles } from '@material-ui/styles'
+import { makeStyles } from '@material-ui/core/styles'
 import Card from '@material-ui/core/Card'
 
 // Card constants
@@ -16,10 +16,10 @@ const useStyles = makeStyles((theme) => ({
   card: {
     maxWidth: Math.min(maxMobileCardWidth, maxDesktopCardWidth),
     width: '100%',
-    marginTop: theme.spacing.unit * 4,
+    marginTop: theme.spacing(4),
     marginLeft: 'auto',
     marginRight: 'auto',
-    marginBottom: theme.spacing.unit * 4,
+    marginBottom: theme.spacing(4),
     overflowX: 'hidden',
     backgroundColor: '#3087C1',
   },
@@ -28,8 +28,8 @@ const useStyles = makeStyles((theme) => ({
     width: '100%',
     marginLeft: 'auto',
     marginRight: 'auto',
-    marginTop: theme.spacing.unit,
-    marginBottom: theme.spacing.unit,
+    marginTop: theme.spacing(1),
+    marginBottom: theme.spacing(1),
     textAlign: 'center',
   },
 }))

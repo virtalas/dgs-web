@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react'
 
 import { Grid, Button, Select, MenuItem, OutlinedInput, CircularProgress } from '@material-ui/core'
-import { makeStyles } from '@material-ui/styles'
+import { makeStyles } from '@material-ui/core/styles'
 
-import GameCard from './gameCard/GameCard'
-import gamesService from '../services/gamesService'
-import { dateFrom } from '../utils/DateUtil'
+import GameCard from '../gameCard/GameCard'
+import gamesService from '../../services/gamesService'
+import { dateFrom } from '../../utils/DateUtil'
 
 const buttonHeight = 45
 
@@ -22,13 +22,13 @@ const useStyles = makeStyles((theme) => ({
     width: '100%',
   },
   topControls: {
-    paddingTop: theme.spacing.unit * 2,
+    paddingTop: theme.spacing(2),
     margin: 0,
-    marginBottom: -theme.spacing.unit * 3,
+    marginBottom: -theme.spacing(3),
     width: '100%',
   },
   bottomControls: {
-    paddingBottom: theme.spacing.unit * 12,
+    paddingBottom: theme.spacing(12),
     margin: 0,
     width: '100%',
   },
@@ -57,7 +57,7 @@ const useStyles = makeStyles((theme) => ({
     right: 0,
   },
   centerContainer: {
-    height: theme.spacing.unit * 30,
+    height: theme.spacing(30),
     position: 'relative',
     zIndex: -1, // Don't block navigation controls.
   },

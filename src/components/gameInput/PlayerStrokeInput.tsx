@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { makeStyles } from '@material-ui/styles'
+import { makeStyles } from '@material-ui/core/styles'
 import List from '@material-ui/core/List'
 import ListItem from '@material-ui/core/ListItem'
 import ListItemText from '@material-ui/core/ListItemText'
@@ -8,7 +8,7 @@ import ListSubheader from '@material-ui/core/ListSubheader'
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    paddingTop: theme.spacing.unit * 8,
+    paddingTop: theme.spacing(8),
   },
   circle: {
     width: 40,

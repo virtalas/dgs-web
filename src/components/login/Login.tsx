@@ -8,13 +8,13 @@ import Checkbox from '@material-ui/core/Checkbox'
 import Link from '@material-ui/core/Link'
 import Grid from '@material-ui/core/Grid'
 import Typography from '@material-ui/core/Typography'
-import { makeStyles } from '@material-ui/styles'
+import { makeStyles } from '@material-ui/core/styles'
 
 import DiscGolfBasket from '../DiscGolfBasket'
 
 const useStyles = makeStyles((theme) => ({
   paper: {
-    marginTop: theme.spacing.unit * 8,
+    marginTop: theme.spacing(8),
     marginLeft: 'auto',
     marginRight: 'auto',
     maxWidth: '40%',
@@ -24,16 +24,16 @@ const useStyles = makeStyles((theme) => ({
     alignItems: 'center',
   },
   avatar: {
-    margin: theme.spacing.unit,
+    margin: theme.spacing(1),
     backgroundColor: '#5cb85c',
   },
   form: {
     width: '100%',
-    marginTop: theme.spacing.unit,
+    marginTop: theme.spacing(1),
   },
   submit: {
     margin: 'auto',
-    marginTop: theme.spacing.unit * 2,
+    marginTop: theme.spacing(2),
   },
 }))
 

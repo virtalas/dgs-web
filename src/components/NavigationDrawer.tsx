@@ -8,7 +8,7 @@ import List from '@material-ui/core/List'
 import ListItem from '@material-ui/core/ListItem'
 import ListItemIcon from '@material-ui/core/ListItemIcon'
 import ListItemText from '@material-ui/core/ListItemText'
-import { makeStyles } from '@material-ui/styles'
+import { makeStyles } from '@material-ui/core/styles'
 
 import GroupIcon from '@material-ui/icons/Group'
 import PlaceIcon from '@material-ui/icons/Place'
@@ -23,6 +23,7 @@ const useStyles = makeStyles((theme) => ({
   toolbar: theme.mixins.toolbar,
   navLink: {
     textDecoration: 'none',
+    color: 'black',
   },
   drawer: {
     [theme.breakpoints.up('md')]: {
