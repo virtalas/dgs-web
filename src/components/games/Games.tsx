@@ -10,6 +10,7 @@ import { dateFrom } from '../../utils/DateUtil'
 
 // TODO: When the device is rotated, don't open the drawer -> show whole score card instead
 // TODO: Fetch prev and next month as well.
+// TODO: Fix bug: moving to previous month before games have loaded
 
 const useStyles = makeStyles((theme) => ({
   root: {
