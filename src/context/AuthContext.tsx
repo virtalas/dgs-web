@@ -1,7 +1,12 @@
 import { createContext, useContext } from 'react';
 
-export const AuthContext = createContext(false);
+type ContextProps = {
+  authToken: Object,
+  setToken: any,
+};
+
+export const AuthContext = createContext<Partial<ContextProps>>({});
 
 export function useAuth() {
-  return useContext(AuthContext);
+  return useContext(AuthContext)
 }

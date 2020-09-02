@@ -10,6 +10,9 @@ const mockPlayers = [
   }
 ]
 
+// TODO for all services:
+// Add Bearer token as a header.
+
 const getPlayers = async (): Promise<Player[]> => {
   // TODO
   return mockPlayers

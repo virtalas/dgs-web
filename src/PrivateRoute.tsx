@@ -11,9 +11,9 @@ export interface ProtectedRouteProps extends RouteProps {
 }
 
 export const ProtectedRoute: React.FC<ProtectedRouteProps> = props => {
-  const isAuthenticated = useAuth()
+  const { authToken } = useAuth()
 
-  if (isAuthenticated) {
+  if (authToken) {
     return <Route {...props} />
   } else {
     const renderComponent = () => <Redirect to={{ pathname: '/login' }} />

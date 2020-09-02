@@ -12,6 +12,9 @@ import { makeStyles } from '@material-ui/core/styles'
 
 import DiscGolfBasket from '../DiscGolfBasket'
 
+import authService from '../../services/authService'
+import { useAuth } from '../../context/AuthContext'
+
 const useStyles = makeStyles((theme) => ({
   paper: {
     marginTop: theme.spacing(8),
@@ -39,6 +42,14 @@ const useStyles = makeStyles((theme) => ({
 
 export default function SignIn() {
   const classes = useStyles()
+  const { setToken } = useAuth()
+
+  const handleLogin = () => {
+    authService.login('', '').then((player: Player) => {
+      // TODO: Handle JWT
+      setToken(player.id)
+    })
+  }
 
   return (
     <div className={classes.paper}>
@@ -75,6 +86,7 @@ export default function SignIn() {
           variant="contained"
           color="primary"
           className={classes.submit}
+          onClick={handleLogin}
         >
           Sign In
         </Button>
