@@ -8,22 +8,47 @@ import { AuthContext } from "./context/AuthContext"
 
 const theme = createMuiTheme({})
 
-const App: React.FC<{}> = () => {
-  const localTokens = localStorage.getItem("dgs-token")
-  const existingTokens = localTokens !== null
-                        && localTokens !== undefined
-                        && localTokens !== 'undefined' 
-                        ? JSON.parse(localTokens as string)
-                        : null
-  const [authTokens, setAuthTokens] = useState(existingTokens)
+const mockLoggedInUser = {
+  id: 'fdjskfl83fhsgls',
+  firstName: 'Konsta',
+  guest: false,
+  admin: false,
+}
 
-  const setTokens = (data: Object) => {
-    localStorage.setItem("dgs-token", JSON.stringify(data))
-    setAuthTokens(data)
+const App: React.FC<{}> = () => {
+  const localToken = localStorage.getItem("dgs-token")
+  const existingToken = localToken !== null
+                        && localToken !== undefined
+                        && localToken !== 'undefined' 
+                        ? JSON.parse(localToken as string)
+                        : null
+  // TODO: Check for expored token?
+
+  const [authToken, setAuthToken] = useState(existingToken)
+
+  let loggedInUser = {
+    id: '',
+    firstName: '',
+    guest: false,
+    admin: false,
+  }
+  if (authToken) {
+    loggedInUser = mockLoggedInUser // TODO: Extract user from authToken.
+  }
+  const [user, setUser] = useState<Player>(loggedInUser)
+
+  const setToken = (tokenData: Object) => {
+    localStorage.setItem("dgs-token", JSON.stringify(tokenData))
+    setAuthToken(tokenData)
+    setUser(mockLoggedInUser) // TODO: Extract user from authToken.
   }
 
   return (
-    <AuthContext.Provider value={{ authToken: authTokens, setToken: setTokens }}>
+    <AuthContext.Provider value={{
+      authToken: authToken,
+      setToken: setToken,
+      user: user,
+    }}>
       <ThemeProvider theme={theme}>
         <Router />
       </ThemeProvider>

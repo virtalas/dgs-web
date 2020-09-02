@@ -24,7 +24,8 @@ const useStyles = makeStyles((theme) => ({
 const user: Player = {
   id: 'fdsfgfdgwrgfhg',
   firstName: 'Teppo',
-  guest: false
+  guest: false,
+  admin: false,
 }
 
 const NewGame: React.FC<{}> = () => {

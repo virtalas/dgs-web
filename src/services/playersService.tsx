@@ -2,11 +2,13 @@ const mockPlayers = [
   {
     id: 'fgdghh',
     firstName: 'Seppo',
-    guest: false
+    guest: false,
+    admin: false,
   }, {
     id: 'hfyj',
     firstName: 'Matti',
-    guest: false
+    guest: false,
+    admin: false,
   }
 ]
 

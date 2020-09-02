@@ -46,9 +46,9 @@ export default function SignIn() {
   const { authToken, setToken } = useAuth()
 
   const handleLogin = () => {
-    authService.login('', '').then((player: Player) => {
+    authService.login('', '').then((token: string) => {
       // TODO: Handle JWT
-      setToken(player.id)
+      setToken(token)
     })
   }
 
@@ -64,7 +64,7 @@ export default function SignIn() {
       <Typography component="h1" variant="h5">
         Sign in
       </Typography>
-      <form className={classes.form} noValidate>
+      <div className={classes.form}>
         <TextField
           variant="outlined"
           margin="normal"
@@ -107,7 +107,7 @@ export default function SignIn() {
             </Link>
           </Grid>
         </Grid>
-      </form>
+      </div>
     </div>
   )
   // <FormControlLabel
