@@ -8,6 +8,7 @@ import { makeStyles } from '@material-ui/core/styles'
 
 import AddIcon from '@material-ui/icons/Add'
 
+import PrivateRoute from '../PrivateRoute'
 import AppBar from './AppBar'
 import Games from './games/Games'
 import NewGame from './newGame/NewGame'
@@ -80,7 +81,7 @@ const BasePage: React.FC<Props> = (props) => {
           <Route exact path="/" component={Games} />
           <Route exact path="/games" component={Games} />
           <Route exact path="/games/new" component={NewGame} />
-          <Route path="/players" component={Players} />
+          <PrivateRoute path="/players" component={Players} />
           <Route path="/courses" component={Courses} />
           <Route path="/graphs" component={Graphs} />
           <Route path="/competitions" component={Competitions} />

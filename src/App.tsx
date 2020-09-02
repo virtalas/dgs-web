@@ -4,7 +4,7 @@ import Router from './components/Router'
 import createMuiTheme from "@material-ui/core/styles/createMuiTheme"
 import ThemeProvider from "@material-ui/styles/ThemeProvider"
 
-import Login from './components/login/Login'
+import { AuthContext } from "./context/AuthContext"
 
 const theme = createMuiTheme({})
 
@@ -12,18 +12,13 @@ const theme = createMuiTheme({})
 
 const App: React.FC<{}> = () => {
   // Check whether logged in or not.
-  if (false) {
-    return (
-      <ThemeProvider theme={theme}>
-        <Login />
-      </ThemeProvider>
-    )
-  }
 
   return (
-    <ThemeProvider theme={theme}>
-      <Router />
-    </ThemeProvider>
+    <AuthContext.Provider value={false}>
+      <ThemeProvider theme={theme}>
+        <Router />
+      </ThemeProvider>
+    </AuthContext.Provider>
   )
 }
 
