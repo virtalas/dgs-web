@@ -78,14 +78,14 @@ const BasePage: React.FC<Props> = (props) => {
       <AppBar />
       <main className={classes.content}>
         <div className="content">
-          <Route exact path="/" component={Games} />
-          <Route exact path="/games" component={Games} />
-          <Route exact path="/games/new" component={NewGame} />
+          <PrivateRoute exact path="/" component={Games} />
+          <PrivateRoute exact path="/games" component={Games} />
+          <PrivateRoute exact path="/games/new" component={NewGame} />
           <PrivateRoute path="/players" component={Players} />
-          <Route path="/courses" component={Courses} />
-          <Route path="/graphs" component={Graphs} />
-          <Route path="/competitions" component={Competitions} />
-          <Route path="/info" component={Info} />
+          <PrivateRoute path="/courses" component={Courses} />
+          <PrivateRoute path="/graphs" component={Graphs} />
+          <PrivateRoute path="/competitions" component={Competitions} />
+          <PrivateRoute path="/info" component={Info} />
 
           {/* TODO: Add a Fab button to continue inputting ongoing game */}
           {shouldRenderNewButton ? (

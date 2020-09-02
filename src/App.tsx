@@ -9,12 +9,17 @@ import { AuthContext } from "./context/AuthContext"
 const theme = createMuiTheme({})
 
 const App: React.FC<{}> = () => {
-  const existingTokens = JSON.parse('' + localStorage.getItem("dgs-token"));
-  const [authTokens, setAuthTokens] = useState(existingTokens);
+  const localTokens = localStorage.getItem("dgs-token")
+  const existingTokens = localTokens !== null
+                        && localTokens !== undefined
+                        && localTokens !== 'undefined' 
+                        ? JSON.parse(localTokens as string)
+                        : null
+  const [authTokens, setAuthTokens] = useState(existingTokens)
 
   const setTokens = (data: Object) => {
-    localStorage.setItem("dgs-token", JSON.stringify(data));
-    setAuthTokens(data);
+    localStorage.setItem("dgs-token", JSON.stringify(data))
+    setAuthTokens(data)
   }
 
   return (

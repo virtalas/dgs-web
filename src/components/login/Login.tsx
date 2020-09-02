@@ -14,6 +14,7 @@ import DiscGolfBasket from '../DiscGolfBasket'
 
 import authService from '../../services/authService'
 import { useAuth } from '../../context/AuthContext'
+import { Redirect } from 'react-router';
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -42,13 +43,17 @@ const useStyles = makeStyles((theme) => ({
 
 export default function SignIn() {
   const classes = useStyles()
-  const { setToken } = useAuth()
+  const { authToken, setToken } = useAuth()
 
   const handleLogin = () => {
     authService.login('', '').then((player: Player) => {
       // TODO: Handle JWT
       setToken(player.id)
     })
+  }
+
+  if (authToken) {
+    return (<Redirect to='/' />)
   }
 
   return (

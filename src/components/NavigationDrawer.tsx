@@ -1,5 +1,5 @@
 import React from 'react'
-import { NavLink } from 'react-router-dom'
+import { NavLink, Redirect } from 'react-router-dom'
 
 import Divider from '@material-ui/core/Divider'
 import Drawer from '@material-ui/core/Drawer'
@@ -15,9 +15,12 @@ import PlaceIcon from '@material-ui/icons/Place'
 import InsertChartIcon from '@material-ui/icons/InsertChart'
 import InfoIcon from '@material-ui/icons/Info'
 import BallotIcon from '@material-ui/icons/Ballot'
+import ExitToApp from '@material-ui/icons/ExitToApp'
 import DiscGolfBasket from './DiscGolfBasket'
 
 import { drawerWidth } from './BasePage'
+
+import { useAuth } from "../context/AuthContext"
 
 const useStyles = makeStyles((theme) => ({
   toolbar: theme.mixins.toolbar,
@@ -43,13 +46,16 @@ interface Props {
 
 const NavigationDrawer: React.FC<Props> = (props) => {
   const classes = useStyles()
-
   const { mobileOpen, handleDrawerToggle } = props
+  const { setToken } = useAuth()
+
+  const handleLogout = () => {
+    setToken()
+  }
 
   const navButtonList = (
     <div>
       <div className={classes.toolbar} />
-      <Divider />
       <List>
         <NavLink to="/games" className={classes.navLink}>
           <ListItem button>
@@ -58,13 +64,13 @@ const NavigationDrawer: React.FC<Props> = (props) => {
           </ListItem>
         </NavLink>
         <NavLink to="/players" className={classes.navLink}>
-          <ListItem button>
+          <ListItem button disabled>
             <ListItemIcon><GroupIcon /></ListItemIcon>
             <ListItemText primary="Players" />
           </ListItem>
         </NavLink>
         <NavLink to="/courses" className={classes.navLink}>
-          <ListItem button>
+          <ListItem button disabled>
             <ListItemIcon><PlaceIcon /></ListItemIcon>
             <ListItemText primary="Courses" />
           </ListItem>
@@ -73,23 +79,30 @@ const NavigationDrawer: React.FC<Props> = (props) => {
       <Divider />
       <List>
         <NavLink to="/graphs" className={classes.navLink}>
-          <ListItem button>
+          <ListItem button disabled>
             <ListItemIcon><InsertChartIcon /></ListItemIcon>
             <ListItemText primary="Graphs" />
           </ListItem>
         </NavLink>
         <NavLink to="/competitions" className={classes.navLink}>
-          <ListItem button>
+          <ListItem button disabled>
             <ListItemIcon><BallotIcon /></ListItemIcon>
             <ListItemText primary="Competitions" />
           </ListItem>
         </NavLink>
         <NavLink to="/info" className={classes.navLink}>
-          <ListItem button>
+          <ListItem button disabled>
             <ListItemIcon><InfoIcon /></ListItemIcon>
             <ListItemText primary="Info" />
           </ListItem>
         </NavLink>
+      </List>
+      <Divider />
+      <List>
+        <ListItem button onClick={handleLogout}>
+          <ListItemIcon><ExitToApp /></ListItemIcon>
+          <ListItemText primary="Log out" />
+        </ListItem>
       </List>
     </div>
   )
