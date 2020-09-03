@@ -61,7 +61,7 @@ const MonthControls: React.FC<Props> = (props) => {
     // setFetchedMonths([]) // empty the array
   }
 
-  var monthOptions: any = []
+  var monthOptions: JSX.Element[] = []
   const lastSelectableMonth = currentYear === selectedYear ? currentMonth : 11 // 0 = January
   for (var i = lastSelectableMonth; i >= 0; i--) {
     // 0 = January, 1st day has to be 1

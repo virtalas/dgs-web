@@ -36,9 +36,9 @@ const MenuProps = {
 interface Props {
   formControlStyle: string,
   players: Player[],
-  setPlayers: any,
+  setPlayers: (players: Player[]) => void,
   allPlayers: Player[],
-  setGameCreatable: any,
+  setGameCreatable: (creatable: boolean) => void,
 }
 
 const PlayerSelect: React.FC<Props> = (props) => {
@@ -52,9 +52,11 @@ const PlayerSelect: React.FC<Props> = (props) => {
     const selectedPlayer = allPlayers.find(player => player.id === selectedPlayerId) as Player
 
     let updatedPlayers
-    if (players.includes(selectedPlayer)) { // Remove if clicked again
+    if (arrayContains(players, selectedPlayer)) {
+      // Remove if clicked again
       updatedPlayers = players.filter(player => player.id !== selectedPlayerId)
-    } else { // Add
+    } else {
+      // Add
       updatedPlayers = [...players, selectedPlayer]
     }
     setPlayers(updatedPlayers)
@@ -63,14 +65,14 @@ const PlayerSelect: React.FC<Props> = (props) => {
 
   const playerList = allPlayers.filter(player => !player.guest).map((player) => (
     <MenuItem key={player.id} value={player.id}>
-      <Checkbox checked={players.indexOf(player) > -1} color="primary" />
+      <Checkbox checked={arrayContains(players, player)} color="primary" />
       <ListItemText primary={player.firstName} />
     </MenuItem>
   ))
 
   const guestList = guests.map((guest) => (
     <MenuItem key={guest.id} value={guest.id}>
-      <Checkbox checked={players.indexOf(guest) > -1} color="primary" />
+      <Checkbox checked={arrayContains(players, guest)} color="primary" />
       <ListItemText primary={guest.firstName} />
     </MenuItem>
   ))
@@ -102,6 +104,10 @@ const PlayerSelect: React.FC<Props> = (props) => {
       <FormHelperText>{players.length === 0 ? 'Choose at least one player' : ''}</FormHelperText>
     </FormControl>
   )
+}
+
+function arrayContains(array: Player[], player: Player): boolean {
+  return array.some(p => p.id === player.id)
 }
 
 export default PlayerSelect

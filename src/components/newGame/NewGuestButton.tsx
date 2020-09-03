@@ -20,9 +20,9 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 interface Props {
-  setPlayers: any,
+  setPlayers: (players: Player[]) => void,
   players: Player[],
-  setAllPlayers: any,
+  setAllPlayers: (players: Player[]) => void,
   allPlayers: Player[],
 }
 

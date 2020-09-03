@@ -11,10 +11,10 @@ import coursesService from '../../services/coursesService'
 interface Props {
   formControlStyle: string,
   course: Course,
-  setCourse: any,
+  setCourse: (course: Course) => void,
   layout: Layout,
-  setLayout: any,
-  setGameCreatable: any,
+  setLayout: (layout: Layout) => void,
+  setGameCreatable: (creatable: boolean) => void,
 }
 
 const CourseSelect: React.FC<Props> = (props) => {

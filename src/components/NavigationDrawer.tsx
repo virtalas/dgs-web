@@ -38,7 +38,7 @@ const useStyles = makeStyles((theme) => ({
 
 interface Props {
   mobileOpen: boolean,
-  handleDrawerToggle: any,
+  handleDrawerToggle: () => void,
 }
 
 const NavigationDrawer: React.FC<Props> = (props) => {

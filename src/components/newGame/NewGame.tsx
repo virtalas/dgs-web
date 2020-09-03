@@ -22,8 +22,8 @@ const useStyles = makeStyles((theme) => ({
 
 // TODO: Implement logged in user info
 const user: Player = {
-  id: 'fdsfgfdgwrgfhg',
-  firstName: 'Teppo',
+  id: 'fgdghh', // Same ID as mocked players from playerService
+  firstName: 'Seppo',
   guest: false
 }
 
@@ -43,7 +43,6 @@ const NewGame: React.FC<{}> = () => {
   useEffect(() => {
     // Fetch players.
     playersService.getPlayers().then(fetchedPlayers => {
-      fetchedPlayers.push(user) // TODO: Temp for mock data. Remove when 'user' ie logged in player is handeled.
       setAllPlayers(fetchedPlayers)
     })
   }, [])
