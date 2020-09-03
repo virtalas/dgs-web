@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 
 import { makeStyles } from '@material-ui/core/styles'
 import Select from '@material-ui/core/Select'
@@ -11,6 +11,7 @@ import Chip from '@material-ui/core/Chip'
 import ListItemText from '@material-ui/core/ListItemText'
 import Checkbox from '@material-ui/core/Checkbox'
 import ListSubheader from '@material-ui/core/ListSubheader'
+import { OutlinedInput } from '@material-ui/core';
 
 const useStyles = makeStyles((theme) => ({
   chips: {
@@ -22,12 +23,10 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-const itemHeight = 48
-const itemPaddingTop = 8
 const MenuProps = {
   PaperProps: {
     style: {
-      maxHeight: itemHeight * 4.5 + itemPaddingTop,
+      maxHeight: '80%',
       width: 250,
     },
   },
@@ -51,6 +50,11 @@ const PlayerSelect: React.FC<Props> = (props) => {
     const selectedPlayerId = value.props.value as string
     const selectedPlayer = allPlayers.find(player => player.id === selectedPlayerId) as Player
 
+    if (!selectedPlayerId) {
+      // selectedPlayerId was 'undefined'. This happens if 'Guests' label in the popup list was clicked.
+      return
+    }
+
     let updatedPlayers
     if (arrayContains(players, selectedPlayer)) {
       // Remove if clicked again
@@ -63,32 +67,39 @@ const PlayerSelect: React.FC<Props> = (props) => {
     setGameCreatable(updatedPlayers.length >= 1)
   }
 
-  const playerList = allPlayers.filter(player => !player.guest).map((player) => (
+  const playerList = allPlayers.filter((player: Player) => !player.guest).map((player: Player) => (
     <MenuItem key={player.id} value={player.id}>
       <Checkbox checked={arrayContains(players, player)} color="primary" />
       <ListItemText primary={player.firstName} />
     </MenuItem>
   ))
 
-  const guestList = guests.map((guest) => (
+  const guestList = guests.map((guest: Player) => (
     <MenuItem key={guest.id} value={guest.id}>
       <Checkbox checked={arrayContains(players, guest)} color="primary" />
       <ListItemText primary={guest.firstName} />
     </MenuItem>
   ))
 
+  // Used for outlined Select's input label.
+  const inputLabel = React.useRef<HTMLLabelElement>(null)
+  const [labelWidth, setLabelWidth] = React.useState(0)
+  useEffect(() => {
+    setLabelWidth(inputLabel.current!.offsetWidth)
+  }, [])
+
   // TODO: Bigger list height so no need for scrolling.
   return (
-    <FormControl className={formControlStyle} error={players.length === 0}>
-      <InputLabel id="demo-mutiple-chip-label">Players</InputLabel>
+    <FormControl variant="outlined" className={formControlStyle} error={players.length === 0}>
+      <InputLabel ref={inputLabel} htmlFor="players-select">Players</InputLabel>
       <Select
         multiple
         value={players}
         onChange={handlePlayersChange}
-        input={<Input id="select-multiple-chip" />}
+        input={<OutlinedInput labelWidth={labelWidth} name="players" id="players-select" />}
         renderValue={selected => (
           <div className={classes.chips}>
-            {(selected as Player[]).map((player) => (
+            {(selected as Player[]).map((player: Player) => (
               <Chip key={player.id} label={player.firstName} className={classes.chip} />
             ))}
           </div>
