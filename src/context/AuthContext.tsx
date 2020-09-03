@@ -2,7 +2,8 @@ import { createContext, useContext } from 'react'
 
 type ContextProps = {
   authToken: Object,
-  setToken: any,
+  loggedIn: (token: Object) => void,
+  loggedOut: () => void,
   user: Player,
 };
 

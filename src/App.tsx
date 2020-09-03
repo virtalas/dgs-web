@@ -22,7 +22,7 @@ const App: React.FC<{}> = () => {
                         && localToken !== 'undefined' 
                         ? JSON.parse(localToken as string)
                         : null
-  // TODO: Check for expored token?
+  // TODO: Check for expired token?
 
   const [authToken, setAuthToken] = useState(existingToken)
 
@@ -37,16 +37,23 @@ const App: React.FC<{}> = () => {
   }
   const [user, setUser] = useState<Player>(loggedInUser)
 
-  const setToken = (tokenData: Object) => {
-    localStorage.setItem("dgs-token", JSON.stringify(tokenData))
+  const loggedIn = (tokenData: Object) => {
+    localStorage.setItem('dgs-token', JSON.stringify(tokenData))
     setAuthToken(tokenData)
     setUser(mockLoggedInUser) // TODO: Extract user from authToken.
+  }
+
+  const loggedOut = () => {
+    localStorage.removeItem('dgs-token')
+    setAuthToken(null)
+    setUser(loggedInUser)
   }
 
   return (
     <AuthContext.Provider value={{
       authToken: authToken,
-      setToken: setToken,
+      loggedIn: loggedIn,
+      loggedOut: loggedOut,
       user: user,
     }}>
       <ThemeProvider theme={theme}>

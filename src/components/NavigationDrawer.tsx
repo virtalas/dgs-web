@@ -1,5 +1,5 @@
 import React from 'react'
-import { NavLink, Redirect } from 'react-router-dom'
+import { NavLink } from 'react-router-dom'
 
 import Divider from '@material-ui/core/Divider'
 import Drawer from '@material-ui/core/Drawer'
@@ -47,10 +47,10 @@ interface Props {
 const NavigationDrawer: React.FC<Props> = (props) => {
   const classes = useStyles()
   const { mobileOpen, handleDrawerToggle } = props
-  const { setToken } = useAuth()
+  const { loggedOut } = useAuth()
 
   const handleLogout = () => {
-    setToken()
+    if (loggedOut) loggedOut()
   }
 
   const navButtonList = (

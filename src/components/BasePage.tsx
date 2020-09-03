@@ -1,5 +1,5 @@
 import React from 'react'
-import { Route, NavLink, withRouter } from 'react-router-dom'
+import { NavLink, withRouter } from 'react-router-dom'
 import { LocationDescriptor } from 'history'
 
 import CssBaseline from '@material-ui/core/CssBaseline'
