@@ -56,6 +56,7 @@ const NewGuestButton: React.FC<Props> = (props) => {
       id: 'temp-id-' + guestName, // Unique ID needed for updating the selection list.
       firstName: guestName,
       guest: true,
+      admin: false,
     }
     setPlayers([...players, newGuest])
     setAllPlayers([...allPlayers, newGuest])
