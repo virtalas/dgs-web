@@ -7,7 +7,6 @@ import gamesService from '../../services/gamesService'
 
 const buttonHeight = 45
 
-// TODO: Highlight selected year/month when Select opened.
 // TODO: Lose focus on Select after choosing month/year, eg:
 // https://stackoverflow.com/questions/54325908/change-outline-for-outlinedinput-with-react-material-ui
 
@@ -61,12 +60,12 @@ const MonthControls: React.FC<Props> = (props) => {
     // setFetchedMonths([]) // empty the array
   }
 
-  var monthOptions: any = []
+  var monthOptions: JSX.Element[] = []
   const lastSelectableMonth = currentYear === selectedYear ? currentMonth : 11 // 0 = January
   for (var i = lastSelectableMonth; i >= 0; i--) {
     // 0 = January, 1st day has to be 1
     const monthName = new Date(Date.UTC(0, i, 1)).toLocaleString('en-us', { month: 'long' })
-    monthOptions.push(<MenuItem value={i} key={i}>{monthName}</MenuItem>)
+    monthOptions.push(<MenuItem selected={true} value={i} key={i}>{monthName}</MenuItem>)
   }
 
   return (
@@ -76,7 +75,7 @@ const MonthControls: React.FC<Props> = (props) => {
       justify="center"
       alignItems="center"
       wrap="nowrap"
-      spacing={3}
+      spacing={1}
     >
       <Grid item zeroMinWidth>
         <Button

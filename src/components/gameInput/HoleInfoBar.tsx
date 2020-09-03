@@ -18,13 +18,14 @@ const useStyles = makeStyles((theme) => ({
     color: 'white',
   },
   par: {
-    margin: 'auto'
+    margin: 'auto',
   },
   appBar: {
     background: gameInputBlue,
   },
   navLink: {
     textDecoration: 'none',
+    color: 'black',
   },
 }))
 

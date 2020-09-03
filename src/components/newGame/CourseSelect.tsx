@@ -5,16 +5,17 @@ import InputLabel from '@material-ui/core/InputLabel'
 import Select from '@material-ui/core/Select'
 import MenuItem from '@material-ui/core/MenuItem'
 import FormHelperText from '@material-ui/core/FormHelperText'
+import OutlinedInput from '@material-ui/core/OutlinedInput'
 
 import coursesService from '../../services/coursesService'
 
 interface Props {
   formControlStyle: string,
   course: Course,
-  setCourse: any,
+  setCourse: (course: Course) => void,
   layout: Layout,
-  setLayout: any,
-  setGameCreatable: any,
+  setLayout: (layout: Layout) => void,
+  setGameCreatable: (creatable: boolean) => void,
 }
 
 const CourseSelect: React.FC<Props> = (props) => {
@@ -54,13 +55,20 @@ const CourseSelect: React.FC<Props> = (props) => {
     })
   }, [])
 
+  // Used for outlined Select's input label.
+  const inputLabel = React.useRef<HTMLLabelElement>(null)
+  const [labelWidth, setLabelWidth] = React.useState(0)
+  useEffect(() => {
+    setLabelWidth(inputLabel.current!.offsetWidth)
+  }, [])
+
   const courseSelect = (
     <FormControl variant="outlined" className={formControlStyle}>
-      <InputLabel>Course</InputLabel>
+      <InputLabel ref={inputLabel} htmlFor="course-select">Course</InputLabel>
       <Select
         value={course.id}
         onChange={handleCourseChange}
-        variant="outlined"
+        input={<OutlinedInput labelWidth={labelWidth} name="course" id="course-select" />}
       >
         {courses.map((course, index) => (
           <MenuItem value={course.id} key={index}>{course.name}</MenuItem>
@@ -71,11 +79,11 @@ const CourseSelect: React.FC<Props> = (props) => {
 
   const layoutSelect = (
     <FormControl variant="outlined" className={formControlStyle}>
-      <InputLabel>Layout</InputLabel>
+      <InputLabel ref={inputLabel} htmlFor="layout-select">Layout</InputLabel>
       <Select
         value={layout.id}
         onChange={handleLayoutChange}
-        variant="outlined"
+        input={<OutlinedInput labelWidth={labelWidth} name="layout" id="layout-select" />}
       >
         {course.layouts.map((layout, index) => (
           <MenuItem value={layout.id} key={index}>{layout.name}{layout.active ? ' (current)' : ''}</MenuItem>
