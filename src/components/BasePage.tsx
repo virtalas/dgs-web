@@ -1,5 +1,5 @@
 import React from 'react'
-import { Route, NavLink, withRouter } from 'react-router-dom'
+import { NavLink, withRouter } from 'react-router-dom'
 import { LocationDescriptor } from 'history'
 
 import CssBaseline from '@material-ui/core/CssBaseline'
@@ -8,6 +8,7 @@ import { makeStyles } from '@material-ui/core/styles'
 
 import AddIcon from '@material-ui/icons/Add'
 
+import PrivateRoute from '../PrivateRoute'
 import AppBar from './AppBar'
 import Games from './games/Games'
 import NewGame from './newGame/NewGame'
@@ -77,14 +78,14 @@ const BasePage: React.FC<Props> = (props) => {
       <AppBar />
       <main className={classes.content}>
         <div className="content">
-          <Route exact path="/" component={Games} />
-          <Route exact path="/games" component={Games} />
-          <Route exact path="/games/new" component={NewGame} />
-          <Route path="/players" component={Players} />
-          <Route path="/courses" component={Courses} />
-          <Route path="/graphs" component={Graphs} />
-          <Route path="/competitions" component={Competitions} />
-          <Route path="/info" component={Info} />
+          <PrivateRoute exact path="/" component={Games} />
+          <PrivateRoute exact path="/games" component={Games} />
+          <PrivateRoute exact path="/games/new" component={NewGame} />
+          <PrivateRoute path="/players" component={Players} />
+          <PrivateRoute path="/courses" component={Courses} />
+          <PrivateRoute path="/graphs" component={Graphs} />
+          <PrivateRoute path="/competitions" component={Competitions} />
+          <PrivateRoute path="/info" component={Info} />
 
           {/* TODO: Add a Fab button to continue inputting ongoing game */}
           {shouldRenderNewButton ? (

@@ -1,29 +1,65 @@
-import React from 'react'
+import React, { useState } from 'react'
 import Router from './components/Router'
 
 import createMuiTheme from "@material-ui/core/styles/createMuiTheme"
 import ThemeProvider from "@material-ui/styles/ThemeProvider"
 
-import Login from './components/login/Login'
+import { AuthContext } from "./context/AuthContext"
 
 const theme = createMuiTheme({})
 
-// TODO: handle login, pass signed in player info as props
+const mockLoggedInUser = {
+  id: 'fdjskfl83fhsgls',
+  firstName: 'Konsta',
+  guest: false,
+  admin: false,
+}
 
 const App: React.FC<{}> = () => {
-  // Check whether logged in or not.
-  if (false) {
-    return (
-      <ThemeProvider theme={theme}>
-        <Login />
-      </ThemeProvider>
-    )
+  const localToken = localStorage.getItem("dgs-token")
+  const existingToken = localToken !== null
+                        && localToken !== undefined
+                        && localToken !== 'undefined' 
+                        ? JSON.parse(localToken as string)
+                        : null
+  // TODO: Check for expired token?
+
+  const [authToken, setAuthToken] = useState(existingToken)
+
+  let loggedInUser = {
+    id: '',
+    firstName: '',
+    guest: false,
+    admin: false,
+  }
+  if (authToken) {
+    loggedInUser = mockLoggedInUser // TODO: Extract user from authToken.
+  }
+  const [user, setUser] = useState<Player>(loggedInUser)
+
+  const loggedIn = (tokenData: Object) => {
+    localStorage.setItem('dgs-token', JSON.stringify(tokenData))
+    setAuthToken(tokenData)
+    setUser(mockLoggedInUser) // TODO: Extract user from authToken.
+  }
+
+  const loggedOut = () => {
+    localStorage.removeItem('dgs-token')
+    setAuthToken(null)
+    setUser(loggedInUser)
   }
 
   return (
-    <ThemeProvider theme={theme}>
-      <Router />
-    </ThemeProvider>
+    <AuthContext.Provider value={{
+      authToken: authToken,
+      loggedIn: loggedIn,
+      loggedOut: loggedOut,
+      user: user,
+    }}>
+      <ThemeProvider theme={theme}>
+        <Router />
+      </ThemeProvider>
+    </AuthContext.Provider>
   )
 }
 

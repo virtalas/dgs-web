@@ -3,14 +3,16 @@ import React from 'react'
 import Avatar from '@material-ui/core/Avatar'
 import Button from '@material-ui/core/Button'
 import TextField from '@material-ui/core/TextField'
-import FormControlLabel from '@material-ui/core/FormControlLabel'
-import Checkbox from '@material-ui/core/Checkbox'
 import Link from '@material-ui/core/Link'
 import Grid from '@material-ui/core/Grid'
 import Typography from '@material-ui/core/Typography'
 import { makeStyles } from '@material-ui/core/styles'
 
 import DiscGolfBasket from '../DiscGolfBasket'
+
+import authService from '../../services/authService'
+import { useAuth } from '../../context/AuthContext'
+import { Redirect } from 'react-router';
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -39,6 +41,18 @@ const useStyles = makeStyles((theme) => ({
 
 export default function SignIn() {
   const classes = useStyles()
+  const { authToken, loggedIn } = useAuth()
+
+  const handleLogin = () => {
+    authService.login('', '').then((token: string) => {
+      // TODO: Handle JWT
+      if (loggedIn) loggedIn(token)
+    })
+  }
+
+  if (authToken) {
+    return (<Redirect to='/' />)
+  }
 
   return (
     <div className={classes.paper}>
@@ -48,7 +62,7 @@ export default function SignIn() {
       <Typography component="h1" variant="h5">
         Sign in
       </Typography>
-      <form className={classes.form} noValidate>
+      <div className={classes.form}>
         <TextField
           variant="outlined"
           margin="normal"
@@ -75,6 +89,7 @@ export default function SignIn() {
           variant="contained"
           color="primary"
           className={classes.submit}
+          onClick={handleLogin}
         >
           Sign In
         </Button>
@@ -90,7 +105,7 @@ export default function SignIn() {
             </Link>
           </Grid>
         </Grid>
-      </form>
+      </div>
     </div>
   )
   // <FormControlLabel

@@ -46,7 +46,7 @@ const MonthControls: React.FC<Props> = (props) => {
       setYearsThatHaveGames(years)
       setSelectedYear(years[0]) // Set selectedYear as the latest year that has games (note: not necessarily the current year).
     })
-  }, [selectedYear, selectedMonth, fetchedMonths])
+  }, [selectedYear, selectedMonth, fetchedMonths, setSelectedYear])
 
   // TODO: change to next/prev year instead of disabling button
   const handlePrevMonth = () => setSelectedMonth((month: number) => month - 1)

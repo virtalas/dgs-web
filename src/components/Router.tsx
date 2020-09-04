@@ -1,15 +1,18 @@
 import React from 'react'
 import { Route, HashRouter, Switch } from 'react-router-dom'
 
+import PrivateRoute from '../PrivateRoute'
 import BasePage from './BasePage'
 import GameInput from './gameInput/GameInput'
+import Login from './login/Login'
 
 const Router: React.FC<{}> = () => {
   return (
     <HashRouter>
       <Switch>
-        <Route path="/games/:gameid/input" component={GameInput}/>
-        <Route component={BasePage}/>
+        <Route path="/login" component={Login} />
+        <PrivateRoute path="/games/:gameid/input" component={GameInput} />
+        <PrivateRoute component={BasePage} />
       </Switch>
     </HashRouter>
   )

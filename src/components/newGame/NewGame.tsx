@@ -23,8 +23,9 @@ const useStyles = makeStyles((theme) => ({
 // TODO: Implement logged in user info
 const user: Player = {
   id: 'fgdghh', // Same ID as mocked players from playerService
-  firstName: 'Seppo',
-  guest: false
+  firstName: 'Teppo',
+  guest: false,
+  admin: false,
 }
 
 const NewGame: React.FC<{}> = () => {
