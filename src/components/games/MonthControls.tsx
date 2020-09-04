@@ -27,13 +27,21 @@ interface Props {
   selectedMonth: number,
   setSelectedMonth: any,
   selectedYear: number,
-  setSelectedYear: any,
+  setSelectedYear: (year: number) => void,
   fetchedMonths: number[],
+  setFetchedMonths: (months: number[]) => void,
 }
 
 const MonthControls: React.FC<Props> = (props) => {
   const classes = useStyles()
-  const { setSelectedMonth, selectedMonth, selectedYear, setSelectedYear, fetchedMonths } = props
+  const {
+    setSelectedMonth,
+    selectedMonth,
+    selectedYear,
+    setSelectedYear,
+    fetchedMonths,
+    setFetchedMonths
+  } = props
 
   const currentYear = new Date().getFullYear()
   const currentMonth = new Date().getMonth() // 0 = January
@@ -46,7 +54,7 @@ const MonthControls: React.FC<Props> = (props) => {
       setYearsThatHaveGames(years)
       setSelectedYear(years[0]) // Set selectedYear as the latest year that has games (note: not necessarily the current year).
     })
-  }, [selectedYear, selectedMonth, fetchedMonths, setSelectedYear])
+  }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
   // TODO: change to next/prev year instead of disabling button
   const handlePrevMonth = () => setSelectedMonth((month: number) => month - 1)
@@ -55,9 +63,8 @@ const MonthControls: React.FC<Props> = (props) => {
     setSelectedMonth(event.target.value as number)
   }
   const handleYearChange = (event: React.ChangeEvent<{ value: unknown }>) => {
-    // TODO
-    // setSelectedYear(event.target.value as number)
-    // setFetchedMonths([]) // empty the array
+    setSelectedYear(event.target.value as number)
+    setFetchedMonths([]) // empty the array
   }
 
   var monthOptions: JSX.Element[] = []

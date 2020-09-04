@@ -53,7 +53,7 @@ const CourseSelect: React.FC<Props> = (props) => {
       selectActiveLayout(fetchedCourses[0])
       setGameCreatable(true) // Even if the fetching of players fails, one player (user) and a course is enough.
     })
-  }, [])
+  }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
   // Used for outlined Select's input label.
   const inputLabel = React.useRef<HTMLLabelElement>(null)

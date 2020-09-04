@@ -93,6 +93,7 @@ const Games: React.FC<{}> = () => {
           selectedYear={selectedYear}
           setSelectedYear={setSelectedYear}
           fetchedMonths={fetchedMonths}
+          setFetchedMonths={setFetchedMonths}
         />
       </div>
       {gamesToShow.map(game => (
@@ -116,6 +117,7 @@ const Games: React.FC<{}> = () => {
             selectedYear={selectedYear}
             setSelectedYear={setSelectedYear}
             fetchedMonths={fetchedMonths}
+            setFetchedMonths={setFetchedMonths}
           />
         </div>
       ) : null}
