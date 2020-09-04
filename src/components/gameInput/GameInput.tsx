@@ -103,14 +103,14 @@ const GameInput: React.FC<{}> = (props: any) => {
     handleHoleChange()
   }
 
-  const handleParClick = () => {
-    if (game === undefined) return
-    const updatedScores: PlayerScores[] = game.scores
-    updatedScores.forEach((playerScores: PlayerScores) => {
-      playerScores.strokes[holeNum - 1] = game.course.pars[holeNum - 1]
-    })
-    updateScores(updatedScores)
-  }
+  // const handleParClick = () => {
+  //   if (game === undefined) return
+  //   const updatedScores: PlayerScores[] = game.scores
+  //   updatedScores.forEach((playerScores: PlayerScores) => {
+  //     playerScores.strokes[holeNum - 1] = game.course.pars[holeNum - 1]
+  //   })
+  //   updateScores(updatedScores)
+  // }
 
   // Show loading screen while fetching game:
   if (game === undefined) {

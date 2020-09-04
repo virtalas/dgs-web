@@ -379,7 +379,7 @@ const mockGames: Game[] = [{
     comment: "",
     contestName: null,
   }, {
-  id: "d3f3fg128",
+  id: "d3f3f3g128",
   course: {
     id: "nfuslefh8lsje",
     name: "Puolarmaari",
@@ -472,10 +472,108 @@ const mockGames: Game[] = [{
   illegalScorers: [],
   comment: "",
   contestName: null,
-}]
+  }, {
+    id: "fj3ifolsu8lfu4gfd8ls",
+    course: {
+      id: "j9göu8rlgudlig",
+      name: "Puolarmaari",
+      pars: [3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3],
+      total: 60,
+      layouts: [
+        { id: 'fdg', active: true, name: '2020 layout' },
+        { id: 'fdfsdg', active: false, name: '2019 layout' }
+      ],
+    },
+    startDate: null,
+    endDate: "2019-07-13 09:22",
+    scores: [
+      {
+        player: {
+          id: "hgfsu4pu83slofj",
+          firstName: "Seppo",
+          guest: false,
+          admin: false,
+        },
+        strokes: [3, 3, 3, 2, 3, 0, 0, 0, 3, 2, 3, 3, 3, 3, 3, 3, 3, 2, 3, 3],
+        obs: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        total: 48,
+        toPar: -3
+      },
+      {
+        player: {
+          id: "jfs83oju8soög",
+          firstName: "Teppo",
+          guest: false,
+          admin: false,
+        },
+        strokes: [3, 3, 4, 2, 3, 3, 3, 3, 3, 2, 3, 3, 3, 6, 3, 3, 3, 2, 3, 3],
+        obs: [0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        total: 61,
+        toPar: 1
+      }
+    ],
+    temperature: null,
+    weatherConditions: [],
+    conditions: [],
+    highScorers: [],
+    illegalScorers: [],
+    comment: "",
+    contestName: null,
+  }, {
+    id: "fj3ifolsu8lfrt4u48ls",
+    course: {
+      id: "j9göu8rlgudlig",
+      name: "Puolarmaari",
+      pars: [3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3],
+      total: 60,
+      layouts: [
+        { id: 'fdg', active: true, name: '2020 layout' },
+        { id: 'fdfsdg', active: false, name: '2019 layout' }
+      ],
+    },
+    startDate: null,
+    endDate: "2018-06-13 09:22",
+    scores: [
+      {
+        player: {
+          id: "hgfsu4pu83slofj",
+          firstName: "Seppo",
+          guest: false,
+          admin: false,
+        },
+        strokes: [3, 3, 3, 2, 3, 0, 0, 0, 3, 2, 3, 3, 3, 3, 3, 3, 3, 2, 3, 3],
+        obs: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        total: 48,
+        toPar: -3
+      },
+      {
+        player: {
+          id: "jfs83oju8soög",
+          firstName: "Teppo",
+          guest: false,
+          admin: false,
+        },
+        strokes: [3, 3, 4, 2, 3, 3, 3, 3, 3, 2, 3, 3, 3, 6, 3, 3, 3, 2, 3, 3],
+        obs: [0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        total: 61,
+        toPar: 1
+      }
+    ],
+    temperature: null,
+    weatherConditions: [],
+    conditions: [],
+    highScorers: [],
+    illegalScorers: [],
+    comment: "",
+    contestName: null,
+  }]
 
-const mockYears = [2015, 2019, 2016, 2017, 2018, 2020]
-const mockMonths = [0, 2, 3, 4, 5, 6, 8]
+// Matches mock games above.
+const mockMonthsThatHaveGames: GameMonths[] = [ // 0=January
+  { year: 2020, months: [4, 5, 7] },
+  { year: 2019, months: [6] },
+  { year: 2018, months: [5] },
+]
 
 const getGames = async (year: number, month: number): Promise<Game[]> => {
   // TODO: Replace mock data with API call.
@@ -483,9 +581,10 @@ const getGames = async (year: number, month: number): Promise<Game[]> => {
       && dateFrom(game.endDate).getFullYear() === year)
 }
 
-const getYearsThatHaveGames = async (): Promise<number[]> => {
+const getMonthsThatHaveGames = async (): Promise<GameMonths[]> => {
   // TODO: Replace mock data with API call.
-  return mockYears.sort((a, b) => b - a)
+  // Note: Years and months should already be ordered (year: desc, month: asc).
+  return mockMonthsThatHaveGames
 }
 
 const createGame = async (course: Course, layout: Layout, players: Player[]): Promise<Game> => {
@@ -506,7 +605,7 @@ const updateGame = async (game: Game): Promise<Game> => {
 
 export default {
   getGames,
-  getYearsThatHaveGames,
+  getMonthsThatHaveGames,
   createGame,
   getGame,
   updateGame,

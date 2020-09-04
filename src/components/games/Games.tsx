@@ -58,31 +58,54 @@ const Games: React.FC<{}> = () => {
   const classes = useStyles()
 
   const currentYear = new Date().getFullYear()
-  const currentMonth = new Date().getMonth() // 0 = January
+  const currentMonth = new Date().getMonth()
 
   const [games, setGames] = useState<Game[]>([])
-  const [fetchedMonths, setFetchedMonths] = useState<number[]>([]) // To store information about empty months
+  const [fetchedMonths, setFetchedMonths] = useState<number[]>([])
   const [selectedMonth, setSelectedMonth] = useState<number>(currentMonth) // 0 = January
   const [selectedYear, setSelectedYear] = useState<number>(currentYear)
-  const [isLoading, setIsLoading] = useState<Boolean>(false)
+  const [monthsThatHaveGames, setMonthsThatHaveGames] = useState<GameMonths[]>()
+  const [isLoading, setIsLoading] = useState<boolean>(false)
 
   const gamesToShow = games.filter(game => dateFrom(game.endDate).getMonth() === selectedMonth
     && dateFrom(game.endDate).getFullYear() === selectedYear)
 
-  // useEffect works like componentDidMount.
-  // Will be rerun each time 'selectedYear' or 'selectedMonth' change.
+  // useEffect() works like componentDidMount(): runs only once after the component is rendered.
+  // In addition, it reruns each time 'selectedYear' or 'selectedMonth' change.
   useEffect(() => {
-    if (fetchedMonths.includes(selectedMonth)) return
+    if (fetchedMonths.includes(selectedMonth)) return // Don't refetch already fetched games.
     setIsLoading(true)
-    setFetchedMonths(months => months.concat([selectedMonth]))
-    gamesService.getGames(selectedYear, selectedMonth).then(fetchedGames => {
-      // Simulate network delay.
-      setTimeout(function () {
-        setGames(games => games.concat(fetchedGames))
-        setIsLoading(false)
-      }, 500);
-    })
-  }, [selectedYear, selectedMonth, fetchedMonths])
+
+    const fetchGames = () => {
+      gamesService.getGames(selectedYear, selectedMonth).then(fetchedGames => {
+        // (TODO: remove) Simulate network delay:
+        setTimeout(function () {
+          setFetchedMonths(months => months.concat([selectedMonth])) // Mark games for this month as fetched.
+          setGames(games => games.concat(fetchedGames))
+          setIsLoading(false)
+        }, 500);
+      })
+    }
+
+    if (!monthsThatHaveGames) {
+      // First fetch a list of years and months that have games:
+      gamesService.getMonthsThatHaveGames().then((gameMonths: GameMonths[]) => {
+        setMonthsThatHaveGames(gameMonths)
+        // Select the latest month & year that have games:
+        setSelectedYear(gameMonths[0].year)
+        setSelectedMonth(gameMonths[0].months[gameMonths[0].months.length - 1])
+        // Since selectedYear/Month changed, component rerenders and fetchGames() happens.
+      })
+    } else {
+      // Fetch games for selectedMonth.
+      fetchGames()
+    }
+  }, [selectedYear, selectedMonth]) // eslint-disable-line react-hooks/exhaustive-deps
+
+  const clearFetchedGames = () => {
+    setFetchedMonths([])
+    setGames([]) // Clear fetched games if year changed.
+  }
 
   return (
     <div id="gamesPage" className={classes.root}>
@@ -92,8 +115,8 @@ const Games: React.FC<{}> = () => {
           setSelectedMonth={setSelectedMonth}
           selectedYear={selectedYear}
           setSelectedYear={setSelectedYear}
-          fetchedMonths={fetchedMonths}
-          setFetchedMonths={setFetchedMonths}
+          clearFetchedGames={clearFetchedGames}
+          monthsThatHaveGames={monthsThatHaveGames}
         />
       </div>
       {gamesToShow.map(game => (
@@ -116,8 +139,8 @@ const Games: React.FC<{}> = () => {
             setSelectedMonth={setSelectedMonth}
             selectedYear={selectedYear}
             setSelectedYear={setSelectedYear}
-            fetchedMonths={fetchedMonths}
-            setFetchedMonths={setFetchedMonths}
+            clearFetchedGames={clearFetchedGames}
+            monthsThatHaveGames={monthsThatHaveGames}
           />
         </div>
       ) : null}
