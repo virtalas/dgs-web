@@ -8,6 +8,7 @@ const mockCourses: Course[] = [
       { id: 'fdg', active: true, name: '2020 layout t'},
       { id: 'fdfsdg', active: false, name: '2019 layout t'}
     ],
+    popularity: 556,
   },
   {
     id: 'gd5rgjffs',
@@ -18,6 +19,7 @@ const mockCourses: Course[] = [
       { id: 'fddg', active: true, name: '2020 layout s'},
       { id: 'fdfsfsdg', active: false, name: '2019 layout s'}
     ],
+    popularity: 476,
   },
   {
     id: 'gdh6u4sghgj',
@@ -28,6 +30,7 @@ const mockCourses: Course[] = [
       { id: 'fdr3eg', active: true, name: '2020 layout k'},
       { id: 'fdfuysdg', active: false, name: '2019 layout k'}
     ],
+    popularity: 417,
   }
 ]
 

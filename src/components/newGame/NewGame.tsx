@@ -35,7 +35,7 @@ const NewGame: React.FC<{}> = () => {
   const [newGameId, setNewGameId] = useState('')
   const [gameCreatable, setGameCreatable] = useState(false)
 
-  const [course, setCourse] = useState<Course>({id: '', name: 'Loading...', pars: [], total: 0, layouts: []})
+  const [course, setCourse] = useState<Course>({id: '', name: 'Loading...', pars: [], total: 0, layouts: [], popularity: 0})
   const [layout, setLayout] = useState<Layout>({id: '', name: 'Loading...', active: false})
   const [players, setPlayers] = useState<Player[]>([user]) // Pre-select the user as a player.
 
@@ -59,7 +59,6 @@ const NewGame: React.FC<{}> = () => {
     return <Redirect to={'/games/' + newGameId + "/input"} />
   }
 
-  // TODO: Change input variant to outlined. Currently not working.
   // TODO: 'Course', 'Layout', and 'Players' InputLabels are offset.
   return (
     <div id="newGamePage" className={classes.page}>

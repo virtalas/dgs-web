@@ -11,6 +11,7 @@ const mockGame: Game = {
       { id: 'fdg', active: true, name: '2020 layout'},
       { id: 'fdfsdg', active: false, name: '2019 layout'}
     ],
+    popularity: 23,
   },
   startDate: null,
   endDate: "2020-08-13 09:22",
@@ -60,6 +61,7 @@ const mockGames: Game[] = [{
       { id: 'fdg', active: true, name: '2020 layout'},
       { id: 'fdfsdg', active: false, name: '2019 layout'}
     ],
+    popularity: 23,
   },
   startDate: null,
   endDate: "2020-08-12 09:22",
@@ -107,6 +109,7 @@ const mockGames: Game[] = [{
       { id: 'fdg', active: true, name: '2020 layout'},
       { id: 'fdfsdg', active: false, name: '2019 layout'}
     ],
+    popularity: 23,
   },
   startDate: null,
   endDate: "2020-08-11 09:22",
@@ -154,6 +157,7 @@ const mockGames: Game[] = [{
       { id: 'fdg', active: true, name: '2020 layout'},
       { id: 'fdfsdg', active: false, name: '2019 layout'}
     ],
+    popularity: 556,
   },
   startDate: null,
   endDate: "2020-08-10 09:22",
@@ -201,6 +205,7 @@ const mockGames: Game[] = [{
       { id: 'fdg', active: true, name: '2020 layout'},
       { id: 'fdfsdg', active: false, name: '2019 layout'}
     ],
+    popularity: 1,
   },
   startDate: null,
   endDate: "2020-08-09 09:22",
@@ -248,6 +253,7 @@ const mockGames: Game[] = [{
       { id: 'fdg', active: true, name: '2020 layout'},
       { id: 'fdfsdg', active: false, name: '2019 layout'}
     ],
+    popularity: 23,
   },
   startDate: null,
   endDate: "2020-08-08 09:22",
@@ -291,10 +297,11 @@ const mockGames: Game[] = [{
       name: "Kivikko",
       pars: [3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3],
       total: 60,
-    layouts: [
-      { id: 'fdg', active: true, name: '2020 layout'},
-      { id: 'fdfsdg', active: false, name: '2019 layout'}
-    ],
+      layouts: [
+        { id: 'fdg', active: true, name: '2020 layout'},
+        { id: 'fdfsdg', active: false, name: '2019 layout'}
+      ],
+      popularity: 447,
     },
     startDate: null,
     endDate: "2020-06-13 09:22",
@@ -338,10 +345,11 @@ const mockGames: Game[] = [{
       name: "Tali",
       pars: [3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3],
       total: 60,
-    layouts: [
-      { id: 'fdg', active: true, name: '2020 layout'},
-      { id: 'fdfsdg', active: false, name: '2019 layout'}
-    ],
+      layouts: [
+        { id: 'fdg', active: true, name: '2020 layout'},
+        { id: 'fdfsdg', active: false, name: '2019 layout'}
+      ],
+      popularity: 556,
     },
     startDate: null,
     endDate: "2020-05-13 09:22",
@@ -389,6 +397,7 @@ const mockGames: Game[] = [{
       { id: 'fdg', active: true, name: '2020 layout'},
       { id: 'fdfsdg', active: false, name: '2019 layout'}
     ],
+    popularity: 23,
   },
   startDate: null,
   endDate: "2020-05-13 09:22",
@@ -436,6 +445,7 @@ const mockGames: Game[] = [{
       { id: 'fdg', active: true, name: '2020 layout'},
       { id: 'fdfsdg', active: false, name: '2019 layout'}
     ],
+    popularity: 23,
   },
   startDate: null,
   endDate: "2020-05-13 09:22",
@@ -483,6 +493,7 @@ const mockGames: Game[] = [{
         { id: 'fdg', active: true, name: '2020 layout' },
         { id: 'fdfsdg', active: false, name: '2019 layout' }
       ],
+      popularity: 23,
     },
     startDate: null,
     endDate: "2019-07-13 09:22",
@@ -530,6 +541,7 @@ const mockGames: Game[] = [{
         { id: 'fdg', active: true, name: '2020 layout' },
         { id: 'fdfsdg', active: false, name: '2019 layout' }
       ],
+      popularity: 23,
     },
     startDate: null,
     endDate: "2018-06-13 09:22",
