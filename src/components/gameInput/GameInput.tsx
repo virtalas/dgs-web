@@ -15,6 +15,7 @@ import HoleInfoBar from './HoleInfoBar'
 import HoleNavigation from './HoleNavigation'
 import PlayerStrokeInput from './PlayerStrokeInput'
 import gamesService from '../../services/gamesService'
+import GameCard from '../gameCard/GameCard'
 
 export const gameInputBlue = '#437FB3'
 
@@ -23,7 +24,8 @@ const holeInfoViewTab = 1
 const mapViewTab = 2
 const gameInfoViewTab = 3
 
-// TODO: Swipeable views buggy: change tab to other tabs, then back and swipe: unexpected behaviour
+// TODO: Tab views into separate components
+// TODO: Swipeable views buggy: change tab to other tabs, then back and swipe: unexpected behaviour (resets which page number it was on?)
 // TODO: change tab bar (& app bar) color to gameInputBlue
 // TODO: SwipeableViews: When swiping starts, show big transparent grey hole number in the middle of the page. When swiping stops fade with animation after ~0.5 seconds.
 // TODO Consider?: Group feature: When saving the game, choose which groups it belongs to
@@ -172,10 +174,13 @@ const GameInput: React.FC<{}> = (props: any) => {
     </div>
   )
 
-  // TODO
+  // TODO: Editable comment area (grey placeholder text: "Click to edit")
+  // TODO: Editable conditions & illegal/high scorers: greyed out buttons that activate when tapped.
   const gameInfoView = (
     <div>
-      <br /><br /><br /><br /><br />(Preview of game card)<br />[Send game]
+      <br /><br /><br />
+      <GameCard game={game}/>
+      <br />[Send game]
     </div>
   )
 
