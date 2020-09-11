@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react'
-import SwipeableViews from 'react-swipeable-views'
 
 import { makeStyles } from '@material-ui/core/styles'
 import BottomNavigation from '@material-ui/core/BottomNavigation'
@@ -14,6 +13,7 @@ import HoleInfoBar from './HoleInfoBar'
 import gamesService from '../../services/gamesService'
 import GameCard from '../gameCard/GameCard'
 import ScoreInputView from './ScoreInputView'
+import HoleInfoView from './HoleInfoView'
 
 export const gameInputBlue = '#437FB3'
 
@@ -77,16 +77,23 @@ const GameInput: React.FC<{}> = (props: any) => {
     )
   }
 
+  const scoreInputView = (
+    <ScoreInputView
+      game={game}
+      setGame={setGame}
+      swipeableViewStyle={classes.swipeableView}
+      holeNum={holeNum}
+      setHoleNum={setHoleNum}
+      setTab={setTab}
+    />
+  )
+
   const holeInfoView = (
-    <div>
-      <SwipeableViews
-        className={classes.swipeableView}
-        resistance
-        onChangeIndex={(index: number) => setHoleNum(index + 1)}
-      >
-        <div>Coming soon</div>
-      </SwipeableViews>
-    </div>
+    <HoleInfoView
+      holeNum={holeNum}
+      setHoleNum={setHoleNum}
+      swipeableViewStyle={classes.swipeableView}
+    />
   )
 
   // TODO
@@ -109,16 +116,7 @@ const GameInput: React.FC<{}> = (props: any) => {
   let activeView
   switch (tab) {
     case scoreInputViewTab:
-      activeView = (
-        <ScoreInputView
-          game={game}
-          setGame={setGame}
-          swipeableViewStyle={classes.swipeableView}
-          holeNum={holeNum}
-          setHoleNum={setHoleNum}
-          setTab={setTab}
-        />
-      )
+      activeView = scoreInputView
       break
     case holeInfoViewTab:
       activeView = holeInfoView
