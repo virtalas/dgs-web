@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react'
 import SwipeableViews from 'react-swipeable-views'
-import { isMobile } from 'react-device-detect'
 
 import { makeStyles } from '@material-ui/core/styles'
 import BottomNavigation from '@material-ui/core/BottomNavigation'
@@ -12,17 +11,16 @@ import LocationOnIcon from '@material-ui/icons/LocationOn'
 import CircularProgress from '@material-ui/core/CircularProgress'
 
 import HoleInfoBar from './HoleInfoBar'
-import HoleNavigation from './HoleNavigation'
-import PlayerStrokeInput from './PlayerStrokeInput'
 import gamesService from '../../services/gamesService'
 import GameCard from '../gameCard/GameCard'
+import ScoreInputView from './ScoreInputView'
 
 export const gameInputBlue = '#437FB3'
 
 const scoreInputViewTab = 0
 const holeInfoViewTab = 1
 const mapViewTab = 2
-const gameInfoViewTab = 3
+export const gameInfoViewTab = 3
 
 // TODO: Tab views into separate components
 // TODO: Swipeable views buggy: change tab to other tabs, then back and swipe: unexpected behaviour (resets which page number it was on?)
@@ -62,7 +60,6 @@ const GameInput: React.FC<{}> = (props: any) => {
 
   const [game, setGame] = useState<Game>()
   const [holeNum, setHoleNum] = useState(1) // TODO: Use findIndex() to start from first 0 stroked hole
-  const [updating, setUpdating] = useState(false)
   const [tab, setTab] = React.useState(scoreInputViewTab)
 
   useEffect(() => {
@@ -70,49 +67,6 @@ const GameInput: React.FC<{}> = (props: any) => {
       setGame(fetchedGame)
     })
   }, [gameId])
-
-  const updateScores = (newScores: PlayerScores[]) => {
-    const newGame = {
-      ...game,
-      scores: newScores,
-    }
-    setGame(newGame as Game)
-  }
-
-  const handleHoleChange = () => {
-    if (game === undefined) return
-    // TODO: Call updateGame only if 1 second has passed since last update
-    setUpdating(true)
-    gamesService.updateGame(game as Game).then(() => {
-      setUpdating(false)
-    })
-  }
-
-  const handlePrevHoleClick = () => {
-    if (holeNum > 1) {
-      setHoleNum(holeNum - 1)
-      handleHoleChange()
-    }
-  }
-
-  const handleNextHoleClick = () => {
-    if (game === undefined) return
-    if (holeNum === game.course.pars.length) {
-      setTab(gameInfoViewTab)
-    } else {
-      setHoleNum(holeNum + 1)
-    }
-    handleHoleChange()
-  }
-
-  // const handleParClick = () => {
-  //   if (game === undefined) return
-  //   const updatedScores: PlayerScores[] = game.scores
-  //   updatedScores.forEach((playerScores: PlayerScores) => {
-  //     playerScores.strokes[holeNum - 1] = game.course.pars[holeNum - 1]
-  //   })
-  //   updateScores(updatedScores)
-  // }
 
   // Show loading screen while fetching game:
   if (game === undefined) {
@@ -123,37 +77,6 @@ const GameInput: React.FC<{}> = (props: any) => {
     )
   }
 
-  // Render hole navigation buttons for desktop.
-  const holeNavigation = isMobile ? null : (
-    <HoleNavigation
-      holeNum={holeNum}
-      showPar={false}
-      onPrevHole={handlePrevHoleClick}
-      onNextHole={handleNextHoleClick}
-    />
-  )
-
-  const scoreInputView = (
-    <div>
-      <SwipeableViews
-        className={classes.swipeableView}
-        resistance
-        onChangeIndex={(index: number) => setHoleNum(index + 1)}
-      >
-        {game.course.pars.map((par, index) => (
-          <PlayerStrokeInput
-            scores={game.scores}
-            holeNumber={index + 1}
-            onScoreChange={updateScores}
-            updating={updating}
-            key={index}
-          />
-        ))}
-      </SwipeableViews>
-      {holeNavigation}
-    </div>
-  )
-
   const holeInfoView = (
     <div>
       <SwipeableViews
@@ -163,7 +86,6 @@ const GameInput: React.FC<{}> = (props: any) => {
       >
         <div>Coming soon</div>
       </SwipeableViews>
-      {holeNavigation}
     </div>
   )
 
@@ -187,7 +109,16 @@ const GameInput: React.FC<{}> = (props: any) => {
   let activeView
   switch (tab) {
     case scoreInputViewTab:
-      activeView = scoreInputView
+      activeView = (
+        <ScoreInputView
+          game={game}
+          setGame={setGame}
+          swipeableViewStyle={classes.swipeableView}
+          holeNum={holeNum}
+          setHoleNum={setHoleNum}
+          setTab={setTab}
+        />
+      )
       break
     case holeInfoViewTab:
       activeView = holeInfoView
