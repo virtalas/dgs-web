@@ -11,9 +11,10 @@ import CircularProgress from '@material-ui/core/CircularProgress'
 
 import HoleInfoBar from './HoleInfoBar'
 import gamesService from '../../services/gamesService'
-import GameCard from '../gameCard/GameCard'
 import ScoreInputView from './ScoreInputView'
 import HoleInfoView from './HoleInfoView'
+import GameInfoView from './GameInfoView'
+import MapView from './MapView'
 
 export const gameInputBlue = '#437FB3'
 
@@ -96,21 +97,12 @@ const GameInput: React.FC<{}> = (props: any) => {
     />
   )
 
-  // TODO
   const mapView = (
-    <div>
-      <br /><br /><br /><br /><br />No course map added.
-    </div>
+    <MapView />
   )
 
-  // TODO: Editable comment area (grey placeholder text: "Click to edit")
-  // TODO: Editable conditions & illegal/high scorers: greyed out buttons that activate when tapped.
   const gameInfoView = (
-    <div>
-      <br /><br /><br />
-      <GameCard game={game}/>
-      <br />[Send game]
-    </div>
+    <GameInfoView game={game} />
   )
 
   let activeView
