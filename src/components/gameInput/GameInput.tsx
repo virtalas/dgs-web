@@ -23,8 +23,6 @@ const holeInfoViewTab = 1
 const mapViewTab = 2
 export const gameInfoViewTab = 3
 
-// TODO: Tab views into separate components
-// TODO: Swipeable views buggy: change tab to other tabs, then back and swipe: unexpected behaviour (resets which page number it was on?)
 // TODO: change tab bar (& app bar) color to gameInputBlue
 // TODO: SwipeableViews: When swiping starts, show big transparent grey hole number in the middle of the page. When swiping stops fade with animation after ~0.5 seconds.
 // TODO Consider?: Group feature: When saving the game, choose which groups it belongs to

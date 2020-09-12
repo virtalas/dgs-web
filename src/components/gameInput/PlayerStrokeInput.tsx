@@ -33,9 +33,13 @@ const useStyles = makeStyles((theme) => ({
     width: 40,
     outline: 'none',
   },
+  strokeInputText: {
+    marginLeft: 20,
+    marginRight: -25,
+  },
   syncText: {
     textAlign: 'center',
-  }
+  },
 }))
 
 interface Props {
@@ -45,15 +49,23 @@ interface Props {
   updating: boolean,
 }
 
+// TODO: Change OB input to a button [OB: 0]. Pressing it cycles through values (0, 1, 2, 3)
+
 const PlayerStrokeInput: React.FC<Props> = (props) => {
   const classes = useStyles()
   const { scores, holeNumber, onScoreChange, updating } = props
 
-  const handleStrokeChange = (playerId: string, event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleStrokeChange = (playerId: string, throws: boolean, event: React.ChangeEvent<HTMLInputElement>) => {
     let strokes = parseInt(event.target.value)
     strokes = isNaN(strokes) ? 0 : strokes
     const playerIndex = scores.findIndex(playerScores => playerScores.player.id === playerId)
-    scores[playerIndex].strokes[holeNumber - 1] = strokes
+    if (throws) {
+      // Update throws (strokes):
+      scores[playerIndex].strokes[holeNumber - 1] = strokes
+    } else {
+      // Update OB strokes:
+      scores[playerIndex].obs[holeNumber - 1] = strokes
+    }
     event.target.blur() // Unfocus/blur the field after inputting a number.
     onScoreChange(scores)
   }
@@ -61,19 +73,33 @@ const PlayerStrokeInput: React.FC<Props> = (props) => {
   const rows = scores.map((scoreInfo, index) => (
     <ListItem key={index}>
       <ListItemText primary={scoreInfo.player.firstName} />
-      <ListItemText primary="-X" />
-      <ListItemText primary="OB:" />
-      <ListItemText primary="Throws:" />
+      <ListItemText primary={scoreInfo.toPar > 0 ? '+' + scoreInfo.toPar : '\u00A0'+scoreInfo.toPar} />
+      <ListItemText primary="OB:" className={classes.strokeInputText} />
       <div className={classes.circle}>
         <input
           className={classes.strokeInput}
-          onChange={event => handleStrokeChange(scoreInfo.player.id, event)}
+          onChange={event => handleStrokeChange(scoreInfo.player.id, false, event)}
+          type="tel"
+          value={scoreInfo.obs[holeNumber - 1]}
+          min="0"
+          max="99"
+          onFocus={e => e.target.value = '' /* Clear the field when it comes into focus. */}
+          onBlur={event => handleStrokeChange(scoreInfo.player.id, false, event)}
+          inputMode="numeric"
+          pattern="[0-9]*">
+        </input>
+      </div>
+      <ListItemText primary="Throws:" className={classes.strokeInputText} />
+      <div className={classes.circle}>
+        <input
+          className={classes.strokeInput}
+          onChange={event => handleStrokeChange(scoreInfo.player.id, true, event)}
           type="tel"
           value={scoreInfo.strokes[holeNumber - 1]} 
           min="0"
           max="99"
           onFocus={e => e.target.value = '' /* Clear the field when it comes into focus. */}
-          onBlur={event => handleStrokeChange(scoreInfo.player.id, event)}
+          onBlur={event => handleStrokeChange(scoreInfo.player.id, true, event)}
           inputMode="numeric"
           pattern="[0-9]*">
         </input>
@@ -86,7 +112,7 @@ const PlayerStrokeInput: React.FC<Props> = (props) => {
       <List>
         {rows}
         <ListSubheader className={classes.syncText}>
-          {updating ? 'Syncing game...' : 'The game was synced X minutes ago.'}
+          {updating ? 'Syncing game...' : 'Game synced.'}
         </ListSubheader>
       </List>
     </div>

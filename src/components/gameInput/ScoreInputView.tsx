@@ -21,6 +21,7 @@ const ScoreInputView: React.FC<Props> = (props) => {
   const [updating, setUpdating] = useState(false)
 
   const updateScores = (newScores: PlayerScores[]) => {
+    newScores = calculateToParTotal(newScores, game.course.pars)
     const newGame = {
       ...game,
       scores: newScores,
@@ -92,6 +93,22 @@ const ScoreInputView: React.FC<Props> = (props) => {
       {holeNavigation}
     </div>
   )
+}
+
+// TODO: Would be more efficient to just calculate from the inputted strokes in PlayerStrokeInput
+function calculateToParTotal(playerScores: PlayerScores[], coursePars: number[]): PlayerScores[] {
+  playerScores.forEach((scores, index, array) => {
+    let toPar = 0
+    let total = 0
+    for (var i = 0; i < coursePars.length; i++) {
+      if (scores.strokes[i] === 0) continue
+      total += scores.strokes[i] + scores.obs[i]
+      toPar += scores.strokes[i] + scores.obs[i] - coursePars[i]
+    }
+    array[index].toPar = toPar
+    array[index].total = total
+  })
+  return playerScores
 }
 
 export default ScoreInputView
