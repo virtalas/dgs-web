@@ -16,6 +16,8 @@ interface Props {
   setTab: (tab: number) => void,
 }
 
+// TODO: Make column names: Player, To Par, OBs, Throws
+
 const ScoreInputView: React.FC<Props> = (props) => {
   const { game, setGame, swipeableViewStyle, holeNum, setHoleNum, setTab } = props
   const [updating, setUpdating] = useState(false)
@@ -53,20 +55,11 @@ const ScoreInputView: React.FC<Props> = (props) => {
     }
   }
 
-  // const handleParClick = () => {
-  //   if (game === undefined) return
-  //   const updatedScores: PlayerScores[] = game.scores
-  //   updatedScores.forEach((playerScores: PlayerScores) => {
-  //     playerScores.strokes[holeNum - 1] = game.course.pars[holeNum - 1]
-  //   })
-  //   updateScores(updatedScores)
-  // }
-
   // Render hole navigation buttons for desktop.
   const holeNavigation = isMobile ? null : (
     <HoleNavigation
       holeNum={holeNum}
-      showPar={false}
+      showPar={true}
       onPrevHole={handlePrevHoleClick}
       onNextHole={handleNextHoleClick}
     />
@@ -81,21 +74,36 @@ const ScoreInputView: React.FC<Props> = (props) => {
         onChangeIndex={(index: number) => setHoleNum(index + 1)}
       >
         {game.course.pars.map((par, index) => (
-          <PlayerStrokeInput
-            scores={game.scores}
-            holeNumber={index + 1}
-            onScoreChange={updateScores}
-            updating={updating}
-            key={index}
-          />
-        ))}
+          <div key={index}>
+            <PlayerStrokeInput
+              scores={game.scores}
+              holeNum={index + 1}
+              coursePars={game.course.pars}
+              onScoreChange={updateScores}
+              updating={updating}
+              key={index}
+            />
+            {/*
+            <Button
+              variant="outlined"
+              size="medium"
+              color="default"
+              className={classes.par}
+              onClick={handleParClick}
+              key={'par' + index}
+            >
+              Par
+            </Button>
+            */}
+          </div>
+        ))}        
       </SwipeableViews>
       {holeNavigation}
     </div>
   )
 }
 
-// TODO: Would be more efficient to just calculate from the inputted strokes in PlayerStrokeInput
+// TODO: !!! Would be more efficient to just calculate from the inputted strokes in PlayerStrokeInput
 function calculateToParTotal(playerScores: PlayerScores[], coursePars: number[]): PlayerScores[] {
   playerScores.forEach((scores, index, array) => {
     let toPar = 0

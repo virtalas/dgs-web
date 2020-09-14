@@ -27,6 +27,9 @@ const useStyles = makeStyles((theme) => ({
     textDecoration: 'none',
     color: 'black',
   },
+  deleteGame: {
+    color: 'red',
+  }
 }))
 
 interface Props {
@@ -70,7 +73,7 @@ const HoleInfoBar: React.FC<Props> = (props) => {
             <NavLink to="/" className={classes.navLink}>
               <MenuItem onClick={handleClose}>Home page</MenuItem>
             </NavLink>
-            <MenuItem onClick={handleClose}>Delete game</MenuItem>
+            <MenuItem onClick={handleClose} className={classes.deleteGame}>Delete game</MenuItem>
           </Menu>
         </Toolbar>
       </AppBar>
