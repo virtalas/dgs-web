@@ -1,9 +1,13 @@
 import React from 'react'
 
-import { makeStyles } from '@material-ui/core/styles'
+import { makeStyles, withStyles } from '@material-ui/core/styles'
 import List from '@material-ui/core/List'
 import ListItem from '@material-ui/core/ListItem'
 import ListItemText from '@material-ui/core/ListItemText'
+import { Button } from '@material-ui/core'
+
+import { gameInfoViewTab } from './GameInput'
+import { lightBlue, lightGrey, sneakyGrey, dirtyBlue } from '../../constants/Colors'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -13,7 +17,7 @@ const useStyles = makeStyles((theme) => ({
     width: 40,
     height: 40,
     borderRadius: '50%',
-    background: 'lightblue',
+    background: lightBlue,
     textAlign: 'center',
     margin: 'auto',
     paddingRight: 1, // Align par button with throw inputs.
@@ -26,14 +30,13 @@ const useStyles = makeStyles((theme) => ({
     borderWidth: 1,
     borderColor: 'grey',
     '&:active': {
-      background: 'lightgrey',
+      background: lightGrey,
     },
   },
   strokeInput: {
     background: '0 0',
     lineHeight: 1,
     border: 0,
-    color: '#1f1f21',
     fontSize: 25,
     fontWeight: 400,
     boxSizing: 'border-box',
@@ -46,7 +49,6 @@ const useStyles = makeStyles((theme) => ({
   },
   parButtonText: {
     lineHeight: 1,
-    color: '#1f1f21',
     fontSize: 17,
     fontWeight: 400,
     textAlign: 'center',
@@ -74,28 +76,39 @@ const useStyles = makeStyles((theme) => ({
     paddingLeft: 20,
   },
   syncText: {
-    color: '#969696',
+    color: sneakyGrey,
   },
   parButton: {
     position: 'absolute',
     right: '5%',
     top: 2,
-  }
+  },
+  finishButton: {
+    width: 155,
+    margin: '0 auto', // Center
+  },
 }))
+
+const FinishButton = withStyles({
+  root: {
+    backgroundColor: dirtyBlue,
+  },
+})(Button)
 
 interface Props {
   scores: PlayerScores[],
   holeNum: number,
   coursePars: number[],
   onScoreChange: (newScores: PlayerScores[]) => void,
+  setTab: (tab: number) => void,
   updating: boolean,
 }
 
-// TODO: Change OB input to a button [OB: 0]. Pressing it cycles through values (0, 1, 2, 3)
+// TODO?: Change OB input to a button [OB: 0]. Pressing it cycles through values (0, 1, 2, 3)?
 
 const PlayerStrokeInput: React.FC<Props> = (props) => {
   const classes = useStyles()
-  const { scores, holeNum, coursePars, onScoreChange, updating } = props
+  const { scores, holeNum, coursePars, onScoreChange, setTab, updating } = props
 
   const handleStrokeChange = (playerId: string, throws: boolean, event: React.ChangeEvent<HTMLInputElement>) => {
     let strokes = parseInt(event.target.value)
@@ -119,6 +132,16 @@ const PlayerStrokeInput: React.FC<Props> = (props) => {
     })
     onScoreChange(updatedScores)
   }
+
+  const finishButton = (
+    <FinishButton
+      variant="contained"
+      color="primary"
+      onClick={() => setTab(gameInfoViewTab)}
+    >
+      Preview & Finish Game
+    </FinishButton>
+  )
 
   const rows = scores.map((scoreInfo, index) => (
     <ListItem key={index}>
@@ -176,6 +199,9 @@ const PlayerStrokeInput: React.FC<Props> = (props) => {
             </div>
           </ListItemText>
         </ListItem>
+        {holeNum === coursePars.length ? (
+          <ListItem className={classes.finishButton}>{finishButton}</ListItem>
+        ) : null}
       </List>
     </div>
   )

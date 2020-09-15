@@ -1,7 +1,7 @@
 import React from 'react'
 import { makeStyles } from '@material-ui/core/styles'
 
-import { gameInputBlue } from './GameInput'
+import { dirtyBlue } from '../../constants/Colors'
 
 // Modified from:
 // https://github.com/oliviertassinari/react-swipeable-views/blob/master/docs/src/modules/components/PaginationDot.js
@@ -23,7 +23,7 @@ const useStyles = makeStyles(() => ({
     margin: 3,
   },
   active: {
-    backgroundColor: gameInputBlue,
+    backgroundColor: dirtyBlue,
   },
 }))
 

@@ -10,7 +10,7 @@ import MenuIcon from '@material-ui/icons/Menu'
 import Menu from '@material-ui/core/Menu'
 import MenuItem from '@material-ui/core/MenuItem'
 
-import { gameInputBlue } from './GameInput'
+import { dirtyBlue } from '../../constants/Colors'
 
 const useStyles = makeStyles((theme) => ({
   menuButton: {
@@ -21,7 +21,7 @@ const useStyles = makeStyles((theme) => ({
     margin: 'auto',
   },
   appBar: {
-    background: gameInputBlue,
+    background: dirtyBlue,
   },
   navLink: {
     textDecoration: 'none',

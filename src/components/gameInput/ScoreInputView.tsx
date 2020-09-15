@@ -80,6 +80,7 @@ const ScoreInputView: React.FC<Props> = (props) => {
               holeNum={index + 1}
               coursePars={game.course.pars}
               onScoreChange={updateScores}
+              setTab={setTab}
               updating={updating}
               key={index}
             />
@@ -96,7 +97,7 @@ const ScoreInputView: React.FC<Props> = (props) => {
             </Button>
             */}
           </div>
-        ))}        
+        ))}
       </SwipeableViews>
       {holeNavigation}
     </div>

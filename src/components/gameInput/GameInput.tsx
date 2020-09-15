@@ -16,8 +16,6 @@ import HoleInfoView from './HoleInfoView'
 import GameInfoView from './GameInfoView'
 import MapView from './MapView'
 
-export const gameInputBlue = '#437FB3'
-
 const scoreInputViewTab = 0
 const holeInfoViewTab = 1
 const mapViewTab = 2

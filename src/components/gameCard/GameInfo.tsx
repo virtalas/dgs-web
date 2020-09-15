@@ -4,6 +4,8 @@ import Paper from '@material-ui/core/Paper'
 import Typography from '@material-ui/core/Typography'
 import Chip from '@material-ui/core/Chip'
 
+import { highScoreBlue, illegalRed } from '../../constants/Colors'
+
 const chipHeight = 22
 
 const useStyles = makeStyles((theme) => ({
@@ -24,7 +26,7 @@ const useStyles = makeStyles((theme) => ({
     width: 90,
     fontSize: '97%',
     cursor: 'pointer',
-    backgroundColor: '#4353b3',
+    backgroundColor: highScoreBlue,
     color: 'white',
     position: 'relative',
     left: -5,
@@ -34,7 +36,7 @@ const useStyles = makeStyles((theme) => ({
     width: 100,
     fontSize: '97%',
     cursor: 'pointer',
-    backgroundColor: '#f2105a',
+    backgroundColor: illegalRed,
     color: 'white',
     position: 'relative',
     left: -5,

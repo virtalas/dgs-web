@@ -2,6 +2,15 @@ import React from 'react'
 import { makeStyles } from '@material-ui/core/styles'
 import Paper from '@material-ui/core/Paper'
 
+import { 
+  holeInOneRed,
+  eagleYellow,
+  birdieGreen,
+  parGreen,
+  bogeyOrange,
+  overBogeyPurple 
+} from '../../constants/Colors'
+
 const useStyles = makeStyles((theme) => ({
   rootPaper: {
     marginBottom: 10,
@@ -84,22 +93,22 @@ const useStyles = makeStyles((theme) => ({
     Score colors.
   */
   holeInOne: {
-    backgroundColor: '#F75151',
+    backgroundColor: holeInOneRed,
   },
   eagle: {
-    backgroundColor: '#FFFF00',
+    backgroundColor: eagleYellow,
   },
   birdie: {
-    backgroundColor: '#00F700',
+    backgroundColor: birdieGreen,
   },
   par: {
-    backgroundColor: '#A7C942',
+    backgroundColor: parGreen,
   },
   bogey: {
-    backgroundColor: '#FFA500',
+    backgroundColor: bogeyOrange,
   },
   overBogey: {
-    backgroundColor: '#A37BA3',
+    backgroundColor: overBogeyPurple,
   },
   /*
     OB marker.

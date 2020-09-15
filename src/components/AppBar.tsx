@@ -10,6 +10,7 @@ import { makeStyles } from '@material-ui/core/styles'
 
 import NavigationDrawer from './NavigationDrawer'
 import { drawerWidth } from './BasePage'
+import { grassGreen } from '../constants/Colors'
 
 export const appBarHeight = 64
 
@@ -17,8 +18,8 @@ const useStyles = makeStyles((theme) => ({
   appBar: {
     marginLeft: drawerWidth,
     zIndex: theme.zIndex.drawer + 1,
-    backgroundColor: '#5cb85c',
-    background: '#5cb85c',
+    backgroundColor: grassGreen,
+    background: grassGreen,
     height: appBarHeight,
   },
   menuButton: {

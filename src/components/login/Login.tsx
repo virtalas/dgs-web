@@ -9,10 +9,11 @@ import Typography from '@material-ui/core/Typography'
 import { makeStyles } from '@material-ui/core/styles'
 
 import DiscGolfBasket from '../DiscGolfBasket'
+import { grassGreen } from '../../constants/Colors'
 
 import authService from '../../services/authService'
 import { useAuth } from '../../context/AuthContext'
-import { Redirect } from 'react-router';
+import { Redirect } from 'react-router'
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -27,7 +28,7 @@ const useStyles = makeStyles((theme) => ({
   },
   avatar: {
     margin: theme.spacing(1),
-    backgroundColor: '#5cb85c',
+    backgroundColor: grassGreen,
   },
   form: {
     width: '100%',

@@ -2,6 +2,8 @@ import React from 'react'
 import { makeStyles } from '@material-ui/core/styles'
 import Card from '@material-ui/core/Card'
 
+import { deepBlue } from '../../constants/Colors'
+
 // Card constants
 const horizontalMargin = 1 // vw amount of margin/space from the sides of the screen
 const maxMobileCardWidth = window.innerWidth - 0.01 * horizontalMargin * 2 * window.innerWidth
@@ -21,7 +23,7 @@ const useStyles = makeStyles((theme) => ({
     marginRight: 'auto',
     marginBottom: theme.spacing(4),
     overflowX: 'hidden',
-    backgroundColor: '#3087C1',
+    backgroundColor: deepBlue,
   },
   content: {
     maxWidth: Math.min(maxMobileContentWidth, maxDesktopContentWidth),
