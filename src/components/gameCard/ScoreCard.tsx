@@ -1,6 +1,8 @@
-import React from 'react'
+import React, { Fragment } from 'react'
+
 import { makeStyles } from '@material-ui/core/styles'
 import Paper from '@material-ui/core/Paper'
+import InputBase from '@material-ui/core/InputBase'
 
 import { 
   holeInOneRed,
@@ -11,9 +13,23 @@ import {
   overBogeyPurple 
 } from '../../constants/Colors'
 
+const cellHeightNormal = 26
+const cellHeightEdit = 35
+
 const useStyles = makeStyles((theme) => ({
   rootPaper: {
     marginBottom: 10,
+  },
+  strokeEdit: {
+    height: cellHeightEdit,
+    width: cellHeightEdit,
+    textAlign: 'center',
+  },
+  playerNameEdit: {
+    height: cellHeightEdit + 3,
+  },
+  obEdit: {
+    background: 'lightgrey',
   },
   /*
     Positioning.
@@ -25,7 +41,7 @@ const useStyles = makeStyles((theme) => ({
     padding: 2,
     '& td': {
       border: '1px solid #000000',
-      height: 26,
+      height: cellHeightNormal,
       fontWeight: 'lighter',
       overflow: 'hidden', /* Stop ob stroke markers from bleeding outside cells. */
     },
@@ -52,7 +68,7 @@ const useStyles = makeStyles((theme) => ({
     '& table': {
       width: '100%',
       '& td': {
-        minWidth: 26,
+        minWidth: cellHeightNormal,
       }
     },
     '&::-webkit-scrollbar': {
@@ -87,6 +103,12 @@ const useStyles = makeStyles((theme) => ({
   bottomRow: {
     '& td': {
       borderBottom: 0,
+    }
+  },
+  bottomRowEdit: {
+    '& td': {
+      borderBottom: 0,
+      height: cellHeightEdit,
     }
   },
   /*
@@ -142,11 +164,14 @@ const useStyles = makeStyles((theme) => ({
 
 interface Props {
   game: Game,
+  isEditing: boolean,
 }
+
+// TODO: when tapping to edit a stroke/ob, move cursor to end
 
 const ScoreCard: React.FC<Props> = (props) => {
   const classes = useStyles()
-  const { game } = props
+  const { game, isEditing } = props
 
   const holeNumbers = game.course.pars.map((par: number, index: number) => (
     <td key={index}>{index + 1}</td>
@@ -156,12 +181,22 @@ const ScoreCard: React.FC<Props> = (props) => {
     <td key={index}>{par}</td>
   ))
 
+  let pnBottomRowClassName = isEditing ? classes.bottomRowEdit : classes.bottomRow
+  let pnRowClassName = isEditing ? classes.playerNameEdit : ''
+
   const playerNames = game.scores.map((playerScores, index) => (
-    <tr className={index + 1 === game.scores.length ? classes.bottomRow : ""} key={index}>
-      <td align="left">
-        {playerScores.player.firstName}
-      </td>
-    </tr>
+    <Fragment key={index}>
+      <tr className={index + 1 === game.scores.length ? pnBottomRowClassName : pnRowClassName}>
+        <td align="left">
+          {playerScores.player.firstName}
+        </td>
+      </tr>
+      {isEditing ? (
+        <tr className={index + 1 === game.scores.length ? pnBottomRowClassName : pnRowClassName}>
+          <td align="right">OB</td>
+        </tr>
+      ) : null}
+    </Fragment>
   ))
 
   const createObMarkers = (obStrokes: number) => {
@@ -181,46 +216,77 @@ const ScoreCard: React.FC<Props> = (props) => {
     )
   }
 
-  const playerStrokes = (playerScores: PlayerScores, index: number) => (
-    <tr className={classes.bottomRow} key={index}>
-      {playerScores.strokes.map((strokeCount: number, index: number) => {
-        const holePar = game.course.pars[index]
-        const obStrokes = playerScores.obs[index]
-        let scoreClass
-
-        switch (strokeCount) {
-          case 0:
-            scoreClass = ""
-            break;
-          case 1:
-            scoreClass = classes.holeInOne
-            break;
-          case holePar - obStrokes - 2:
-            scoreClass = classes.eagle
-            break;
-          case holePar - obStrokes - 1:
-            scoreClass = classes.birdie
-            break;
-          case holePar - obStrokes:
-            scoreClass = classes.par
-            break;
-          case holePar - obStrokes + 1:
-            scoreClass = classes.bogey
-            break;
-          default:
-            scoreClass = classes.overBogey
-        }
-
-        return (
-          <td className={scoreClass} key={index}>
-            {strokeCount === 0 ? "-" : strokeCount}
-            {/* obStrokes ? (<span className="obCount">{"+" + obStrokes}</span>) : null */}
-            {obStrokes > 0 ? createObMarkers(obStrokes) : null}
+  const playerObEdit = (playerScores: PlayerScores, index: number) => {
+    return isEditing ? (
+      <tr className={classes.bottomRow}>
+        {playerScores.obs.map((obCount: number, index: number) => (
+          <td className={classes.obEdit} key={index}>
+            <InputBase
+              className={classes.strokeEdit}
+              defaultValue={obCount}
+              inputProps={{ 'aria-label': 'naked', style: { textAlign: 'center' } }}
+            />
           </td>
-        )
-      })}
-      <td>{playerScores.total}</td>
-    </tr>
+        ))}
+      </tr>
+    ) : null
+  }
+
+  const playerStrokes = (playerScores: PlayerScores, index: number) => (
+    <Fragment key={index}>
+      <tr className={classes.bottomRow}>
+        {playerScores.strokes.map((strokeCount: number, index: number) => {
+          const holePar = game.course.pars[index]
+          const obStrokes = playerScores.obs[index]
+          let scoreClass
+
+          switch (strokeCount) {
+            case 0:
+              scoreClass = ""
+              break;
+            case 1:
+              scoreClass = classes.holeInOne
+              break;
+            case holePar - obStrokes - 2:
+              scoreClass = classes.eagle
+              break;
+            case holePar - obStrokes - 1:
+              scoreClass = classes.birdie
+              break;
+            case holePar - obStrokes:
+              scoreClass = classes.par
+              break;
+            case holePar - obStrokes + 1:
+              scoreClass = classes.bogey
+              break;
+            default:
+              scoreClass = classes.overBogey
+          }
+
+          if (isEditing) {
+            return (
+              <td className={scoreClass} key={index}>
+                <InputBase
+                  className={classes.strokeEdit}
+                  defaultValue={strokeCount}
+                  inputProps={{ 'aria-label': 'naked', style: { textAlign: 'center' }}}
+                />
+              </td>
+            )
+          }
+
+          return (
+            <td className={scoreClass} key={index}>
+              {strokeCount === 0 ? "-" : strokeCount}
+              {/* obStrokes ? (<span className="obCount">{"+" + obStrokes}</span>) : null */}
+              {obStrokes > 0 ? createObMarkers(obStrokes) : null}
+            </td>
+          )
+        })}
+        <td>{playerScores.total}</td>
+      </tr>
+      {playerObEdit(playerScores, index)}
+    </Fragment>
   )
 
   const playerToPars = game.scores.map((playerScores, index) => (
