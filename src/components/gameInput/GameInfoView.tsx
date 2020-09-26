@@ -1,4 +1,5 @@
 import React from 'react'
+import { Button } from '@material-ui/core'
 
 import GameCard from '../gameCard/GameCard'
 
@@ -12,11 +13,18 @@ interface Props {
 const GameInfoView: React.FC<Props> = (props) => {
   const { game } = props
 
+  const handleFinish = () => {
+    
+  }
+
   return (
     <div>
       <br /><br /><br />
       <GameCard game={game} />
-      <br />[Send game]
+      <br />
+      <Button variant="contained" color="primary" onClick={handleFinish}>
+        Finish game
+      </Button>
     </div>
   )
 }

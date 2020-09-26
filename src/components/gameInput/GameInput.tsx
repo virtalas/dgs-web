@@ -134,7 +134,7 @@ const GameInput: React.FC<{}> = (props: any) => {
         className={classes.bottomNav}
       >
         <BottomNavigationAction label="Scores" icon={<EditIcon />} />
-        <BottomNavigationAction label="Hole info" icon={<InfoIcon />} />
+        <BottomNavigationAction label="Stats" icon={<InfoIcon />} />
         <BottomNavigationAction label="Map" icon={<LocationOnIcon />} />
         <BottomNavigationAction label="Game info" icon={<DescriptionIcon />} />
       </BottomNavigation>

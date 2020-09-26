@@ -24,6 +24,7 @@ const useStyles = makeStyles((theme) => ({
     marginBottom: theme.spacing(4),
     overflowX: 'hidden',
     backgroundColor: deepBlue,
+    position: 'relative', // For positioning edit button.
   },
   content: {
     maxWidth: Math.min(maxMobileContentWidth, maxDesktopContentWidth),
