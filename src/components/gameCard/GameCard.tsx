@@ -56,7 +56,7 @@ interface Props {
 
 // TODO: if startDate != null, render "1.1.1111 9.30 - 10.45"
 // TODO: When isEditing == true, hide new game button
-// TODO: update game & backend after editing done.
+// TODO: update game & backend after editing done (also after individual edits).
 
 const GameCard: React.FC<Props> = (props) => {
   const classes = useStyles()

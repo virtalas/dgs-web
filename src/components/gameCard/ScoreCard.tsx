@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react'
+import React, { ChangeEvent, Fragment } from 'react'
 
 import { makeStyles } from '@material-ui/core/styles'
 import Paper from '@material-ui/core/Paper'
@@ -10,11 +10,13 @@ import {
   birdieGreen,
   parGreen,
   bogeyOrange,
-  overBogeyPurple 
+  overBogeyPurple,
+  chipGrey,
 } from '../../constants/Colors'
 
 const cellHeightNormal = 26
 const cellHeightEdit = 35
+const trHeightEdit = cellHeightEdit + 3
 
 const useStyles = makeStyles((theme) => ({
   rootPaper: {
@@ -26,10 +28,10 @@ const useStyles = makeStyles((theme) => ({
     textAlign: 'center',
   },
   playerNameEdit: {
-    height: cellHeightEdit + 3,
+    height: trHeightEdit,
   },
   obEdit: {
-    background: 'lightgrey',
+    background: chipGrey,
   },
   /*
     Positioning.
@@ -108,7 +110,7 @@ const useStyles = makeStyles((theme) => ({
   bottomRowEdit: {
     '& td': {
       borderBottom: 0,
-      height: cellHeightEdit,
+      height: trHeightEdit,
     }
   },
   /*
@@ -168,10 +170,23 @@ interface Props {
 }
 
 // TODO: when tapping to edit a stroke/ob, move cursor to end
+// TODO: Update game & backend when unfocus.
 
 const ScoreCard: React.FC<Props> = (props) => {
   const classes = useStyles()
   const { game, isEditing } = props
+
+  const handleStrokeChange = (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const playerName = event.currentTarget.name.split(':')[0]
+    const holeIndex = Number(event.currentTarget.name.split(':')[1])
+    const stroke = Number(event.currentTarget.value)
+    if (!isNaN(+stroke)) {
+      game.scores = updateScores(game.scores, playerName, holeIndex, stroke)
+    }
+  }
+
+  const handleOBChange = (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  }
 
   const holeNumbers = game.course.pars.map((par: number, index: number) => (
     <td key={index}>{index + 1}</td>
@@ -186,7 +201,7 @@ const ScoreCard: React.FC<Props> = (props) => {
 
   const playerNames = game.scores.map((playerScores, index) => (
     <Fragment key={index}>
-      <tr className={index + 1 === game.scores.length ? pnBottomRowClassName : pnRowClassName}>
+      <tr className={index + 1 === game.scores.length && !isEditing ? pnBottomRowClassName : pnRowClassName}>
         <td align="left">
           {playerScores.player.firstName}
         </td>
@@ -228,6 +243,7 @@ const ScoreCard: React.FC<Props> = (props) => {
             />
           </td>
         ))}
+        <td></td>
       </tr>
     ) : null
   }
@@ -270,6 +286,8 @@ const ScoreCard: React.FC<Props> = (props) => {
                   className={classes.strokeEdit}
                   defaultValue={strokeCount}
                   inputProps={{ 'aria-label': 'naked', style: { textAlign: 'center' }}}
+                  onChange={handleStrokeChange}
+                  name={playerScores.player.firstName + ':' + index}
                 />
               </td>
             )
@@ -290,9 +308,12 @@ const ScoreCard: React.FC<Props> = (props) => {
   )
 
   const playerToPars = game.scores.map((playerScores, index) => (
-    <tr className={classes.bottomRow} key={index}>
-      <td>{playerScores.toPar > 0 ? "+" + playerScores.toPar : playerScores.toPar}</td>
-    </tr>
+    <Fragment key={index}>
+      <tr className={isEditing ? classes.bottomRowEdit : classes.bottomRow} key={index}>
+        <td>{playerScores.toPar > 0 ? "+" + playerScores.toPar : playerScores.toPar}</td>
+      </tr>
+      {isEditing ? (<tr className={classes.bottomRowEdit}><td></td></tr>) : null}
+    </Fragment>
   ))
 
   const scoreTable = (
@@ -342,6 +363,11 @@ const ScoreCard: React.FC<Props> = (props) => {
       {scoreTable}
     </Paper>
   )
+}
+
+function updateScores(scores: PlayerScores[], playerName: string, holeIndex: number, stroke: number): PlayerScores[] {
+  // TODO
+  return scores
 }
 
 export default ScoreCard

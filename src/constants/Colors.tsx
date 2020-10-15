@@ -21,3 +21,5 @@ export const lightGrey = 'lightgrey'
 export const dirtyBlue = '#437FB3'
 // Game input 'game synced' text
 export const sneakyGrey = '#969696'
+// Game card condition chip color
+export const chipGrey = '#e0e0e0'
