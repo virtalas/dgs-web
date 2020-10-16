@@ -98,7 +98,7 @@ const GameInput: React.FC<{}> = (props: any) => {
   )
 
   const gameInfoView = (
-    <GameInfoView game={game} />
+    <GameInfoView game={game} setGame={setGame} />
   )
 
   let activeView

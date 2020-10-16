@@ -166,6 +166,7 @@ const useStyles = makeStyles((theme) => ({
 
 interface Props {
   game: Game,
+  setGame: (game: Game) => void,
   isEditing: boolean,
 }
 
@@ -174,7 +175,7 @@ interface Props {
 
 const ScoreCard: React.FC<Props> = (props) => {
   const classes = useStyles()
-  const { game, isEditing } = props
+  const { game, setGame, isEditing } = props
 
   const handleStrokeChange = (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const playerName = event.currentTarget.name.split(':')[0]
@@ -182,6 +183,7 @@ const ScoreCard: React.FC<Props> = (props) => {
     const stroke = Number(event.currentTarget.value)
     if (!isNaN(+stroke)) {
       game.scores = updateScores(game.scores, playerName, holeIndex, stroke)
+      setGame(game)
     }
   }
 
@@ -366,7 +368,12 @@ const ScoreCard: React.FC<Props> = (props) => {
 }
 
 function updateScores(scores: PlayerScores[], playerName: string, holeIndex: number, stroke: number): PlayerScores[] {
-  // TODO
+  scores.forEach((playerScores, index, array: PlayerScores[]) => {
+    if (array[index].player.firstName !== playerName) {
+      return
+    }
+    array[index].strokes[holeIndex] = stroke
+  })
   return scores
 }
 

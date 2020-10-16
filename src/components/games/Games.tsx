@@ -107,6 +107,13 @@ const Games: React.FC<{}> = () => {
     setGames([]) // Clear fetched games if year changed.
   }
 
+  const setGame = (game: Game) => {
+    let gameToUpdate = games.find(g => g.id === game.id) as Game
+    let index = games.indexOf(gameToUpdate)
+    games.fill(game, index, index++) // Replace gameToUpdate with game
+    setGames(games)
+  }
+
   return (
     <div id="gamesPage" className={classes.root}>
       <div className={classes.topControls}>
@@ -120,7 +127,7 @@ const Games: React.FC<{}> = () => {
         />
       </div>
       {gamesToShow.map(game => (
-        <GameCard game={game} key={game.id}/>
+        <GameCard game={game} setGame={setGame} key={game.id}/>
       ))}
       {gamesToShow.length === 0 && isLoading ? (
         <div className={classes.centerContainer}>
