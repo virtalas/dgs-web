@@ -26,6 +26,15 @@ const useStyles = makeStyles((theme) => ({
     height: cellHeightEdit,
     width: cellHeightEdit,
     textAlign: 'center',
+    background: '0 0',
+    lineHeight: 1,
+    border: 0,
+    fontSize: 18,
+    fontWeight: 400,
+    paddingTop: 3,
+    '&:focus': {
+      outline: '4px solid white',
+    }
   },
   playerNameEdit: {
     height: trHeightEdit,
@@ -180,10 +189,16 @@ const ScoreCard: React.FC<Props> = (props) => {
   const handleStrokeChange = (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const playerName = event.currentTarget.name.split(':')[0]
     const holeIndex = Number(event.currentTarget.name.split(':')[1])
-    const stroke = Number(event.currentTarget.value)
-    if (!isNaN(+stroke)) {
-      game.scores = updateScores(game.scores, playerName, holeIndex, stroke)
+    const stroke = event.currentTarget.value
+    if (!isNaN(+stroke) && stroke.length !== 0) {
+      // Valid stroke inputted, update game.
+      game.scores = updateScores(game.scores, playerName, holeIndex, Number(stroke))
       setGame(game)
+      event.currentTarget.blur() // Unfocus/blur the field after inputting a number.
+    } else {
+      // No input (or invalid), restore the original stroke.
+      const playerScores = game.scores.find(scores => scores.player.firstName === playerName)
+      event.currentTarget.value = String(playerScores?.strokes[holeIndex])
     }
   }
 
@@ -284,13 +299,23 @@ const ScoreCard: React.FC<Props> = (props) => {
           if (isEditing) {
             return (
               <td className={scoreClass} key={index}>
-                <InputBase
+                <input
                   className={classes.strokeEdit}
-                  defaultValue={strokeCount}
-                  inputProps={{ 'aria-label': 'naked', style: { textAlign: 'center' }}}
-                  onChange={handleStrokeChange}
                   name={playerScores.player.firstName + ':' + index}
-                />
+                  type="tel"
+                  defaultValue={strokeCount}
+                  min="0"
+                  max="99"
+                  // After tapping a stroke, clear the stroke from the input field.
+                  onFocus={e => e.target.value = ''}
+                  // Try to update the changed stroke. But check for empty change (happens at onFocus),
+                  onChange={e => { if (e.target.value.length > 0) handleStrokeChange(e) }}
+                  // After editing finishes, try to update once more if user left the field empty
+                  // (in which case restore the original stroke).
+                  onBlur={handleStrokeChange}
+                  inputMode="numeric"
+                  pattern="[0-9]*">
+                </input>
               </td>
             )
           }
