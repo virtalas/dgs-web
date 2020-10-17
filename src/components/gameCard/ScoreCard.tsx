@@ -188,21 +188,24 @@ const ScoreCard: React.FC<Props> = (props) => {
 
   const handleStrokeChange = (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const playerName = event.currentTarget.name.split(':')[0]
-    const holeIndex = Number(event.currentTarget.name.split(':')[1])
+    const throws = event.currentTarget.name.split(':')[1] === 'stroke'
+    const holeIndex = Number(event.currentTarget.name.split(':')[2])
     const stroke = event.currentTarget.value
+
     if (!isNaN(+stroke) && stroke.length !== 0) {
       // Valid stroke inputted, update game.
-      game.scores = updateScores(game.scores, playerName, holeIndex, Number(stroke))
+      game.scores = updateScores(game.scores, playerName, holeIndex, Number(stroke), throws)
       setGame(game)
       event.currentTarget.blur() // Unfocus/blur the field after inputting a number.
     } else {
       // No input (or invalid), restore the original stroke.
       const playerScores = game.scores.find(scores => scores.player.firstName === playerName)
-      event.currentTarget.value = String(playerScores?.strokes[holeIndex])
+      if (throws) {
+        event.currentTarget.value = String(playerScores?.strokes[holeIndex])
+      } else {
+        event.currentTarget.value = String(playerScores?.obs[holeIndex])
+      }
     }
-  }
-
-  const handleOBChange = (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
   }
 
   const holeNumbers = game.course.pars.map((par: number, index: number) => (
@@ -253,11 +256,7 @@ const ScoreCard: React.FC<Props> = (props) => {
       <tr className={classes.bottomRow}>
         {playerScores.obs.map((obCount: number, index: number) => (
           <td className={classes.obEdit} key={index}>
-            <InputBase
-              className={classes.strokeEdit}
-              defaultValue={obCount}
-              inputProps={{ 'aria-label': 'naked', style: { textAlign: 'center' } }}
-            />
+            {createStrokeInput(classes.strokeEdit, playerScores.player.firstName, obCount, index, handleStrokeChange, false)}
           </td>
         ))}
         <td></td>
@@ -299,23 +298,7 @@ const ScoreCard: React.FC<Props> = (props) => {
           if (isEditing) {
             return (
               <td className={scoreClass} key={index}>
-                <input
-                  className={classes.strokeEdit}
-                  name={playerScores.player.firstName + ':' + index}
-                  type="tel"
-                  defaultValue={strokeCount}
-                  min="0"
-                  max="99"
-                  // After tapping a stroke, clear the stroke from the input field.
-                  onFocus={e => e.target.value = ''}
-                  // Try to update the changed stroke. But check for empty change (happens at onFocus),
-                  onChange={e => { if (e.target.value.length > 0) handleStrokeChange(e) }}
-                  // After editing finishes, try to update once more if user left the field empty
-                  // (in which case restore the original stroke).
-                  onBlur={handleStrokeChange}
-                  inputMode="numeric"
-                  pattern="[0-9]*">
-                </input>
+                {createStrokeInput(classes.strokeEdit, playerScores.player.firstName, strokeCount, index, handleStrokeChange, true)}
               </td>
             )
           }
@@ -392,14 +375,46 @@ const ScoreCard: React.FC<Props> = (props) => {
   )
 }
 
-function updateScores(scores: PlayerScores[], playerName: string, holeIndex: number, stroke: number): PlayerScores[] {
+function updateScores(scores: PlayerScores[], playerName: string, holeIndex: number, stroke: number, throws: boolean): PlayerScores[] {
   scores.forEach((playerScores, index, array: PlayerScores[]) => {
     if (array[index].player.firstName !== playerName) {
       return
     }
-    array[index].strokes[holeIndex] = stroke
+    if (throws) {
+      array[index].strokes[holeIndex] = stroke
+    } else {
+      array[index].obs[holeIndex] = stroke
+    }
   })
   return scores
+}
+
+function createStrokeInput(
+  className: string,
+  playerName: string,
+  strokeCount: number,
+  index: number,
+  handleStrokeChange: (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void,
+  throws: boolean) {
+  return (
+    <input
+      className={className}
+      name={playerName + (throws ? ':stroke:' : ':ob:') + index}
+      type="tel"
+      defaultValue={strokeCount}
+      min="0"
+      max="99"
+      // After tapping a stroke, clear the stroke from the input field.
+      onFocus={e => e.target.value = ''}
+      // Try to update the changed stroke. But check for empty change (happens at onFocus),
+      onChange={e => { if (e.target.value.length > 0) handleStrokeChange(e) }}
+      // After editing finishes, try to update once more if user left the field empty
+      // (in which case restore the original stroke).
+      onBlur={handleStrokeChange}
+      inputMode="numeric"
+      pattern="[0-9]*">
+    </input>
+  )
 }
 
 export default ScoreCard
