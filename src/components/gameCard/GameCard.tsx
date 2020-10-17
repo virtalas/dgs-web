@@ -70,19 +70,30 @@ const GameCard: React.FC<Props> = (props) => {
 
   const [isEditing, setIsEditing] = useState(false)
   const [updating, setUpdating] = useState(false)
+  // TODO: Fix(?) hack variable to make React render the game again.
+  // Affects: when editing a stroke, the color should change after a number inputted and onfocus happens.
+  // Works in commit 6ec7087d99bfdf40bd4ae977f7f572c977e04f34
+  const [update, setUpdate] = useState(false)
 
   // TODO(?): if game.creator == user || user.isAdmin
   const allowedToEdit = true
 
+  const toggleEdit = () => {
+    if (isEditing) {
+      // TODO: Check that the spinner shows up
+      gamesService.updateGame(game).then(() => setUpdating(false))
+      setUpdating(true)
+    }
+    setIsEditing(!isEditing)
+  }
+
   const updateGame = (game: Game) => {
-    // TODO: Check that the spinner shows up
-    gamesService.updateGame(game).then(() => setUpdating(false))
     setGame(game)
-    setUpdating(true)
+    setUpdate(!update)
   }
 
   const editButton = allowedToEdit ? (
-    <IconButton aria-label="edit" className={classes.actionButton} onClick={() => setIsEditing(!isEditing)}>
+    <IconButton aria-label="edit" className={classes.actionButton} onClick={toggleEdit}>
       {isEditing ? (<DoneIcon />) : (<EditIcon />)}
     </IconButton>
   ) : null

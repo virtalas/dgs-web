@@ -56,7 +56,7 @@ const mockGames: Game[] = [{
     id: "fds3ury83ofh",
     name: "Puolarmaari",
     pars: [3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 4, 3, 3, 3, 3, 3],
-    total: 60,
+    total: 61,
     layouts: [
       { id: 'fdg', active: true, name: '2020 layout'},
       { id: 'fdfsdg', active: false, name: '2019 layout'}
@@ -74,9 +74,9 @@ const mockGames: Game[] = [{
         admin: false,
       },
       strokes: [3, 3, 3, 2, 3, 3, 0, 0, 3, 2, 3, 3, 1, 3, 3, 3, 3, 2, 3, 3],
-      obs: [0, 1, 2, 3, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-      total: 49,
-      toPar: 4
+      obs: [0, 1, 2, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      total: 55,
+      toPar: 0
     },
     {
       player: {

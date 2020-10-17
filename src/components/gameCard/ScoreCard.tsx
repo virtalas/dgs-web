@@ -194,7 +194,7 @@ const ScoreCard: React.FC<Props> = (props) => {
 
     if (!isNaN(+stroke) && stroke.length !== 0) {
       // Valid stroke inputted, update game.
-      game.scores = updateScores(game.scores, playerName, holeIndex, Number(stroke), throws)
+      game.scores = updateScores(game.scores, playerName, holeIndex, Number(stroke), game.course, throws)
       setGame(game)
       event.currentTarget.blur() // Unfocus/blur the field after inputting a number.
     } else {
@@ -375,27 +375,43 @@ const ScoreCard: React.FC<Props> = (props) => {
   )
 }
 
-function updateScores(scores: PlayerScores[], playerName: string, holeIndex: number, stroke: number, throws: boolean): PlayerScores[] {
+function updateScores(scores: PlayerScores[],
+                      playerName: string,
+                      holeIndex: number,
+                      stroke: number,
+                      course: Course,
+                      throws: boolean): PlayerScores[] {
   scores.forEach((playerScores, index, array: PlayerScores[]) => {
-    if (array[index].player.firstName !== playerName) {
-      return
+    // Update the stroke for the player in question
+    if (array[index].player.firstName === playerName) {
+      if (throws) {
+        array[index].strokes[holeIndex] = stroke
+      } else {
+        array[index].obs[holeIndex] = stroke
+      }
     }
-    if (throws) {
-      array[index].strokes[holeIndex] = stroke
-    } else {
-      array[index].obs[holeIndex] = stroke
+    // Update toPar
+    let total = 0
+    let courseTotal = 0
+    for (let holeIndex = 0; holeIndex < array[index].strokes.length; holeIndex++) {
+      if (array[index].strokes[holeIndex] !== 0) {
+        total += array[index].strokes[holeIndex]
+        total += array[index].obs[holeIndex]
+        courseTotal += course.pars[holeIndex]
+      }
     }
+    array[index].total = total
+    array[index].toPar = total - courseTotal
   })
   return scores
 }
 
-function createStrokeInput(
-  className: string,
-  playerName: string,
-  strokeCount: number,
-  index: number,
-  handleStrokeChange: (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void,
-  throws: boolean) {
+function createStrokeInput(className: string,
+                            playerName: string,
+                            strokeCount: number,
+                            index: number,
+                            handleStrokeChange: (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void,
+                            throws: boolean) {
   return (
     <input
       className={className}
