@@ -14,7 +14,7 @@ const mockGame: Game = {
     popularity: 23,
   },
   startDate: null,
-  endDate: "2020-08-13 09:22",
+  endDate: new Date("2020-08-13 09:22"),
   scores: [
     {
       player: {
@@ -64,7 +64,7 @@ const mockGames: Game[] = [{
     popularity: 23,
   },
   startDate: null,
-  endDate: "2020-08-12 09:22",
+  endDate: new Date("2020-08-12 09:22"),
   scores: [
     {
       player: {
@@ -111,8 +111,8 @@ const mockGames: Game[] = [{
     ],
     popularity: 23,
   },
-  startDate: null,
-  endDate: "2020-08-11 09:22",
+  startDate: new Date("2020-08-11 07:55"),
+  endDate: new Date("2020-08-11 09:22"),
   scores: [
     {
       player: {
@@ -159,8 +159,8 @@ const mockGames: Game[] = [{
     ],
     popularity: 556,
   },
-  startDate: null,
-  endDate: "2020-08-10 09:22",
+    startDate: new Date("2020-08-10 23:22"),
+  endDate: new Date("2020-08-11 01:47"),
   scores: [
     {
       player: {
@@ -208,7 +208,7 @@ const mockGames: Game[] = [{
     popularity: 1,
   },
   startDate: null,
-  endDate: "2020-08-09 09:22",
+  endDate: new Date("2020-08-09 09:22"),
   scores: [
     {
       player: {
@@ -256,7 +256,7 @@ const mockGames: Game[] = [{
     popularity: 23,
   },
   startDate: null,
-  endDate: "2020-08-08 09:22",
+  endDate: new Date("2020-08-08 09:22"),
   scores: [
     {
       player: {
@@ -304,7 +304,7 @@ const mockGames: Game[] = [{
       popularity: 447,
     },
     startDate: null,
-    endDate: "2020-06-13 09:22",
+    endDate: new Date("2020-06-13 09:22"),
     scores: [
       {
         player: {
@@ -352,7 +352,7 @@ const mockGames: Game[] = [{
       popularity: 556,
     },
     startDate: null,
-    endDate: "2020-05-13 09:22",
+    endDate: new Date("2020-05-13 09:22"),
     scores: [
       {
         player: {
@@ -400,7 +400,7 @@ const mockGames: Game[] = [{
     popularity: 23,
   },
   startDate: null,
-  endDate: "2020-05-13 09:22",
+  endDate: new Date("2020-05-13 09:22"),
   scores: [
     {
       player: {
@@ -448,7 +448,7 @@ const mockGames: Game[] = [{
     popularity: 23,
   },
   startDate: null,
-  endDate: "2020-05-13 09:22",
+  endDate: new Date("2020-05-13 09:22"),
   scores: [
     {
       player: {
@@ -496,7 +496,7 @@ const mockGames: Game[] = [{
       popularity: 23,
     },
     startDate: null,
-    endDate: "2019-07-13 09:22",
+    endDate: new Date("2019-07-13 09:22"),
     scores: [
       {
         player: {
@@ -544,7 +544,7 @@ const mockGames: Game[] = [{
       popularity: 23,
     },
     startDate: null,
-    endDate: "2018-06-13 09:22",
+    endDate: new Date("2018-06-13 09:22"),
     scores: [
       {
         player: {
@@ -589,8 +589,8 @@ const mockMonthsThatHaveGames: GameMonths[] = [ // 0=January
 
 const getGames = async (year: number, month: number): Promise<Game[]> => {
   // TODO: Replace mock data with API call.
-  return mockGames.filter(game => dateFrom(game.endDate).getMonth() === month
-      && dateFrom(game.endDate).getFullYear() === year)
+  return mockGames.filter(game => game.endDate.getMonth() === month
+      && game.endDate.getFullYear() === year)
 }
 
 const getMonthsThatHaveGames = async (): Promise<GameMonths[]> => {

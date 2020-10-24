@@ -5,13 +5,15 @@ import Typography from '@material-ui/core/Typography'
 import { IconButton, withStyles } from '@material-ui/core'
 import EditIcon from '@material-ui/icons/Edit'
 import DoneIcon from '@material-ui/icons/Done'
-import TextField from '@material-ui/core/TextField'
 import CircularProgress from '@material-ui/core/CircularProgress'
+import DayjsUtils from '@date-io/dayjs'
+import { MuiPickersUtilsProvider, DateTimePicker } from '@material-ui/pickers'
 
 import ScoreCard from './ScoreCard'
 import GameInfo from './GameInfo'
 import BlueCard from './BlueCard'
 import gamesService from '../../services/gamesService'
+import { MaterialUiPickersDate } from '@material-ui/pickers/typings/date'
 
 const useStyles = makeStyles((theme) => ({
   title: {
@@ -27,7 +29,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-const GameDateTextField = withStyles({
+const DatePicker = withStyles({
   root: {
     '& label': {
       color: 'white',
@@ -35,25 +37,16 @@ const GameDateTextField = withStyles({
     '& label.Mui-focused': {
       color: 'white',
     },
+    '& .MuiInputBase-input': {
+      color: 'white',
+    },
     '& .MuiInput-underline:after': {
       borderBottomColor: 'white',
-    },
-    '& .MuiOutlinedInput-root': {
-      '& fieldset': {
-        borderColor: 'white',
-      },
-      '&:hover fieldset': {
-        borderColor: 'white',
-      },
-      '&.Mui-focused fieldset': {
-        borderColor: 'white',
-      },
-      color: 'white',
     },
     marginTop: 5,
     marginBottom: 10,
   },
-})(TextField)
+})(DateTimePicker)
 
 interface Props {
   game: Game,
@@ -92,6 +85,22 @@ const GameCard: React.FC<Props> = (props) => {
     setUpdate(!update)
   }
 
+  const handleStartDateChange = (date: MaterialUiPickersDate, value?: string | null | undefined) => {
+    const newDate = date?.toDate()
+    if (newDate) {
+      game.startDate = newDate
+      updateGame(game)
+    }
+  }
+
+  const handleEndDateChange = (date: MaterialUiPickersDate, value?: string | null | undefined) => {
+    const newDate = date?.toDate()
+    if (newDate) {
+      game.endDate = newDate
+      updateGame(game)
+    }
+  }
+
   const editButton = allowedToEdit ? (
     <IconButton aria-label="edit" className={classes.actionButton} onClick={toggleEdit}>
       {isEditing ? (<DoneIcon />) : (<EditIcon />)}
@@ -104,37 +113,49 @@ const GameCard: React.FC<Props> = (props) => {
     </div>
   )
 
-  const actionButton = updating ? progressSpinner : editButton
-
+  const dateOptions = {
+    weekday: 'short',
+    year: 'numeric',
+    month: '2-digit',
+    day: 'numeric',
+    hour: 'numeric',
+    minute: 'numeric',
+  }
+  const endDateTime = game.endDate.toLocaleString('fi-FI', dateOptions)
+  const endTime = game.endDate.toLocaleString('fi-FI', { hour: 'numeric', minute: 'numeric' })
+  const startDateTime = game.startDate ? game.startDate.toLocaleString('fi-FI', dateOptions) : null
+  const dateTime = startDateTime ? startDateTime + ' - ' + endTime : endDateTime
   const gameDate = (
-    <Typography variant="subtitle1" className={classes.title}>{game.endDate}</Typography>
+    <Typography variant="subtitle1" className={classes.title}>{dateTime}</Typography>
   )
 
   // TODO: Validation for date, calendar value picker?
   const gameDateEditing = (
-    <div>
-      <GameDateTextField
+    <MuiPickersUtilsProvider utils={DayjsUtils}>
+      <DatePicker
+        margin="normal"
         id="gamedate-start-edit"
-        label="Start"
-        variant="outlined"
-        size="small"
-        defaultValue={game.startDate}
+        label="Start date"
+        format="HH:mm DD.MM.YYYY"
+        value={game.startDate}
+        onChange={handleStartDateChange}
       />
-      <GameDateTextField
+      <DatePicker
+        margin="normal"
         id="gamedate-end-edit"
-        label="End"
-        variant="outlined"
-        size="small"
-        defaultValue={game.endDate}
+        label="End date"
+        format="HH:mm DD.MM.YYYY"
+        value={game.endDate}
+        onChange={handleEndDateChange}
       />
-    </div>
+    </MuiPickersUtilsProvider>
   )
 
   return (
     <BlueCard>
       <Typography variant="h6" className={classes.title}>{game.course.name}</Typography>
       {isEditing ? gameDateEditing : gameDate}
-      {actionButton}
+      {updating ? progressSpinner : editButton}
       <ScoreCard game={game} setGame={updateGame} isEditing={isEditing} />
       <GameInfo game={game} />
     </BlueCard>

@@ -1,8 +1,8 @@
 interface Game {
   id: string,
   course: Course,
-  startDate: string | null,
-  endDate: string,
+  startDate: Date | null | undefined,
+  endDate: Date,
   scores: PlayerScores[],
   temperature: number | null,
   weatherConditions: Condition[],

@@ -6,7 +6,6 @@ import { makeStyles } from '@material-ui/core/styles'
 import GameCard from '../gameCard/GameCard'
 import MonthControls from './MonthControls'
 import gamesService from '../../services/gamesService'
-import { dateFrom } from '../../utils/DateUtil'
 
 // TODO: When the device is rotated, don't open the drawer -> show whole score card instead
 // TODO: Fetch prev and next month as well.
@@ -67,8 +66,8 @@ const Games: React.FC<{}> = () => {
   const [monthsThatHaveGames, setMonthsThatHaveGames] = useState<GameMonths[]>()
   const [isLoading, setIsLoading] = useState<boolean>(false)
 
-  const gamesToShow = games.filter(game => dateFrom(game.endDate).getMonth() === selectedMonth
-    && dateFrom(game.endDate).getFullYear() === selectedYear)
+  const gamesToShow = games.filter(game => game.endDate.getMonth() === selectedMonth
+    && game.endDate.getFullYear() === selectedYear)
 
   // useEffect() works like componentDidMount(): runs only once after the component is rendered.
   // In addition, it reruns each time 'selectedYear' or 'selectedMonth' change.
