@@ -615,10 +615,20 @@ const updateGame = async (game: Game): Promise<Game> => {
   return mockGame
 }
 
+const getAvailableWeatherConditions = async (): Promise<Condition[]> => {
+  return ['rain', 'wet (no rain)', 'windy', 'dark', 'snow']
+}
+
+const getAvailableConditions = async (): Promise<Condition[]> => {
+  return ['LED', 'variant layout', 'doubles']
+}
+
 export default {
   getGames,
   getMonthsThatHaveGames,
   createGame,
   getGame,
   updateGame,
+  getAvailableWeatherConditions,
+  getAvailableConditions,
 }

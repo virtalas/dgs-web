@@ -47,12 +47,16 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 interface Props {
-  game: Game
+  game: Game,
+  setGame: (game: Game) => void,
+  isEditing: boolean,
+  availableWeatherConditions: Condition[],
+  availableConditions: Condition[],
 }
 
 const GameInfo: React.FC<Props> = (props) => {
   const classes = useStyles()
-  const { game } = props
+  const { game, setGame, isEditing, availableWeatherConditions, availableConditions } = props
 
   const handlePlayerClipClick = () => {
     // TODO
@@ -63,6 +67,33 @@ const GameInfo: React.FC<Props> = (props) => {
     // TODO
     alert('Coming soon: Search games by clicked condition!')
   }
+
+  const handleConditionToggle = (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+    const condition = event.currentTarget.querySelector('.MuiChip-label')?.textContent as Condition
+    if (!game.conditions.includes(condition)) {
+      game.conditions = game.conditions.concat(condition)
+    } else {
+      game.conditions = game.conditions.filter(c => c !== condition)
+    }
+    setGame(game)
+  }
+
+  const handleWeatherConditionToggle = (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+    const condition = event.currentTarget.querySelector('.MuiChip-label')?.textContent as Condition
+    if (!game.weatherConditions.includes(condition)) {
+      game.weatherConditions = game.weatherConditions.concat(condition)
+    } else {
+      game.weatherConditions = game.weatherConditions.filter(c => c !== condition)
+    }
+    setGame(game)
+  }
+
+  const selected = (condition: Condition): boolean => {
+    return game.weatherConditions.includes(condition) || game.conditions.includes(condition)
+  }
+
+  game.conditions.sort()
+  game.weatherConditions.sort()
 
   const conditions = (
     <div className={classes.chipRow}>
@@ -75,6 +106,31 @@ const GameInfo: React.FC<Props> = (props) => {
       ))}
     </div>
   )
+
+  const temperatureEdit = null
+  
+  const editableConditions = isEditing ? (
+    <div className={classes.chipRow}>
+      {availableWeatherConditions.map((condition: Condition, index: number) => (
+        <Chip
+          className={classes.chip}
+          label={condition}
+          variant={selected(condition) ? 'default' : 'outlined'}
+          onClick={handleWeatherConditionToggle}
+          key={index}
+        />
+      ))}
+      {availableConditions.map((condition: Condition, index: number) => (
+        <Chip
+          className={classes.chip}
+          label={condition}
+          variant={selected(condition) ? 'default' : 'outlined'}
+          onClick={handleConditionToggle}
+          key={index}
+        />
+      ))}
+    </div>
+  ) : null
 
   const illegalAndHighScorers = (
     <div className={classes.chipRow}>
@@ -106,17 +162,21 @@ const GameInfo: React.FC<Props> = (props) => {
   const shouldShowInfoPaper = game.temperature || game.weatherConditions.length || game.conditions.length ||
                               game.highScorers.length || game.illegalScorers.length || game.comment || game.contestName
 
-  return (
-    <div>
-      {shouldShowInfoPaper ? (
-        <Paper className={classes.infoPaper} elevation={0}>
-          {conditions}
-          {illegalAndHighScorers}
-          <Typography className={classes.comment} align="left" variant="body1">{game.comment}</Typography>
-        </Paper>
-      ) : null}
-    </div>
+  const normalView = shouldShowInfoPaper ? (
+    <Paper className = {classes.infoPaper} elevation = { 0} >
+      {conditions}
+      {illegalAndHighScorers}
+      <Typography className={classes.comment} align="left" variant="body1"> {game.comment}</Typography>
+    </Paper>
+  ) : null
+
+  const editingView = (
+    <Paper className={classes.infoPaper} elevation={0}>
+      {editableConditions}
+    </Paper>
   )
+
+  return isEditing ? editingView : normalView
 }
 
 export default GameInfo

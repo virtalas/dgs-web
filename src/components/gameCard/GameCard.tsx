@@ -63,6 +63,8 @@ const GameCard: React.FC<Props> = (props) => {
 
   const [isEditing, setIsEditing] = useState(false)
   const [updating, setUpdating] = useState(false)
+  const [availableWeatherConditions, setAvailableWeatherConditions] = useState<Condition[]>([])
+  const [availableConditions, setAvailableConditions] = useState<Condition[]>([])
   // TODO: Fix(?) hack variable to make React render the game again.
   // Affects: when editing a stroke, the color should change after a number inputted and onfocus happens.
   // Works in commit 6ec7087d99bfdf40bd4ae977f7f572c977e04f34
@@ -76,6 +78,10 @@ const GameCard: React.FC<Props> = (props) => {
       // TODO: Check that the spinner shows up
       gamesService.updateGame(game).then(() => setUpdating(false))
       setUpdating(true)
+    } else if (availableWeatherConditions.length === 0) {
+      // Fetch available conditions for editing.
+      gamesService.getAvailableWeatherConditions().then(c => setAvailableWeatherConditions(c))
+      gamesService.getAvailableConditions().then(c => setAvailableConditions(c))
     }
     setIsEditing(!isEditing)
   }
@@ -157,7 +163,13 @@ const GameCard: React.FC<Props> = (props) => {
       {isEditing ? gameDateEditing : gameDate}
       {updating ? progressSpinner : editButton}
       <ScoreCard game={game} setGame={updateGame} isEditing={isEditing} />
-      <GameInfo game={game} />
+      <GameInfo
+        game={game}
+        setGame={updateGame}
+        isEditing={isEditing}
+        availableWeatherConditions={availableWeatherConditions}
+        availableConditions={availableConditions}
+      />
     </BlueCard>
   )
 }
