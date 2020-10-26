@@ -48,7 +48,12 @@ const useStyles = makeStyles((theme) => ({
   temperatureEdit: {
     width: 130,
     marginBottom: 10,
-  }
+  },
+  commentEdit: {
+    width: '100%',
+    marginTop: 10,
+    marginBottom: 40, // Make room for 'Save' and 'Cancel' buttons.
+  },
 }))
 
 interface Props {
@@ -84,6 +89,11 @@ const GameInfo: React.FC<Props> = (props) => {
       game.temperature = input === '' ? null : Number(input)
       setGame(game)
     }
+  }
+
+  const handleCommentChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    game.comment = event.target.value
+    setGame(game)
   }
 
   const handleConditionToggle = (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
@@ -136,6 +146,17 @@ const GameInfo: React.FC<Props> = (props) => {
       InputProps={{
         endAdornment: <InputAdornment position="end">°C</InputAdornment>,
       }}
+    />
+  ) : null
+
+  const commentEdit = isEditing ? (
+    <TextField
+      className={classes.commentEdit}
+      value={game.comment}
+      multiline={true}
+      rowsMax={100}
+      placeholder="Comment"
+      onChange={handleCommentChange}
     />
   ) : null
   
@@ -204,6 +225,7 @@ const GameInfo: React.FC<Props> = (props) => {
     <Paper className={classes.infoPaper} elevation={0}>
       {temperatureEdit}
       {editableConditions}
+      {commentEdit}
     </Paper>
   )
 

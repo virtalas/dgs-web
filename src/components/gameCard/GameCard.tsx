@@ -1,19 +1,21 @@
 import React, { useState } from 'react'
+import _ from 'lodash'
 
 import { makeStyles } from '@material-ui/core/styles'
 import Typography from '@material-ui/core/Typography'
 import { IconButton, withStyles } from '@material-ui/core'
 import EditIcon from '@material-ui/icons/Edit'
 import DoneIcon from '@material-ui/icons/Done'
+import ClearIcon from '@material-ui/icons/Clear'
 import CircularProgress from '@material-ui/core/CircularProgress'
 import DayjsUtils from '@date-io/dayjs'
 import { MuiPickersUtilsProvider, DateTimePicker } from '@material-ui/pickers'
+import { MaterialUiPickersDate } from '@material-ui/pickers/typings/date'
 
 import ScoreCard from './ScoreCard'
 import GameInfo from './GameInfo'
 import BlueCard from './BlueCard'
 import gamesService from '../../services/gamesService'
-import { MaterialUiPickersDate } from '@material-ui/pickers/typings/date'
 
 const useStyles = makeStyles((theme) => ({
   title: {
@@ -23,6 +25,11 @@ const useStyles = makeStyles((theme) => ({
     position: 'absolute',
     bottom: 10,
     right: 8,
+  },
+  cancelButton: {
+    position: 'absolute',
+    bottom: 10,
+    right: 55,
   },
   spinner: {
     padding: 5,
@@ -53,9 +60,8 @@ interface Props {
   setGame: (game: Game) => void,
 }
 
-// TODO: if startDate != null, render "1.1.1111 9.30 - 10.45"
 // TODO: When isEditing == true, hide new game button
-// TODO: update game & backend after editing done (also after individual edits).
+// TODO: Position of edit button when there is no GameInfo
 
 const GameCard: React.FC<Props> = (props) => {
   const classes = useStyles()
@@ -65,10 +71,11 @@ const GameCard: React.FC<Props> = (props) => {
   const [updating, setUpdating] = useState(false)
   const [availableWeatherConditions, setAvailableWeatherConditions] = useState<Condition[]>([])
   const [availableConditions, setAvailableConditions] = useState<Condition[]>([])
+  const [originalGame, setOriginalGame] = useState<Game>()
   // TODO: Fix(?) hack variable to make React render the game again.
   // Affects: when editing a stroke, the color should change after a number inputted and onfocus happens.
   // Works in commit 6ec7087d99bfdf40bd4ae977f7f572c977e04f34
-  const [update, setUpdate] = useState(false)
+  const [update, updateChildren] = useState(false)
 
   // TODO(?): if game.creator == user || user.isAdmin
   const allowedToEdit = true
@@ -79,6 +86,7 @@ const GameCard: React.FC<Props> = (props) => {
       gamesService.updateGame(game).then(() => setUpdating(false))
       setUpdating(true)
     } else if (availableWeatherConditions.length === 0) {
+      setOriginalGame(_.cloneDeep(game))
       // Fetch available conditions for editing.
       gamesService.getAvailableWeatherConditions().then(c => setAvailableWeatherConditions(c))
       gamesService.getAvailableConditions().then(c => setAvailableConditions(c))
@@ -86,9 +94,18 @@ const GameCard: React.FC<Props> = (props) => {
     setIsEditing(!isEditing)
   }
 
+  const handleCancelEdit = () => {
+    if (window.confirm('Cancel editing?')) {
+      if (originalGame) {
+        updateGame(originalGame) // TODO: BUG: Original game does is not rendered
+      }
+      setIsEditing(!isEditing)
+    }
+  }
+
   const updateGame = (game: Game) => {
     setGame(game)
-    setUpdate(!update)
+    updateChildren(!update)
   }
 
   const handleStartDateChange = (date: MaterialUiPickersDate, value?: string | null | undefined) => {
@@ -110,6 +127,12 @@ const GameCard: React.FC<Props> = (props) => {
   const editButton = allowedToEdit ? (
     <IconButton aria-label="edit" className={classes.actionButton} onClick={toggleEdit}>
       {isEditing ? (<DoneIcon />) : (<EditIcon />)}
+    </IconButton>
+  ) : null
+
+  const cancelButton = isEditing ? (
+    <IconButton aria-label="edit" className={classes.cancelButton} onClick={handleCancelEdit}>
+      <ClearIcon />
     </IconButton>
   ) : null
 
@@ -161,6 +184,7 @@ const GameCard: React.FC<Props> = (props) => {
     <BlueCard>
       <Typography variant="h6" className={classes.title}>{game.course.name}</Typography>
       {isEditing ? gameDateEditing : gameDate}
+      {isEditing ? cancelButton : null}
       {updating ? progressSpinner : editButton}
       <ScoreCard game={game} setGame={updateGame} isEditing={isEditing} />
       <GameInfo

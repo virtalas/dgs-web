@@ -77,12 +77,9 @@ const Games: React.FC<{}> = () => {
 
     const fetchGames = () => {
       gamesService.getGames(selectedYear, selectedMonth).then(fetchedGames => {
-        // (TODO: remove) Simulate network delay:
-        setTimeout(function () {
-          setFetchedMonths(months => months.concat([selectedMonth])) // Mark games for this month as fetched.
-          setGames(games => games.concat(fetchedGames))
-          setIsLoading(false)
-        }, 500);
+        setFetchedMonths(months => months.concat([selectedMonth])) // Mark games for this month as fetched.
+        setGames(games => games.concat(fetchedGames))
+        setIsLoading(false)
       })
     }
 
