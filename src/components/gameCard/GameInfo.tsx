@@ -1,10 +1,11 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { makeStyles } from '@material-ui/core/styles'
 import Paper from '@material-ui/core/Paper'
 import Typography from '@material-ui/core/Typography'
 import Chip from '@material-ui/core/Chip'
 
 import { highScoreBlue, illegalRed } from '../../constants/Colors'
+import { InputAdornment, TextField } from '@material-ui/core'
 
 const chipHeight = 22
 
@@ -44,6 +45,10 @@ const useStyles = makeStyles((theme) => ({
   comment: {
     marginTop: 5,
   },
+  temperatureEdit: {
+    width: 130,
+    marginBottom: 10,
+  }
 }))
 
 interface Props {
@@ -58,6 +63,8 @@ const GameInfo: React.FC<Props> = (props) => {
   const classes = useStyles()
   const { game, setGame, isEditing, availableWeatherConditions, availableConditions } = props
 
+  const [temperature, setTemperature] = useState<string>(String(game.temperature))
+
   const handlePlayerClipClick = () => {
     // TODO
     alert('Coming soon: Go to clicked player\'s page!')
@@ -66,6 +73,17 @@ const GameInfo: React.FC<Props> = (props) => {
   const handleConditionChipClick = () => {
     // TODO
     alert('Coming soon: Search games by clicked condition!')
+  }
+
+  const handleTemperatureChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const input = event.target.value
+    if (input === '-') {
+      setTemperature(input)
+    } else if (!isNaN(Number(input)) || input === '') {
+      setTemperature(input)
+      game.temperature = input === '' ? null : Number(input)
+      setGame(game)
+    }
   }
 
   const handleConditionToggle = (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
@@ -107,7 +125,19 @@ const GameInfo: React.FC<Props> = (props) => {
     </div>
   )
 
-  const temperatureEdit = null
+  const temperatureEdit = isEditing ? (
+    <TextField
+      className={classes.temperatureEdit}
+      label="Temperature"
+      size="small"
+      value={temperature}
+      onChange={handleTemperatureChange}
+      id="temperature-edit"
+      InputProps={{
+        endAdornment: <InputAdornment position="end">°C</InputAdornment>,
+      }}
+    />
+  ) : null
   
   const editableConditions = isEditing ? (
     <div className={classes.chipRow}>
@@ -172,6 +202,7 @@ const GameInfo: React.FC<Props> = (props) => {
 
   const editingView = (
     <Paper className={classes.infoPaper} elevation={0}>
+      {temperatureEdit}
       {editableConditions}
     </Paper>
   )
