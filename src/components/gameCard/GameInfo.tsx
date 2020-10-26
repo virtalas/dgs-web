@@ -42,6 +42,15 @@ const useStyles = makeStyles((theme) => ({
     position: 'relative',
     left: -5,
   },
+  illegalDisabledChip: {
+    height: chipHeight,
+    width: 100,
+    fontSize: '97%',
+    cursor: 'pointer',
+    // color: 'white',
+    position: 'relative',
+    left: -5,
+  },
   comment: {
     marginTop: 5,
   },
@@ -70,9 +79,19 @@ const GameInfo: React.FC<Props> = (props) => {
 
   const [temperature, setTemperature] = useState<string>(String(game.temperature))
 
-  const handlePlayerClipClick = () => {
-    // TODO
-    alert('Coming soon: Go to clicked player\'s page!')
+  const handlePlayerClipClick = (event: React.MouseEvent) => {
+    const name = event.currentTarget.textContent?.split('Illegal game')[1]
+    if (isEditing) {
+      if (game.illegalScorers.find(n => n === name)) {
+        game.illegalScorers = game.illegalScorers.filter(n => n !== name)
+      } else {
+        game.illegalScorers = game.illegalScorers.concat(String(name))
+      }
+      setGame(game)
+    } else {
+      // TODO
+      alert('Coming soon: Go to ' + name + '\'s page!')
+    }
   }
 
   const handleConditionChipClick = () => {
@@ -183,32 +202,41 @@ const GameInfo: React.FC<Props> = (props) => {
     </div>
   ) : null
 
+  const createColorChip = (styleClass: string, label: string, name: string, color: 'primary' | 'secondary', index: number) => {
+    const variant = isEditing && game.illegalScorers.find(n => n === name) ? 'default' : 'outlined'
+    const classs = isEditing && game.illegalScorers.find(n => n === name) ? classes.illegalChip : styleClass
+    return (
+      <Chip
+        classes={{ icon: classs } as any}
+        icon={<Chip color={color} variant={variant} label={label} />}
+        label={name}
+        variant="outlined"
+        color={color}
+        onClick={handlePlayerClipClick}
+        className={classes.chip}
+        key={index}
+      />
+    )
+  }
+
   const illegalAndHighScorers = (
     <div className={classes.chipRow}>
-      {game.highScorers.map((name: string, index: number) => (
-        <Chip
-          classes={{ icon: classes.highScoreChip } as any}
-          icon={<Chip label="High score" />}
-          label={name}
-          variant="outlined"
-          color="primary"
-          onClick={handlePlayerClipClick}
-          className={classes.chip}
-          key={index} />
-      ))}
-      {game.illegalScorers.map((name: string, index: number) => (
-        <Chip
-          classes={{ icon: classes.illegalChip } as any}
-          icon={<Chip label="Illegal game" />}
-          label={name}
-          variant="outlined"
-          color="secondary"
-          onClick={handlePlayerClipClick}
-          className={classes.chip}
-          key={index} />
-      ))}
+      {isEditing ? null : game.highScorers.map((name: string, index: number) => {
+        return createColorChip(classes.highScoreChip, 'High score', name, 'primary', index)
+      })}
+      {game.illegalScorers.map((name: string, index: number) => {
+        return createColorChip(classes.illegalChip, 'Illegal game', name, 'secondary', index)
+      })}
     </div>
   )
+
+  const illegalScorerEdit = isEditing ? (
+    <div className={classes.chipRow}>
+      {game.scores.map((scores: PlayerScores, index: number) => {
+        return createColorChip(classes.illegalDisabledChip, 'Illegal game', scores.player.firstName, 'secondary', index)
+      })}
+    </div>
+  ) : null
 
   const shouldShowInfoPaper = game.temperature || game.weatherConditions.length || game.conditions.length ||
                               game.highScorers.length || game.illegalScorers.length || game.comment || game.contestName
@@ -221,13 +249,14 @@ const GameInfo: React.FC<Props> = (props) => {
     </Paper>
   ) : null
 
-  const editingView = (
+  const editingView = isEditing ? (
     <Paper className={classes.infoPaper} elevation={0}>
       {temperatureEdit}
       {editableConditions}
+      {illegalScorerEdit}
       {commentEdit}
     </Paper>
-  )
+  ) : null
 
   return isEditing ? editingView : normalView
 }

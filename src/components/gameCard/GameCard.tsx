@@ -62,6 +62,7 @@ interface Props {
 
 // TODO: When isEditing == true, hide new game button
 // TODO: Position of edit button when there is no GameInfo
+// TODO: 'Save' and 'Cancel' texts to buttons
 
 const GameCard: React.FC<Props> = (props) => {
   const classes = useStyles()
@@ -83,6 +84,7 @@ const GameCard: React.FC<Props> = (props) => {
   const toggleEdit = () => {
     if (isEditing) {
       // TODO: Check that the spinner shows up
+      // TODO: setGame(returnedGame) in then() of gamesService.updateGame
       gamesService.updateGame(game).then(() => setUpdating(false))
       setUpdating(true)
     } else if (availableWeatherConditions.length === 0) {
