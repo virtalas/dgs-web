@@ -47,7 +47,6 @@ const useStyles = makeStyles((theme) => ({
     width: 100,
     fontSize: '97%',
     cursor: 'pointer',
-    // color: 'white',
     position: 'relative',
     left: -5,
   },
@@ -174,7 +173,7 @@ const GameInfo: React.FC<Props> = (props) => {
       value={game.comment}
       multiline={true}
       rowsMax={100}
-      placeholder="Comment"
+      placeholder="Enter a comment"
       onChange={handleCommentChange}
     />
   ) : null
