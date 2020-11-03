@@ -1,5 +1,3 @@
-import { dateFrom } from '../utils/DateUtil'
-
 const mockGame: Game = {
   id: "123sdfsdf",
   course: {

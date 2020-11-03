@@ -1,10 +1,12 @@
-import React from 'react'
+import React, { useState } from 'react'
+import { Redirect } from 'react-router'
 
 import { Button, Typography } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
 
 import GameCard from '../gameCard/GameCard'
 import { sneakyGrey } from '../../constants/Colors'
+import gamesService from '../../services/gamesService'
 
 const useStyles = makeStyles((theme) => ({
   gameContainer: {
@@ -47,9 +49,16 @@ const GameInfoView: React.FC<Props> = (props) => {
   const classes = useStyles()
 
   const { game, updateGame, availableWeatherConditions, availableConditions, updating } = props
+  const [redirect, setRedirect] = useState(false)
 
   const handleFinish = () => {
-    
+    gamesService.updateGame(game)
+      .then(() => setRedirect(true))
+      .catch(() => alert('Failed to send game.'))
+  }
+
+  if (redirect) {
+    return <Redirect to={'/'} />
   }
 
   return (

@@ -1,10 +1,9 @@
-import React, { useState } from 'react'
+import React from 'react'
 import SwipeableViews from 'react-swipeable-views'
 import { isMobile } from 'react-device-detect'
 
 import HoleNavigation from './HoleNavigation'
 import PlayerStrokeInput from './PlayerStrokeInput'
-import gamesService from '../../services/gamesService'
 import { gameInfoViewTab } from './GameInput'
 
 interface Props {
