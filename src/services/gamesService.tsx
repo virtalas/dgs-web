@@ -46,7 +46,7 @@ const mockGame: Game = {
   conditions: [],
   highScorers: [],
   illegalScorers: [],
-  comment: null,
+  comment: '',
   contestName: null,
 }
 

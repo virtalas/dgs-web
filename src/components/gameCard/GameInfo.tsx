@@ -72,11 +72,16 @@ interface Props {
   availableConditions: Condition[],
 }
 
+// TODO: Temperature editing: use numeric keyboard
+
 const GameInfo: React.FC<Props> = (props) => {
   const classes = useStyles()
   const { game, setGame, isEditing, availableWeatherConditions, availableConditions } = props
 
-  const [temperature, setTemperature] = useState<string>(String(game.temperature))
+  // eslint-disable-next-line
+  const gameTemperature = game.temperature != null || game.temperature != undefined ? game.temperature : ''
+  const [temperature, setTemperature] = useState<string>(String(gameTemperature))
+  const [comment, setComment] = useState<string>(game.comment)
 
   const handlePlayerClipClick = (event: React.MouseEvent) => {
     const name = event.currentTarget.textContent?.split('Illegal game')[1]
@@ -98,19 +103,27 @@ const GameInfo: React.FC<Props> = (props) => {
     alert('Coming soon: Search games by clicked condition!')
   }
 
+  // TODO: temperature field shouldn't accept space (' ')
   const handleTemperatureChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const input = event.target.value
     if (input === '-') {
       setTemperature(input)
     } else if (!isNaN(Number(input)) || input === '') {
       setTemperature(input)
-      game.temperature = input === '' ? null : Number(input)
-      setGame(game)
     }
   }
 
+  const handleTemperatureBlur = (_: React.FocusEvent<HTMLTextAreaElement | HTMLInputElement>) => {
+    game.temperature = temperature === '' ? null : Number(temperature)
+    setGame(game)
+  }
+
   const handleCommentChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    game.comment = event.target.value
+    setComment(event.target.value)
+  }
+
+  const handleCommentBlur = (event: React.FocusEvent<HTMLTextAreaElement | HTMLInputElement>) => {
+    game.comment = comment
     setGame(game)
   }
 
@@ -160,6 +173,7 @@ const GameInfo: React.FC<Props> = (props) => {
       size="small"
       value={temperature}
       onChange={handleTemperatureChange}
+      onBlur={handleTemperatureBlur}
       id="temperature-edit"
       InputProps={{
         endAdornment: <InputAdornment position="end">°C</InputAdornment>,
@@ -170,15 +184,16 @@ const GameInfo: React.FC<Props> = (props) => {
   const commentEdit = isEditing ? (
     <TextField
       className={classes.commentEdit}
-      value={game.comment}
+      value={comment}
       multiline={true}
       rowsMax={100}
       placeholder="Enter a comment"
       onChange={handleCommentChange}
+      onBlur={handleCommentBlur}
     />
   ) : null
   
-  const editableConditions = isEditing ? (
+  const editableConditions = isEditing && availableConditions.length > 0 ? (
     <div className={classes.chipRow}>
       {availableWeatherConditions.map((condition: Condition, index: number) => (
         <Chip

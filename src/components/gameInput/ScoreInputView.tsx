@@ -9,18 +9,18 @@ import { gameInfoViewTab } from './GameInput'
 
 interface Props {
   game: Game,
-  setGame: (game: Game) => void,
+  updateGame: (game: Game) => void,
   swipeableViewStyle: any,
   holeNum: number,
   setHoleNum: (holeNum: number) => void,
   setTab: (tab: number) => void,
+  updating: boolean,
 }
 
 // TODO: Make column names: Player, To Par, OBs, Throws
 
 const ScoreInputView: React.FC<Props> = (props) => {
-  const { game, setGame, swipeableViewStyle, holeNum, setHoleNum, setTab } = props
-  const [updating, setUpdating] = useState(false)
+  const { game, updateGame, swipeableViewStyle, holeNum, setHoleNum, setTab, updating } = props
 
   const updateScores = (newScores: PlayerScores[]) => {
     newScores = calculateToParTotal(newScores, game.course.pars)
@@ -28,16 +28,7 @@ const ScoreInputView: React.FC<Props> = (props) => {
       ...game,
       scores: newScores,
     }
-    setGame(newGame as Game)
-    updateGame()
-  }
-
-  const updateGame = () => {
-    if (game === undefined) return
-    setUpdating(true)
-    gamesService.updateGame(game as Game).then(() => {
-      setUpdating(false)
-    })
+    updateGame(newGame as Game)
   }
 
   const handlePrevHoleClick = () => {

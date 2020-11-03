@@ -9,6 +9,6 @@ interface Game {
   conditions: Condition[],
   highScorers: string[],
   illegalScorers: string[],
-  comment: string | null,
+  comment: string,
   contestName: string | null,
 }

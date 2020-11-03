@@ -56,14 +56,29 @@ const GameInput: React.FC<{}> = (props: any) => {
   const gameId = props.match.params.gameid // Props type as any to avoid props.match type problem.
 
   const [game, setGame] = useState<Game>()
+  const [availableWeatherConditions, setAvailableWeatherConditions] = useState<Condition[]>([])
+  const [availableConditions, setAvailableConditions] = useState<Condition[]>([])
   const [holeNum, setHoleNum] = useState(1) // TODO: Use findIndex() to start from first 0 stroked hole
   const [tab, setTab] = React.useState(scoreInputViewTab)
+  const [updating, setUpdating] = useState(false)
 
   useEffect(() => {
     gamesService.getGame(gameId).then((fetchedGame) => {
       setGame(fetchedGame)
     })
+    gamesService.getAvailableWeatherConditions().then(c => setAvailableWeatherConditions(c))
+    gamesService.getAvailableConditions().then(c => setAvailableConditions(c))
   }, [gameId])
+
+  const updateGame = (game: Game) => {
+    console.log('update')
+    if (game === undefined) return
+    setUpdating(true)
+    gamesService.updateGame(game).then(() => {
+      setUpdating(false)
+    })
+    setGame(game)
+  }
 
   // Show loading screen while fetching game:
   if (game === undefined) {
@@ -77,11 +92,12 @@ const GameInput: React.FC<{}> = (props: any) => {
   const scoreInputView = (
     <ScoreInputView
       game={game}
-      setGame={setGame}
+      updateGame={updateGame}
       swipeableViewStyle={classes.swipeableView}
       holeNum={holeNum}
       setHoleNum={setHoleNum}
       setTab={setTab}
+      updating={updating}
     />
   )
 
@@ -98,7 +114,13 @@ const GameInput: React.FC<{}> = (props: any) => {
   )
 
   const gameInfoView = (
-    <GameInfoView game={game} setGame={setGame} />
+    <GameInfoView
+      game={game}
+      updateGame={updateGame}
+      availableWeatherConditions={availableWeatherConditions}
+      availableConditions={availableConditions}
+      updating={updating}
+    />
   )
 
   let activeView

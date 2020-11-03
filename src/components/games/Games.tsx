@@ -64,6 +64,8 @@ const Games: React.FC<{}> = () => {
   const [selectedMonth, setSelectedMonth] = useState<number>(currentMonth) // 0 = January
   const [selectedYear, setSelectedYear] = useState<number>(currentYear)
   const [monthsThatHaveGames, setMonthsThatHaveGames] = useState<GameMonths[]>()
+  const [availableWeatherConditions, setAvailableWeatherConditions] = useState<Condition[]>([])
+  const [availableConditions, setAvailableConditions] = useState<Condition[]>([])
   const [isLoading, setIsLoading] = useState<boolean>(false)
 
   const gamesToShow = games.filter(game => game.endDate.getMonth() === selectedMonth
@@ -96,6 +98,12 @@ const Games: React.FC<{}> = () => {
       // Fetch games for selectedMonth.
       fetchGames()
     }
+
+    // Fetch available conditions (for editing, search)
+    if (availableConditions.length === 0) {
+      gamesService.getAvailableWeatherConditions().then(c => setAvailableWeatherConditions(c))
+      gamesService.getAvailableConditions().then(c => setAvailableConditions(c))
+    }
   }, [selectedYear, selectedMonth]) // eslint-disable-line react-hooks/exhaustive-deps
 
   const clearFetchedGames = () => {
@@ -123,7 +131,13 @@ const Games: React.FC<{}> = () => {
         />
       </div>
       {gamesToShow.map(game => (
-        <GameCard game={game} setGame={setGame} key={game.id}/>
+        <GameCard
+          game={game}
+          setGame={setGame}
+          availableWeatherConditions={availableWeatherConditions}
+          availableConditions={availableConditions}
+          key={game.id}
+        />
       ))}
       {gamesToShow.length === 0 && isLoading ? (
         <div className={classes.centerContainer}>

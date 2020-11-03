@@ -58,6 +58,10 @@ const DatePicker = withStyles({
 interface Props {
   game: Game,
   setGame: (game: Game) => void,
+  editOnly?: boolean,
+  disableScoreEditing?: boolean,
+  availableConditions: Condition[],
+  availableWeatherConditions: Condition[],
 }
 
 // TODO: When isEditing == true, hide new game button
@@ -66,12 +70,17 @@ interface Props {
 
 const GameCard: React.FC<Props> = (props) => {
   const classes = useStyles()
-  const { game, setGame } = props
+  const {
+    game,
+    setGame,
+    editOnly,
+    disableScoreEditing,
+    availableConditions,
+    availableWeatherConditions
+  } = props
 
-  const [isEditing, setIsEditing] = useState(false)
+  const [isEditing, setIsEditing] = useState(editOnly ? true : false) // to get rid of undefined
   const [updating, setUpdating] = useState(false)
-  const [availableWeatherConditions, setAvailableWeatherConditions] = useState<Condition[]>([])
-  const [availableConditions, setAvailableConditions] = useState<Condition[]>([])
   const [originalGame, setOriginalGame] = useState<Game>()
   // TODO: Fix(?) hack variable to make React render the game again.
   // Affects: when editing a stroke, the color should change after a number inputted and onfocus happens.
@@ -84,14 +93,11 @@ const GameCard: React.FC<Props> = (props) => {
   const toggleEdit = () => {
     if (isEditing) {
       // TODO: Check that the spinner shows up
-      // TODO: setGame(returnedGame) in then() of gamesService.updateGame
+      // TODO(?): setGame(returnedGame) in then() of gamesService.updateGame
       gamesService.updateGame(game).then(() => setUpdating(false))
       setUpdating(true)
-    } else if (availableWeatherConditions.length === 0) {
+    } else {
       setOriginalGame(_.cloneDeep(game))
-      // Fetch available conditions for editing.
-      gamesService.getAvailableWeatherConditions().then(c => setAvailableWeatherConditions(c))
-      gamesService.getAvailableConditions().then(c => setAvailableConditions(c))
     }
     setIsEditing(!isEditing)
   }
@@ -99,13 +105,13 @@ const GameCard: React.FC<Props> = (props) => {
   const handleCancelEdit = () => {
     if (window.confirm('Cancel editing?')) {
       if (originalGame) {
-        updateGame(originalGame) // TODO: BUG: Original game does is not rendered
+        refreshGame(originalGame) // TODO: BUG: Original game does is not rendered
       }
       setIsEditing(!isEditing)
     }
   }
 
-  const updateGame = (game: Game) => {
+  const refreshGame = (game: Game) => {
     setGame(game)
     updateChildren(!update)
   }
@@ -114,7 +120,7 @@ const GameCard: React.FC<Props> = (props) => {
     const newDate = date?.toDate()
     if (newDate) {
       game.startDate = newDate
-      updateGame(game)
+      refreshGame(game)
     }
   }
 
@@ -122,11 +128,11 @@ const GameCard: React.FC<Props> = (props) => {
     const newDate = date?.toDate()
     if (newDate) {
       game.endDate = newDate
-      updateGame(game)
+      refreshGame(game)
     }
   }
 
-  const editButton = allowedToEdit ? (
+  const editButton = allowedToEdit && !editOnly ? (
     <IconButton aria-label="edit" className={classes.actionButton} onClick={toggleEdit}>
       {isEditing ? (<DoneIcon />) : (<EditIcon />)}
     </IconButton>
@@ -186,12 +192,12 @@ const GameCard: React.FC<Props> = (props) => {
     <BlueCard>
       <Typography variant="h6" className={classes.title}>{game.course.name}</Typography>
       {isEditing ? gameDateEditing : gameDate}
-      {isEditing ? cancelButton : null}
+      {isEditing && !editOnly ? cancelButton : null}
       {updating ? progressSpinner : editButton}
-      <ScoreCard game={game} setGame={updateGame} isEditing={isEditing} />
+      <ScoreCard game={game} setGame={refreshGame} isEditing={disableScoreEditing ? false : isEditing} />
       <GameInfo
         game={game}
-        setGame={updateGame}
+        setGame={refreshGame}
         isEditing={isEditing}
         availableWeatherConditions={availableWeatherConditions}
         availableConditions={availableConditions}
