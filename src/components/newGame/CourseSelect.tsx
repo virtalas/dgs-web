@@ -14,9 +14,9 @@ interface Props {
   formControlStyle: string,
   course: Course,
   setCourse: (course: Course) => void,
-  layout: Layout,
-  setLayout: (layout: Layout) => void,
-  setGameCreatable: (creatable: boolean) => void,
+  layout?: Layout,
+  setLayout?: (layout: Layout) => void,
+  setGameCreatable?: (creatable: boolean) => void,
 }
 
 // TODO: Better layout for sort button.
@@ -35,7 +35,9 @@ const CourseSelect: React.FC<Props> = (props) => {
   }
 
   function selectActiveLayout(forCourse: Course) {
-    setLayout(getActiveLayout(forCourse))
+    if (setLayout) {
+      setLayout(getActiveLayout(forCourse))
+    }
   }
 
   const handleCourseChange = (event: React.ChangeEvent<{ value: unknown }>, value: any) => {
@@ -53,7 +55,9 @@ const CourseSelect: React.FC<Props> = (props) => {
   const handleLayoutChange = (event: React.ChangeEvent<{ value: unknown }>, value: any) => {
     const selectedLayoutId = value.props.value as string
     const selectedLayout = course.layouts.find(layout => layout.id === selectedLayoutId) as Layout
-    setLayout(selectedLayout)
+    if (setLayout) {
+      setLayout(selectedLayout)
+    }
   }
 
   useEffect(() => {
@@ -62,7 +66,9 @@ const CourseSelect: React.FC<Props> = (props) => {
       setCourses(sortCourses(fetchedCourses, sortByPopularity))
       setCourse(fetchedCourses[0]) // Courses should be ordered by popularity (at least initially).
       selectActiveLayout(fetchedCourses[0])
-      setGameCreatable(true) // Even if the fetching of players fails, one player (user) and a course is enough.
+      if (setGameCreatable) {
+        setGameCreatable(true) // Even if the fetching of players fails, one player (user) and a course is enough.
+      }
     })
   }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
@@ -101,7 +107,7 @@ const CourseSelect: React.FC<Props> = (props) => {
     <FormControl variant="outlined" className={formControlStyle}>
       <InputLabel ref={inputLabel} htmlFor="layout-select">Layout</InputLabel>
       <Select
-        value={layout.id}
+        value={layout ? layout.id : 0}
         onChange={handleLayoutChange}
         input={<OutlinedInput labelWidth={labelWidth} name="layout" id="layout-select" />}
       >
@@ -118,7 +124,7 @@ const CourseSelect: React.FC<Props> = (props) => {
       {courseSelect}
       {sortButton}
       <br />
-      {layoutSelect}
+      {layout ? layoutSelect : null}
     </div>
   )
 }

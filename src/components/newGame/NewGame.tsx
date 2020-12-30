@@ -28,6 +28,8 @@ const user: Player = {
   admin: false,
 }
 
+// TODO: Update style: Don't use outlined buttons.
+
 const NewGame: React.FC<{}> = () => {
   const classes = useStyles()
 
@@ -35,7 +37,9 @@ const NewGame: React.FC<{}> = () => {
   const [newGameId, setNewGameId] = useState('')
   const [gameCreatable, setGameCreatable] = useState(false)
 
-  const [course, setCourse] = useState<Course>({id: '', name: 'Loading...', pars: [], total: 0, layouts: [], popularity: 0})
+  const [course, setCourse] = useState<Course>(
+    { id: '', name: 'Loading...', city: '', pars: [], total: 0, layouts: [], popularity: 0 }
+  )
   const [layout, setLayout] = useState<Layout>({id: '', name: 'Loading...', active: false})
   const [players, setPlayers] = useState<Player[]>([user]) // Pre-select the user as a player.
 

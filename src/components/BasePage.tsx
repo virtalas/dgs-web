@@ -14,6 +14,9 @@ import Games from './games/Games'
 import NewGame from './newGame/NewGame'
 import Players from './players/Players'
 import Courses from './courses/Courses'
+import NewSelection from './courses/NewSelection'
+import NewCourse from './courses/NewCourse'
+import NewLayout from './courses/NewLayout'
 import Graphs from './graphs/Graphs'
 import Competitions from './competitions/Competitions'
 import Info from './info/Info'
@@ -52,16 +55,13 @@ const BasePage: React.FC<Props> = (props) => {
 
   let shouldRenderNewButton = true
   let newButtonPath: LocationDescriptor = '/'
-  let newButtonColor = undefined
   switch (location.pathname) {
     case '/':
     case '/games':
       newButtonPath = '/games/new'
-      newButtonColor = 'primary'
       break
     case '/courses':
       newButtonPath = '/courses/new'
-      newButtonColor = 'secondary'
       break
       // TODO: Enable new player (login user) creation.
     // case '/players':
@@ -81,17 +81,20 @@ const BasePage: React.FC<Props> = (props) => {
           <PrivateRoute exact path="/" component={Games} />
           <PrivateRoute exact path="/games" component={Games} />
           <PrivateRoute exact path="/games/new" component={NewGame} />
-          <PrivateRoute path="/players" component={Players} />
-          <PrivateRoute path="/courses" component={Courses} />
-          <PrivateRoute path="/graphs" component={Graphs} />
-          <PrivateRoute path="/competitions" component={Competitions} />
-          <PrivateRoute path="/info" component={Info} />
+          <PrivateRoute exact path="/players" component={Players} />
+          <PrivateRoute exact path="/courses" component={Courses} />
+          <PrivateRoute exact path="/courses/new" component={NewSelection} />
+          <PrivateRoute exact path="/courses/new/course" component={NewCourse} />
+          <PrivateRoute exact path="/courses/new/layout/:id" component={NewLayout} />
+          <PrivateRoute exact path="/graphs" component={Graphs} />
+          <PrivateRoute exact path="/competitions" component={Competitions} />
+          <PrivateRoute exact path="/info" component={Info} />
 
           {/* TODO: Add a Fab button to continue inputting ongoing game */}
           {shouldRenderNewButton ? (
             <NavLink to={newButtonPath} className={classes.navLink} id="newButton">
               {/* Usage of 'any': https://material-ui.com/guides/typescript/#usage-of-component-property */}
-              <Fab color={newButtonColor as any} aria-label="Add" className={classes.fab}>
+              <Fab color="primary" aria-label="Add" className={classes.fab}>
                 <AddIcon />
               </Fab>
             </NavLink>

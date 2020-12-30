@@ -72,8 +72,6 @@ interface Props {
   availableConditions: Condition[],
 }
 
-// TODO: Temperature editing: use numeric keyboard
-
 const GameInfo: React.FC<Props> = (props) => {
   const classes = useStyles()
   const { game, setGame, isEditing, availableWeatherConditions, availableConditions } = props

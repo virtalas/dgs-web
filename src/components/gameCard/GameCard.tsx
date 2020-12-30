@@ -67,6 +67,7 @@ interface Props {
 // TODO: When isEditing == true, hide new game button
 // TODO: Position of edit button when there is no GameInfo
 // TODO: 'Save' and 'Cancel' texts to buttons
+// TODO: Add a button: 'Continue adding scores', that links to Game inputting view.
 
 const GameCard: React.FC<Props> = (props) => {
   const classes = useStyles()

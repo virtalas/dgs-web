@@ -2,6 +2,7 @@ const mockCourses: Course[] = [
   {
     id: 'fsdfefesd',
     name: 'Tali',
+    city: 'Helsinki',
     pars: [5,3,3,3,3,3,3,3,3,4,3,3,3,3,3,3,4,3],
     total: 58,
     layouts: [
@@ -13,6 +14,7 @@ const mockCourses: Course[] = [
   {
     id: 'gd5rgjffs',
     name: 'Siltamäki',
+    city: 'Helsinki',
     pars: [3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3],
     total: 54,
     layouts: [
@@ -24,6 +26,7 @@ const mockCourses: Course[] = [
   {
     id: 'gdh6u4sghgj',
     name: 'Kivikko',
+    city: 'Helsinki',
     pars: [3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3],
     total: 54,
     layouts: [
@@ -39,6 +42,12 @@ const getCourses = async (): Promise<Course[]> => {
   return mockCourses
 }
 
+const getCourse = async (id: string): Promise<Course> => {
+  // TODO
+  return mockCourses[0]
+}
+
 export default {
   getCourses,
+  getCourse,
 }

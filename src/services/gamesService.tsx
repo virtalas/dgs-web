@@ -3,6 +3,7 @@ const mockGame: Game = {
   course: {
     id: "fds3ury83ofh",
     name: "Puolarmaari",
+    city: 'Helsinki',
     pars: [3, 4, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 4, 3, 3, 3],
     total: 60,
     layouts: [
@@ -53,6 +54,7 @@ const mockGames: Game[] = [{
   course: {
     id: "fds3ury83ofh",
     name: "Puolarmaari",
+    city: 'Helsinki',
     pars: [3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 4, 3, 3, 3, 3, 3],
     total: 61,
     layouts: [
@@ -101,6 +103,7 @@ const mockGames: Game[] = [{
   course: {
     id: "uflshf8sls",
     name: "Puolarmaari",
+    city: 'Helsinki',
     pars: [3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3],
     total: 60,
     layouts: [
@@ -148,6 +151,7 @@ const mockGames: Game[] = [{
   id: "1253rffsfsesfe",
   course: {
     id: "j8fslof8sl3",
+    city: 'Helsinki',
     name: "Tali",
     pars: [3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3],
     total: 60,
@@ -197,6 +201,7 @@ const mockGames: Game[] = [{
   course: {
     id: "jfs9ö3fus9ljfsi",
     name: "Shorty",
+    city: 'Helsinki',
     pars: [3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3],
     total: 60,
     layouts: [
@@ -245,6 +250,7 @@ const mockGames: Game[] = [{
   course: {
     id: "flsul8lsejiflse",
     name: "Puolarmaari",
+    city: 'Helsinki',
     pars: [3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3],
     total: 60,
     layouts: [
@@ -293,6 +299,7 @@ const mockGames: Game[] = [{
     course: {
       id: "nfuslefh8lsje",
       name: "Kivikko",
+      city: 'Helsinki',
       pars: [3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3],
       total: 60,
       layouts: [
@@ -341,6 +348,7 @@ const mockGames: Game[] = [{
     course: {
       id: "j9göu8rlgudlig",
       name: "Tali",
+      city: 'Helsinki',
       pars: [3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3],
       total: 60,
       layouts: [
@@ -389,6 +397,7 @@ const mockGames: Game[] = [{
   course: {
     id: "nfuslefh8lsje",
     name: "Puolarmaari",
+    city: 'Helsinki',
     pars: [3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3],
     total: 60,
     layouts: [
@@ -437,6 +446,7 @@ const mockGames: Game[] = [{
   course: {
     id: "j9göu8rlgudlig",
     name: "Puolarmaari",
+    city: 'Helsinki',
     pars: [3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3],
     total: 60,
     layouts: [
@@ -485,6 +495,7 @@ const mockGames: Game[] = [{
     course: {
       id: "j9göu8rlgudlig",
       name: "Puolarmaari",
+      city: 'Helsinki',
       pars: [3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3],
       total: 60,
       layouts: [
@@ -533,6 +544,7 @@ const mockGames: Game[] = [{
     course: {
       id: "j9göu8rlgudlig",
       name: "Puolarmaari",
+      city: 'Helsinki',
       pars: [3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3],
       total: 60,
       layouts: [
