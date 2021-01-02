@@ -29,6 +29,7 @@ const user: Player = {
 }
 
 // TODO: Update style: Don't use outlined buttons.
+// TODO: Center by using Grids (e.g in NewLayout.tsx)
 
 const NewGame: React.FC<{}> = () => {
   const classes = useStyles()

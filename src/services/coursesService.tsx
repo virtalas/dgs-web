@@ -47,7 +47,13 @@ const getCourse = async (id: string): Promise<Course> => {
   return mockCourses[0]
 }
 
+const createLayout = async (courseId: string, name: string, description: string, mapURL: string, pars: number[]): Promise<Layout> => {
+  // TODO
+  return { id: 'fdfuysdg', active: false, name: '2019 layout k' }
+}
+
 export default {
   getCourses,
   getCourse,
+  createLayout,
 }
