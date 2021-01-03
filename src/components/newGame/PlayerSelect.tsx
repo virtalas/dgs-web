@@ -13,6 +13,10 @@ import ListSubheader from '@material-ui/core/ListSubheader'
 import { OutlinedInput } from '@material-ui/core';
 
 const useStyles = makeStyles((theme) => ({
+  formControl: {
+    margin: 5,
+    minWidth: 120,
+  },
   chips: {
     display: 'flex',
     flexWrap: 'wrap',
@@ -32,7 +36,6 @@ const MenuProps = {
 }
 
 interface Props {
-  formControlStyle: string,
   players: Player[],
   setPlayers: (players: Player[]) => void,
   allPlayers: Player[],
@@ -41,7 +44,7 @@ interface Props {
 
 const PlayerSelect: React.FC<Props> = (props) => {
   const classes = useStyles()
-  const { formControlStyle, players, setPlayers, allPlayers, setGameCreatable } = props
+  const { players, setPlayers, allPlayers, setGameCreatable } = props
 
   const guests = allPlayers.filter(player => player.guest)
 
@@ -89,7 +92,7 @@ const PlayerSelect: React.FC<Props> = (props) => {
 
   // TODO: Bigger list height so no need for scrolling.
   return (
-    <FormControl variant="outlined" className={formControlStyle} error={players.length === 0}>
+    <FormControl variant="outlined" className={classes.formControl} error={players.length === 0}>
       <InputLabel ref={inputLabel} htmlFor="players-select">Players</InputLabel>
       <Select
         multiple

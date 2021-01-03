@@ -75,6 +75,7 @@ interface Props {
 }
 
 // TODO: remove big decrease/increase count buttons if the native up/down arrows are OK.
+// TODO: List other layouts for the course that already exist
 
 const NewLayout: React.FC<Props> = (props) => {
   const classes = useStyles()

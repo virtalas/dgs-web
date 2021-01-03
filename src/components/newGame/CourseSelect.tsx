@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 
+import { makeStyles } from '@material-ui/core/styles'
 import Button from '@material-ui/core/Button'
 import FormControl from '@material-ui/core/FormControl'
 import InputLabel from '@material-ui/core/InputLabel'
@@ -10,8 +11,14 @@ import OutlinedInput from '@material-ui/core/OutlinedInput'
 
 import coursesService from '../../services/coursesService'
 
+const useStyles = makeStyles((theme) => ({
+  formControl: {
+    margin: 5,
+    minWidth: 120,
+  },
+}))
+
 interface Props {
-  formControlStyle: string,
   course: Course,
   setCourse: (course: Course) => void,
   layout?: Layout,
@@ -24,7 +31,9 @@ interface Props {
 // TODO: Search function for courses.
 
 const CourseSelect: React.FC<Props> = (props) => {
-  const { formControlStyle, course, setCourse, layout, setLayout, setGameCreatable } = props
+  const classes = useStyles()
+
+  const { course, setCourse, layout, setLayout, setGameCreatable } = props
 
   const [courses, setCourses] = useState<Course[]>([course])
   const [sortByPopularity, setSortByPopularity] = useState(true)
@@ -80,7 +89,7 @@ const CourseSelect: React.FC<Props> = (props) => {
   }, [])
 
   const courseSelect = (
-    <FormControl variant="outlined" className={formControlStyle}>
+    <FormControl variant="outlined" className={classes.formControl}>
       <InputLabel ref={inputLabel} htmlFor="course-select">Course</InputLabel>
       <Select
         value={course.id}
@@ -95,7 +104,7 @@ const CourseSelect: React.FC<Props> = (props) => {
   )
 
   const sortButton = (
-    <FormControl variant="outlined" className={formControlStyle}>
+    <FormControl variant="outlined" className={classes.formControl}>
       <FormHelperText>Sorted by</FormHelperText>
       <Button variant="outlined" id="course-order" size="small" onClick={handleSortChange}>
         {sortByPopularity ? 'Popularity' : 'Name'}
@@ -104,7 +113,7 @@ const CourseSelect: React.FC<Props> = (props) => {
   )
 
   const layoutSelect = (
-    <FormControl variant="outlined" className={formControlStyle}>
+    <FormControl variant="outlined" className={classes.formControl}>
       <InputLabel ref={inputLabel} htmlFor="layout-select">Layout</InputLabel>
       <Select
         value={layout ? layout.id : 0}

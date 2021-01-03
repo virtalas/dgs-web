@@ -11,10 +11,6 @@ import gamesService from '../../services/gamesService'
 import playersService from '../../services/playersService'
 
 const useStyles = makeStyles((theme) => ({
-  formControl: {
-    margin: 5,
-    minWidth: 120,
-  },
   page: {
     margin: 20,
   },
@@ -68,7 +64,6 @@ const NewGame: React.FC<{}> = () => {
   return (
     <div id="newGamePage" className={classes.page}>
       <CourseSelect
-        formControlStyle={classes.formControl}
         course={course}
         setCourse={setCourse}
         layout={layout}
@@ -76,7 +71,6 @@ const NewGame: React.FC<{}> = () => {
         setGameCreatable={setGameCreatable}
       />
       <PlayerSelect
-        formControlStyle={classes.formControl}
         players={players}
         setPlayers={setPlayers}
         allPlayers={allPlayers}
