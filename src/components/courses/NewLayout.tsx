@@ -16,6 +16,7 @@ const inputWidth = '90%'
 
 const useStyles = makeStyles((theme) => ({
   page: {
+    marginBottom: theme.spacing(2),
   },
   formControl: {
     maxWidth: inputMaxWidth,

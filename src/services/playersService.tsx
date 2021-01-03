@@ -9,6 +9,24 @@ const mockPlayers = [
     firstName: 'Matti',
     guest: false,
     admin: false,
+  },
+  {
+    id: 'fdjskfl83fhsgls', // Fake logged in user.
+    firstName: 'Konsta',
+    guest: false,
+    admin: false,
+  },
+  {
+    id: 'gfsfdsf4gh',
+    firstName: 'Kaarle',
+    guest: false,
+    admin: false,
+  },
+  {
+    id: 'gfsfdsdsgs3sdff4gh',
+    firstName: 'Matilda',
+    guest: false,
+    admin: false,
   }
 ]
 

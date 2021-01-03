@@ -64,7 +64,7 @@ const NavigationDrawer: React.FC<Props> = (props) => {
           </ListItem>
         </NavLink>
         <NavLink to="/players" className={classes.navLink}>
-          <ListItem button disabled>
+          <ListItem button>
             <ListItemIcon><GroupIcon /></ListItemIcon>
             <ListItemText primary="Players" />
           </ListItem>

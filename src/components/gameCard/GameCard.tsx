@@ -68,6 +68,7 @@ interface Props {
 // TODO: Position of edit button when there is no GameInfo
 // TODO: 'Save' and 'Cancel' texts to buttons
 // TODO: Add a button: 'Continue adding scores', that links to Game inputting view.
+// TODO: View pictures. Game JSON stores how many pictures, and then use Material UI 'Skeleton' while loading.
 
 const GameCard: React.FC<Props> = (props) => {
   const classes = useStyles()

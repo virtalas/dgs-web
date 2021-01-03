@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 
 import { CircularProgress } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
+import Grow from '@material-ui/core/Grow'
 
 import GameCard from '../gameCard/GameCard'
 import MonthControls from './MonthControls'
@@ -130,14 +131,19 @@ const Games: React.FC<{}> = () => {
           monthsThatHaveGames={monthsThatHaveGames}
         />
       </div>
-      {gamesToShow.map(game => (
-        <GameCard
-          game={game}
-          setGame={setGame}
-          availableWeatherConditions={availableWeatherConditions}
-          availableConditions={availableConditions}
-          key={game.id}
-        />
+      
+      {gamesToShow.map((game, index) => (
+        <Grow in={true} {...{ timeout: index * 400 } }> {/* or timeout: index * 300 + 100 */}
+          <div>
+            <GameCard
+              game={game}
+              setGame={setGame}
+              availableWeatherConditions={availableWeatherConditions}
+              availableConditions={availableConditions}
+              key={game.id}
+            />
+          </div>
+        </Grow>
       ))}
       {gamesToShow.length === 0 && isLoading ? (
         <div className={classes.centerContainer}>

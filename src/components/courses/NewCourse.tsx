@@ -25,6 +25,8 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
+// TODO: Feature for uploading a picture of the course. (use same preview as NewLayout.tsx)
+
 const NewCourse: React.FC<{}> = () => {
   const classes = useStyles()
 
