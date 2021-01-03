@@ -63,7 +63,10 @@ const useStyles = makeStyles((theme) => ({
     maxWidth: inputMaxWidth,
   },
   createButton: {
-    margin: theme.spacing(4),
+    margin: theme.spacing(3),
+  },
+  totalPar: {
+    marginTop: theme.spacing(2),
   },
 }))
 
@@ -148,6 +151,8 @@ const NewLayout: React.FC<Props> = (props) => {
     }
   }
 
+  const totalPar = pars.reduce((a, b) => a + b, 0)
+
   const parInputs = pars.map((par, index) => (
     <TextField
       key={'par' + index}
@@ -175,6 +180,7 @@ const NewLayout: React.FC<Props> = (props) => {
           className={classes.formControl}
           label="Layout name"
           value={name}
+          required
           onChange={e => setName(e.target.value)}
         />
 
@@ -247,11 +253,16 @@ const NewLayout: React.FC<Props> = (props) => {
           {parInputs}
         </Grid>
 
+        <Typography className={classes.totalPar}>
+          Total par: {totalPar}
+        </Typography>
+
         <Button
           className={classes.createButton}
           variant="contained"
           color="primary"
           onClick={handleCreateLayout}
+          disabled={name.length === 0}
         >
           Create
         </Button>
