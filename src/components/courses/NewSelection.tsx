@@ -34,7 +34,7 @@ const NewSelection: React.FC<{}> = () => {
       </Typography>
 
       <Typography className={classes.paragraph}>
-        Layouts can then be added to the course.
+        Create a course and add layouts to it.
       </Typography>
 
       <NavLink className={classes.navLink} to="/courses/new/course">

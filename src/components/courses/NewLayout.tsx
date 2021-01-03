@@ -175,7 +175,9 @@ const NewLayout: React.FC<Props> = (props) => {
         justify="flex-start"
         alignItems="center"
       >
-        <h2>New Layout for {course.name}, {course.city}</h2>
+        <Typography className={classes.formControl} variant="h5">
+          New Layout for {course.name}, {course.city}
+        </Typography>
 
         <TextField
           className={classes.formControl}

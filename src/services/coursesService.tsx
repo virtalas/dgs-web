@@ -52,8 +52,22 @@ const createLayout = async (courseId: string, name: string, description: string,
   return { id: 'fdfuysdg', active: false, name: '2019 layout k' }
 }
 
+const createCourse = async (name: string, city: string): Promise<Course> => {
+  // TODO
+  return {
+    id: 'newly_created_id_hgurskgfg',
+    name: 'Tali',
+    city: 'Helsinki',
+    pars: [5, 3, 3, 3, 3, 3, 3, 3, 3, 4, 3, 3, 3, 3, 3, 3, 4, 3],
+    total: 58,
+    layouts: [],
+    popularity: 556,
+  }
+}
+
 export default {
   getCourses,
   getCourse,
   createLayout,
+  createCourse,
 }
