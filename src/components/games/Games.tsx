@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react'
 
-import { CircularProgress } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
-import Grow from '@material-ui/core/Grow'
 
-import GameCard from '../gameCard/GameCard'
 import MonthControls from './MonthControls'
 import gamesService from '../../services/gamesService'
+import GameList from './GameList'
+import { Button, Grid } from '@material-ui/core'
+import { Redirect } from 'react-router-dom'
 
 // TODO: When the device is rotated, don't open the drawer -> show whole score card instead
 // TODO: Fetch prev and next month as well.
@@ -29,33 +29,18 @@ const useStyles = makeStyles((theme) => ({
     margin: 0,
     width: '100%',
   },
-  noGames: {
-    color: 'grey',
-    margin: 0,
-    position: 'absolute',
-    top: '50%',
-    marginTop: -10, // Align with progress spinner
-    left: '50%',
-    marginLeft: -35, // Align with progress spinner
-    transform: 'translate(-50 %, -50 %)',
-  },
-  progress: {
-    margin: 'auto',
-    position: 'absolute',
-    top: 0,
-    bottom: 0,
-    left: 0,
-    right: 0,
-  },
-  centerContainer: {
-    height: theme.spacing(30),
-    position: 'relative',
-    zIndex: -1, // Don't block navigation controls.
-  },
 }))
 
-const Games: React.FC<{}> = () => {
+interface Props {
+  match: any,
+}
+
+const Games: React.FC<Props> = (props) => {
   const classes = useStyles()
+
+  const { match } = props
+  const gameId = match.params.id
+  const singleGameView = Boolean(gameId)
 
   const currentYear = new Date().getFullYear()
   const currentMonth = new Date().getMonth()
@@ -68,23 +53,39 @@ const Games: React.FC<{}> = () => {
   const [availableWeatherConditions, setAvailableWeatherConditions] = useState<Condition[]>([])
   const [availableConditions, setAvailableConditions] = useState<Condition[]>([])
   const [isLoading, setIsLoading] = useState<boolean>(false)
+  const [redirect, setRedirect] = useState(false)
 
-  const gamesToShow = games.filter(game => game.endDate.getMonth() === selectedMonth
-    && game.endDate.getFullYear() === selectedYear)
+  const gamesToShow = singleGameView ? games : games.filter(game => game.endDate.getMonth() === selectedMonth
+                                                            && game.endDate.getFullYear() === selectedYear)
+
+  const fetchGames = () => {
+    gamesService.getGames(selectedYear, selectedMonth).then(fetchedGames => {
+      setFetchedMonths(months => months.concat([selectedMonth])) // Mark games for this month as fetched.
+      setGames(games => games.concat(fetchedGames))
+      setIsLoading(false)
+    })
+  }
 
   // useEffect() works like componentDidMount(): runs only once after the component is rendered.
   // In addition, it reruns each time 'selectedYear' or 'selectedMonth' change.
   useEffect(() => {
+    // Fetch available conditions (for editing, search)
+    if (availableConditions.length === 0) {
+      gamesService.getAvailableWeatherConditions().then(c => setAvailableWeatherConditions(c))
+      gamesService.getAvailableConditions().then(c => setAvailableConditions(c))
+    }
+
     if (fetchedMonths.includes(selectedMonth)) return // Don't refetch already fetched games.
     setIsLoading(true)
 
-    const fetchGames = () => {
-      gamesService.getGames(selectedYear, selectedMonth).then(fetchedGames => {
-        setFetchedMonths(months => months.concat([selectedMonth])) // Mark games for this month as fetched.
-        setGames(games => games.concat(fetchedGames))
-        setIsLoading(false)
-      })
+    // Page for a single game:
+
+    if (singleGameView) {
+      gamesService.getGame(gameId).then(game => setGames([game]))
+      return
     }
+
+    // Page for multiple games:
 
     if (!monthsThatHaveGames) {
       // First fetch a list of years and months that have games:
@@ -100,12 +101,11 @@ const Games: React.FC<{}> = () => {
       fetchGames()
     }
 
-    // Fetch available conditions (for editing, search)
-    if (availableConditions.length === 0) {
-      gamesService.getAvailableWeatherConditions().then(c => setAvailableWeatherConditions(c))
-      gamesService.getAvailableConditions().then(c => setAvailableConditions(c))
-    }
   }, [selectedYear, selectedMonth]) // eslint-disable-line react-hooks/exhaustive-deps
+
+  if (redirect) {
+    return <Redirect to={'/games'} />
+  }
 
   const clearFetchedGames = () => {
     setFetchedMonths([])
@@ -119,52 +119,44 @@ const Games: React.FC<{}> = () => {
     setGames(games)
   }
 
+  const handleShowAllButton = () => setRedirect(true)
+
+  const monthControls = (
+    <MonthControls
+      selectedMonth={selectedMonth}
+      setSelectedMonth={setSelectedMonth}
+      selectedYear={selectedYear}
+      setSelectedYear={setSelectedYear}
+      clearFetchedGames={clearFetchedGames}
+      monthsThatHaveGames={monthsThatHaveGames}
+    />
+  )
+
   return (
     <div id="gamesPage" className={classes.root}>
-      <div className={classes.topControls}>
-        <MonthControls
-          selectedMonth={selectedMonth}
-          setSelectedMonth={setSelectedMonth}
-          selectedYear={selectedYear}
-          setSelectedYear={setSelectedYear}
-          clearFetchedGames={clearFetchedGames}
-          monthsThatHaveGames={monthsThatHaveGames}
-        />
-      </div>
-      
-      {gamesToShow.map((game, index) => (
-        <Grow key={'grow' + index} in={true} {...{ timeout: index * 300 + 100 } }>
-          <div>
-            <GameCard
-              game={game}
-              setGame={setGame}
-              availableWeatherConditions={availableWeatherConditions}
-              availableConditions={availableConditions}
-              key={game.id}
-            />
-          </div>
-        </Grow>
-      ))}
-      {gamesToShow.length === 0 && isLoading ? (
-        <div className={classes.centerContainer}>
-          <CircularProgress className={classes.progress} />
+      {singleGameView ? (
+        <Grid className={classes.topControls} container justify="center">
+          <Button variant="outlined" onClick={handleShowAllButton}>
+            Show all games
+          </Button>
+        </Grid>
+      ) : (
+        <div className={classes.topControls}>
+          {monthControls}
         </div>
-      ) : null}
-      {gamesToShow.length === 0 && !isLoading ? (
-        <div className={classes.centerContainer}>
-          <div className={classes.noGames}>No games</div>
-        </div>
-      ) : null}
+      )}
+
+      <GameList
+        gamesToShow={gamesToShow}
+        setGame={setGame}
+        availableWeatherConditions={availableWeatherConditions}
+        availableConditions={availableConditions}
+        isLoading={isLoading}
+      />
+
       {gamesToShow.length > 2 ? (
         <div className={classes.bottomControls}>
-          <MonthControls
-            selectedMonth={selectedMonth}
-            setSelectedMonth={setSelectedMonth}
-            selectedYear={selectedYear}
-            setSelectedYear={setSelectedYear}
-            clearFetchedGames={clearFetchedGames}
-            monthsThatHaveGames={monthsThatHaveGames}
-          />
+          {monthControls}
         </div>
       ) : null}
     </div>

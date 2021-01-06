@@ -617,7 +617,7 @@ const createGame = async (course: Course, layout: Layout, players: Player[]): Pr
 
 const getGame = async (id: string): Promise<Game> => {
   // TODO: Replace mock data with API call.
-  return mockGame
+  return mockGames[0]
 }
 
 const updateGame = async (game: Game): Promise<Game> => {

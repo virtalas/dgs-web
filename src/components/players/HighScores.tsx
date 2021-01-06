@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { Redirect } from 'react-router-dom'
 
 import { makeStyles } from '@material-ui/core/styles'
 import Button from '@material-ui/core/Button'
@@ -30,8 +31,6 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: theme.palette.background.paper,
     padding: theme.spacing(1),
   },
-  gameButton: {
-  }
 }))
 
 interface Props {
@@ -44,8 +43,14 @@ const HighScores: React.FC<Props> = (props) => {
   const classes = useStyles()
 
   const { playerId } = props
+  const [redirect, setRedirect] = useState(false)
+  const [redirectGameId, setRedirectGameId] = useState('')
   const [highScores, setHighScores] = useState<HighScore[]>()
   const [highScoresOpen, setHighScoresOpen] = useState(false)
+
+  if (redirect) {
+    return <Redirect to={'/games/' + redirectGameId} />
+  }
 
   const handleHighScoresOpen = () => {
     playersService.getHighScores(playerId).then(scores => setHighScores(scores))
@@ -57,8 +62,8 @@ const HighScores: React.FC<Props> = (props) => {
   }
 
   const handleGameClick = (e: any) => {
-    const gameId = e.currentTarget.value
-    // TODO: Redirect to /games/:id. On that page instead of month controls, there is a button called "show all games".
+    setRedirectGameId(e.currentTarget.value)
+    setRedirect(true)
   }
 
   const dateOptions = {
@@ -69,7 +74,9 @@ const HighScores: React.FC<Props> = (props) => {
 
   return (
     <div>
-      <Button size="small" onClick={handleHighScoresOpen}>High scores</Button>
+      <Button size="small" onClick={handleHighScoresOpen}>
+        High scores
+      </Button>
       <Modal
         className={classes.modal}
         open={highScoresOpen}
@@ -97,7 +104,6 @@ const HighScores: React.FC<Props> = (props) => {
                     <TableCell align="center">{score.toPar}</TableCell>
                     <TableCell align="right">
                       <Button
-                        className={classes.gameButton}
                         variant="outlined"
                         size="small"
                         onClick={handleGameClick}
