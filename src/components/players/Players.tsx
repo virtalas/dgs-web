@@ -1,10 +1,6 @@
 import React, { useEffect, useState } from 'react'
 
 import { makeStyles } from '@material-ui/core/styles'
-import Accordion from '@material-ui/core/Accordion'
-import AccordionSummary from '@material-ui/core/AccordionSummary'
-import AccordionDetails from '@material-ui/core/AccordionDetails'
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
 import Typography from '@material-ui/core/Typography'
 import Card from '@material-ui/core/Card'
 import CardActions from '@material-ui/core/CardActions'
@@ -13,20 +9,22 @@ import Button from '@material-ui/core/Button'
 import Table from '@material-ui/core/Table'
 import TableBody from '@material-ui/core/TableBody'
 import TableCell from '@material-ui/core/TableCell'
-import TableContainer from '@material-ui/core/TableContainer'
-import TableHead from '@material-ui/core/TableHead'
 import TableRow from '@material-ui/core/TableRow'
 
 import { useAuth } from '../../context/AuthContext'
 import playersService from '../../services/playersService'
+import HighScores from './HighScores'
 
 const useStyles = makeStyles((theme) => ({
   card: {
     margin: theme.spacing(2),
   },
   table: {
+    marginTop: theme.spacing(1),
   },
 }))
+
+// TODO: Average scores modal (pretty identical to High Scores, show only toPar and no total, vertically scrolling, years as columns).
 
 const Players: React.FC<{}> = () => {
   const classes = useStyles()
@@ -40,7 +38,7 @@ const Players: React.FC<{}> = () => {
 
   const generatePlayerCard = (player: Player | undefined) => {
     return (
-      <Card className={classes.card}>
+      <Card key={'player' + player?.id} className={classes.card}>
         <CardContent>
           <Typography variant="h5" component="h2">
             {player?.firstName}
@@ -89,7 +87,7 @@ const Players: React.FC<{}> = () => {
 
         </CardContent>
         <CardActions>
-          <Button size="small">High scores</Button>
+          <HighScores key={'highscore' + player?.id} playerId={player ? player.id : ''} />
           <Button size="small" disabled>Average scores</Button>
         </CardActions>
       </Card>

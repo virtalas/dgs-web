@@ -133,7 +133,7 @@ const Games: React.FC<{}> = () => {
       </div>
       
       {gamesToShow.map((game, index) => (
-        <Grow in={true} {...{ timeout: index * 400 } }> {/* or timeout: index * 300 + 100 */}
+        <Grow key={'grow' + index} in={true} {...{ timeout: index * 300 + 100 } }>
           <div>
             <GameCard
               game={game}
