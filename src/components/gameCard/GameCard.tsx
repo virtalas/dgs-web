@@ -25,6 +25,7 @@ const useStyles = makeStyles((theme) => ({
     position: 'absolute',
     bottom: 10,
     right: 8,
+    zIndex: 9999,
   },
   cancelButton: {
     position: 'absolute',
