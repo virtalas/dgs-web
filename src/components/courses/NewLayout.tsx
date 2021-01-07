@@ -133,8 +133,8 @@ const NewLayout: React.FC<Props> = (props) => {
 
   const handleHoleCountChange = (event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
     const newHoleCount = Number(event.target.value)
-    // TODO: Fix input with keyboard
-    if (newHoleCount > 0 && newHoleCount < 100) {
+    // Temporarily accept zero to enable empty field while editing.
+    if (newHoleCount >= 0 && newHoleCount < 100) {
       updateParsLength(newHoleCount)
       setHoleCount(newHoleCount)
       setPars(pars)
@@ -145,15 +145,16 @@ const NewLayout: React.FC<Props> = (props) => {
     const holeIndex = Number(event.target.name)
     const par = Number(event.target.value)
 
-    // TODO: Fix input with keyboard
-    if (par > 0 && par < 100) {
+    // Temporarily accept zero to enable empty field while editing.
+    if (par >= 0 && par < 100) {
       const newPars = [...pars]
       newPars[holeIndex] = par
       setPars(newPars)
     }
   }
 
-  const totalPar = pars.reduce((a, b) => a + b, 0)
+  const totalPar = pars.reduce((total, currentValue) => total + currentValue, 0)
+  const numberOfZeroPars = pars.reduce((total, currentValue) => currentValue === 0 ? total + 1 : total, 0)
 
   const parInputs = pars.map((par, index) => (
     <TextField
@@ -161,7 +162,8 @@ const NewLayout: React.FC<Props> = (props) => {
       className={classes.parInput}
       label={'Hole ' + (index + 1)}
       variant="outlined"
-      value={par}
+      value={par === 0 ? '' : par}
+      error={par === 0}
       name={String(index)}
       type="number"
       onChange={handleParChange}
@@ -234,7 +236,8 @@ const NewLayout: React.FC<Props> = (props) => {
               className={classes.countInput}
               label="Number of holes"
               variant="outlined"
-              value={holeCount}
+              value={holeCount === 0 ? '' : holeCount}
+              error={holeCount === 0}
               type="number"
               onChange={handleHoleCountChange}
             />
@@ -266,7 +269,7 @@ const NewLayout: React.FC<Props> = (props) => {
           variant="contained"
           color="primary"
           onClick={handleCreateLayout}
-          disabled={name.length === 0}
+          disabled={name.length === 0 || numberOfZeroPars > 0 || holeCount === 0}
         >
           Create
         </Button>
