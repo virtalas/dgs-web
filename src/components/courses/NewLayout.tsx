@@ -216,7 +216,6 @@ const NewLayout: React.FC<Props> = (props) => {
                 src={mapURL}
               />
             )}
-
         </Paper>
 
         <Grid

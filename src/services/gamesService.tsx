@@ -7,8 +7,8 @@ const mockGame: Game = {
     pars: [3, 4, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 4, 3, 3, 3],
     total: 60,
     layouts: [
-      { id: 'fdg', active: true, name: '2020 layout'},
-      { id: 'fdfsdg', active: false, name: '2019 layout'}
+      { id: 'fdg', active: true, name: '2020 layout', mapURL: 'https://frisbeegolfradat.fi/files/2014/05/kivikon_helsinki_ratakartta_2014.jpg'},
+      { id: 'fdfsdg', active: false, name: '2019 layout', mapURL: 'https://frisbeegolfradat.fi/files/2014/05/kivikon_helsinki_ratakartta_2014.jpg'}
     ],
     popularity: 23,
   },
@@ -58,8 +58,8 @@ const mockGames: Game[] = [{
     pars: [3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 4, 3, 3, 3, 3, 3],
     total: 61,
     layouts: [
-      { id: 'fdg', active: true, name: '2020 layout'},
-      { id: 'fdfsdg', active: false, name: '2019 layout'}
+      { id: 'fdg', active: true, name: '2020 layout', mapURL: 'https://frisbeegolfradat.fi/files/2014/05/kivikon_helsinki_ratakartta_2014.jpg'},
+      { id: 'fdfsdg', active: false, name: '2019 layout', mapURL: 'https://frisbeegolfradat.fi/files/2014/05/kivikon_helsinki_ratakartta_2014.jpg'}
     ],
     popularity: 23,
   },
@@ -107,8 +107,8 @@ const mockGames: Game[] = [{
     pars: [3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3],
     total: 60,
     layouts: [
-      { id: 'fdg', active: true, name: '2020 layout'},
-      { id: 'fdfsdg', active: false, name: '2019 layout'}
+      { id: 'fdg', active: true, name: '2020 layout', mapURL: 'https://frisbeegolfradat.fi/files/2014/05/kivikon_helsinki_ratakartta_2014.jpg'},
+      { id: 'fdfsdg', active: false, name: '2019 layout', mapURL: 'https://frisbeegolfradat.fi/files/2014/05/kivikon_helsinki_ratakartta_2014.jpg'}
     ],
     popularity: 23,
   },
@@ -156,8 +156,8 @@ const mockGames: Game[] = [{
     pars: [3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3],
     total: 60,
     layouts: [
-      { id: 'fdg', active: true, name: '2020 layout'},
-      { id: 'fdfsdg', active: false, name: '2019 layout'}
+      { id: 'fdg', active: true, name: '2020 layout', mapURL: 'https://frisbeegolfradat.fi/files/2014/05/kivikon_helsinki_ratakartta_2014.jpg'},
+      { id: 'fdfsdg', active: false, name: '2019 layout', mapURL: 'https://frisbeegolfradat.fi/files/2014/05/kivikon_helsinki_ratakartta_2014.jpg'}
     ],
     popularity: 556,
   },
@@ -205,8 +205,8 @@ const mockGames: Game[] = [{
     pars: [3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3],
     total: 60,
     layouts: [
-      { id: 'fdg', active: true, name: '2020 layout'},
-      { id: 'fdfsdg', active: false, name: '2019 layout'}
+      { id: 'fdg', active: true, name: '2020 layout', mapURL: 'https://frisbeegolfradat.fi/files/2014/05/kivikon_helsinki_ratakartta_2014.jpg'},
+      { id: 'fdfsdg', active: false, name: '2019 layout', mapURL: 'https://frisbeegolfradat.fi/files/2014/05/kivikon_helsinki_ratakartta_2014.jpg'}
     ],
     popularity: 1,
   },
@@ -254,8 +254,8 @@ const mockGames: Game[] = [{
     pars: [3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3],
     total: 60,
     layouts: [
-      { id: 'fdg', active: true, name: '2020 layout'},
-      { id: 'fdfsdg', active: false, name: '2019 layout'}
+      { id: 'fdg', active: true, name: '2020 layout', mapURL: 'https://frisbeegolfradat.fi/files/2014/05/kivikon_helsinki_ratakartta_2014.jpg'},
+      { id: 'fdfsdg', active: false, name: '2019 layout', mapURL: 'https://frisbeegolfradat.fi/files/2014/05/kivikon_helsinki_ratakartta_2014.jpg'}
     ],
     popularity: 23,
   },
@@ -303,8 +303,8 @@ const mockGames: Game[] = [{
       pars: [3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3],
       total: 60,
       layouts: [
-        { id: 'fdg', active: true, name: '2020 layout'},
-        { id: 'fdfsdg', active: false, name: '2019 layout'}
+        { id: 'fdg', active: true, name: '2020 layout', mapURL: 'https://frisbeegolfradat.fi/files/2014/05/kivikon_helsinki_ratakartta_2014.jpg'},
+        { id: 'fdfsdg', active: false, name: '2019 layout', mapURL: 'https://frisbeegolfradat.fi/files/2014/05/kivikon_helsinki_ratakartta_2014.jpg'}
       ],
       popularity: 447,
     },
@@ -352,8 +352,8 @@ const mockGames: Game[] = [{
       pars: [3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3],
       total: 60,
       layouts: [
-        { id: 'fdg', active: true, name: '2020 layout'},
-        { id: 'fdfsdg', active: false, name: '2019 layout'}
+        { id: 'fdg', active: true, name: '2020 layout', mapURL: 'https://frisbeegolfradat.fi/files/2014/05/kivikon_helsinki_ratakartta_2014.jpg'},
+        { id: 'fdfsdg', active: false, name: '2019 layout', mapURL: 'https://frisbeegolfradat.fi/files/2014/05/kivikon_helsinki_ratakartta_2014.jpg'}
       ],
       popularity: 556,
     },
@@ -401,8 +401,8 @@ const mockGames: Game[] = [{
     pars: [3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3],
     total: 60,
     layouts: [
-      { id: 'fdg', active: true, name: '2020 layout'},
-      { id: 'fdfsdg', active: false, name: '2019 layout'}
+      { id: 'fdg', active: true, name: '2020 layout', mapURL: 'https://frisbeegolfradat.fi/files/2014/05/kivikon_helsinki_ratakartta_2014.jpg'},
+      { id: 'fdfsdg', active: false, name: '2019 layout', mapURL: 'https://frisbeegolfradat.fi/files/2014/05/kivikon_helsinki_ratakartta_2014.jpg'}
     ],
     popularity: 23,
   },
@@ -450,8 +450,8 @@ const mockGames: Game[] = [{
     pars: [3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3],
     total: 60,
     layouts: [
-      { id: 'fdg', active: true, name: '2020 layout'},
-      { id: 'fdfsdg', active: false, name: '2019 layout'}
+      { id: 'fdg', active: true, name: '2020 layout', mapURL: 'https://frisbeegolfradat.fi/files/2014/05/kivikon_helsinki_ratakartta_2014.jpg'},
+      { id: 'fdfsdg', active: false, name: '2019 layout', mapURL: 'https://frisbeegolfradat.fi/files/2014/05/kivikon_helsinki_ratakartta_2014.jpg'}
     ],
     popularity: 23,
   },
@@ -499,8 +499,8 @@ const mockGames: Game[] = [{
       pars: [3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3],
       total: 60,
       layouts: [
-        { id: 'fdg', active: true, name: '2020 layout' },
-        { id: 'fdfsdg', active: false, name: '2019 layout' }
+        { id: 'fdg', active: true, name: '2020 layout', mapURL: 'https://frisbeegolfradat.fi/files/2014/05/kivikon_helsinki_ratakartta_2014.jpg' },
+        { id: 'fdfsdg', active: false, name: '2019 layout', mapURL: 'https://frisbeegolfradat.fi/files/2014/05/kivikon_helsinki_ratakartta_2014.jpg' }
       ],
       popularity: 23,
     },
@@ -548,8 +548,8 @@ const mockGames: Game[] = [{
       pars: [3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3],
       total: 60,
       layouts: [
-        { id: 'fdg', active: true, name: '2020 layout' },
-        { id: 'fdfsdg', active: false, name: '2019 layout' }
+        { id: 'fdg', active: true, name: '2020 layout', mapURL: 'https://frisbeegolfradat.fi/files/2014/05/kivikon_helsinki_ratakartta_2014.jpg' },
+        { id: 'fdfsdg', active: false, name: '2019 layout', mapURL: 'https://frisbeegolfradat.fi/files/2014/05/kivikon_helsinki_ratakartta_2014.jpg' }
       ],
       popularity: 23,
     },

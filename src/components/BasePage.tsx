@@ -80,7 +80,7 @@ const BasePage: React.FC<Props> = (props) => {
         <div className="content">
           <PrivateRoute exact path="/" component={Games} />
           <PrivateRoute exact path="/games" component={Games} />
-          <PrivateRoute exact path="/games/:id" component={Games} />
+          <PrivateRoute exact path="/games/view/:id" component={Games} />
           <PrivateRoute exact path="/games/new" component={NewGame} />
           <PrivateRoute exact path="/players" component={Players} />
           <PrivateRoute exact path="/courses" component={Courses} />

@@ -10,6 +10,8 @@ import FormHelperText from '@material-ui/core/FormHelperText'
 import OutlinedInput from '@material-ui/core/OutlinedInput'
 
 import coursesService from '../../services/coursesService'
+import SortButton from './SortButton'
+import { sortCourses } from './SortButton'
 
 const useStyles = makeStyles((theme) => ({
   formControl: {
@@ -26,7 +28,6 @@ interface Props {
   setGameCreatable?: (creatable: boolean) => void,
 }
 
-// TODO: Better layout for sort button.
 // TODO: Spread controls out if there is space. They are too packed together on desktop.
 // TODO: Search function for courses.
 
@@ -40,7 +41,7 @@ const CourseSelect: React.FC<Props> = (props) => {
 
   function getActiveLayout(forCourse: Course): Layout {
     const layout = forCourse.layouts.find(layout => layout.active)
-    return layout !== undefined ? layout : {id: '', name: '', active: false}
+    return layout !== undefined ? layout : { id: '', name: '', active: false, mapURL: '' }
   }
 
   function selectActiveLayout(forCourse: Course) {
@@ -54,11 +55,6 @@ const CourseSelect: React.FC<Props> = (props) => {
     const selectedCourse = courses.find(course => course.id === selectedCourseId) as Course
     setCourse(selectedCourse)
     selectActiveLayout(selectedCourse)
-  }
-
-  const handleSortChange = () => {
-    setCourses(sortCourses(courses, !sortByPopularity))
-    setSortByPopularity(!sortByPopularity)
   }
 
   const handleLayoutChange = (event: React.ChangeEvent<{ value: unknown }>, value: any) => {
@@ -103,15 +99,6 @@ const CourseSelect: React.FC<Props> = (props) => {
     </FormControl>
   )
 
-  const sortButton = (
-    <FormControl variant="outlined" className={classes.formControl}>
-      <FormHelperText>Sorted by</FormHelperText>
-      <Button variant="outlined" id="course-order" size="small" onClick={handleSortChange}>
-        {sortByPopularity ? 'Popularity' : 'Name'}
-        </Button>
-    </FormControl>
-  )
-
   const layoutSelect = (
     <FormControl variant="outlined" className={classes.formControl}>
       <InputLabel ref={inputLabel} htmlFor="layout-select">Layout</InputLabel>
@@ -131,20 +118,16 @@ const CourseSelect: React.FC<Props> = (props) => {
   return (
     <div>
       {courseSelect}
-      {sortButton}
+      <SortButton
+        courses={courses}
+        setCourses={setCourses}
+        sortByPopularity={sortByPopularity}
+        setSortByPopularity={setSortByPopularity}
+      />
       <br />
       {layout ? layoutSelect : null}
     </div>
   )
-}
-
-function sortCourses(courses: Course[], sortByPopularity: boolean): Course[] {
-  return courses.sort((a, b) => {
-    if (sortByPopularity) {
-      return b.popularity - a.popularity
-    }
-    return a.name > b.name ? 1 : -1
-  })
 }
 
 export default CourseSelect

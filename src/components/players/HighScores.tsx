@@ -49,7 +49,7 @@ const HighScores: React.FC<Props> = (props) => {
   const [highScoresOpen, setHighScoresOpen] = useState(false)
 
   if (redirect) {
-    return <Redirect to={'/games/' + redirectGameId} />
+    return <Redirect to={'/games/view/' + redirectGameId} />
   }
 
   const handleHighScoresOpen = () => {
