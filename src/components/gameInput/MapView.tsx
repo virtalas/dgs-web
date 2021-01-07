@@ -8,17 +8,43 @@ const useStyles = makeStyles((theme) => ({
     textAlign: 'center',
     color: sneakyGrey,
   },
+  image: {
+    width: '100%',
+  },
+  imageContainer: {
+    width: '100%',
+    height: 100,
+    overflow: 'hidden',
+    // Center mapPlaceholderText vertically:
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "center"
+  },
 }))
 
+interface Props {
+  mapURL: string,
+}
 
-const MapView: React.FC<{}> = () => {
+const MapView: React.FC<Props> = (props) => {
   const classes = useStyles()
 
-  // TODO
+  const { mapURL } = props
 
   return (
     <div className={classes.root}>
-      <br /><br /><br /><br /><br />No course map added.
+      {mapURL.length > 0 ? (
+        <div className={classes.imageContainer}>
+          {/* TODO: Clicking image opens popup of course map */}
+          <img
+            className={classes.image}
+            src={mapURL}
+          />
+        </div>
+      ) : (
+        <div><br /><br /><br /><br /><br />No course map added.</div>
+      )}
+      
     </div>
   )
 }
