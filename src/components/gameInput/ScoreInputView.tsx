@@ -21,8 +21,10 @@ interface Props {
 const ScoreInputView: React.FC<Props> = (props) => {
   const { game, updateGame, swipeableViewStyle, holeNum, setHoleNum, setTab, updating } = props
 
+  const layout = game.course.layouts.filter(l => l.active)[0]
+
   const updateScores = (newScores: PlayerScores[]) => {
-    newScores = calculateToParTotal(newScores, game.course.pars)
+    newScores = calculateToParTotal(newScores, layout.pars)
     const newGame = {
       ...game,
       scores: newScores,
@@ -38,7 +40,7 @@ const ScoreInputView: React.FC<Props> = (props) => {
 
   const handleNextHoleClick = () => {
     if (game === undefined) return
-    if (holeNum === game.course.pars.length) {
+    if (holeNum === layout.pars.length) {
       setTab(gameInfoViewTab)
     } else {
       setHoleNum(holeNum + 1)
@@ -63,12 +65,12 @@ const ScoreInputView: React.FC<Props> = (props) => {
         index={holeNum - 1}
         onChangeIndex={(index: number) => setHoleNum(index + 1)}
       >
-        {game.course.pars.map((par, index) => (
+        {layout.pars.map((par, index) => (
           <div key={index}>
             <PlayerStrokeInput
               scores={game.scores}
               holeNum={index + 1}
-              coursePars={game.course.pars}
+              coursePars={layout.pars}
               onScoreChange={updateScores}
               setTab={setTab}
               updating={updating}

@@ -62,6 +62,8 @@ const GameInput: React.FC<{}> = (props: any) => {
   const [tab, setTab] = React.useState(scoreInputViewTab)
   const [updating, setUpdating] = useState(false)
 
+  const layout = game?.course.layouts.filter(l => l.active)[0]
+
   useEffect(() => {
     gamesService.getGame(gameId).then((fetchedGame) => {
       setGame(fetchedGame)
@@ -147,7 +149,7 @@ const GameInput: React.FC<{}> = (props: any) => {
       <HoleInfoBar
         showInfo={tab !== gameInfoViewTab}
         holeNum={holeNum}
-        par={game.course.pars[holeNum - 1]}
+        par={layout ? layout.pars[holeNum - 1] : 0}
       />
       {activeView}
       <BottomNavigation

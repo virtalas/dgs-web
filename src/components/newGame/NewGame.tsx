@@ -35,9 +35,11 @@ const NewGame: React.FC<{}> = () => {
   const [gameCreatable, setGameCreatable] = useState(false)
 
   const [course, setCourse] = useState<Course>(
-    { id: '', name: 'Loading...', city: '', pars: [], total: 0, layouts: [], popularity: 0 }
+    { id: '', name: 'Loading...', city: '', layouts: [], popularity: 0 }
   )
-  const [layout, setLayout] = useState<Layout>({ id: '', name: 'Loading...', active: false, mapURL: '' })
+  const [layout, setLayout] = useState<Layout>(
+    { id: '', name: 'Loading...', pars: [], total: 0, active: false, mapURL: '' }
+  )
   const [players, setPlayers] = useState<Player[]>([user]) // Pre-select the user as a player.
 
   const [allPlayers, setAllPlayers] = useState<Player[]>([user])

@@ -185,6 +185,8 @@ const ScoreCard: React.FC<Props> = (props) => {
   const classes = useStyles()
   const { game, setGame, isEditing } = props
 
+  const layout = game.course.layouts.filter(l => l.active)[0]
+
   const handleStrokeChange = (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const playerName = event.currentTarget.name.split(':')[0]
     const throws = event.currentTarget.name.split(':')[1] === 'stroke'
@@ -193,7 +195,7 @@ const ScoreCard: React.FC<Props> = (props) => {
 
     if (!isNaN(+stroke) && stroke.length !== 0) {
       // Valid stroke inputted, update game.
-      game.scores = updateScores(game.scores, playerName, holeIndex, Number(stroke), game.course, throws)
+      game.scores = updateScores(game.scores, playerName, holeIndex, Number(stroke), layout, throws)
       setGame(game)
       event.currentTarget.blur() // Unfocus/blur the field after inputting a number.
     } else {
@@ -207,11 +209,11 @@ const ScoreCard: React.FC<Props> = (props) => {
     }
   }
 
-  const holeNumbers = game.course.pars.map((par: number, index: number) => (
+  const holeNumbers = layout.pars.map((par: number, index: number) => (
     <td key={index}>{index + 1}</td>
   ))
 
-  const coursePars = game.course.pars.map((par: number, index: number) => (
+  const coursePars = layout.pars.map((par: number, index: number) => (
     <td key={index}>{par}</td>
   ))
 
@@ -267,7 +269,7 @@ const ScoreCard: React.FC<Props> = (props) => {
     <Fragment key={index}>
       <tr className={classes.bottomRow}>
         {playerScores.strokes.map((strokeCount: number, index: number) => {
-          const holePar = game.course.pars[index]
+          const holePar = layout.pars[index]
           const obStrokes = playerScores.obs[index]
           let scoreClass
 
@@ -347,7 +349,7 @@ const ScoreCard: React.FC<Props> = (props) => {
             </tr>
             <tr>
               {coursePars}
-              <td>{game.course.total}</td>
+              <td>{layout.total}</td>
             </tr>
             {game.scores.map((playerScores, index) => playerStrokes(playerScores, index))}
           </tbody>
@@ -378,7 +380,7 @@ function updateScores(scores: PlayerScores[],
                       playerName: string,
                       holeIndex: number,
                       stroke: number,
-                      course: Course,
+                      layout: Layout,
                       throws: boolean): PlayerScores[] {
   scores.forEach((playerScores, index, array: PlayerScores[]) => {
     // Update the stroke for the player in question
@@ -396,7 +398,7 @@ function updateScores(scores: PlayerScores[],
       if (array[index].strokes[holeIndex] !== 0) {
         total += array[index].strokes[holeIndex]
         total += array[index].obs[holeIndex]
-        courseTotal += course.pars[holeIndex]
+        courseTotal += layout.pars[holeIndex]
       }
     }
     array[index].total = total
