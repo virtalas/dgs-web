@@ -14,6 +14,7 @@ import Games from './games/Games'
 import NewGame from './newGame/NewGame'
 import Players from './players/Players'
 import Courses from './courses/Courses'
+import Course from './courses/Course'
 import NewSelection from './courses/NewSelection'
 import NewCourse from './courses/NewCourse'
 import NewLayout from './courses/NewLayout'
@@ -84,6 +85,7 @@ const BasePage: React.FC<Props> = (props) => {
           <PrivateRoute exact path="/games/new" component={NewGame} />
           <PrivateRoute exact path="/players" component={Players} />
           <PrivateRoute exact path="/courses" component={Courses} />
+          <PrivateRoute exact path="/courses/view/:id" component={Course} />
           <PrivateRoute exact path="/courses/new" component={NewSelection} />
           <PrivateRoute exact path="/courses/new/course" component={NewCourse} />
           <PrivateRoute exact path="/courses/new/layout/:id" component={NewLayout} />

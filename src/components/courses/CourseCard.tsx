@@ -1,16 +1,11 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 
 import { makeStyles } from '@material-ui/core/styles'
-import Accordion from '@material-ui/core/Accordion'
-import AccordionSummary from '@material-ui/core/AccordionSummary'
-import AccordionDetails from '@material-ui/core/AccordionDetails'
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
 import Typography from '@material-ui/core/Typography'
-import Button from '@material-ui/core/Button'
-import { Card, CardContent } from '@material-ui/core'
+import { Card, CardContent, CardActionArea } from '@material-ui/core'
 
 import { sneakyGrey } from '../../constants/Colors'
-import coursesService from '../../services/coursesService'
+import { Redirect } from 'react-router-dom'
 
 const useStyles = makeStyles((theme) => ({
   card: {
@@ -38,114 +33,37 @@ interface Props {
   course: Course,
 }
 
-// TODO: Current weather conditions?
-// TODO: Use ghosting after opening Accordion and fetching data
 // TODO: Picture: Use course.picture (IRL pic uploaded to server), or if it's empty, use the mapURL from the active layout.
 
 const CourseCard: React.FC<Props> = (props) => {
   const classes = useStyles()
 
   const { course } = props
-
-  useEffect(() => {
-  }, [])
-
   const coverPictureURL = course.layouts.filter(layout => layout.active)[0].mapURL
+  const [redirect, setRedirect] = useState(false)
+
+  if (redirect) {
+    return <Redirect to={'/courses/view/' + course.id} />
+  }
+
+  const handleClick = () => setRedirect(true)
 
   return (
     <Card className={classes.card}>
-      <div className={classes.imageContainer}>
-        {/* TODO: Clicking image opens popup of course map */}
-        <img
-          className={classes.image}
-          src={coverPictureURL}
-        />
-      </div>
+      <CardActionArea onClick={handleClick}>
+        <div className={classes.imageContainer}>
+          <img
+            className={classes.image}
+            src={coverPictureURL}
+          />
+        </div>
 
-      <CardContent>
-        <Typography variant="h5">
-          {course.name}, {course.city}
-        </Typography>
-
-        <Typography component="p">
-          Games played: XXX
-        </Typography>
-
-        <Typography component="p">
-          Latest game: X.XX.XXXX
-        </Typography>
-
-        <Typography component="p">
-          Average score: +X.X
-        </Typography>
-
-        <Typography component="p">
-          On this course:
-          <Button size="small">All games</Button>
-          <Button size="small">My games</Button>
-        </Typography>
-
-        <br />
-
-        <Accordion disabled>
-          <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-            <Typography>Holes</Typography>
-          </AccordionSummary>
-          <AccordionDetails>
-            <Typography>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse malesuada lacus ex,
-              sit amet blandit leo lobortis eget.
-            </Typography>
-          </AccordionDetails>
-        </Accordion>
-
-        <Accordion disabled>
-          <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-            <Typography>Layouts</Typography>
-          </AccordionSummary>
-          <AccordionDetails>
-            <Typography>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse malesuada lacus ex,
-              sit amet blandit leo lobortis eget.
-            </Typography>
-          </AccordionDetails>
-        </Accordion>
-
-        <Accordion disabled>
-          <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-            <Typography>High scores</Typography>
-          </AccordionSummary>
-          <AccordionDetails>
-            <Typography>
-              [All scores] [My scores]
-            </Typography>
-          </AccordionDetails>
-        </Accordion>
-
-        <Accordion disabled>
-          <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-            <Typography>Scores per hole</Typography>
-          </AccordionSummary>
-          <AccordionDetails>
-            <Typography>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse malesuada lacus ex,
-              sit amet blandit leo lobortis eget.
-            </Typography>
-          </AccordionDetails>
-        </Accordion>
-
-        <Accordion disabled>
-          <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-            <Typography>Development of high scores</Typography>
-          </AccordionSummary>
-          <AccordionDetails>
-            <Typography>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse malesuada lacus ex,
-              sit amet blandit leo lobortis eget.
-            </Typography>
-          </AccordionDetails>
-        </Accordion>
-      </CardContent>
+        <CardContent>
+          <Typography variant="h5">
+            {course.name}, {course.city}
+          </Typography>
+        </CardContent>
+      </CardActionArea>
     </Card>
   )
 }

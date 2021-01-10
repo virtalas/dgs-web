@@ -38,7 +38,7 @@ const NewGame: React.FC<{}> = () => {
     { id: '', name: 'Loading...', city: '', layouts: [], popularity: 0 }
   )
   const [layout, setLayout] = useState<Layout>(
-    { id: '', name: 'Loading...', pars: [], total: 0, active: false, mapURL: '' }
+    { id: '', name: 'Loading...', description: '', pars: [], total: 0, active: false, mapURL: '' }
   )
   const [players, setPlayers] = useState<Player[]>([user]) // Pre-select the user as a player.
 

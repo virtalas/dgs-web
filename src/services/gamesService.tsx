@@ -5,8 +5,8 @@ const mockGame: Game = {
     name: "Puolarmaari",
     city: 'Helsinki',
     layouts: [
-      { id: 'fdg', active: true, name: '2020 layout', pars: [3, 3, 3, 3, 3, 3, 3, 3, 3, 4, 3, 3, 3, 3, 3, 3, 4, 3], total: 58, mapURL: 'https://frisbeegolfradat.fi/files/2014/05/kivikon_helsinki_ratakartta_2014.jpg'},
-      { id: 'fdfsdg', active: false, name: '2019 layout', pars: [3, 3, 3, 3, 3, 3, 3, 3, 3, 4, 3, 3, 3, 3, 3, 3, 4, 3], total: 58, mapURL: 'https://frisbeegolfradat.fi/files/2014/05/kivikon_helsinki_ratakartta_2014.jpg'}
+      { id: 'fdg', active: true, name: '2020 layout', description: 'Holes 3 and 7 have a temporary basket placement closer to the tee. There is a mandatory on hole 16.', pars: [3, 3, 3, 3, 3, 3, 3, 3, 3, 4, 3, 3, 3, 3, 3, 3, 4, 3], total: 58, mapURL: 'https://frisbeegolfradat.fi/files/2014/05/kivikon_helsinki_ratakartta_2014.jpg'},
+      { id: 'fdfsdg', active: false, name: '2019 layout', description: 'Holes 3 and 7 have a temporary basket placement closer to the tee. There is a mandatory on hole 16.', pars: [3, 3, 3, 3, 3, 3, 3, 3, 3, 4, 3, 3, 3, 3, 3, 3, 4, 3], total: 58, mapURL: 'https://frisbeegolfradat.fi/files/2014/05/kivikon_helsinki_ratakartta_2014.jpg'}
     ],
     popularity: 23,
   },
@@ -54,8 +54,8 @@ const mockGames: Game[] = [{
     name: "Puolarmaari",
     city: 'Helsinki',
     layouts: [
-      { id: 'fdg', active: true, name: '2020 layout', pars: [3, 3, 3, 3, 3, 3, 3, 3, 3, 4, 3, 3, 3, 3, 3, 3, 4, 3], total: 58, mapURL: 'https://frisbeegolfradat.fi/files/2014/05/kivikon_helsinki_ratakartta_2014.jpg'},
-      { id: 'fdfsdg', active: false, name: '2019 layout', pars: [3, 3, 3, 3, 3, 3, 3, 3, 3, 4, 3, 3, 3, 3, 3, 3, 4, 3], total: 58, mapURL: 'https://frisbeegolfradat.fi/files/2014/05/kivikon_helsinki_ratakartta_2014.jpg'}
+      { id: 'fdg', active: true, name: '2020 layout', description: 'Holes 3 and 7 have a temporary basket placement closer to the tee. There is a mandatory on hole 16.', pars: [3, 3, 3, 3, 3, 3, 3, 3, 3, 4, 3, 3, 3, 3, 3, 3, 4, 3], total: 58, mapURL: 'https://frisbeegolfradat.fi/files/2014/05/kivikon_helsinki_ratakartta_2014.jpg'},
+      { id: 'fdfsdg', active: false, name: '2019 layout', description: 'Holes 3 and 7 have a temporary basket placement closer to the tee. There is a mandatory on hole 16.', pars: [3, 3, 3, 3, 3, 3, 3, 3, 3, 4, 3, 3, 3, 3, 3, 3, 4, 3], total: 58, mapURL: 'https://frisbeegolfradat.fi/files/2014/05/kivikon_helsinki_ratakartta_2014.jpg'}
     ],
     popularity: 23,
   },
@@ -101,8 +101,8 @@ const mockGames: Game[] = [{
     name: "Puolarmaari",
     city: 'Helsinki',
     layouts: [
-      { id: 'fdg', active: true, name: '2020 layout', pars: [3, 3, 3, 3, 3, 3, 3, 3, 3, 4, 3, 3, 3, 3, 3, 3, 4, 3], total: 58, mapURL: 'https://frisbeegolfradat.fi/files/2014/05/kivikon_helsinki_ratakartta_2014.jpg'},
-      { id: 'fdfsdg', active: false, name: '2019 layout', pars: [3, 3, 3, 3, 3, 3, 3, 3, 3, 4, 3, 3, 3, 3, 3, 3, 4, 3], total: 58, mapURL: 'https://frisbeegolfradat.fi/files/2014/05/kivikon_helsinki_ratakartta_2014.jpg'}
+      { id: 'fdg', active: true, name: '2020 layout', description: 'Holes 3 and 7 have a temporary basket placement closer to the tee. There is a mandatory on hole 16.', pars: [3, 3, 3, 3, 3, 3, 3, 3, 3, 4, 3, 3, 3, 3, 3, 3, 4, 3], total: 58, mapURL: 'https://frisbeegolfradat.fi/files/2014/05/kivikon_helsinki_ratakartta_2014.jpg'},
+      { id: 'fdfsdg', active: false, name: '2019 layout', description: 'Holes 3 and 7 have a temporary basket placement closer to the tee. There is a mandatory on hole 16.', pars: [3, 3, 3, 3, 3, 3, 3, 3, 3, 4, 3, 3, 3, 3, 3, 3, 4, 3], total: 58, mapURL: 'https://frisbeegolfradat.fi/files/2014/05/kivikon_helsinki_ratakartta_2014.jpg'}
     ],
     popularity: 23,
   },
@@ -148,8 +148,8 @@ const mockGames: Game[] = [{
     city: 'Helsinki',
     name: "Tali",
     layouts: [
-      { id: 'fdg', active: true, name: '2020 layout', pars: [5, 3, 3, 3, 3, 3, 3, 3, 3, 4, 3, 3, 3, 3, 3, 3, 4, 3], total: 58, mapURL: 'https://frisbeegolfradat.fi/files/2014/05/kivikon_helsinki_ratakartta_2014.jpg'},
-      { id: 'fdfsdg', active: false, name: '2019 layout', pars: [5, 3, 3, 3, 3, 3, 3, 3, 3, 4, 3, 3, 3, 3, 3, 3, 4, 3], total: 58, mapURL: 'https://frisbeegolfradat.fi/files/2014/05/kivikon_helsinki_ratakartta_2014.jpg'}
+      { id: 'fdg', active: true, name: '2020 layout', description: 'Holes 3 and 7 have a temporary basket placement closer to the tee. There is a mandatory on hole 16.', pars: [5, 3, 3, 3, 3, 3, 3, 3, 3, 4, 3, 3, 3, 3, 3, 3, 4, 3], total: 58, mapURL: 'https://frisbeegolfradat.fi/files/2014/05/kivikon_helsinki_ratakartta_2014.jpg'},
+      { id: 'fdfsdg', active: false, name: '2019 layout', description: 'Holes 3 and 7 have a temporary basket placement closer to the tee. There is a mandatory on hole 16.', pars: [5, 3, 3, 3, 3, 3, 3, 3, 3, 4, 3, 3, 3, 3, 3, 3, 4, 3], total: 58, mapURL: 'https://frisbeegolfradat.fi/files/2014/05/kivikon_helsinki_ratakartta_2014.jpg'}
     ],
     popularity: 556,
   },
@@ -195,8 +195,8 @@ const mockGames: Game[] = [{
     name: "Shorty",
     city: 'Helsinki',
     layouts: [
-      { id: 'fdg', active: true, name: '2020 layout', pars: [5, 3, 3, 3, 3, 3, 3, 3, 3, 4, 3, 3, 3, 3, 3, 3, 4, 3], total: 58, mapURL: 'https://frisbeegolfradat.fi/files/2014/05/kivikon_helsinki_ratakartta_2014.jpg'},
-      { id: 'fdfsdg', active: false, name: '2019 layout', pars: [5, 3, 3, 3, 3, 3, 3, 3, 3, 4, 3, 3, 3, 3, 3, 3, 4, 3], total: 58, mapURL: 'https://frisbeegolfradat.fi/files/2014/05/kivikon_helsinki_ratakartta_2014.jpg'}
+      { id: 'fdg', active: true, name: '2020 layout', description: 'Holes 3 and 7 have a temporary basket placement closer to the tee. There is a mandatory on hole 16.', pars: [5, 3, 3, 3, 3, 3, 3, 3, 3, 4, 3, 3, 3, 3, 3, 3, 4, 3], total: 58, mapURL: 'https://frisbeegolfradat.fi/files/2014/05/kivikon_helsinki_ratakartta_2014.jpg'},
+      { id: 'fdfsdg', active: false, name: '2019 layout', description: 'Holes 3 and 7 have a temporary basket placement closer to the tee. There is a mandatory on hole 16.', pars: [5, 3, 3, 3, 3, 3, 3, 3, 3, 4, 3, 3, 3, 3, 3, 3, 4, 3], total: 58, mapURL: 'https://frisbeegolfradat.fi/files/2014/05/kivikon_helsinki_ratakartta_2014.jpg'}
     ],
     popularity: 1,
   },
@@ -242,8 +242,8 @@ const mockGames: Game[] = [{
     name: "Puolarmaari",
     city: 'Helsinki',
     layouts: [
-      { id: 'fdg', active: true, name: '2020 layout', pars: [5, 3, 3, 3, 3, 3, 3, 3, 3, 4, 3, 3, 3, 3, 3, 3, 4, 3], total: 58, mapURL: 'https://frisbeegolfradat.fi/files/2014/05/kivikon_helsinki_ratakartta_2014.jpg'},
-      { id: 'fdfsdg', active: false, name: '2019 layout', pars: [5, 3, 3, 3, 3, 3, 3, 3, 3, 4, 3, 3, 3, 3, 3, 3, 4, 3], total: 58, mapURL: 'https://frisbeegolfradat.fi/files/2014/05/kivikon_helsinki_ratakartta_2014.jpg'}
+      { id: 'fdg', active: true, name: '2020 layout', description: 'Holes 3 and 7 have a temporary basket placement closer to the tee. There is a mandatory on hole 16.', pars: [5, 3, 3, 3, 3, 3, 3, 3, 3, 4, 3, 3, 3, 3, 3, 3, 4, 3], total: 58, mapURL: 'https://frisbeegolfradat.fi/files/2014/05/kivikon_helsinki_ratakartta_2014.jpg'},
+      { id: 'fdfsdg', active: false, name: '2019 layout', description: 'Holes 3 and 7 have a temporary basket placement closer to the tee. There is a mandatory on hole 16.', pars: [5, 3, 3, 3, 3, 3, 3, 3, 3, 4, 3, 3, 3, 3, 3, 3, 4, 3], total: 58, mapURL: 'https://frisbeegolfradat.fi/files/2014/05/kivikon_helsinki_ratakartta_2014.jpg'}
     ],
     popularity: 23,
   },
@@ -289,8 +289,8 @@ const mockGames: Game[] = [{
       name: "Kivikko",
       city: 'Helsinki',
       layouts: [
-        { id: 'fdg', active: true, name: '2020 layout', pars: [5, 3, 3, 3, 3, 3, 3, 3, 3, 4, 3, 3, 3, 3, 3, 3, 4, 3], total: 58, mapURL: 'https://frisbeegolfradat.fi/files/2014/05/kivikon_helsinki_ratakartta_2014.jpg'},
-        { id: 'fdfsdg', active: false, name: '2019 layout', pars: [5, 3, 3, 3, 3, 3, 3, 3, 3, 4, 3, 3, 3, 3, 3, 3, 4, 3], total: 58, mapURL: 'https://frisbeegolfradat.fi/files/2014/05/kivikon_helsinki_ratakartta_2014.jpg'}
+        { id: 'fdg', active: true, name: '2020 layout', description: 'Holes 3 and 7 have a temporary basket placement closer to the tee. There is a mandatory on hole 16.', pars: [5, 3, 3, 3, 3, 3, 3, 3, 3, 4, 3, 3, 3, 3, 3, 3, 4, 3], total: 58, mapURL: 'https://frisbeegolfradat.fi/files/2014/05/kivikon_helsinki_ratakartta_2014.jpg'},
+        { id: 'fdfsdg', active: false, name: '2019 layout', description: 'Holes 3 and 7 have a temporary basket placement closer to the tee. There is a mandatory on hole 16.', pars: [5, 3, 3, 3, 3, 3, 3, 3, 3, 4, 3, 3, 3, 3, 3, 3, 4, 3], total: 58, mapURL: 'https://frisbeegolfradat.fi/files/2014/05/kivikon_helsinki_ratakartta_2014.jpg'}
       ],
       popularity: 447,
     },
@@ -336,8 +336,8 @@ const mockGames: Game[] = [{
       name: "Tali",
       city: 'Helsinki',
       layouts: [
-        { id: 'fdg', active: true, name: '2020 layout', pars: [5, 3, 3, 3, 3, 3, 3, 3, 3, 4, 3, 3, 3, 3, 3, 3, 4, 3], total: 58, mapURL: 'https://frisbeegolfradat.fi/files/2014/05/kivikon_helsinki_ratakartta_2014.jpg'},
-        { id: 'fdfsdg', active: false, name: '2019 layout', pars: [5, 3, 3, 3, 3, 3, 3, 3, 3, 4, 3, 3, 3, 3, 3, 3, 4, 3], total: 58, mapURL: 'https://frisbeegolfradat.fi/files/2014/05/kivikon_helsinki_ratakartta_2014.jpg'}
+        { id: 'fdg', active: true, name: '2020 layout', description: 'Holes 3 and 7 have a temporary basket placement closer to the tee. There is a mandatory on hole 16.', pars: [5, 3, 3, 3, 3, 3, 3, 3, 3, 4, 3, 3, 3, 3, 3, 3, 4, 3], total: 58, mapURL: 'https://frisbeegolfradat.fi/files/2014/05/kivikon_helsinki_ratakartta_2014.jpg'},
+        { id: 'fdfsdg', active: false, name: '2019 layout', description: 'Holes 3 and 7 have a temporary basket placement closer to the tee. There is a mandatory on hole 16.', pars: [5, 3, 3, 3, 3, 3, 3, 3, 3, 4, 3, 3, 3, 3, 3, 3, 4, 3], total: 58, mapURL: 'https://frisbeegolfradat.fi/files/2014/05/kivikon_helsinki_ratakartta_2014.jpg'}
       ],
       popularity: 556,
     },
@@ -383,8 +383,8 @@ const mockGames: Game[] = [{
     name: "Puolarmaari",
     city: 'Helsinki',
     layouts: [
-      { id: 'fdg', active: true, name: '2020 layout', pars: [5, 3, 3, 3, 3, 3, 3, 3, 3, 4, 3, 3, 3, 3, 3, 3, 4, 3], total: 58, mapURL: 'https://frisbeegolfradat.fi/files/2014/05/kivikon_helsinki_ratakartta_2014.jpg'},
-      { id: 'fdfsdg', active: false, name: '2019 layout', pars: [5, 3, 3, 3, 3, 3, 3, 3, 3, 4, 3, 3, 3, 3, 3, 3, 4, 3], total: 58, mapURL: 'https://frisbeegolfradat.fi/files/2014/05/kivikon_helsinki_ratakartta_2014.jpg'}
+      { id: 'fdg', active: true, name: '2020 layout', description: 'Holes 3 and 7 have a temporary basket placement closer to the tee. There is a mandatory on hole 16.', pars: [5, 3, 3, 3, 3, 3, 3, 3, 3, 4, 3, 3, 3, 3, 3, 3, 4, 3], total: 58, mapURL: 'https://frisbeegolfradat.fi/files/2014/05/kivikon_helsinki_ratakartta_2014.jpg'},
+      { id: 'fdfsdg', active: false, name: '2019 layout', description: 'Holes 3 and 7 have a temporary basket placement closer to the tee. There is a mandatory on hole 16.', pars: [5, 3, 3, 3, 3, 3, 3, 3, 3, 4, 3, 3, 3, 3, 3, 3, 4, 3], total: 58, mapURL: 'https://frisbeegolfradat.fi/files/2014/05/kivikon_helsinki_ratakartta_2014.jpg'}
     ],
     popularity: 23,
   },
@@ -430,8 +430,8 @@ const mockGames: Game[] = [{
     name: "Puolarmaari",
     city: 'Helsinki',
     layouts: [
-      { id: 'fdg', active: true, name: '2020 layout', pars: [5, 3, 3, 3, 3, 3, 3, 3, 3, 4, 3, 3, 3, 3, 3, 3, 4, 3], total: 58, mapURL: 'https://frisbeegolfradat.fi/files/2014/05/kivikon_helsinki_ratakartta_2014.jpg'},
-      { id: 'fdfsdg', active: false, name: '2019 layout', pars: [5, 3, 3, 3, 3, 3, 3, 3, 3, 4, 3, 3, 3, 3, 3, 3, 4, 3], total: 58, mapURL: 'https://frisbeegolfradat.fi/files/2014/05/kivikon_helsinki_ratakartta_2014.jpg'}
+      { id: 'fdg', active: true, name: '2020 layout', description: 'Holes 3 and 7 have a temporary basket placement closer to the tee. There is a mandatory on hole 16.', pars: [5, 3, 3, 3, 3, 3, 3, 3, 3, 4, 3, 3, 3, 3, 3, 3, 4, 3], total: 58, mapURL: 'https://frisbeegolfradat.fi/files/2014/05/kivikon_helsinki_ratakartta_2014.jpg'},
+      { id: 'fdfsdg', active: false, name: '2019 layout', description: 'Holes 3 and 7 have a temporary basket placement closer to the tee. There is a mandatory on hole 16.', pars: [5, 3, 3, 3, 3, 3, 3, 3, 3, 4, 3, 3, 3, 3, 3, 3, 4, 3], total: 58, mapURL: 'https://frisbeegolfradat.fi/files/2014/05/kivikon_helsinki_ratakartta_2014.jpg'}
     ],
     popularity: 23,
   },
@@ -477,8 +477,8 @@ const mockGames: Game[] = [{
       name: "Puolarmaari",
       city: 'Helsinki',
       layouts: [
-        { id: 'fdg', active: true, name: '2020 layout', pars: [5, 3, 3, 3, 3, 3, 3, 3, 3, 4, 3, 3, 3, 3, 3, 3, 4, 3], total: 58, mapURL: 'https://frisbeegolfradat.fi/files/2014/05/kivikon_helsinki_ratakartta_2014.jpg' },
-        { id: 'fdfsdg', active: false, name: '2019 layout', pars: [5, 3, 3, 3, 3, 3, 3, 3, 3, 4, 3, 3, 3, 3, 3, 3, 4, 3], total: 58, mapURL: 'https://frisbeegolfradat.fi/files/2014/05/kivikon_helsinki_ratakartta_2014.jpg' }
+        { id: 'fdg', active: true, name: '2020 layout', description: 'Holes 3 and 7 have a temporary basket placement closer to the tee. There is a mandatory on hole 16.', pars: [5, 3, 3, 3, 3, 3, 3, 3, 3, 4, 3, 3, 3, 3, 3, 3, 4, 3], total: 58, mapURL: 'https://frisbeegolfradat.fi/files/2014/05/kivikon_helsinki_ratakartta_2014.jpg' },
+        { id: 'fdfsdg', active: false, name: '2019 layout', description: 'Holes 3 and 7 have a temporary basket placement closer to the tee. There is a mandatory on hole 16.', pars: [5, 3, 3, 3, 3, 3, 3, 3, 3, 4, 3, 3, 3, 3, 3, 3, 4, 3], total: 58, mapURL: 'https://frisbeegolfradat.fi/files/2014/05/kivikon_helsinki_ratakartta_2014.jpg' }
       ],
       popularity: 23,
     },
@@ -524,8 +524,8 @@ const mockGames: Game[] = [{
       name: "Puolarmaari",
       city: 'Helsinki',
       layouts: [
-        { id: 'fdg', active: true, name: '2020 layout', pars: [5, 3, 3, 3, 3, 3, 3, 3, 3, 4, 3, 3, 3, 3, 3, 3, 4, 3], total: 58, mapURL: 'https://frisbeegolfradat.fi/files/2014/05/kivikon_helsinki_ratakartta_2014.jpg' },
-        { id: 'fdfsdg', active: false, name: '2019 layout', pars: [5, 3, 3, 3, 3, 3, 3, 3, 3, 4, 3, 3, 3, 3, 3, 3, 4, 3], total: 58, mapURL: 'https://frisbeegolfradat.fi/files/2014/05/kivikon_helsinki_ratakartta_2014.jpg' }
+        { id: 'fdg', active: true, name: '2020 layout', description: 'Holes 3 and 7 have a temporary basket placement closer to the tee. There is a mandatory on hole 16.', pars: [5, 3, 3, 3, 3, 3, 3, 3, 3, 4, 3, 3, 3, 3, 3, 3, 4, 3], total: 58, mapURL: 'https://frisbeegolfradat.fi/files/2014/05/kivikon_helsinki_ratakartta_2014.jpg' },
+        { id: 'fdfsdg', active: false, name: '2019 layout', description: 'Holes 3 and 7 have a temporary basket placement closer to the tee. There is a mandatory on hole 16.', pars: [5, 3, 3, 3, 3, 3, 3, 3, 3, 4, 3, 3, 3, 3, 3, 3, 4, 3], total: 58, mapURL: 'https://frisbeegolfradat.fi/files/2014/05/kivikon_helsinki_ratakartta_2014.jpg' }
       ],
       popularity: 23,
     },

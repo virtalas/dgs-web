@@ -12,7 +12,6 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-// TODO: Ability to view and edit layouts
 // TODO: "Expand" arrow next to name, OR clicking takes to /courses/show/:id ?
 
 const Courses: React.FC<{}> = () => {

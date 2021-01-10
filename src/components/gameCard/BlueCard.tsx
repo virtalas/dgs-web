@@ -37,6 +37,8 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
+// TODO: Fix horizontal. Try with just CSS. Try with useState for margins
+
 const BlueCard: React.FC<{}> = (props) => {
   const classes = useStyles()
   return (

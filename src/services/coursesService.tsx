@@ -4,8 +4,8 @@ const mockCourses: Course[] = [
     name: 'Tali',
     city: 'Helsinki',
     layouts: [
-      { id: 'fdg', active: true, name: '2020 layout t', pars: [5, 3, 3, 3, 3, 3, 3, 3, 3, 4, 3, 3, 3, 3, 3, 3, 4, 3], total: 58, mapURL: 'https://www.tallaajat.org/wordpress/wp-content/uploads/2010/03/ratakartta.gif'},
-      { id: 'fdfsdg', active: false, name: '2019 layout t', pars: [5, 3, 3, 3, 3, 3, 3, 3, 3, 4, 3, 3, 3, 3, 3, 3, 4, 3], total: 58, mapURL: 'https://www.tallaajat.org/wordpress/wp-content/uploads/2010/03/ratakartta.gif'}
+      { id: 'fdg', active: true, name: '2020 layout t', description: 'Holes 3 and 7 have a temporary basket placement closer to the tee. There is a mandatory on hole 16.', pars: [5, 3, 3, 3, 3, 3, 3, 3, 3, 4, 3, 3, 3, 3, 3, 3, 4, 3], total: 58, mapURL: 'https://www.tallaajat.org/wordpress/wp-content/uploads/2010/03/ratakartta.gif'},
+      { id: 'fdfsdg', active: false, name: '2019 layout t', description: 'Holes 3 and 7 have a temporary basket placement closer to the tee. There is a mandatory on hole 16.', pars: [5, 3, 3, 3, 3, 3, 3, 3, 3, 4, 3, 3, 3, 3, 3, 3, 4, 3], total: 58, mapURL: 'https://www.tallaajat.org/wordpress/wp-content/uploads/2010/03/ratakartta.gif'}
     ],
     popularity: 556,
   },
@@ -14,8 +14,8 @@ const mockCourses: Course[] = [
     name: 'Siltamäki',
     city: 'Helsinki',
     layouts: [
-      { id: 'fddg', active: true, name: '2020 layout s', pars: [5, 3, 3, 3, 3, 3, 3, 3, 3, 4, 3, 3, 3, 3, 3, 3, 4, 3], total: 58, mapURL: 'https://frisbeegolfradat.fi/files/2014/05/siltamaen_helsinki_ratakartta_2014.jpg'},
-      { id: 'fdfsfsdg', active: false, name: '2019 layout s', pars: [5, 3, 3, 3, 3, 3, 3, 3, 3, 4, 3, 3, 3, 3, 3, 3, 4, 3], total: 58, mapURL: 'https://frisbeegolfradat.fi/files/2014/05/siltamaen_helsinki_ratakartta_2014.jpg'}
+      { id: 'fddg', active: true, name: '2020 layout s', description: 'Holes 3 and 7 have a temporary basket placement closer to the tee. There is a mandatory on hole 16.', pars: [5, 3, 3, 3, 3, 3, 3, 3, 3, 4, 3, 3, 3, 3, 3, 3, 4, 3], total: 58, mapURL: 'https://frisbeegolfradat.fi/files/2014/05/siltamaen_helsinki_ratakartta_2014.jpg'},
+      { id: 'fdfsfsdg', active: false, name: '2019 layout s', description: 'Holes 3 and 7 have a temporary basket placement closer to the tee. There is a mandatory on hole 16.', pars: [5, 3, 3, 3, 3, 3, 3, 3, 3, 4, 3, 3, 3, 3, 3, 3, 4, 3], total: 58, mapURL: 'https://frisbeegolfradat.fi/files/2014/05/siltamaen_helsinki_ratakartta_2014.jpg'}
     ],
     popularity: 476,
   },
@@ -24,8 +24,8 @@ const mockCourses: Course[] = [
     name: 'Kivikko',
     city: 'Helsinki',
     layouts: [
-      { id: 'fdr3eg', active: true, name: '2020 layout k', pars: [5, 3, 3, 3, 3, 3, 3, 3, 3, 4, 3, 3, 3, 3, 3, 3, 4, 3], total: 58, mapURL: 'https://frisbeegolfradat.fi/files/2014/05/kivikon_helsinki_ratakartta_2014.jpg'},
-      { id: 'fdfuysdg', active: false, name: '2019 layout k', pars: [5, 3, 3, 3, 3, 3, 3, 3, 3, 4, 3, 3, 3, 3, 3, 3, 4, 3], total: 58, mapURL: 'https://frisbeegolfradat.fi/files/2014/05/kivikon_helsinki_ratakartta_2014.jpg'}
+      { id: 'fdr3eg', active: true, name: '2020 layout k', description: 'Holes 3 and 7 have a temporary basket placement closer to the tee. There is a mandatory on hole 16.', pars: [5, 3, 3, 3, 3, 3, 3, 3, 3, 4, 3, 3, 3, 3, 3, 3, 4, 3], total: 58, mapURL: 'https://frisbeegolfradat.fi/files/2014/05/kivikon_helsinki_ratakartta_2014.jpg'},
+      { id: 'fdfuysdg', active: false, name: '2019 layout k', description: 'Holes 3 and 7 have a temporary basket placement closer to the tee. There is a mandatory on hole 16.', pars: [5, 3, 3, 3, 3, 3, 3, 3, 3, 4, 3, 3, 3, 3, 3, 3, 4, 3], total: 58, mapURL: 'https://frisbeegolfradat.fi/files/2014/05/kivikon_helsinki_ratakartta_2014.jpg'}
     ],
     popularity: 417,
   }
@@ -41,9 +41,14 @@ const getCourse = async (id: string): Promise<Course> => {
   return mockCourses[0]
 }
 
-const createLayout = async (courseId: string, name: string, description: string, mapURL: string, pars: number[]): Promise<Layout> => {
+const createLayout = async (courseId: string, layout: Layout): Promise<Layout> => {
   // TODO
-  return { id: 'fdfuysdg', active: false, name: '2019 layout k', pars: [5, 3, 3, 3, 3, 3, 3, 3, 3, 4, 3, 3, 3, 3, 3, 3, 4, 3], total: 58, mapURL: 'https://www.opendiscgolf.com/wp-content/uploads/EAO2020_Tampere_Disc_Golf_Center_Course_Map_Championship_Layout_WEB_v2.jpg' }
+  return layout
+}
+
+const updateLayout = async (layout: Layout): Promise<Layout> => {
+  // TODO
+  return layout
 }
 
 const createCourse = async (name: string, city: string): Promise<Course> => {
@@ -62,4 +67,5 @@ export default {
   getCourse,
   createLayout,
   createCourse,
+  updateLayout,
 }

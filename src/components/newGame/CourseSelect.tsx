@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react'
 
 import { makeStyles } from '@material-ui/core/styles'
-import Button from '@material-ui/core/Button'
 import FormControl from '@material-ui/core/FormControl'
 import InputLabel from '@material-ui/core/InputLabel'
 import Select from '@material-ui/core/Select'
@@ -41,7 +40,9 @@ const CourseSelect: React.FC<Props> = (props) => {
 
   function getActiveLayout(forCourse: Course): Layout {
     const layout = forCourse.layouts.find(layout => layout.active)
-    return layout !== undefined ? layout : { id: '', name: '', pars: [], total: 0, active: false, mapURL: '' }
+    return layout !== undefined ? layout : {
+      id: '', name: '', description: '', pars: [], total: 0, active: false, mapURL: ''
+    }
   }
 
   function selectActiveLayout(forCourse: Course) {
