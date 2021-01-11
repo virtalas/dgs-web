@@ -4,40 +4,33 @@ import Card from '@material-ui/core/Card'
 
 import { deepBlue } from '../../constants/Colors'
 
-// Card constants
-const horizontalMargin = 1 // vw amount of margin/space from the sides of the screen
-const maxMobileCardWidth = window.innerWidth - 0.01 * horizontalMargin * 2 * window.innerWidth
-const maxDesktopCardWidth = 700
-
-// Card content constants
-const contentHorizontalMargin = 2 // vw amount of margin/space from the sides of the card
-const maxMobileContentWidth = maxMobileCardWidth - 0.01 * contentHorizontalMargin * 2 * maxMobileCardWidth
-const maxDesktopContentWidth = maxDesktopCardWidth - 0.01 * contentHorizontalMargin * 2 * maxDesktopCardWidth
-
 const useStyles = makeStyles((theme) => ({
   card: {
-    maxWidth: Math.min(maxMobileCardWidth, maxDesktopCardWidth),
+    maxWidth: 700, // Max desktop width.
     width: '100%',
+    [theme.breakpoints.down('sm')]: {
+      width: 'calc(100% - 2vw)' // Width for mobile.
+    },
     marginTop: theme.spacing(4),
-    marginLeft: 'auto',
+    marginLeft: 'auto', // Place in the center.
     marginRight: 'auto',
     marginBottom: theme.spacing(4),
-    overflowX: 'hidden',
     backgroundColor: deepBlue,
     position: 'relative', // For positioning edit button.
   },
   content: {
-    maxWidth: Math.min(maxMobileContentWidth, maxDesktopContentWidth),
+    maxWidth: 672, // Max desktop width.
     width: '100%',
-    marginLeft: 'auto',
+    [theme.breakpoints.down('sm')]: {
+      width: 'calc(100% - 4vw)', // Width for mobile.
+    },
+    marginLeft: 'auto', // Place in the center.
     marginRight: 'auto',
     marginTop: theme.spacing(1),
     marginBottom: theme.spacing(1),
     textAlign: 'center',
   },
 }))
-
-// TODO: Fix horizontal. Try with just CSS. Try with useState for margins
 
 const BlueCard: React.FC<{}> = (props) => {
   const classes = useStyles()

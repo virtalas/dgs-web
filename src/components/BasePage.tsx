@@ -32,6 +32,7 @@ const useStyles = makeStyles((theme) => ({
   },
   content: {
     marginTop: appBarHeight,
+    width: '100%',
     flexGrow: 1,
   },
   navLink: {
