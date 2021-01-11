@@ -43,7 +43,7 @@ const CourseCard: React.FC<Props> = (props) => {
   const [redirect, setRedirect] = useState(false)
 
   if (redirect) {
-    return <Redirect to={'/courses/view/' + course.id} />
+    return <Redirect push to={'/courses/view/' + course.id} />
   }
 
   const handleClick = () => setRedirect(true)

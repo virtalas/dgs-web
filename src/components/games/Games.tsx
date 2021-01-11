@@ -104,7 +104,7 @@ const Games: React.FC<Props> = (props) => {
   }, [selectedYear, selectedMonth]) // eslint-disable-line react-hooks/exhaustive-deps
 
   if (redirect) {
-    return <Redirect to={'/games'} />
+    return <Redirect push to={'/games'} />
   }
 
   const clearFetchedGames = () => {
