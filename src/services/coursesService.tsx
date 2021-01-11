@@ -1,5 +1,3 @@
-import { GolfCourse } from "@material-ui/icons"
-
 const mockCourses: Course[] = [
   {
     id: 'fsdfefesd',

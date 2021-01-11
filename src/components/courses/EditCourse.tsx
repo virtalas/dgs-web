@@ -19,6 +19,7 @@ const useStyles = makeStyles((theme) => ({
   },
   createButton: {
     margin: theme.spacing(3),
+    marginBottom: 0,
   },
 }))
 
@@ -42,11 +43,10 @@ const EditCourse: React.FC<Props> = (props) => {
 
   useEffect(() => {
     if (!newCourse) {
-      console.log(course?.name)
       setName(course ? course.name : '')
       setCity(course ? course.city : '')
     }
-  }, [])
+  }, [course, newCourse])
 
   const handleFinishClicked = () => {
     const courseId = course ? course.id : ''

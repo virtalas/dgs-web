@@ -63,6 +63,7 @@ const useStyles = makeStyles((theme) => ({
   },
   createButton: {
     margin: theme.spacing(3),
+    marginBottom: 0,
   },
   totalPar: {
     marginTop: theme.spacing(2),
@@ -112,7 +113,7 @@ const EditLayout: React.FC<Props> = (props) => {
       setHoleCount(layout ? layout.pars.length : 18)
       setPars(layout ? layout.pars : [])
     }
-  }, [])
+  }, [layout, newLayout]) // eslint-disable-line react-hooks/exhaustive-deps
 
   const totalPar = pars.reduce((total, currentValue) => total + currentValue, 0)
   const numberOfZeroPars = pars.reduce((total, currentValue) => currentValue === 0 ? total + 1 : total, 0)
@@ -258,6 +259,7 @@ const EditLayout: React.FC<Props> = (props) => {
               <img
                 className={classes.map}
                 src={mapURL}
+                alt="Course map"
               />
             )}
         </Paper>
@@ -278,25 +280,32 @@ const EditLayout: React.FC<Props> = (props) => {
           Total par: {totalPar}
         </Typography>
 
-        {newLayout ? null : (
+        <Grid
+          container
+          direction="row"
+          justify="center"
+          alignItems="center"
+        >
+          {newLayout ? null : (
+            <Button
+              className={classes.createButton}
+              variant="contained"
+              onClick={handleCancel}
+            >
+              Cancel
+            </Button>
+          )}
+
           <Button
             className={classes.createButton}
             variant="contained"
-            onClick={handleCancel}
+            color="primary"
+            onClick={handleFinishClicked}
+            disabled={name.length === 0 || numberOfZeroPars > 0 || holeCount === 0}
           >
-            Cancel
+            {newLayout ? 'Create' : 'Update'}
           </Button>
-        )}
-
-        <Button
-          className={classes.createButton}
-          variant="contained"
-          color="primary"
-          onClick={handleFinishClicked}
-          disabled={name.length === 0 || numberOfZeroPars > 0 || holeCount === 0}
-        >
-          {newLayout ? 'Create' : 'Update'}
-        </Button>
+        </Grid>
       </Grid>
     </div>
   )

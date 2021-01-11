@@ -19,7 +19,7 @@ const NewLayout: React.FC<Props> = (props) => {
 
   useEffect(() => {
     coursesService.getCourse(courseId).then(c => setCourse(c))
-  }, [course])
+  }, [course, courseId])
 
   // TODO: Redirect to newly created Layout's view?
   if (redirect) {

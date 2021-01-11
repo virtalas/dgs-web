@@ -55,6 +55,7 @@ const CourseCard: React.FC<Props> = (props) => {
           <img
             className={classes.image}
             src={coverPictureURL}
+            alt="Course map"
           />
         </div>
 

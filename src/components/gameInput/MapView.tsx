@@ -41,6 +41,7 @@ const MapView: React.FC<Props> = (props) => {
             <img
               className={classes.image}
               src={mapURL}
+              alt="Course map"
             />
           </div>
         </MapInteractionCSS>

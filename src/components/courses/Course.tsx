@@ -65,7 +65,7 @@ const Course: React.FC<Props> = (props) => {
 
   useEffect(() => {
     coursesService.getCourse(courseId).then(c => setCourse(c))
-  }, [])
+  }, [courseId])
 
   const coverPictureURL = course?.layouts.filter(layout => layout.active)[0].mapURL
 
@@ -111,6 +111,7 @@ const Course: React.FC<Props> = (props) => {
           <img
             className={classes.image}
             src={coverPictureURL}
+            alt="Course map"
           />
         </div>
       ) : (
