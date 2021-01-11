@@ -1,4 +1,6 @@
 import React from 'react'
+// @ts-ignore
+import { MapInteractionCSS } from 'react-map-interaction'
 import { makeStyles } from '@material-ui/core'
 
 import { sneakyGrey } from '../../constants/Colors'
@@ -12,8 +14,9 @@ const useStyles = makeStyles((theme) => ({
     width: '100%',
   },
   imageContainer: {
+    marginTop: theme.spacing(7),
     width: '100%',
-    height: 100,
+    height: '100%',
     overflow: 'hidden',
     // Center mapPlaceholderText vertically:
     display: "flex",
@@ -28,23 +31,22 @@ interface Props {
 
 const MapView: React.FC<Props> = (props) => {
   const classes = useStyles()
-
   const { mapURL } = props
 
   return (
     <div className={classes.root}>
       {mapURL.length > 0 ? (
-        <div className={classes.imageContainer}>
-          {/* TODO: Clicking image opens popup of course map */}
-          <img
-            className={classes.image}
-            src={mapURL}
-          />
-        </div>
+        <MapInteractionCSS minScale={1}>
+          <div className={classes.imageContainer}>
+            <img
+              className={classes.image}
+              src={mapURL}
+            />
+          </div>
+        </MapInteractionCSS>
       ) : (
         <div><br /><br /><br /><br /><br />No course map added.</div>
       )}
-      
     </div>
   )
 }

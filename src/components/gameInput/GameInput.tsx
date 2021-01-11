@@ -113,7 +113,7 @@ const GameInput: React.FC<{}> = (props: any) => {
 
   // TODO
   const mapView = (
-    <MapView mapURL={''} />
+    <MapView mapURL={layout ? layout?.mapURL : ''} />
   )
 
   const gameInfoView = (
