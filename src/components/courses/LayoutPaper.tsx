@@ -5,13 +5,11 @@ import EditIcon from '@material-ui/icons/Edit'
 import Typography from '@material-ui/core/Typography'
 import Button from '@material-ui/core/Button'
 import { Grid, IconButton, Paper } from '@material-ui/core'
-import Backdrop from '@material-ui/core/Backdrop'
-import Fade from '@material-ui/core/Fade'
 
 import Box from '@material-ui/core/Box/Box'
-import Modal from '@material-ui/core/Modal/Modal'
 import EditLayout from './EditLayout'
 import coursesService from '../../services/coursesService'
+import CancellableModal from '../CancellableModal'
 
 const useStyles = makeStyles((theme) => ({
   layoutPaper: {
@@ -23,19 +21,6 @@ const useStyles = makeStyles((theme) => ({
   },
   editButton: {
     marginLeft: theme.spacing(1),
-  },
-  modal: {
-    alignItems: 'center',
-  },
-  container: {
-    maxHeight: '75%',
-    position: 'absolute',
-    top: '12%', // Half of the remaining space from (100 - maxHeight)%, thus centering element.
-    width: '100%',
-    overflow: 'scroll',
-    display: 'block',
-    backgroundColor: theme.palette.background.paper,
-    padding: theme.spacing(1),
   },
 }))
 
@@ -110,27 +95,14 @@ const LayoutPaper: React.FC<Props> = (props) => {
 
       <Button disabled size="small">Layout map</Button>
 
-      <Modal
-        className={classes.modal}
-        open={modalOpen}
-        onClose={() => setModalOpen(false)}
-        closeAfterTransition
-        BackdropComponent={Backdrop}
-        BackdropProps={{
-          timeout: 500,
-        }}
-      >
-        <Fade in={modalOpen}>
-          <div className={classes.container}>
-            <EditLayout
-              layout={layout}
-              course={course}
-              handleFinish={handleUpdateLayout}
-              handleCancel={() => setModalOpen(false)}
-            />
-          </div>
-        </Fade>
-      </Modal>
+      <CancellableModal modalOpen={modalOpen} onClose={() => setModalOpen(false)}>
+        <EditLayout
+          layout={layout}
+          course={course}
+          handleFinish={handleUpdateLayout}
+          handleCancel={() => setModalOpen(false)}
+        />
+      </CancellableModal>
     </Paper>
   )
 }

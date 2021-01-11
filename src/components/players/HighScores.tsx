@@ -8,28 +8,13 @@ import TableBody from '@material-ui/core/TableBody'
 import TableCell from '@material-ui/core/TableCell'
 import TableHead from '@material-ui/core/TableHead'
 import TableRow from '@material-ui/core/TableRow'
-import Modal from '@material-ui/core/Modal'
-import Backdrop from '@material-ui/core/Backdrop'
-import Fade from '@material-ui/core/Fade'
 
 import playersService from '../../services/playersService'
+import CancellableModal from '../CancellableModal'
 
 const useStyles = makeStyles((theme) => ({
-  modal: {
-    alignItems: 'center',
-  },
   modalTable: {
     display: 'table',
-  },
-  container: {
-    maxHeight: '75%',
-    position: 'absolute',
-    top: '12%', // Half of the remaining space from (100 - maxHeight)%, thus centering element.
-    width: '100%',
-    overflow: 'scroll',
-    display: 'block',
-    backgroundColor: theme.palette.background.paper,
-    padding: theme.spacing(1),
   },
 }))
 
@@ -77,48 +62,35 @@ const HighScores: React.FC<Props> = (props) => {
       <Button size="small" onClick={handleHighScoresOpen}>
         High scores
       </Button>
-      <Modal
-        className={classes.modal}
-        open={highScoresOpen}
-        onClose={handleHighScoresClose}
-        closeAfterTransition
-        BackdropComponent={Backdrop}
-        BackdropProps={{
-          timeout: 500,
-        }}
-      >
-        <Fade in={highScoresOpen}>
-          <div className={classes.container}>
-            <Table className={classes.modalTable} size="small">
-              <TableHead>
-                <TableRow>
-                  <TableCell>Course</TableCell>
-                  <TableCell>To Par</TableCell>
-                  <TableCell>Game Card</TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {highScores?.map((score: HighScore) => (
-                  <TableRow key={'scoreRow' + score.courseName}>
-                    <TableCell align="left">{score.courseName}</TableCell>
-                    <TableCell align="center">{score.toPar}</TableCell>
-                    <TableCell align="right">
-                      <Button
-                        variant="outlined"
-                        size="small"
-                        onClick={handleGameClick}
-                        value={score.gameId}
-                      >
-                        {score.gameDate.toLocaleString('fi-FI', dateOptions)}
-                      </Button>
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </div>
-        </Fade>
-      </Modal>
+      <CancellableModal modalOpen={highScoresOpen} onClose={handleHighScoresClose}>
+        <Table className={classes.modalTable} size="small">
+          <TableHead>
+            <TableRow>
+              <TableCell>Course</TableCell>
+              <TableCell>To Par</TableCell>
+              <TableCell>Game Card</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {highScores?.map((score: HighScore) => (
+              <TableRow key={'scoreRow' + score.courseName}>
+                <TableCell align="left">{score.courseName}</TableCell>
+                <TableCell align="center">{score.toPar}</TableCell>
+                <TableCell align="right">
+                  <Button
+                    variant="outlined"
+                    size="small"
+                    onClick={handleGameClick}
+                    value={score.gameId}
+                  >
+                    {score.gameDate.toLocaleString('fi-FI', dateOptions)}
+                  </Button>
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </CancellableModal>
     </div>
   )
 }

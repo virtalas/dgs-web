@@ -10,6 +10,8 @@ import Skeleton from '@material-ui/lab/Skeleton'
 import { sneakyGrey } from '../../constants/Colors'
 import coursesService from '../../services/coursesService'
 import LayoutPaper from './LayoutPaper'
+import EditCourse from './EditCourse'
+import CancellableModal from '../CancellableModal'
 
 const useStyles = makeStyles((theme) => ({
   page: {
@@ -43,6 +45,7 @@ interface Props {
   match: any,
 }
 
+// TODO: pressing back takes to front page??
 // TODO: Ability to view and edit everything
 // TODO: Current weather conditions?
 // TODO: Use ghosting after opening Accordion and fetching data
@@ -58,6 +61,7 @@ const Course: React.FC<Props> = (props) => {
   const courseId = match.params.id
 
   const [course, setCourse] = useState<Course>()
+  const [editCourseOpen, setEditCourseOpen] = useState(false)
 
   useEffect(() => {
     coursesService.getCourse(courseId).then(c => setCourse(c))
@@ -65,8 +69,13 @@ const Course: React.FC<Props> = (props) => {
 
   const coverPictureURL = course?.layouts.filter(layout => layout.active)[0].mapURL
 
-  const handleEditCourse = () => {
-    // TODO: Popover
+  const handleEditCourse = () => setEditCourseOpen(true)
+
+  const handleEditCourseFinished = (course: Course) => {
+    coursesService.updateCourse(course).then((c) => {
+      setCourse(c)
+      setEditCourseOpen(false)
+    })
   }
 
   const handleLayoutUpdated = (layout: Layout) => {
@@ -80,9 +89,19 @@ const Course: React.FC<Props> = (props) => {
   }
 
   const editCourseButton = (
-    <IconButton disabled className={classes.editCourseButton} onClick={handleEditCourse}>
+    <IconButton className={classes.editCourseButton} onClick={handleEditCourse}>
       <EditIcon />
     </IconButton>
+  )
+
+  const editCourseModal = (
+    <CancellableModal modalOpen={editCourseOpen} onClose={() => setEditCourseOpen(false)}>
+      <EditCourse
+        course={course}
+        handleFinish={handleEditCourseFinished}
+        handleCancel={() => setEditCourseOpen(false)}
+      />
+    </CancellableModal>
   )
 
   return (
@@ -109,12 +128,12 @@ const Course: React.FC<Props> = (props) => {
           <Typography className={classes.title} variant="h4">
             {course?.name}, {course?.city} {editCourseButton}
           </Typography>
-          
         </Grid>
       ) : (
         <Skeleton variant="text" width={200} height={40} />
       )}
       
+      {editCourseModal}
 
       <Table size="small">
         <TableHead>

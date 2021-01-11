@@ -13,7 +13,6 @@ const NewLayout: React.FC<Props> = (props) => {
   const courseId = match.params.id
 
   const [redirect, setRedirect] = useState(false)
-  const [layout, setLayout] = useState<Layout>()
   const [course, setCourse] = useState<Course>(
     { id: '', name: 'Loading...', city: '', layouts: [], popularity: 0 }
   )

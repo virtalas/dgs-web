@@ -118,7 +118,6 @@ const EditLayout: React.FC<Props> = (props) => {
   const numberOfZeroPars = pars.reduce((total, currentValue) => currentValue === 0 ? total + 1 : total, 0)
 
   const handleFinishClicked = () => {
-    // TODO create layout and handleFinish(layout)
     const layoutId = layout ? layout.id : ''
     const active = layout ? layout.active : false
     const inputtedLayout = {

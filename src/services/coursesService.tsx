@@ -1,3 +1,5 @@
+import { GolfCourse } from "@material-ui/icons"
+
 const mockCourses: Course[] = [
   {
     id: 'fsdfefesd',
@@ -51,7 +53,7 @@ const updateLayout = async (layout: Layout): Promise<Layout> => {
   return layout
 }
 
-const createCourse = async (name: string, city: string): Promise<Course> => {
+const createCourse = async (course: Course): Promise<Course> => {
   // TODO
   return {
     id: 'newly_created_id_hgurskgfg',
@@ -62,10 +64,16 @@ const createCourse = async (name: string, city: string): Promise<Course> => {
   }
 }
 
+const updateCourse = async (course: Course): Promise<Course> => {
+  // TODO
+  return course
+}
+
 export default {
   getCourses,
   getCourse,
   createLayout,
   createCourse,
   updateLayout,
+  updateCourse,
 }

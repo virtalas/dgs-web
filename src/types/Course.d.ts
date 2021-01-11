@@ -3,5 +3,5 @@ interface Course {
   name: string,
   city: string,
   layouts: Layout[],
-  popularity: number,
+  popularity: number, // TODO: Change to numberOfGames
 }
