@@ -87,7 +87,7 @@ const useStyles = makeStyles((theme) => ({
     width: 155,
     margin: '0 auto', // Center
   },
-}))
+}), { name: 'MuiHook' })
 
 const FinishButton = withStyles({
   root: {
@@ -148,6 +148,7 @@ const PlayerStrokeInput: React.FC<Props> = (props) => {
       <ListItemText primary={scoreInfo.player.firstName} />
       <ListItemText
         className={classes.toParText}
+        data-cy="toPar"
         primary={scoreInfo.toPar > 0 ? '+' + scoreInfo.toPar : scoreInfo.toPar}
       />
       <ListItemText primary="OB:" className={classes.obInputText} />
@@ -195,7 +196,7 @@ const PlayerStrokeInput: React.FC<Props> = (props) => {
           </ListItemText>
           <ListItemText className={classes.parButton}>
             <div className={classes.parCircle} onClick={handleParClick}>
-              <div className={classes.parButtonText}>Par</div>
+              <div className={classes.parButtonText} data-cy="parCircleButton">Par</div>
             </div>
           </ListItemText>
         </ListItem>

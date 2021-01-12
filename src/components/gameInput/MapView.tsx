@@ -34,7 +34,7 @@ const MapView: React.FC<Props> = (props) => {
   const { mapURL } = props
 
   return (
-    <div className={classes.root}>
+    <div id="mapView" className={classes.root}>
       {mapURL.length > 0 ? (
         <MapInteractionCSS minScale={1}>
           <div className={classes.imageContainer}>

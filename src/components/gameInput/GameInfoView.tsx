@@ -67,7 +67,7 @@ const GameInfoView: React.FC<Props> = (props) => {
   }
 
   return (
-    <div>
+    <div id="gameInfoView">
       <div className={classes.gameContainer}>
         <GameCard
           game={game}
@@ -83,7 +83,7 @@ const GameInfoView: React.FC<Props> = (props) => {
           <Typography className={classes.syncText}>
             {updating ? 'Syncing game...' : 'Game synced.'}
           </Typography>
-          <Button variant="contained" color="primary" onClick={handleFinish}>
+          <Button id="finishGameButton" variant="contained" color="primary" onClick={handleFinish}>
             Finish game
           </Button>
         </div>

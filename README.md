@@ -13,4 +13,4 @@ Disc Golf Stats web frontend built with ReactJS & TypeScript. Using [dgs-api](ht
 ### Testing
 
 - Run all unit tests (enzyme): `$ npm test`
-- Run integration tests (cypress): `$ npm run cypress`
+- Run integration tests (cypress): `$ npm start` and then `$ npm run cypress`

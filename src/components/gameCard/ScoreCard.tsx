@@ -305,7 +305,7 @@ const ScoreCard: React.FC<Props> = (props) => {
           }
 
           return (
-            <td className={scoreClass} key={index}>
+            <td className={scoreClass} key={index} data-cy="playerStroke">
               {strokeCount === 0 ? "-" : strokeCount}
               {/* obStrokes ? (<span className="obCount">{"+" + obStrokes}</span>) : null */}
               {obStrokes > 0 ? createObMarkers(obStrokes) : null}

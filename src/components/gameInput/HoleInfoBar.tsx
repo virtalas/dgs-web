@@ -59,7 +59,7 @@ const HoleInfoBar: React.FC<Props> = (props) => {
     <div>
       <AppBar position="fixed" className={classes.appBar}>
         <Toolbar>
-          <Typography variant="h6" color="inherit">
+          <Typography id="infoBarHoleNumber" variant="h6" color="inherit">
             {showInfo ? 'Hole ' + holeNum : null}
           </Typography>
           <Typography variant="h6" color="inherit" className={classes.par}>

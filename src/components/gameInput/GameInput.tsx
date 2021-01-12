@@ -163,10 +163,10 @@ const GameInput: React.FC<{}> = (props: any) => {
         showLabels
         className={classes.bottomNav}
       >
-        <BottomNavigationAction label="Scores" icon={<EditIcon />} />
-        <BottomNavigationAction label="Stats" icon={<InfoIcon />} />
-        <BottomNavigationAction label="Map" icon={<LocationOnIcon />} />
-        <BottomNavigationAction label="Game info" icon={<DescriptionIcon />} />
+        <BottomNavigationAction label="Scores" icon={<EditIcon />} id="scoresTabButton" />
+        <BottomNavigationAction label="Stats" icon={<InfoIcon />} id="statsTabButton" />
+        <BottomNavigationAction label="Map" icon={<LocationOnIcon />} id="mapTabButton" />
+        <BottomNavigationAction label="Game info" icon={<DescriptionIcon id="gameInfoTabButton" />} />
       </BottomNavigation>
     </div>
   )

@@ -23,3 +23,10 @@
 //
 // -- This is will overwrite an existing command --
 // Cypress.Commands.overwrite("visit", (originalFn, url, options) => { ... })
+
+Cypress.Commands.add('login', () => {
+  // TODO: Implement stubbing of the server once there is a server to stub and dgs-web is making API calls to it.
+
+  // Workaround for now:
+  window.localStorage.setItem("dgs-token", '{"minAge":"12","maxAge":"15"}')
+})

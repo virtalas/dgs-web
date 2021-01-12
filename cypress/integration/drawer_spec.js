@@ -1,4 +1,9 @@
 describe('Drawer', function () {
+
+  beforeEach(() => {
+    cy.login()
+  })
+
   it('navigates correctly with drawer buttons', function () {
     cy.visit('/')
 
@@ -25,11 +30,5 @@ describe('Drawer', function () {
     cy.contains('Info')
       .click({ force: true })
     cy.get('#infoPage')
-  })
-
-  it('navigates to new course page', function () {
-    cy.visit('/courses')
-    cy.get('#newButton').click({ force: true })
-    // TODO: when implemented
   })
 })

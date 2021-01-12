@@ -181,6 +181,7 @@ const GameInfo: React.FC<Props> = (props) => {
 
   const commentEdit = isEditing ? (
     <TextField
+      id="commentEdit"
       className={classes.commentEdit}
       value={comment}
       multiline={true}
@@ -195,6 +196,7 @@ const GameInfo: React.FC<Props> = (props) => {
     <div className={classes.chipRow}>
       {availableWeatherConditions.map((condition: Condition, index: number) => (
         <Chip
+          data-cy="weatherConditionChip"
           className={classes.chip}
           label={condition}
           variant={selected(condition) ? 'default' : 'outlined'}
@@ -257,7 +259,14 @@ const GameInfo: React.FC<Props> = (props) => {
     <Paper className = {classes.infoPaper} elevation = { 0} >
       {conditions}
       {illegalAndHighScorers}
-      <Typography className={classes.comment} align="left" variant="body1"> {game.comment}</Typography>
+      <Typography
+        id="comment"
+        className={classes.comment}
+        align="left"
+        variant="body1"
+      >
+        {game.comment}
+      </Typography>
     </Paper>
   ) : null
 

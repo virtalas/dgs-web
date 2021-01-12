@@ -71,7 +71,7 @@ const ScoreInputView: React.FC<Props> = (props) => {
   )
 
   return (
-    <div className={classes.root}>
+    <div id="scoresInputView" className={classes.root}>
       <SwipeableViews
         className={swipeableViewStyle}
         resistance

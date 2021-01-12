@@ -86,7 +86,13 @@ const NewGame: React.FC<{}> = () => {
         allPlayers={allPlayers}
       />
       <br/>
-      <Button variant="contained" color="primary" onClick={handleStartButtonClick} disabled={!gameCreatable}>
+      <Button
+        id="newGameButton"
+        variant="contained"
+        color="primary"
+        onClick={handleStartButtonClick}
+        disabled={!gameCreatable}
+      >
         New game
       </Button>
     </div>

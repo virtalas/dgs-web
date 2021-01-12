@@ -14,6 +14,7 @@ const HoleInfoView: React.FC<Props> = (props) => {
 
   return (
     <SwipeableViews
+      id="holeInfoView"
       className={swipeableViewStyle}
       resistance
       index={holeNum - 1}

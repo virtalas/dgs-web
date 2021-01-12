@@ -61,7 +61,7 @@ const HoleNavigation: React.FC<Props> = (props) => {
       <Fab
         disableRipple
         color="primary"
-        aria-label="Add"
+        data-cy="previousHole"        
         className={classes.prevHole}
         onClick={() => onPrevHole()}
       >
@@ -85,7 +85,7 @@ const HoleNavigation: React.FC<Props> = (props) => {
       <Fab
         disableRipple
         color="primary"
-        aria-label="Add"
+        data-cy="nextHole"        
         className={classes.nextHole}
         onClick={() => onNextHole()}
       >
