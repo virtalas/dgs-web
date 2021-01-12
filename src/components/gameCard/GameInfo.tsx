@@ -62,7 +62,7 @@ const useStyles = makeStyles((theme) => ({
     marginTop: 10,
     marginBottom: 40, // Make room for 'Save' and 'Cancel' buttons.
   },
-}))
+}), { name: 'MuiHook' })
 
 interface Props {
   game: Game,

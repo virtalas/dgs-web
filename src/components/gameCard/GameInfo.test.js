@@ -18,8 +18,9 @@ describe.only('<GameInfo />', () => {
       course: {
         id: 5,
         name: "Puolarmaari",
-        pars: [3,3,3,3,3,3,3,3,3,3,3,3,3,3,4,3,3,3,3,3],
-        total: 60,
+        layouts: [
+          { id: 'fdg', active: true, name: '2020 layout', description: '', pars: [3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 4, 3, 3, 3], total: 58, mapURL: '' },
+        ],
       },
       startDate: null,
       endDate: "2019-02-16 09:22",
@@ -57,7 +58,7 @@ describe.only('<GameInfo />', () => {
   })
 
   it('renders content', () => {
-    expect(info.find('[className^="Hook-chipRow"]')).to.have.lengthOf(2) // Chips are rendered in two rows
+    expect(info.find('[className="MuiHook-chipRow"]')).to.have.lengthOf(2) // Chips are rendered in two rows
     expect(info.find(Chip)).to.have.lengthOf(6) // There should be 6 Chips in total
 
     // Contents

@@ -170,7 +170,7 @@ const useStyles = makeStyles((theme) => ({
   obCount: {
     fontSize: '80%',
   },
-}))
+}), { name: 'MuiHook' }) // For testing. Will render e.g. classes.par as 'MuiHook-par'
 
 interface Props {
   game: Game,
@@ -275,7 +275,7 @@ const ScoreCard: React.FC<Props> = (props) => {
 
           switch (strokeCount) {
             case 0:
-              scoreClass = ""
+              scoreClass = ''
               break;
             case 1:
               scoreClass = classes.holeInOne
