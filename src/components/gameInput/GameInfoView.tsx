@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Redirect } from 'react-router'
 
 import { Button, Typography } from '@material-ui/core'
@@ -34,7 +34,6 @@ const useStyles = makeStyles((theme) => ({
 
 interface Props {
   game: Game,
-  // setGame: (game: Game) => void,
   updateGame: (game: Game) => void,
   availableWeatherConditions: Condition[],
   availableConditions: Condition[],
@@ -50,6 +49,12 @@ const GameInfoView: React.FC<Props> = (props) => {
 
   const { game, updateGame, availableWeatherConditions, availableConditions, updating } = props
   const [redirect, setRedirect] = useState(false)
+
+  useEffect(() => {
+    // Update the game finish time automatically.
+    game.endDate = new Date()
+    updateGame(game)
+  }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
   const handleFinish = () => {
     gamesService.updateGame(game)

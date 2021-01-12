@@ -22,6 +22,10 @@ const useStyles = makeStyles((theme) => ({
   },
   appBar: {
     background: dirtyBlue,
+    [theme.breakpoints.up('sm')]: {
+      paddingLeft: '25%',
+      paddingRight: '25%',
+    },
   },
   navLink: {
     textDecoration: 'none',

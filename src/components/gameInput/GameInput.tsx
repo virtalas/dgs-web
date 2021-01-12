@@ -33,6 +33,11 @@ const useStyles = makeStyles((theme) => ({
     width: '100%',
     position: 'fixed',
     bottom: 0,
+    [theme.breakpoints.up('sm')]: {
+      width: '50%',
+      marginRight: '25%',
+      marginLeft: '25%',
+    },
   },
   progress: {
     margin: 'auto',

@@ -53,7 +53,7 @@ const NewGame: React.FC<{}> = () => {
 
   const handleStartButtonClick = async () => {
     // Create a new game, then redirect to '/games/:newGameId/input'.
-    const newGame = await gamesService.createGame(course, layout, players)
+    const newGame = await gamesService.createGame(layout, players)
     setNewGameId(newGame.id)
     setRedirect(true)
   }

@@ -585,9 +585,10 @@ const getMonthsThatHaveGames = async (): Promise<GameMonths[]> => {
   return mockMonthsThatHaveGames
 }
 
-const createGame = async (course: Course, layout: Layout, players: Player[]): Promise<Game> => {
+const createGame = async (layout: Layout, players: Player[]): Promise<Game> => {
   // TODO: Replace mock data with API call.
   // Note: If the layout is not active, the active layout should be updated to be the chosen layout.
+  // Note: Add startDate as the time of creation.
   return mockGame
 }
 

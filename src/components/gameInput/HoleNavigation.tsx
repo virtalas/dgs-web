@@ -20,6 +20,9 @@ const useStyles = makeStyles((theme) => ({
     left: buttonEdgeMargin + '%',
     height: buttonHeight,
     width: buttonHeight,
+    [theme.breakpoints.up('sm')]: {
+      left: '25%',
+    },
   },
   nextHole: {
     position: 'fixed',
@@ -27,6 +30,9 @@ const useStyles = makeStyles((theme) => ({
     right: buttonEdgeMargin + '%',
     height: buttonHeight,
     width: buttonHeight,
+    [theme.breakpoints.up('sm')]: {
+      right: '25%',
+    },
   },
   par: {
     margin: 'auto',

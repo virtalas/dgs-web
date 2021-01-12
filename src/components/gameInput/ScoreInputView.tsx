@@ -2,9 +2,20 @@ import React from 'react'
 import SwipeableViews from 'react-swipeable-views'
 import { isMobile } from 'react-device-detect'
 
+import { makeStyles } from '@material-ui/core/styles'
 import HoleNavigation from './HoleNavigation'
 import PlayerStrokeInput from './PlayerStrokeInput'
 import { gameInfoViewTab } from './GameInput'
+
+const useStyles = makeStyles((theme) => ({
+  root: {
+    [theme.breakpoints.up('sm')]: {
+      width: '50%',
+      marginLeft: '25%',
+      marginRight: '25%',
+    },
+  },
+}))
 
 interface Props {
   game: Game,
@@ -19,6 +30,8 @@ interface Props {
 // TODO: Make column names: Player, To Par, OBs, Throws
 
 const ScoreInputView: React.FC<Props> = (props) => {
+  const classes = useStyles()
+
   const { game, updateGame, swipeableViewStyle, holeNum, setHoleNum, setTab, updating } = props
 
   const layout = game.course.layouts.filter(l => l.active)[0]
@@ -58,7 +71,7 @@ const ScoreInputView: React.FC<Props> = (props) => {
   )
 
   return (
-    <div>
+    <div className={classes.root}>
       <SwipeableViews
         className={swipeableViewStyle}
         resistance
