@@ -8,7 +8,7 @@ Disc Golf Stats web frontend built with ReactJS & TypeScript. Using [dgs-api](ht
 
 1. Install npm packages: `$ npm install`
 2. Run the project: `$ npm start`
-3. The app will be running at http://localhost:3000/.
+3. The app will be running at http://localhost:3000/ (https disabled for developmet environment).
 
 ### Testing
 
