@@ -150,7 +150,7 @@ const GameInput: React.FC<{}> = (props: any) => {
   }
 
   return (
-    <div>
+    <div id="gameInputPage">
       <HoleInfoBar
         showInfo={tab !== gameInfoViewTab}
         holeNum={holeNum}

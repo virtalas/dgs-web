@@ -1,4 +1,9 @@
 describe('Inputting a new game', function () {
+
+  // Note.
+  // { force: true } is added to fix an issue of tests randomly failing:
+  // https://github.com/cypress-io/cypress/issues/5830
+
   beforeEach(function () {
     cy.login()
     cy.visit('/games')
@@ -7,7 +12,7 @@ describe('Inputting a new game', function () {
   })
 
   it('saves inputted game info when moving between tabs', () => {
-    cy.get('[class=MuiHook-strokeInput]').eq(1).type(3)
+    cy.get('[class=MuiHook-strokeInput]').eq(1).type(3, { force: true })
 
     cy.get('#gameInfoTabButton').click()
     cy.get('[data-cy=playerStroke').should('contain', '3')
@@ -23,24 +28,24 @@ describe('Inputting a new game', function () {
   })
   
   it('inputs ob', function () {
-    cy.get('[class=MuiHook-strokeInput]:first').type(2)
+    cy.get('[class=MuiHook-strokeInput]:first').type(2, { force: true })
     cy.get('[class=MuiHook-strokeInput]:first').should('have.value', '2')
-    cy.get('[class=MuiHook-strokeInput]').eq(1).type(3)
+    cy.get('[class=MuiHook-strokeInput]').eq(1).type(3, { force: true })
     cy.get('[class=MuiHook-strokeInput]').eq(1).should('have.value', '3')
   })
 
   it('inputs strokes', function () {
-    cy.get('[class=MuiHook-strokeInput]').eq(1).type(3)
+    cy.get('[class=MuiHook-strokeInput]').eq(1).type(3, { force: true })
     cy.get('[class=MuiHook-strokeInput]').eq(1).should('have.value', '3')
   })
 
   it('updates "to par"', function () {
     cy.get('[data-cy=toPar]:first').should('contain', '0')
-    cy.get('[class=MuiHook-strokeInput]').eq(1).type(3)
+    cy.get('[class=MuiHook-strokeInput]').eq(1).type(3, { force: true })
     cy.get('[data-cy=toPar]:first').should('contain', '0') // Assume par 3
-    cy.get('[class=MuiHook-strokeInput]').eq(1).type(4)
+    cy.get('[class=MuiHook-strokeInput]').eq(1).type(4, { force: true })
     cy.get('[data-cy=toPar]:first').should('contain', '+1')
-    cy.get('[class=MuiHook-strokeInput]').eq(1).type(2)
+    cy.get('[class=MuiHook-strokeInput]').eq(1).type(2, { force: true })
     cy.get('[data-cy=toPar]:first').should('contain', '-1')
   })
   
