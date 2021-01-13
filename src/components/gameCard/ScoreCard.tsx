@@ -415,6 +415,7 @@ function createStrokeInput(className: string,
                             throws: boolean) {
   return (
     <input
+      data-cy="strokeEdit"
       className={className}
       name={playerName + (throws ? ':stroke:' : ':ob:') + index}
       type="tel"

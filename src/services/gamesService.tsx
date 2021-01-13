@@ -88,7 +88,7 @@ const mockGames: Game[] = [{
     }
   ],
   temperature: 1,
-  weatherConditions: ["snow", "rain"],
+  weatherConditions: ["snow"],
   conditions: ["LED"],
   highScorers: ["Teppo"],
   illegalScorers: ["Teppo"],

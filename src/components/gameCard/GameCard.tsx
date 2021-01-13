@@ -136,7 +136,12 @@ const GameCard: React.FC<Props> = (props) => {
   }
 
   const editButton = allowedToEdit && !editOnly ? (
-    <IconButton aria-label="edit" className={classes.actionButton} onClick={toggleEdit}>
+    <IconButton
+      data-cy="editGameButton"
+      aria-label="edit"
+      className={classes.actionButton}
+      onClick={toggleEdit}
+    >
       {isEditing ? (<DoneIcon />) : (<EditIcon />)}
     </IconButton>
   ) : null
