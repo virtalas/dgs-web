@@ -14,9 +14,8 @@ cache:
     # we also need to cache folder with Cypress binary
     - ~/.cache
 before_script:
-  - npm install wait-on
-  - npm start & wait-on http://localhost:3000
+  - npm install start-server-and-test
 install:
   - npm ci
 script:
-  - $(npm bin)/cypress run --record
+  - $(npm bin)/start-server-and-test start http://localhost:3000 cypress run
