@@ -38,7 +38,7 @@ const NewSelection: React.FC<{}> = () => {
       </Typography>
 
       <NavLink className={classes.navLink} to="/courses/new/course">
-        <Button variant="contained" color="primary">New Course</Button>
+        <Button id="newCourseButton" variant="contained" color="primary">New Course</Button>
       </NavLink>
 
       <Typography className={classes.paragraph} variant="h5">
@@ -56,7 +56,7 @@ const NewSelection: React.FC<{}> = () => {
       <br />
       
       <NavLink className={classes.navLink} to={'/courses/new/layout/' + course.id}>
-        <Button variant="contained" color="primary">New Layout</Button>
+        <Button id="newLayoutButton" variant="contained" color="primary">New Layout</Button>
       </NavLink>
     </div>
   )

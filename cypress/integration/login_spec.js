@@ -3,7 +3,7 @@ describe('Login', function () {
   // TODO: Implement stubbing of the server once there is a server to stub and dgs-web is making API calls to it.
 
   it('sets auth cookie when logging in via form submission', function () {
-    cy.visit('/login')
+    cy.visit('#/login')
 
     cy.get('#username').type('grdfgd')
     cy.get('#password').type(`fstgggf`)

@@ -105,7 +105,7 @@ const Course: React.FC<Props> = (props) => {
   )
 
   return (
-    <div className={classes.page}>
+    <div id="coursePage" className={classes.page}>
       {course ? (
         <div className={classes.imageContainer}>
           <img

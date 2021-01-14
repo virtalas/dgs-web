@@ -215,7 +215,7 @@ const EditLayout: React.FC<Props> = (props) => {
   ))
 
   return (
-    <div className={classes.page}>
+    <div id="editLayout" className={classes.page}>
       <Grid
         container
         direction="column"
@@ -230,6 +230,7 @@ const EditLayout: React.FC<Props> = (props) => {
         <TextField
           className={classes.formControl}
           label="Layout name"
+          id="layoutNameInput"
           value={name}
           required
           onChange={e => setName(e.target.value)}
@@ -297,6 +298,7 @@ const EditLayout: React.FC<Props> = (props) => {
           )}
 
           <Button
+            id="submitLayoutButton"
             className={classes.createButton}
             variant="contained"
             color="primary"

@@ -71,6 +71,7 @@ const EditCourse: React.FC<Props> = (props) => {
       <TextField
         className={classes.formControl}
         label="Name"
+        data-cy="courseNameInput"
         value={name}
         required
         onChange={e => setName(e.target.value)}
@@ -79,6 +80,7 @@ const EditCourse: React.FC<Props> = (props) => {
       <TextField
         className={classes.formControl}
         label="City"
+        data-cy="courseCityInput"
         value={city}
         required
         onChange={e => setCity(e.target.value)}
@@ -97,6 +99,7 @@ const EditCourse: React.FC<Props> = (props) => {
       <Button
         className={classes.createButton}
         variant="contained"
+        id="submitCourseButton"
         color="primary"
         onClick={handleFinishClicked}
         disabled={name.length === 0 || city.length === 0}

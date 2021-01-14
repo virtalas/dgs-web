@@ -49,7 +49,7 @@ const CourseCard: React.FC<Props> = (props) => {
   const handleClick = () => setRedirect(true)
 
   return (
-    <Card className={classes.card}>
+    <Card data-cy="courseCard" className={classes.card}>
       <CardActionArea onClick={handleClick}>
         <div className={classes.imageContainer}>
           <img
