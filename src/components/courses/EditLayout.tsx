@@ -239,6 +239,7 @@ const EditLayout: React.FC<Props> = (props) => {
         <TextField
           className={classes.formControl}
           label="Description"
+          id="layoutDescInput"
           multiline
           value={description}
           onChange={e => setDescription(e.target.value)}

@@ -46,19 +46,19 @@ const LayoutPaper: React.FC<Props> = (props) => {
   }
 
   return (
-    <Paper className={classes.layoutPaper} key={'layout-' + layout.id}>
+    <Paper data-cy="layoutPaper" className={classes.layoutPaper} key={'layout-' + layout.id}>
       <Grid
         container
         direction="row"
         justify="flex-start"
         alignItems="center"
       >
-        <Typography variant="h6">
+        <Typography data-cy="layoutName" variant="h6">
           {layout.name}
           {layout.active ? ' (current)' : null}
         </Typography>
 
-        <IconButton className={classes.editButton} onClick={handleEditLayout}>
+        <IconButton data-cy="editLayoutButton" className={classes.editButton} onClick={handleEditLayout}>
           <EditIcon />
         </IconButton>
       </Grid>
@@ -89,7 +89,7 @@ const LayoutPaper: React.FC<Props> = (props) => {
         </div>
       </Grid>
 
-      <Typography>
+      <Typography data-cy="layoutDesc">
         {layout.description}
       </Typography>
 

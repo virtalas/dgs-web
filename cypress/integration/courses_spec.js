@@ -1,4 +1,4 @@
-describe('Drawer', function () {
+describe('Courses page', function () {
 
   beforeEach(() => {
     cy.login()

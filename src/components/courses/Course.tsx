@@ -89,7 +89,7 @@ const Course: React.FC<Props> = (props) => {
   }
 
   const editCourseButton = (
-    <IconButton className={classes.editCourseButton} onClick={handleEditCourse}>
+    <IconButton id="editCourseButton" className={classes.editCourseButton} onClick={handleEditCourse}>
       <EditIcon />
     </IconButton>
   )
@@ -109,6 +109,7 @@ const Course: React.FC<Props> = (props) => {
       {course ? (
         <div className={classes.imageContainer}>
           <img
+            id="courseImage"
             className={classes.image}
             src={coverPictureURL}
             alt="Course map"
@@ -126,7 +127,7 @@ const Course: React.FC<Props> = (props) => {
           justify="flex-start"
           alignItems="center"
         >
-          <Typography className={classes.title} variant="h4">
+          <Typography id="courseNameCity" className={classes.title} variant="h4">
             {course?.name}, {course?.city} {editCourseButton}
           </Typography>
         </Grid>
