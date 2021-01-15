@@ -9,6 +9,9 @@ import Modal from '@material-ui/core/Modal/Modal'
 const useStyles = makeStyles((theme) => ({
   modal: {
     alignItems: 'center',
+    maxWidth: 500,
+    marginLeft: 'auto',
+    marginRight: 'auto',
   },
   container: {
     maxHeight: '75%',
