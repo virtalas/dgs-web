@@ -11,6 +11,7 @@ describe('Games page', function () {
     cy.get('#gameInputPage')
   })
 
+  // TODO: Move to a unit test of <GameCard />
   it('edits a game', () => {
     cy.get('[data-cy=editGameButton]:first').click() // Initiate edit
     cy.get('[data-cy=strokeEdit]:first').type(6, { force: true })

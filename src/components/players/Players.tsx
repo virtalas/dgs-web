@@ -16,6 +16,13 @@ import playersService from '../../services/playersService'
 import HighScores from './HighScores'
 
 const useStyles = makeStyles((theme) => ({
+  page: {
+    maxWidth: 600,
+    marginTop: theme.spacing(1),
+    marginLeft: 'auto',
+    marginRight: 'auto',
+    marginBottom: theme.spacing(11),
+  },
   card: {
     margin: theme.spacing(2),
   },
@@ -95,7 +102,7 @@ const Players: React.FC<{}> = () => {
   }
 
   return (
-    <div id="playersPage">
+    <div id="playersPage" className={classes.page}>
       {/* First the user's own card, then other players in alphabetical order. */}
       {generatePlayerCard(user)}
       {players?.filter(player => player.id !== user?.id).map(player => (

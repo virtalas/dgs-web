@@ -15,7 +15,11 @@ import CancellableModal from '../CancellableModal'
 
 const useStyles = makeStyles((theme) => ({
   page: {
-    margin: theme.spacing(2),
+    maxWidth: 600,
+    marginTop: theme.spacing(1),
+    marginLeft: 'auto',
+    marginRight: 'auto',
+    marginBottom: theme.spacing(1),    
   },
   image: {
     width: '100%',

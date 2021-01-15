@@ -7,7 +7,10 @@ import SortButton from '../newGame/SortButton'
 
 const useStyles = makeStyles((theme) => ({
   page: {
-    margin: theme.spacing(1),
+    maxWidth: 600,
+    marginTop: theme.spacing(1),
+    marginLeft: 'auto',
+    marginRight: 'auto',
     marginBottom: theme.spacing(11),
   },
 }))
