@@ -59,11 +59,11 @@ const HighScores: React.FC<Props> = (props) => {
 
   return (
     <div>
-      <Button size="small" onClick={handleHighScoresOpen}>
+      <Button data-cy="highScoresButton" size="small" onClick={handleHighScoresOpen}>
         High scores
       </Button>
       <CancellableModal modalOpen={highScoresOpen} onClose={handleHighScoresClose}>
-        <Table className={classes.modalTable} size="small">
+        <Table data-cy="highScoresTable" className={classes.modalTable} size="small">
           <TableHead>
             <TableRow>
               <TableCell>Course</TableCell>
@@ -78,6 +78,7 @@ const HighScores: React.FC<Props> = (props) => {
                 <TableCell align="center">{score.toPar}</TableCell>
                 <TableCell align="right">
                   <Button
+                    data-cy="highScoreGameButton"
                     variant="outlined"
                     size="small"
                     onClick={handleGameClick}

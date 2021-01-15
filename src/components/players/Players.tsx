@@ -38,7 +38,7 @@ const Players: React.FC<{}> = () => {
 
   const generatePlayerCard = (player: Player | undefined) => {
     return (
-      <Card key={'player' + player?.id} className={classes.card}>
+      <Card data-cy="playerCard" key={'player' + player?.id} className={classes.card}>
         <CardContent>
           <Typography variant="h5" component="h2">
             {player?.firstName}
