@@ -1,6 +1,6 @@
 # dgs-web
 
-Disc Golf Stats web frontend built with ReactJS & TypeScript. Using [dgs-api](https://github.com/kajte/dgs-api) as the backend.
+Disc Golf Stats web frontend built with ReactJS & TypeScript.
 
 ### Installation
 
