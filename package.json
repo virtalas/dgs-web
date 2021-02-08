@@ -20,7 +20,6 @@
     "axios": "^0.21.1",
     "chai": "^4.2.0",
     "dayjs": "^1.9.4",
-    "email-validator": "^2.0.4",
     "formik": "^2.2.6",
     "jwt-decode": "^3.1.2",
     "jwt-encode": "^1.0.1",
