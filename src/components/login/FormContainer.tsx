@@ -32,7 +32,7 @@ interface Props {
   title: string,
 }
 
-const AuthForm: React.FC<Props> = props => {
+const FormContainer: React.FC<Props> = props => {
   const classes = useStyles()
 
   const { title } = props
@@ -54,4 +54,4 @@ const AuthForm: React.FC<Props> = props => {
   )
 }
 
-export default AuthForm
+export default FormContainer

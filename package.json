@@ -22,6 +22,7 @@
     "dayjs": "^1.9.4",
     "email-validator": "^2.0.4",
     "formik": "^2.2.6",
+    "jwt-decode": "^3.1.2",
     "lodash": "^4.17.20",
     "react-device-detect": "^1.13.1",
     "react-dom": "^16.13.1",

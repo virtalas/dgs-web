@@ -1,6 +1,5 @@
 import React, { useState } from 'react'
 import { Formik } from 'formik'
-import * as EmailValidator from 'email-validator'
 import * as Yup from 'yup'
 
 import Button from '@material-ui/core/Button'
@@ -9,7 +8,7 @@ import { makeStyles } from '@material-ui/core/styles'
 import Link from '@material-ui/core/Link'
 import Grid from '@material-ui/core/Grid'
 
-import AuthForm from './AuthForm'
+import FormContainer from './FormContainer'
 
 import authService from '../../services/authService'
 import { useAuth } from '../../context/AuthContext'
@@ -31,14 +30,42 @@ const useStyles = makeStyles((theme) => ({
 
 const Register: React.FC<{}> = () => {
   const classes = useStyles()
-  // const { authToken, loggedIn } = useAuth()
+  const { authToken, loggedIn } = useAuth()
 
-  // if (authToken) {
-  //   return (<Redirect to='/' />)
-  // }
+  const [existingAccountError, setExistingAccountError] = useState(false)
+
+  if (authToken) {
+    return (<Redirect to='/' />)
+  }
+
+  const handleRegister = async (values: any, setSubmitting: (submitting: boolean) => void) => {
+    setExistingAccountError(false)
+
+    try {
+      await authService.register(values.email, values.firstName, values.lastName, values.password)
+    } catch (error) {
+      if (error.response && error.response.status === 409) {
+        setExistingAccountError(true)
+      } else {
+        alert('Registering failed:\n\n' + error)
+      }
+      setSubmitting(false)
+      return
+    }
+
+    try {
+      const accessToken = await authService.login(values.email, values.password)
+      if (loggedIn) {
+        setSubmitting(false)
+        loggedIn(accessToken)
+      }
+    } catch (error) {
+      alert('Registering succeeded, but login failed:\n\n' + error)
+    }
+  }
 
   return (
-    <AuthForm title="Sign up">
+    <FormContainer title="Sign up">
       <Formik
         initialValues={{ email: '', firstName: '', lastName: '', password: '' }}
         validationSchema={Yup.object().shape({
@@ -54,14 +81,7 @@ const Register: React.FC<{}> = () => {
             .min(8, 'Password is too short - should be 8 chars minimum.')
         })}
         onSubmit={(values, { setSubmitting }) => {
-          authService.register(values.email, values.firstName, values.lastName, values.password)
-            .then((token: string) => {
-            setSubmitting(false)
-            console.log(token)
-          }).catch(error => {
-            // TODO: handle existing email error
-            console.log(error)
-          })
+          handleRegister(values, setSubmitting)
         }}
       >
         {props => {
@@ -89,10 +109,17 @@ const Register: React.FC<{}> = () => {
                 value={values.email}
                 onChange={handleChange}
                 onBlur={handleBlur}
-                error={(errors.email ? errors.email.length > 0 : false) && touched.email}
+                error={
+                  (errors.email ? errors.email.length > 0 : false) && touched.email || existingAccountError
+                }
               />
               {errors.email && touched.email && (
                 <div className={classes.inputFeedback}>{errors.email}</div>
+              )}
+              {existingAccountError && (
+                <div className={classes.inputFeedback}>
+                  This email has already been registered with another email.
+                </div>
               )}
 
               <TextField
@@ -172,7 +199,7 @@ const Register: React.FC<{}> = () => {
           </Link>
         </Grid>
       </Grid>
-    </AuthForm>
+    </FormContainer>
   )
 }
 
