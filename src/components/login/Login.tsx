@@ -96,7 +96,7 @@ const SignIn: React.FC<{}> = () => {
                 value={values.email}
                 onChange={handleChange}
                 onBlur={handleBlur}
-                error={(errors.email ? errors.email.length > 0 : false) && touched.email || wrongCredentialsError}
+                error={((errors.email ? errors.email.length > 0 : false) && touched.email) || wrongCredentialsError}
               />
               {errors.email && touched.email && (
                 <div className={classes.inputFeedback}>{errors.email}</div>
@@ -114,7 +114,7 @@ const SignIn: React.FC<{}> = () => {
                 value={values.password}
                 onChange={handleChange}
                 onBlur={handleBlur}
-                error={(errors.password ? errors.password.length > 0 : false) && touched.password || wrongCredentialsError}
+                error={((errors.password ? errors.password.length > 0 : false) && touched.password) || wrongCredentialsError}
               />
               {errors.password && touched.password && (
                 <div className={classes.inputFeedback}>{errors.password}</div>
@@ -148,7 +148,7 @@ const SignIn: React.FC<{}> = () => {
             Forgot password? (coming soon)
           </Link> */}
         </Grid>
-        <Grid item>
+        <Grid item id="#signup">
           <Link href="#/register" variant="body2">
             Don't have an account? Sign up
           </Link>

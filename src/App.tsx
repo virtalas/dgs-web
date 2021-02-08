@@ -35,6 +35,7 @@ const App: React.FC<{}> = () => {
   }
 
   const loggedIn = (tokenData: Object) => {
+    // TODO: Use Cookie (with HttpOnly flag)
     localStorage.setItem('dgs-token', JSON.stringify(tokenData))
     setAuthToken(tokenData)
     // TODO

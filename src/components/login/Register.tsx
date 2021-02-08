@@ -110,7 +110,7 @@ const Register: React.FC<{}> = () => {
                 onChange={handleChange}
                 onBlur={handleBlur}
                 error={
-                  (errors.email ? errors.email.length > 0 : false) && touched.email || existingAccountError
+                  ((errors.email ? errors.email.length > 0 : false) && touched.email) || existingAccountError
                 }
               />
               {errors.email && touched.email && (
@@ -118,7 +118,7 @@ const Register: React.FC<{}> = () => {
               )}
               {existingAccountError && (
                 <div className={classes.inputFeedback}>
-                  This email has already been registered with another email.
+                  This email has already been registered with another account.
                 </div>
               )}
 
@@ -176,7 +176,7 @@ const Register: React.FC<{}> = () => {
 
               <Button
                 type="submit"
-                id="signin"
+                id="signup"
                 fullWidth
                 variant="contained"
                 color="primary"
