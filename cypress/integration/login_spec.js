@@ -4,7 +4,7 @@ import { API_ROOT } from '../../src/apiConfig'
 
 describe('Login', () => {
 
-  it('sets auth cookie when logging in via form submission', function () {
+  it('sets auth cookie after successful login', function () {
     cy.intercept('POST', `${API_ROOT}/authentication/login/password`, {
       body: {
         access_token: sign({'sub': 'golfer@email.com', 'exp': 9999999}, 'abc')
@@ -20,24 +20,7 @@ describe('Login', () => {
     })
 
     cy.get('h6').should('contain', 'Disc Golf Stats')
-  })
-
-  it('logs in programmatically without using the UI', function () {
-    cy.intercept('POST', `${API_ROOT}/authentication/login/password`, {
-      body: {
-        access_token: sign({'sub': 'golfer@email.com', 'exp': 9999999}, 'abc')
-      }
-    })
-
-    cy.visit('/', {
-      onBeforeLoad (win) {
-        win.localStorage.setItem('dgs-token', JSON.stringify({
-          access_token: sign({'sub': 'golfer@email.com', 'exp': 9999999}, 'abc')
-        }))
-      },
-    })
-
-    cy.get('h6').should('contain', 'Disc Golf Stats')
+    cy.get('#basePage')
   })
 
   it('displays error for invalid credentials', () => {
@@ -78,6 +61,9 @@ describe('Registering', () => {
     cy.get('#lastName').type('Tulppu')
     cy.get('#password').type('password')
     cy.get('#signup').click()
+
+    cy.get('h6').should('contain', 'Disc Golf Stats')
+    cy.get('#basePage')
   })
 
   it('displays error for existing account', () => {

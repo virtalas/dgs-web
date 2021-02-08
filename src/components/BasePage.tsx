@@ -75,7 +75,7 @@ const BasePage: React.FC<Props> = (props) => {
   }
 
   return (
-    <div className={classes.root}>
+    <div className={classes.root} id="basePage">
       <CssBaseline />
       <AppBar />
       <main className={classes.content}>
