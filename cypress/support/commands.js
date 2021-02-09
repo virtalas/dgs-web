@@ -24,9 +24,10 @@
 // -- This is will overwrite an existing command --
 // Cypress.Commands.overwrite("visit", (originalFn, url, options) => { ... })
 
-Cypress.Commands.add('login', () => {
-  // TODO: Implement stubbing of the server once there is a server to stub and dgs-web is making API calls to it.
+const sign = require('jwt-encode')
 
-  // Workaround for now:
-  window.localStorage.setItem("dgs-token", '{"minAge":"12","maxAge":"15"}')
+Cypress.Commands.add('login', () => {
+  window.localStorage.setItem("dgs-token", JSON.stringify({
+    access_token: sign({'sub': 'golfer@email.com', 'exp': 9999999}, 'abc')
+  }))
 })

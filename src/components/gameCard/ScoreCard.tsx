@@ -85,6 +85,7 @@ const useStyles = makeStyles((theme) => ({
       width: 0,  /* Remove scrollbar space. */
       height: 0,
     },
+    scrollbarWidth: 'none', /* Remove scrollbar space on FireFox */
   },
   rightTable: {
     flex: '0 0 40px',

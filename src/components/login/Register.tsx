@@ -4,9 +4,9 @@ import * as Yup from 'yup'
 
 import Button from '@material-ui/core/Button'
 import TextField from '@material-ui/core/TextField'
+import { makeStyles } from '@material-ui/core/styles'
 import Link from '@material-ui/core/Link'
 import Grid from '@material-ui/core/Grid'
-import { makeStyles } from '@material-ui/core/styles'
 
 import FormContainer from './FormContainer'
 
@@ -28,47 +28,60 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-const SignIn: React.FC<{}> = () => {
+const Register: React.FC<{}> = () => {
   const classes = useStyles()
   const { authToken, loggedIn } = useAuth()
 
-  const [wrongCredentialsError, setWrongCredentialsError] = useState(false)
+  const [existingAccountError, setExistingAccountError] = useState(false)
 
   if (authToken) {
     return (<Redirect to='/' />)
   }
 
-  const handleLogin = (values: { email: string, password: string }, setSubmitting: (submitting: boolean) => void) => {
-    setWrongCredentialsError(false)
+  const handleRegister = async (values: any, setSubmitting: (submitting: boolean) => void) => {
+    setExistingAccountError(false)
 
-    authService.login(values.email, values.password).then(accessToken => {
+    try {
+      await authService.register(values.email, values.firstName, values.lastName, values.password)
+    } catch (error) {
+      if (error.response && error.response.status === 409) {
+        setExistingAccountError(true)
+      } else {
+        alert('Registering failed:\n\n' + error)
+      }
+      setSubmitting(false)
+      return
+    }
+
+    try {
+      const accessToken = await authService.login(values.email, values.password)
       if (loggedIn) {
         setSubmitting(false)
         loggedIn(accessToken)
       }
-    }).catch(error => {
-      if (error.response && error.response.status === 401) {
-        setWrongCredentialsError(true)
-      } else {
-        alert('Login failed:\n\n' + error)
-      }
-      setSubmitting(false)
-    })
+    } catch (error) {
+      alert('Registering succeeded, but login failed:\n\n' + error)
+    }
   }
 
   return (
-    <FormContainer title="Sign in">
+    <FormContainer title="Sign up">
       <Formik
-        initialValues={{ email: '', password: '' }}
+        initialValues={{ email: '', firstName: '', lastName: '', password: '' }}
         validationSchema={Yup.object().shape({
           email: Yup.string()
             .email()
             .required('Required'),
+          firstName: Yup.string()
+            .required('Required'),
+          lastName: Yup.string()
+            .required('Required'),
           password: Yup.string()
             .required('No password provided.')
+            .min(8, 'Password is too short - should be 8 chars minimum.')
         })}
         onSubmit={(values, { setSubmitting }) => {
-          handleLogin(values, setSubmitting)
+          handleRegister(values, setSubmitting)
         }}
       >
         {props => {
@@ -96,10 +109,51 @@ const SignIn: React.FC<{}> = () => {
                 value={values.email}
                 onChange={handleChange}
                 onBlur={handleBlur}
-                error={((errors.email ? errors.email.length > 0 : false) && touched.email) || wrongCredentialsError}
+                error={
+                  ((errors.email ? errors.email.length > 0 : false) && touched.email) || existingAccountError
+                }
               />
               {errors.email && touched.email && (
                 <div className={classes.inputFeedback}>{errors.email}</div>
+              )}
+              {existingAccountError && (
+                <div className={classes.inputFeedback}>
+                  This email has already been registered with another account.
+                </div>
+              )}
+
+              <TextField
+                variant="outlined"
+                margin="normal"
+                fullWidth
+                id="firstName"
+                label="First name"
+                name="firstName"
+                autoComplete="given-name"
+                value={values.firstName}
+                onChange={handleChange}
+                onBlur={handleBlur}
+                error={(errors.firstName ? errors.firstName.length > 0 : false) && touched.firstName}
+              />
+              {errors.firstName && touched.firstName && (
+                <div className={classes.inputFeedback}>{errors.firstName}</div>
+              )}
+
+              <TextField
+                variant="outlined"
+                margin="normal"
+                fullWidth
+                id="lastName"
+                label="Family name"
+                name="lastName"
+                autoComplete="family-name"
+                value={values.lastName}
+                onChange={handleChange}
+                onBlur={handleBlur}
+                error={(errors.lastName ? errors.lastName.length > 0 : false) && touched.lastName}
+              />
+              {errors.lastName && touched.lastName && (
+                <div className={classes.inputFeedback}>{errors.lastName}</div>
               )}
 
               <TextField
@@ -114,21 +168,15 @@ const SignIn: React.FC<{}> = () => {
                 value={values.password}
                 onChange={handleChange}
                 onBlur={handleBlur}
-                error={((errors.password ? errors.password.length > 0 : false) && touched.password) || wrongCredentialsError}
+                error={(errors.password ? errors.password.length > 0 : false) && touched.password}
               />
               {errors.password && touched.password && (
                 <div className={classes.inputFeedback}>{errors.password}</div>
               )}
 
-              {wrongCredentialsError && (
-                <div className={classes.inputFeedback}>
-                  You have entered an invalid email or password.
-                </div>
-              )}
-
               <Button
                 type="submit"
-                id="signin"
+                id="signup"
                 fullWidth
                 variant="contained"
                 color="primary"
@@ -144,22 +192,15 @@ const SignIn: React.FC<{}> = () => {
 
       <Grid container className={classes.buttonsGrid}>
         <Grid item xs>
-          {/* <Link href="#" variant="body2">
-            Forgot password? (coming soon)
-          </Link> */}
         </Grid>
-        <Grid item id="#signup">
-          <Link href="#/register" variant="body2">
-            Don't have an account? Sign up
+        <Grid item>
+          <Link href="#/signin" variant="body2">
+            Already have an account? Sign in
           </Link>
         </Grid>
       </Grid>
     </FormContainer>
   )
-  // <FormControlLabel
-  //   control={<Checkbox value="remember" color="primary" />}
-  //   label="Remember me"
-  // />
 }
 
-export default SignIn
+export default Register

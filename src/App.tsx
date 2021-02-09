@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import Router from './components/Router'
+import jwt from 'jwt-decode'
 
 import createMuiTheme from "@material-ui/core/styles/createMuiTheme"
 import ThemeProvider from "@material-ui/styles/ThemeProvider"
@@ -8,9 +9,9 @@ import { AuthContext } from "./context/AuthContext"
 
 const theme = createMuiTheme({})
 
-const mockLoggedInUser = {
-  id: 'fdjskfl83fhsgls',
-  firstName: 'Konsta',
+const emptyUser: Player = {
+  id: '',
+  firstName: '',
   guest: false,
   admin: false,
 }
@@ -25,28 +26,26 @@ const App: React.FC<{}> = () => {
   // TODO: Check for expired token?
 
   const [authToken, setAuthToken] = useState(existingToken)
+  const [user, setUser] = useState<Player>({ ...emptyUser })
 
-  let loggedInUser = {
-    id: '',
-    firstName: '',
-    guest: false,
-    admin: false,
-  }
   if (authToken) {
-    loggedInUser = mockLoggedInUser // TODO: Extract user from authToken.
+    const userData = jwt(authToken.access_token)
+    // TODO
+    // setUser(previousUser => { ...previousUser, firstName: userData.})
   }
-  const [user, setUser] = useState<Player>(loggedInUser)
 
   const loggedIn = (tokenData: Object) => {
+    // TODO: Use Cookie (with HttpOnly flag)
     localStorage.setItem('dgs-token', JSON.stringify(tokenData))
     setAuthToken(tokenData)
-    setUser(mockLoggedInUser) // TODO: Extract user from authToken.
+    // TODO
+    // setUser(???)
   }
 
   const loggedOut = () => {
     localStorage.removeItem('dgs-token')
     setAuthToken(null)
-    setUser(loggedInUser)
+    setUser({ ...emptyUser })
   }
 
   return (
