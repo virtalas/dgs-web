@@ -30,6 +30,8 @@ interface Props {
   handleLayoutUpdated: (layout: Layout) => void,
 }
 
+// TODO: Activate/deactivate layout button
+
 const LayoutPaper: React.FC<Props> = (props) => {
   const classes = useStyles()
 
@@ -55,7 +57,7 @@ const LayoutPaper: React.FC<Props> = (props) => {
       >
         <Typography data-cy="layoutName" variant="h6">
           {layout.name}
-          {layout.active ? ' (current)' : null}
+          {layout.active ? ' (active)' : null}
         </Typography>
 
         <IconButton data-cy="editLayoutButton" className={classes.editButton} onClick={handleEditLayout}>

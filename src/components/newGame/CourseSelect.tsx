@@ -27,6 +27,7 @@ interface Props {
   setGameCreatable?: (creatable: boolean) => void,
 }
 
+// TODO: Layout selection when multiple active layouts
 // TODO: Spread controls out if there is space. They are too packed together on desktop.
 // TODO: Search function for courses.
 
@@ -109,10 +110,10 @@ const CourseSelect: React.FC<Props> = (props) => {
         input={<OutlinedInput labelWidth={labelWidth} name="layout" id="layout-select" />}
       >
         {course.layouts.map((layout, index) => (
-          <MenuItem value={layout.id} key={index}>{layout.name}{layout.active ? ' (current)' : ''}</MenuItem>
+          <MenuItem value={layout.id} key={index}>{layout.name}{layout.active ? ' (active)' : ''}</MenuItem>
         ))}
       </Select>
-      <FormHelperText>{layout !== getActiveLayout(course) ? 'Will become the current layout.' : ''}</FormHelperText>
+      <FormHelperText>{layout !== getActiveLayout(course) ? 'This layout will become active.' : ''}</FormHelperText>
     </FormControl>
   )
 

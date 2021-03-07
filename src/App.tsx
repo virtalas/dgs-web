@@ -26,7 +26,7 @@ const App: React.FC<{}> = () => {
   // TODO: Check for expired token?
 
   const [authToken, setAuthToken] = useState(existingToken)
-  const [user, setUser] = useState<Player>({ ...emptyUser })
+  const [user, setUser] = useState<Player>({ ...emptyUser }) // TODO: userId instead of user
 
   if (authToken) {
     const userData = jwt(authToken.access_token)
