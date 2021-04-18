@@ -1,3 +1,7 @@
+import axios from "axios"
+
+import { API_ROOT } from '../apiConfig'
+
 const mockCourses: Course[] = [
   {
     id: 'fsdfefesd',
@@ -42,8 +46,17 @@ const getCourse = async (id: string): Promise<Course> => {
 }
 
 const createLayout = async (courseId: string, layout: Layout): Promise<Layout> => {
-  // TODO
-  return layout
+  const response = await axios.post(`${API_ROOT}/courses/${courseId}/layout`, {
+    name: layout.name,
+    description: layout.description,
+    pars: layout.pars,
+    mapURL: layout.mapURL,
+  }, {
+    headers: {
+      'Content-Type': 'application/json',
+    }
+  })
+  return response.data
 }
 
 const updateLayout = async (layout: Layout): Promise<Layout> => {
@@ -52,14 +65,15 @@ const updateLayout = async (layout: Layout): Promise<Layout> => {
 }
 
 const createCourse = async (course: Course): Promise<Course> => {
-  // TODO
-  return {
-    id: 'newly_created_id_hgurskgfg',
-    name: 'Tali',
-    city: 'Helsinki',
-    layouts: [],
-    popularity: 556,
-  }
+  const response = await axios.post(`${API_ROOT}/courses`, {
+    name: course.name,
+    city: course.city,
+  }, {
+    headers: {
+      'Content-Type': 'application/json',
+    }
+  })
+  return response.data
 }
 
 const updateCourse = async (course: Course): Promise<Course> => {
