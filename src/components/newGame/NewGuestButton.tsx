@@ -62,7 +62,7 @@ const NewGuestButton: React.FC<Props> = (props) => {
     setAllPlayers([...allPlayers, newGuest])
   }
 
-  // TODO: On mobile, popup size changes when error appears.
+  // TODO: On mobile, popup size changes when error appears. Fix width?
   const dialogContent = (
     <DialogContent>
       <form className={classes.dialogContainer}>

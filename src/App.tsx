@@ -1,6 +1,7 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Router from './components/Router'
 import jwt from 'jwt-decode'
+import axios from 'axios'
 
 import createMuiTheme from "@material-ui/core/styles/createMuiTheme"
 import ThemeProvider from "@material-ui/styles/ThemeProvider"
@@ -9,13 +10,6 @@ import { AuthContext } from "./context/AuthContext"
 
 const theme = createMuiTheme({})
 
-const emptyUser: Player = {
-  id: '',
-  firstName: '',
-  guest: false,
-  admin: false,
-}
-
 const App: React.FC<{}> = () => {
   const localToken = localStorage.getItem("dgs-token")
   const existingToken = localToken !== null
@@ -23,37 +17,56 @@ const App: React.FC<{}> = () => {
                         && localToken !== 'undefined' 
                         ? JSON.parse(localToken as string)
                         : null
-  // TODO: Check for expired token?
+  const [userId, setUserId] = useState<string | undefined>()
 
-  const [authToken, setAuthToken] = useState(existingToken)
-  const [user, setUser] = useState<Player>({ ...emptyUser }) // TODO: userId instead of user
-
-  if (authToken) {
-    const userData = jwt(authToken.access_token)
-    // TODO
-    // setUser(previousUser => { ...previousUser, firstName: userData.})
+  const extractUserId = (token: AuthToken) => {
+    const tokenData: { sub: string } = jwt(token.access_token)
+    return tokenData['sub']
   }
 
-  const loggedIn = (tokenData: Object) => {
-    // TODO: Use Cookie (with HttpOnly flag)
-    localStorage.setItem('dgs-token', JSON.stringify(tokenData))
-    setAuthToken(tokenData)
-    // TODO
-    // setUser(???)
+  const checkTokenExpired = (token: AuthToken): boolean => {
+    const tokenData: { exp: string } = jwt(token.access_token)
+    return Date.now() >= parseInt(tokenData.exp) * 1000
   }
 
-  const loggedOut = () => {
+  useEffect(() => {
+    const addTokenExpiryInterceptor = () => {
+      axios.interceptors.request.use(config => {
+        if (checkTokenExpired(existingToken)) {
+          handleLogout()
+        }  
+        return config
+      }, error => {
+        return Promise.reject(error)
+      })
+    }
+
+    const addDefaultAuthorizationHeader = () =>
+      axios.defaults.headers.common['Authorization'] = 'Bearer ' + existingToken.access_token
+  
+    if (existingToken) {
+      addTokenExpiryInterceptor()
+      addDefaultAuthorizationHeader()
+      setUserId(extractUserId(existingToken))
+    }  
+  }, [existingToken])
+
+  const handleLogin = (token: AuthToken) => {
+    localStorage.setItem('dgs-token', JSON.stringify(token))
+    setUserId(extractUserId(token))
+  }
+
+  const handleLogout = () => {
     localStorage.removeItem('dgs-token')
-    setAuthToken(null)
-    setUser({ ...emptyUser })
+    setUserId(undefined)
   }
 
   return (
     <AuthContext.Provider value={{
-      authToken: authToken,
-      loggedIn: loggedIn,
-      loggedOut: loggedOut,
-      user: user,
+      handleLogin: handleLogin,
+      handleLogout: handleLogout,
+      authenticated: userId !== undefined,
+      userId: userId,
     }}>
       <ThemeProvider theme={theme}>
         <Router />

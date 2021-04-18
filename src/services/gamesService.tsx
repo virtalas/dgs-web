@@ -1,3 +1,7 @@
+import axios from 'axios'
+
+import { API_ROOT } from '../apiConfig'
+
 const mockGame: Game = {
   id: "123sdfsdf",
   course: {
@@ -568,15 +572,19 @@ const mockGames: Game[] = [{
 
 // Matches mock games above.
 const mockMonthsThatHaveGames: GameMonths[] = [ // 0=January
-  { year: 2020, months: [4, 5, 7] },
+  { year: 2021, months: [4, 5, 7] },
   { year: 2019, months: [6] },
   { year: 2018, months: [5] },
 ]
 
 const getGames = async (year: number, month: number): Promise<Game[]> => {
-  // TODO: Replace mock data with API call.
-  return mockGames.filter(game => game.endDate.getMonth() === month
-      && game.endDate.getFullYear() === year)
+  const response = await axios.get(`${API_ROOT}/games`, {
+    params: {
+      year: year,
+      month: month,
+    },
+  })
+  return response.data
 }
 
 const getMonthsThatHaveGames = async (): Promise<GameMonths[]> => {

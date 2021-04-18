@@ -2,6 +2,7 @@ import React from 'react'
 
 import { makeStyles } from '@material-ui/core/styles'
 import { CircularProgress, Grow } from '@material-ui/core'
+import ErrorOutlineIcon from '@material-ui/icons/ErrorOutline'
 import GameCard from '../gameCard/GameCard'
 
 export const drawerWidth = 240
@@ -12,7 +13,7 @@ const useStyles = makeStyles((theme) => ({
     position: 'relative',
     zIndex: -1, // Don't block navigation controls.
   },
-  progress: {
+  centerIcon: {
     margin: 'auto',
     position: 'absolute',
     top: 0,
@@ -30,6 +31,16 @@ const useStyles = makeStyles((theme) => ({
     marginLeft: -35, // Align with progress spinner
     transform: 'translate(-50 %, -50 %)',
   },
+  errorText: {
+    color: 'grey',
+    margin: 0,
+    position: 'absolute',
+    top: '50%',
+    marginTop: 20,
+    left: '50%',
+    marginLeft: -65,
+    transform: 'translate(-50 %, -50 %)',
+  }
 }))
 
 interface Props {
@@ -38,12 +49,13 @@ interface Props {
   availableWeatherConditions: Condition[],
   availableConditions: Condition[],
   isLoading: boolean,
+  isError: boolean,
 }
 
 const GameList: React.FC<Props> = (props) => {
   const classes = useStyles()
 
-  const { gamesToShow, setGame, availableWeatherConditions, availableConditions, isLoading } = props
+  const { gamesToShow, setGame, availableWeatherConditions, availableConditions, isLoading, isError } = props
   
   return (
     <div>
@@ -60,12 +72,21 @@ const GameList: React.FC<Props> = (props) => {
           </div>
         </Grow>
       ))}
+
       {gamesToShow.length === 0 && isLoading ? (
         <div className={classes.centerContainer}>
-          <CircularProgress className={classes.progress} />
+          <CircularProgress className={classes.centerIcon} />
         </div>
       ) : null}
-      {gamesToShow.length === 0 && !isLoading ? (
+
+      {gamesToShow.length === 0 && isError ? (
+        <div className={classes.centerContainer}>
+          <ErrorOutlineIcon className={classes.centerIcon} />
+          <span className={classes.errorText}>Failed to load games</span>
+        </div>      
+      ) : null}
+
+      {gamesToShow.length === 0 && !isLoading && !isError ? (
         <div className={classes.centerContainer}>
           <div className={classes.noGames}>No games</div>
         </div>

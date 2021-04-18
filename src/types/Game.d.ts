@@ -7,8 +7,8 @@ interface Game {
   temperature: number | null,
   weatherConditions: Condition[],
   conditions: Condition[],
-  highScorers: string[],
-  illegalScorers: string[],
+  highScorers: string[],  // TODO: just get this from filter(PlayerScores.high_score)
+  illegalScorers: string[], // TODO: just get this from filter(PlayerScores.legal)
   comment: string,
-  contestName: string | null,
+  contestName: string | null, // TODO: remove
 }

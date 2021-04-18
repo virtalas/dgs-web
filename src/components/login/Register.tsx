@@ -30,11 +30,11 @@ const useStyles = makeStyles((theme) => ({
 
 const Register: React.FC<{}> = () => {
   const classes = useStyles()
-  const { authToken, loggedIn } = useAuth()
+  const { authenticated, handleLogin } = useAuth()
 
   const [existingAccountError, setExistingAccountError] = useState(false)
 
-  if (authToken) {
+  if (authenticated) {
     return (<Redirect to='/' />)
   }
 
@@ -55,9 +55,9 @@ const Register: React.FC<{}> = () => {
 
     try {
       const accessToken = await authService.login(values.email, values.password)
-      if (loggedIn) {
+      if (handleLogin) {
         setSubmitting(false)
-        loggedIn(accessToken)
+        handleLogin(accessToken)
       }
     } catch (error) {
       alert('Registering succeeded, but login failed:\n\n' + error)

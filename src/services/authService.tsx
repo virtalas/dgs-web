@@ -16,7 +16,7 @@ const register = async (email: string, firstName: string, lastName: string, pass
   return response.data
 }
 
-const login = async (email: string, password: string): Promise<string> => {
+const login = async (email: string, password: string): Promise<AuthToken> => {
   const bodyFormData = new FormData()
   bodyFormData.append('username', email)
   bodyFormData.append('password', password)

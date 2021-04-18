@@ -47,10 +47,10 @@ interface Props {
 const NavigationDrawer: React.FC<Props> = (props) => {
   const classes = useStyles()
   const { mobileOpen, handleDrawerToggle } = props
-  const { loggedOut } = useAuth()
+  const { handleLogout } = useAuth()
 
-  const handleLogout = () => {
-    if (loggedOut) loggedOut()
+  const loggedOut = () => {
+    if (handleLogout) handleLogout()
   }
 
   const navButtonList = (
@@ -99,7 +99,7 @@ const NavigationDrawer: React.FC<Props> = (props) => {
       </List>
       <Divider />
       <List>
-        <ListItem button onClick={handleLogout}>
+        <ListItem button onClick={loggedOut}>
           <ListItemIcon><ExitToApp /></ListItemIcon>
           <ListItemText primary="Log out" />
         </ListItem>

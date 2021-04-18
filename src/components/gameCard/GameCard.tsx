@@ -65,11 +65,13 @@ interface Props {
   availableWeatherConditions: Condition[],
 }
 
+// TODO: Display course name in big font, then layout name somewhere smaller?
 // TODO: When isEditing == true, hide new game button
 // TODO: Position of edit button when there is no GameInfo
 // TODO: 'Save' and 'Cancel' texts to buttons
 // TODO: Add a button: 'Continue adding scores', that links to Game inputting view.
 // TODO: View pictures. Game JSON stores how many pictures, and then use Material UI 'Skeleton' while loading.
+// TODO: Ability to add user-created tags
 
 const GameCard: React.FC<Props> = (props) => {
   const classes = useStyles()

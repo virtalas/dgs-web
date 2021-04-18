@@ -30,21 +30,21 @@ const useStyles = makeStyles((theme) => ({
 
 const SignIn: React.FC<{}> = () => {
   const classes = useStyles()
-  const { authToken, loggedIn } = useAuth()
+  const { authenticated, handleLogin } = useAuth()
 
   const [wrongCredentialsError, setWrongCredentialsError] = useState(false)
 
-  if (authToken) {
+  if (authenticated) {
     return (<Redirect to='/' />)
   }
 
-  const handleLogin = (values: { email: string, password: string }, setSubmitting: (submitting: boolean) => void) => {
+  const loggedIn = (values: { email: string, password: string }, setSubmitting: (submitting: boolean) => void) => {
     setWrongCredentialsError(false)
 
     authService.login(values.email, values.password).then(accessToken => {
-      if (loggedIn) {
+      if (handleLogin) {
         setSubmitting(false)
-        loggedIn(accessToken)
+        handleLogin(accessToken)
       }
     }).catch(error => {
       if (error.response && error.response.status === 401) {
@@ -68,7 +68,7 @@ const SignIn: React.FC<{}> = () => {
             .required('No password provided.')
         })}
         onSubmit={(values, { setSubmitting }) => {
-          handleLogin(values, setSubmitting)
+          loggedIn(values, setSubmitting)
         }}
       >
         {props => {
@@ -135,7 +135,7 @@ const SignIn: React.FC<{}> = () => {
                 className={classes.submit}
                 disabled={isSubmitting}
               >
-                Sign up
+                Sign in
               </Button>
             </form>
           )

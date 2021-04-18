@@ -4,9 +4,9 @@ import { Redirect, Route, RouteProps } from 'react-router'
 import { useAuth } from "./context/AuthContext"
 
 export const PrivateRoute: React.FC<RouteProps> = props => {
-  const { authToken } = useAuth()
+  const { authenticated } = useAuth()
 
-  if (authToken) {
+  if (authenticated) {
     // Logged in.
     return <Route {...props} />
   } else {

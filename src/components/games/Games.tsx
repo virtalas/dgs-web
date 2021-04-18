@@ -53,6 +53,7 @@ const Games: React.FC<Props> = (props) => {
   const [availableWeatherConditions, setAvailableWeatherConditions] = useState<Condition[]>([])
   const [availableConditions, setAvailableConditions] = useState<Condition[]>([])
   const [isLoading, setIsLoading] = useState<boolean>(false)
+  const [isError, setIsError] = useState<boolean>(false)
   const [redirect, setRedirect] = useState(false)
 
   const gamesToShow = singleGameView ? games : games.filter(game => game.endDate.getMonth() === selectedMonth
@@ -64,10 +65,13 @@ const Games: React.FC<Props> = (props) => {
       setGames(games => games.concat(fetchedGames))
       setIsLoading(false)
     })
+    .catch(e => {
+      console.log(e)
+      setIsLoading(false)
+      setIsError(true)
+    })
   }
 
-  // useEffect() works like componentDidMount(): runs only once after the component is rendered.
-  // In addition, it reruns each time 'selectedYear' or 'selectedMonth' change.
   useEffect(() => {
     // Fetch available conditions (for editing, search)
     if (availableConditions.length === 0) {
@@ -152,6 +156,7 @@ const Games: React.FC<Props> = (props) => {
         availableWeatherConditions={availableWeatherConditions}
         availableConditions={availableConditions}
         isLoading={isLoading}
+        isError={isError}
       />
 
       {gamesToShow.length > 2 ? (

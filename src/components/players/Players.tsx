@@ -35,20 +35,24 @@ const useStyles = makeStyles((theme) => ({
 
 const Players: React.FC<{}> = () => {
   const classes = useStyles()
-  const { user } = useAuth()
+  const { userId } = useAuth()
 
   const [players, setPlayers] = useState<Player[]>()
+  const [currentUser, setCurrentUser] = useState<Player>()
 
   useEffect(() => {
-    playersService.getPlayers().then(p => setPlayers(p))
-  }, [players])
+    playersService.getPlayers().then(p => {
+      setPlayers(p)
+      setCurrentUser(p.find(player => player.id === userId))
+    })
+  }, [players, userId])
 
-  const generatePlayerCard = (player: Player | undefined) => {
+  const generatePlayerCard = (userId: string | undefined) => {
     return (
-      <Card data-cy="playerCard" key={'player' + player?.id} className={classes.card}>
+      <Card data-cy="playerCard" key={'player' + currentUser?.id} className={classes.card}>
         <CardContent>
           <Typography variant="h5" component="h2">
-            {player?.firstName}
+            {currentUser?.firstName}
           </Typography>
 
           <Table className={classes.table} size="small">
@@ -94,7 +98,7 @@ const Players: React.FC<{}> = () => {
 
         </CardContent>
         <CardActions>
-          <HighScores key={'highscore' + player?.id} playerId={player ? player.id : ''} />
+          <HighScores key={'highscore' + currentUser?.id} playerId={currentUser ? currentUser.id : ''} />
           <Button size="small" disabled>Average scores</Button>
         </CardActions>
       </Card>
@@ -104,9 +108,9 @@ const Players: React.FC<{}> = () => {
   return (
     <div id="playersPage" className={classes.page}>
       {/* First the user's own card, then other players in alphabetical order. */}
-      {generatePlayerCard(user)}
-      {players?.filter(player => player.id !== user?.id).map(player => (
-        generatePlayerCard(player)
+      {generatePlayerCard(userId)}
+      {players?.filter(player => player.id !== userId).map(player => (
+        generatePlayerCard(userId)
       ))}
     </div>
   )
