@@ -36,13 +36,13 @@ const mockCourses: Course[] = [
 ]
 
 const getCourses = async (): Promise<Course[]> => {
-  // TODO
-  return mockCourses
+  const response = await axios.get(`${API_ROOT}/courses`)
+  return response.data
 }
 
-const getCourse = async (id: string): Promise<Course> => {
-  // TODO
-  return mockCourses[0]
+const getCourse = async (courseId: string): Promise<Course> => {
+  const response = await axios.get(`${API_ROOT}/courses/${courseId}`)
+  return response.data
 }
 
 const createLayout = async (courseId: string, layout: Layout): Promise<Layout> => {

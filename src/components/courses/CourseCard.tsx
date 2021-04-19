@@ -19,13 +19,11 @@ const useStyles = makeStyles((theme) => ({
     width: '100%',
     height: 100,
     overflow: 'hidden',
-    // Center mapPlaceholderText vertically:
-    display: "flex",
-    flexDirection: "column",
-    justifyContent: "center"
   },
-  mapPlaceholderText: {
-    color: sneakyGrey,
+  mapPlaceholder: {
+    backgroundColor: 'lightgrey',
+    width: '100%',
+    height: '100%',
   },
 }))
 
@@ -33,13 +31,11 @@ interface Props {
   course: Course,
 }
 
-// TODO: Picture: Use course.picture (IRL pic uploaded to server), or if it's empty, use the mapURL from the active layout.
-
 const CourseCard: React.FC<Props> = (props) => {
   const classes = useStyles()
 
   const { course } = props
-  const coverPictureURL = course.layouts.filter(layout => layout.active)[0].mapURL
+  const coverPictureURL = course.layouts.find(layout => layout.active)?.mapURL
   const [redirect, setRedirect] = useState(false)
 
   if (redirect) {
@@ -51,13 +47,16 @@ const CourseCard: React.FC<Props> = (props) => {
   return (
     <Card className={classes.card}>
       <CardActionArea data-cy="courseCard" onClick={handleClick}>
-        <div className={classes.imageContainer}>
-          <img
-            className={classes.image}
-            src={coverPictureURL}
-            alt="Course map"
-          />
-        </div>
+        
+        {coverPictureURL ? (
+          <div className={classes.imageContainer}>
+            <img
+              className={classes.image}
+              src={coverPictureURL}
+              alt="Course map"
+            />
+          </div>
+        ) : null}
 
         <CardContent>
           <Typography variant="h5">

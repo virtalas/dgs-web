@@ -70,6 +70,10 @@ const CourseSelect: React.FC<Props> = (props) => {
   useEffect(() => {
     // Fetch courses.
     coursesService.getCourses().then(fetchedCourses => {
+      if (fetchedCourses.length === 0) {
+        return
+      }
+      
       setCourses(sortCourses(fetchedCourses, sortByPopularity))
       setCourse(fetchedCourses[0]) // Courses should be ordered by popularity (at least initially).
       selectActiveLayout(fetchedCourses[0])

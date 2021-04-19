@@ -24,7 +24,7 @@ const NewSelection: React.FC<{}> = () => {
   const classes = useStyles()
 
   const [course, setCourse] = useState<Course>(
-    { id: '', name: 'Loading...', city: '', layouts: [], popularity: 0 }
+    { id: '', name: 'No courses', city: '', layouts: [], popularity: 0 }
   )
 
   return (

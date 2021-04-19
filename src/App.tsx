@@ -40,13 +40,9 @@ const App: React.FC<{}> = () => {
         return Promise.reject(error)
       })
     }
-
-    const addDefaultAuthorizationHeader = () =>
-      axios.defaults.headers.common['Authorization'] = 'Bearer ' + existingToken.access_token
   
     if (existingToken) {
       addTokenExpiryInterceptor()
-      addDefaultAuthorizationHeader()
       setUserId(extractUserId(existingToken))
     }  
   }, [existingToken])
@@ -61,11 +57,15 @@ const App: React.FC<{}> = () => {
     setUserId(undefined)
   }
 
+  if (existingToken) {
+    axios.defaults.headers.common['Authorization'] = 'Bearer ' + existingToken.access_token
+  }
+
   return (
     <AuthContext.Provider value={{
       handleLogin: handleLogin,
       handleLogout: handleLogout,
-      authenticated: userId !== undefined,
+      authenticated: existingToken !== null,
       userId: userId,
     }}>
       <ThemeProvider theme={theme}>

@@ -29,13 +29,11 @@ const useStyles = makeStyles((theme) => ({
     height: 180,
     borderRadius: 5,
     overflow: 'hidden',
-    // Center mapPlaceholderText vertically:
-    display: "flex",
-    flexDirection: "column",
-    justifyContent: "center",
   },
-  mapPlaceholderText: {
-    color: sneakyGrey,
+  mapPlaceholder: {
+    backgroundColor: 'lightgrey',
+    width: '100%',
+    height: '100%',
   },
   title: {
     marginTop: theme.spacing(2),
@@ -49,13 +47,9 @@ interface Props {
   match: any,
 }
 
-// TODO: pressing back takes to front page??
-// TODO: Ability to view and edit everything
 // TODO: Current weather conditions?
 // TODO: Use ghosting after opening Accordion and fetching data
-// TODO: Picture: Use course.picture (IRL pic uploaded to server), or if it's empty, use the mapURL from the active layout.
-// TODO: Upload cover picture button
-// TODO: Check map placeholder text
+// TODO: Upload cover picture
 // TODO: Use accordion, because more than 2 layouts already makes scrolling tedious for high scores etc.
 
 const Course: React.FC<Props> = (props) => {
@@ -66,12 +60,13 @@ const Course: React.FC<Props> = (props) => {
 
   const [course, setCourse] = useState<Course>()
   const [editCourseOpen, setEditCourseOpen] = useState(false)
+  const [imgError, setImgError] = useState(false)
 
   useEffect(() => {
     coursesService.getCourse(courseId).then(c => setCourse(c))
   }, [courseId])
 
-  const coverPictureURL = course?.layouts.filter(layout => layout.active)[0].mapURL
+  const coverPictureURL = undefined // TODO: ability to upload a picture, course.coverPictureURL
 
   const handleEditCourse = () => setEditCourseOpen(true)
 
@@ -83,6 +78,7 @@ const Course: React.FC<Props> = (props) => {
   }
 
   const handleLayoutUpdated = (layout: Layout) => {
+    setImgError(false)
     if (course) {
       const layoutIndex = course.layouts.findIndex(l => l.id === layout.id)
       const layouts = [...course.layouts]
@@ -112,12 +108,23 @@ const Course: React.FC<Props> = (props) => {
     <div id="coursePage" className={classes.page}>
       {course ? (
         <div className={classes.imageContainer}>
-          <img
-            id="courseImage"
-            className={classes.image}
-            src={coverPictureURL}
-            alt="Course map"
-          />
+          {(coverPictureURL && !imgError) ? (
+            <img
+              id="courseImage"
+              className={classes.image}
+              src={coverPictureURL}
+              alt="Course map"
+              onError={() => setImgError(true)}
+            />
+          ) : (
+            <Button
+              className={classes.mapPlaceholder}
+              size="small"
+              onClick={handleEditCourse}
+            >
+              Upload a picture
+            </Button>
+          )}
         </div>
       ) : (
         <Skeleton className={classes.imageContainer} variant="rect" />

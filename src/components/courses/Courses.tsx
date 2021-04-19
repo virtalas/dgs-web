@@ -25,7 +25,7 @@ const Courses: React.FC<{}> = () => {
 
   useEffect(() => {
     coursesService.getCourses().then(c => setCourses(c))
-  }, [courses])
+  }, [])
 
   const courseCards = courses?.map(course => (
     <CourseCard

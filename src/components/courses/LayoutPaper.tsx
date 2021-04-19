@@ -86,7 +86,7 @@ const LayoutPaper: React.FC<Props> = (props) => {
             Total
           </Box>
           <Box className={classes.layoutParBox}>
-            {layout.total}
+            {layout.pars.reduce((a, b) => a + b, 0)}
           </Box>
         </div>
       </Grid>
