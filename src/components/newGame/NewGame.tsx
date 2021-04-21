@@ -4,6 +4,7 @@ import { Redirect } from 'react-router'
 import { makeStyles } from '@material-ui/core/styles'
 import Button from '@material-ui/core/Button'
 
+import { useAuth } from "../../context/AuthContext"
 import PlayerSelect from './PlayerSelect'
 import CourseSelect from './CourseSelect'
 import NewGuestButton from './NewGuestButton'
@@ -16,18 +17,11 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-// TODO: Implement logged in user info
-const user: Player = {
-  id: 'fgdghh', // Same ID as mocked players from playerService
-  firstName: 'Teppo',
-  guest: false,
-  admin: false,
-}
-
 // TODO: Update style: Don't use outlined buttons.
 // TODO: Center by using Grids (e.g in NewLayout.tsx)
 
 const NewGame: React.FC<{}> = () => {
+  const { userId } = useAuth()
   const classes = useStyles()
 
   const [redirect, setRedirect] = useState(false)
@@ -40,22 +34,32 @@ const NewGame: React.FC<{}> = () => {
   const [layout, setLayout] = useState<Layout>(
     { id: '', name: 'Loading...', description: '', pars: [], total: 0, active: false, mapURL: '' }
   )
-  const [players, setPlayers] = useState<Player[]>([user]) // Pre-select the user as a player.
+  const [players, setPlayers] = useState<Player[]>([])
 
-  const [allPlayers, setAllPlayers] = useState<Player[]>([user])
+  const [allPlayers, setAllPlayers] = useState<Player[]>([])
 
   useEffect(() => {
     // Fetch players.
     playersService.getPlayers().then(fetchedPlayers => {
+      // TODO: Filter players to get current user and add it to 'players'.
+      const mockUser: Player = {
+        id: ''+userId,
+        firstName: 'MockUser',
+        guest: false,
+        admin: false,
+      }
+
+      fetchedPlayers.push(mockUser)
       setAllPlayers(fetchedPlayers)
     })
   }, [])
 
   const handleStartButtonClick = async () => {
-    // Create a new game, then redirect to '/games/:newGameId/input'.
-    const newGame = await gamesService.createGame(layout, players)
-    setNewGameId(newGame.id)
-    setRedirect(true)
+    const start_date = new Date().toISOString()
+    gamesService.createGame(layout, players, start_date).then(newGameId => {
+      setNewGameId(newGameId.id)
+      setRedirect(true)
+    })
   }
 
   if (redirect) {

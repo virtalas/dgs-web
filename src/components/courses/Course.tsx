@@ -7,7 +7,6 @@ import Button from '@material-ui/core/Button'
 import { Grid, IconButton, Table, TableCell, TableHead, TableRow, TableBody } from '@material-ui/core'
 import Skeleton from '@material-ui/lab/Skeleton'
 
-import { sneakyGrey } from '../../constants/Colors'
 import coursesService from '../../services/coursesService'
 import LayoutPaper from './LayoutPaper'
 import EditCourse from './EditCourse'

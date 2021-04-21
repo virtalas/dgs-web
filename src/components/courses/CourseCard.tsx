@@ -4,7 +4,6 @@ import { makeStyles } from '@material-ui/core/styles'
 import Typography from '@material-ui/core/Typography'
 import { Card, CardContent, CardActionArea } from '@material-ui/core'
 
-import { sneakyGrey } from '../../constants/Colors'
 import { Redirect } from 'react-router-dom'
 
 const useStyles = makeStyles((theme) => ({

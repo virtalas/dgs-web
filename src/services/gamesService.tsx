@@ -593,11 +593,25 @@ const getMonthsThatHaveGames = async (): Promise<GameMonths[]> => {
   return mockMonthsThatHaveGames
 }
 
-const createGame = async (layout: Layout, players: Player[]): Promise<Game> => {
-  // TODO: Replace mock data with API call.
-  // Note: If the layout is not active, the active layout should be updated to be the chosen layout.
-  // Note: Add startDate as the time of creation.
-  return mockGame
+const createGame = async (layout: Layout, players: Player[], start_date: string): Promise<{ id: string }> => {
+  try {
+    const response = await axios.post(`${API_ROOT}/games`, {
+      layout_id: layout.id,
+      start_date: start_date,
+      end_date: start_date, // Initial value.
+      comment: '',
+      temperature: null,
+      player_ids: players.map(player => player.id),
+    }, {
+      headers: {
+        'Content-Type': 'application/json',
+      }
+    })
+    return response.data
+  } catch (e) {
+    console.log(e.response.data)
+    return Promise.reject()
+  }
 }
 
 const getGame = async (id: string): Promise<Game> => {
