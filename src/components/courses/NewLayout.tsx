@@ -8,6 +8,8 @@ interface Props {
   match: any,
 }
 
+// TODO: creating new layout gives warning
+
 const NewLayout: React.FC<Props> = (props) => {
   const { match } = props
   const courseId = match.params.id

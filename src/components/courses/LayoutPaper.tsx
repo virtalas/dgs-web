@@ -71,13 +71,13 @@ const LayoutPaper: React.FC<Props> = (props) => {
         justify="flex-start"
         alignItems="center"
       >
-        {layout.pars.map((par, index) => (
+        {layout.holes.map((hole, index) => (
           <div key={'layout-par-' + index}>
             <Box className={classes.layoutParBox} fontWeight="fontWeightBold">
               {index + 1}
             </Box>
             <Box className={classes.layoutParBox}>
-              {par}
+              {hole.par}
             </Box>
           </div>
         ))}
@@ -86,7 +86,7 @@ const LayoutPaper: React.FC<Props> = (props) => {
             Total
           </Box>
           <Box className={classes.layoutParBox}>
-            {layout.pars.reduce((a, b) => a + b, 0)}
+            {layout.holes.map(hole => hole.par).reduce((a, b) => a + b, 0)}
           </Box>
         </div>
       </Grid>

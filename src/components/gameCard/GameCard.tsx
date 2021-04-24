@@ -8,6 +8,7 @@ import EditIcon from '@material-ui/icons/Edit'
 import DoneIcon from '@material-ui/icons/Done'
 import ClearIcon from '@material-ui/icons/Clear'
 import CircularProgress from '@material-ui/core/CircularProgress'
+import ErrorOutlineIcon from '@material-ui/icons/ErrorOutline'
 import DayjsUtils from '@date-io/dayjs'
 import { MuiPickersUtilsProvider, DateTimePicker } from '@material-ui/pickers'
 import { MaterialUiPickersDate } from '@material-ui/pickers/typings/date'
@@ -25,7 +26,7 @@ const useStyles = makeStyles((theme) => ({
     position: 'absolute',
     bottom: 10,
     right: 8,
-    zIndex: 9999,
+    zIndex: 10,
   },
   cancelButton: {
     position: 'absolute',
@@ -35,6 +36,10 @@ const useStyles = makeStyles((theme) => ({
   spinner: {
     padding: 5,
   },
+  error: {
+    marginRight: 40,
+    color: 'red',
+  }
 }))
 
 const DatePicker = withStyles({
@@ -86,21 +91,25 @@ const GameCard: React.FC<Props> = (props) => {
 
   const [isEditing, setIsEditing] = useState(editOnly ? true : false) // to get rid of undefined
   const [updating, setUpdating] = useState(false)
+  const [updateError, setUpdateError] = useState(false)
   const [originalGame, setOriginalGame] = useState<Game>()
-  // TODO: Fix(?) hack variable to make React render the game again.
-  // Affects: when editing a stroke, the color should change after a number inputted and onfocus happens.
-  // Works in commit 6ec7087d99bfdf40bd4ae977f7f572c977e04f34
-  const [update, updateChildren] = useState(false)
 
-  // TODO(?): if game.creator == user || user.isAdmin
+  // TODO: if game.creatorId == userId || user.isAdmin
   const allowedToEdit = true
 
   const toggleEdit = () => {
     if (isEditing) {
       // TODO: Check that the spinner shows up
-      // TODO(?): setGame(returnedGame) in then() of gamesService.updateGame
-      gamesService.updateGame(game).then(() => setUpdating(false))
+      gamesService.updateGame(game)
+        .then(() => setUpdating(false))
+        .catch(() => {
+          setUpdateError(true)
+          if (originalGame) {
+            setGame(originalGame)
+          }
+        })
       setUpdating(true)
+      setUpdateError(false)
     } else {
       setOriginalGame(_.cloneDeep(game))
     }
@@ -110,22 +119,17 @@ const GameCard: React.FC<Props> = (props) => {
   const handleCancelEdit = () => {
     if (window.confirm('Cancel editing?')) {
       if (originalGame) {
-        refreshGame(originalGame) // TODO: BUG: Original game does is not rendered
+        setGame(originalGame)
       }
       setIsEditing(!isEditing)
     }
-  }
-
-  const refreshGame = (game: Game) => {
-    setGame(game)
-    updateChildren(!update)
   }
 
   const handleStartDateChange = (date: MaterialUiPickersDate, value?: string | null | undefined) => {
     const newDate = date?.toDate()
     if (newDate) {
       game.startDate = newDate
-      refreshGame(game)
+      setGame(game)
     }
   }
 
@@ -133,7 +137,7 @@ const GameCard: React.FC<Props> = (props) => {
     const newDate = date?.toDate()
     if (newDate) {
       game.endDate = newDate
-      refreshGame(game)
+      setGame(game)
     }
   }
 
@@ -157,6 +161,12 @@ const GameCard: React.FC<Props> = (props) => {
   const progressSpinner = (
     <div className={classes.actionButton}>
       <CircularProgress className={classes.spinner} size={40} />
+    </div>
+  )
+
+  const errorIndicator = (
+    <div className={classes.actionButton} title="Updating game failed">
+      <ErrorOutlineIcon className={classes.error} fontSize="large" />
     </div>
   )
 
@@ -200,14 +210,15 @@ const GameCard: React.FC<Props> = (props) => {
 
   return (
     <BlueCard>
-      <Typography variant="h6" className={classes.title}>{game.course.name}</Typography>
+      <Typography variant="h6" className={classes.title}>{game.courseName}</Typography>
       {isEditing ? gameDateEditing : gameDate}
       {isEditing && !editOnly ? cancelButton : null}
-      {updating ? progressSpinner : editButton}
-      <ScoreCard game={game} setGame={refreshGame} isEditing={disableScoreEditing ? false : isEditing} />
+      {!isEditing && updateError ? errorIndicator : null}
+      {updating && !updateError ? progressSpinner : editButton}
+      <ScoreCard game={game} setGame={setGame} isEditing={disableScoreEditing ? false : isEditing} />
       <GameInfo
         game={game}
-        setGame={refreshGame}
+        setGame={setGame}
         isEditing={isEditing}
         availableWeatherConditions={availableWeatherConditions}
         availableConditions={availableConditions}

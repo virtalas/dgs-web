@@ -3,7 +3,7 @@ interface Layout {
   active: boolean,
   name: string,
   description: string,
-  pars: number[],
+  holes: Hole[],
   total: number,
   mapURL: string,
 }

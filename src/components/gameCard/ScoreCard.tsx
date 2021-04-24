@@ -13,6 +13,8 @@ import {
   chipGrey,
 } from '../../constants/Colors'
 
+import { calculateToPar, calculateTotalScore } from '../../utils/ScoreUtil'
+
 const cellHeightNormal = 26
 const cellHeightEdit = 35
 const trHeightEdit = cellHeightEdit + 3
@@ -186,8 +188,6 @@ const ScoreCard: React.FC<Props> = (props) => {
   const classes = useStyles()
   const { game, setGame, isEditing } = props
 
-  const layout = game.course.layouts.filter(l => l.active)[0]
-
   const handleStrokeChange = (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const playerName = event.currentTarget.name.split(':')[0]
     const throws = event.currentTarget.name.split(':')[1] === 'stroke'
@@ -196,12 +196,12 @@ const ScoreCard: React.FC<Props> = (props) => {
 
     if (!isNaN(+stroke) && stroke.length !== 0) {
       // Valid stroke inputted, update game.
-      game.scores = updateScores(game.scores, playerName, holeIndex, Number(stroke), layout, throws)
+      game.scores = updateScores(game.scores, playerName, holeIndex, Number(stroke), game.layout, throws)
       setGame(game)
       event.currentTarget.blur() // Unfocus/blur the field after inputting a number.
     } else {
       // No input (or invalid), restore the original stroke.
-      const playerScores = game.scores.find(scores => scores.player.firstName === playerName)
+      const playerScores = game.scores.find(scores => scores.playerName === playerName)
       if (throws) {
         event.currentTarget.value = String(playerScores?.strokes[holeIndex])
       } else {
@@ -210,12 +210,12 @@ const ScoreCard: React.FC<Props> = (props) => {
     }
   }
 
-  const holeNumbers = layout.pars.map((par: number, index: number) => (
+  const holeNumbers = game.layout.holes.map((hole: Hole, index: number) => (
     <td key={index}>{index + 1}</td>
   ))
 
-  const coursePars = layout.pars.map((par: number, index: number) => (
-    <td key={index}>{par}</td>
+  const coursePars = game.layout.holes.map((hole: Hole, index: number) => (
+    <td key={index}>{hole.par}</td>
   ))
 
   let pnBottomRowClassName = isEditing ? classes.bottomRowEdit : classes.bottomRow
@@ -225,7 +225,7 @@ const ScoreCard: React.FC<Props> = (props) => {
     <Fragment key={index}>
       <tr className={index + 1 === game.scores.length && !isEditing ? pnBottomRowClassName : pnRowClassName}>
         <td align="left">
-          {playerScores.player.firstName}
+          {playerScores.playerName}
         </td>
       </tr>
       {isEditing ? (
@@ -258,7 +258,7 @@ const ScoreCard: React.FC<Props> = (props) => {
       <tr className={classes.bottomRow}>
         {playerScores.obs.map((obCount: number, index: number) => (
           <td className={classes.obEdit} key={index}>
-            {createStrokeInput(classes.strokeEdit, playerScores.player.firstName, obCount, index, handleStrokeChange, false)}
+            {createStrokeInput(classes.strokeEdit, playerScores.playerName, obCount, index, handleStrokeChange, false)}
           </td>
         ))}
         <td></td>
@@ -270,7 +270,7 @@ const ScoreCard: React.FC<Props> = (props) => {
     <Fragment key={index}>
       <tr className={classes.bottomRow}>
         {playerScores.strokes.map((strokeCount: number, index: number) => {
-          const holePar = layout.pars[index]
+          const holePar = game.layout.holes[index].par
           const obStrokes = playerScores.obs[index]
           let scoreClass
 
@@ -300,7 +300,7 @@ const ScoreCard: React.FC<Props> = (props) => {
           if (isEditing) {
             return (
               <td className={scoreClass} key={index}>
-                {createStrokeInput(classes.strokeEdit, playerScores.player.firstName, strokeCount, index, handleStrokeChange, true)}
+                {createStrokeInput(classes.strokeEdit, playerScores.playerName, strokeCount, index, handleStrokeChange, true)}
               </td>
             )
           }
@@ -350,7 +350,7 @@ const ScoreCard: React.FC<Props> = (props) => {
             </tr>
             <tr>
               {coursePars}
-              <td>{layout.total}</td>
+              <td>{game.layout.total}</td>
             </tr>
             {game.scores.map((playerScores, index) => playerStrokes(playerScores, index))}
           </tbody>
@@ -382,28 +382,20 @@ function updateScores(scores: PlayerScores[],
                       holeIndex: number,
                       stroke: number,
                       layout: Layout,
-                      throws: boolean): PlayerScores[] {
+                      strokesAreThrows: boolean): PlayerScores[] {
   scores.forEach((playerScores, index, array: PlayerScores[]) => {
     // Update the stroke for the player in question
-    if (array[index].player.firstName === playerName) {
-      if (throws) {
+    if (array[index].playerName === playerName) {
+      if (strokesAreThrows) {
         array[index].strokes[holeIndex] = stroke
       } else {
         array[index].obs[holeIndex] = stroke
       }
     }
     // Update toPar
-    let total = 0
-    let courseTotal = 0
-    for (let holeIndex = 0; holeIndex < array[index].strokes.length; holeIndex++) {
-      if (array[index].strokes[holeIndex] !== 0) {
-        total += array[index].strokes[holeIndex]
-        total += array[index].obs[holeIndex]
-        courseTotal += layout.pars[holeIndex]
-      }
-    }
+    const total = calculateTotalScore(playerScores.strokes, playerScores.obs)
     array[index].total = total
-    array[index].toPar = total - courseTotal
+    array[index].toPar = calculateToPar(playerScores.strokes, total, layout.holes)
   })
   return scores
 }

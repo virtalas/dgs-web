@@ -247,13 +247,13 @@ const GameInfo: React.FC<Props> = (props) => {
   const illegalScorerEdit = isEditing ? (
     <div className={classes.chipRow}>
       {game.scores.map((scores: PlayerScores, index: number) => {
-        return createColorChip(classes.illegalDisabledChip, 'Illegal game', scores.player.firstName, 'secondary', index)
+        return createColorChip(classes.illegalDisabledChip, 'Illegal game', scores.playerName, 'secondary', index)
       })}
     </div>
   ) : null
 
   const shouldShowInfoPaper = game.temperature || game.weatherConditions.length || game.conditions.length ||
-                              game.highScorers.length || game.illegalScorers.length || game.comment || game.contestName
+                              game.highScorers.length || game.illegalScorers.length || game.comment
 
   const normalView = shouldShowInfoPaper ? (
     <Paper className = {classes.infoPaper} elevation = { 0} >

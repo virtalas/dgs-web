@@ -1,14 +1,16 @@
 interface Game {
   id: string,
-  course: Course,
+  creatorId: string,
+  courseName: string,
+  layout: Layout,
   startDate: Date | null | undefined,
   endDate: Date,
-  scores: PlayerScores[],
   temperature: number | null,
-  weatherConditions: Condition[],
-  conditions: Condition[],
+  comment: string,
+  scores: PlayerScores[],
+  tags: Tag[],
+  weatherConditions: Condition[], // TODO: get this from tags
+  conditions: Condition[], // TODO: get this from tags
   highScorers: string[],  // TODO: just get this from filter(PlayerScores.high_score)
   illegalScorers: string[], // TODO: just get this from filter(PlayerScores.legal)
-  comment: string,
-  contestName: string | null, // TODO: remove
 }

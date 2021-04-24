@@ -67,8 +67,6 @@ const GameInput: React.FC<{}> = (props: any) => {
   const [tab, setTab] = React.useState(scoreInputViewTab)
   const [updating, setUpdating] = useState(false)
 
-  const layout = game?.course.layouts.filter(l => l.active)[0]
-
   useEffect(() => {
     gamesService.getGame(gameId).then((fetchedGame) => {
       setGame(fetchedGame)
@@ -118,7 +116,7 @@ const GameInput: React.FC<{}> = (props: any) => {
 
   // TODO
   const mapView = (
-    <MapView mapURL={layout ? layout?.mapURL : ''} />
+    <MapView mapURL={game ? game.layout.mapURL : ''} />
   )
 
   const gameInfoView = (
@@ -154,7 +152,7 @@ const GameInput: React.FC<{}> = (props: any) => {
       <HoleInfoBar
         showInfo={tab !== gameInfoViewTab}
         holeNum={holeNum}
-        par={layout ? layout.pars[holeNum - 1] : 0}
+        par={game ? game.layout.holes[holeNum - 1].par : 0}
       />
       {activeView}
       <BottomNavigation

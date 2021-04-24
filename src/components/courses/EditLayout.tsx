@@ -77,6 +77,7 @@ interface Props {
   handleCancel?: () => void,
 }
 
+// TODO: edit ability to disable holes
 // TODO: remove big decrease/increase count buttons if the native up/down arrows are OK.
 // TODO: List other layouts for the course that already exist
 
@@ -91,6 +92,7 @@ const EditLayout: React.FC<Props> = (props) => {
   const [mapURL, setMapURL] = useState('')
   const [holeCount, setHoleCount] = useState(18)
   const [pars, setPars] = useState<number[]>([])
+  const [holeNumbers, setHoleNumbers] = useState<number[]>([])
 
   const updateParsLength = (newHoleCount: number): number[] => {
     while (pars.length !== newHoleCount) {
@@ -110,8 +112,9 @@ const EditLayout: React.FC<Props> = (props) => {
       setName(layout ? layout.name : '')
       setDescription(layout ? layout.description : '')
       setMapURL(layout ? layout.mapURL : '')
-      setHoleCount(layout ? layout.pars.length : 18)
-      setPars(layout ? layout.pars : [])
+      setHoleCount(layout ? layout.holes.length : 18)
+      setPars(layout ? layout.holes.map(hole => hole.par) : [])
+      setHoleNumbers(layout ? layout.holes.map(hole => hole.number) : [])
     }
   }, [layout, newLayout]) // eslint-disable-line react-hooks/exhaustive-deps
 
@@ -127,7 +130,9 @@ const EditLayout: React.FC<Props> = (props) => {
       name: name,
       description: description,
       mapURL: mapURL,
-      pars: pars,
+      holes: pars.map((par, i) => { // TODO
+        return { number: i + 1, par: par }
+      }),
       total: totalPar
     }
     handleFinish(inputtedLayout)

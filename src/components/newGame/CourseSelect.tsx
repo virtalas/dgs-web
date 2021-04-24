@@ -42,7 +42,7 @@ const CourseSelect: React.FC<Props> = (props) => {
   function getActiveLayout(forCourse: Course): Layout {
     const layout = forCourse.layouts.find(layout => layout.active)
     return layout !== undefined ? layout : {
-      id: '', name: '', description: '', pars: [], total: 0, active: false, mapURL: ''
+      id: '', name: '', description: '', holes: [], total: 0, active: false, mapURL: ''
     }
   }
 

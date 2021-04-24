@@ -32,7 +32,7 @@ const NewGame: React.FC<{}> = () => {
     { id: '', name: 'Loading...', city: '', layouts: [], popularity: 0 }
   )
   const [layout, setLayout] = useState<Layout>(
-    { id: '', name: 'Loading...', description: '', pars: [], total: 0, active: false, mapURL: '' }
+    { id: '', name: 'Loading...', description: '', holes: [], total: 0, active: false, mapURL: '' }
   )
   const [players, setPlayers] = useState<Player[]>([])
 
@@ -52,7 +52,7 @@ const NewGame: React.FC<{}> = () => {
       fetchedPlayers.push(mockUser)
       setAllPlayers(fetchedPlayers)
     })
-  }, [])
+  }, [userId])
 
   const handleStartButtonClick = async () => {
     const start_date = new Date().toISOString()

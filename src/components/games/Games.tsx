@@ -43,7 +43,7 @@ const Games: React.FC<Props> = (props) => {
   const singleGameView = Boolean(gameId)
 
   const currentYear = new Date().getFullYear()
-  const currentMonth = new Date().getMonth()
+  const currentMonth = new Date().getMonth() - 1
 
   const [games, setGames] = useState<Game[]>([])
   const [fetchedMonths, setFetchedMonths] = useState<number[]>([])
@@ -118,9 +118,9 @@ const Games: React.FC<Props> = (props) => {
 
   const setGame = (game: Game) => {
     let gameToUpdate = games.find(g => g.id === game.id) as Game
-    let index = games.indexOf(gameToUpdate)
-    games.fill(game, index, index++) // Replace gameToUpdate with game
-    setGames(games)
+    let updateIndex = games.indexOf(gameToUpdate)
+    const updatedGames = games.fill(game, updateIndex, updateIndex + 1)
+    setGames([...updatedGames])
   }
 
   const handleShowAllButton = () => setRedirect(true)
