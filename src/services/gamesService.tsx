@@ -1,7 +1,7 @@
 import axios from 'axios'
 
 import { API_ROOT } from '../apiConfig'
-import { gameResponseToGame } from '../types/api/ModelMappers'
+import { apiGameResponseToGame } from '../types/api/ModelMappers'
 
 // frontend: January = 0, backend: January = 1
 
@@ -14,7 +14,7 @@ const getGames = async (year: number, month: number): Promise<Game[]> => {
       },
     })
 
-    const games = response.data.map((gameResponse: ApiGameResponse) => gameResponseToGame(gameResponse))
+    const games = response.data.map((gameResponse: ApiGameResponse) => apiGameResponseToGame(gameResponse))
     return games
   } catch (e) {
     console.log(e.response.data)
@@ -66,12 +66,12 @@ const updateGame = async (game: Game): Promise<Game> => {
     const response = await axios.put(`${API_ROOT}/games`, {
       game: game,
       scores: game.scores.map((playerScores: PlayerScores) => {
-        // const legal = game.illegalScorers.find()
+        const legal = game.illegalScorers.find(player => player.id === playerScores.player.id) ? true : false
         return {
           player_id: playerScores.player.id,
           throws: playerScores.strokes,
           obs: playerScores.obs,
-          // legal: legal,
+          legal: legal,
         }
       }),
     }, {

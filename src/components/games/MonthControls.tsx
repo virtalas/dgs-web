@@ -51,21 +51,19 @@ const MonthControls: React.FC<Props> = (props) => {
   } = props
 
   const isLoading = monthsThatHaveGames === undefined
-  const gameMonthsInSelectedYear = monthsThatHaveGames ?
-      monthsThatHaveGames.find((gameMonths: GameMonths) => selectedYear === gameMonths.year)
-      : undefined
-  const latestSelectableYear = monthsThatHaveGames ?
-      monthsThatHaveGames[0].year
-      : 9999
-  const latestSelectableMonth = monthsThatHaveGames ?
-      monthsThatHaveGames[0].months[monthsThatHaveGames[0].months.length - 1]
-      : 11
-  const oldestSelectableYear = monthsThatHaveGames ?
-      monthsThatHaveGames[monthsThatHaveGames.length - 1].year
-      : 0
-  const oldestSelectableMonth = monthsThatHaveGames ?
-      monthsThatHaveGames[monthsThatHaveGames.length - 1].months[0]
-      : 11
+  let gameMonthsInSelectedYear: GameMonths | undefined = undefined
+  let latestSelectableYear = 9999
+  let latestSelectableMonth = 11
+  let oldestSelectableYear = 0
+  let oldestSelectableMonth = 11
+
+  if (monthsThatHaveGames && monthsThatHaveGames.length > 0) {
+    gameMonthsInSelectedYear = monthsThatHaveGames.find((gameMonths: GameMonths) => selectedYear === gameMonths.year)
+    latestSelectableYear = monthsThatHaveGames[0].year
+    latestSelectableMonth = monthsThatHaveGames[0].months[monthsThatHaveGames[0].months.length - 1]
+    oldestSelectableYear = monthsThatHaveGames[monthsThatHaveGames.length - 1].year
+    oldestSelectableMonth = monthsThatHaveGames[monthsThatHaveGames.length - 1].months[0]
+  }
 
   const handlePrevMonth = () => {
     if (monthsThatHaveGames && gameMonthsInSelectedYear) {

@@ -96,8 +96,10 @@ const Games: React.FC<Props> = (props) => {
       gamesService.getMonthsThatHaveGames().then((gameMonths: GameMonths[]) => {
         setMonthsThatHaveGames(gameMonths)
         // Select the latest month & year that have games:
-        setSelectedYear(gameMonths[0].year)
-        setSelectedMonth(gameMonths[0].months[gameMonths[0].months.length - 1])
+        if (gameMonths && gameMonths.length > 0) {
+          setSelectedYear(gameMonths[0].year)
+          setSelectedMonth(gameMonths[0].months[gameMonths[0].months.length - 1])
+        }
         // Since selectedYear/Month changed, component rerenders and fetchGames() happens.
       })
     } else {

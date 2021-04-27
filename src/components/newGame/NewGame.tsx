@@ -4,7 +4,8 @@ import { Redirect } from 'react-router'
 import { makeStyles } from '@material-ui/core/styles'
 import Button from '@material-ui/core/Button'
 
-import { useAuth } from "../../context/AuthContext"
+import { useAuth } from '../../context/AuthContext'
+import { toISOStringWithTimezone } from '../../utils/DateUtils'
 import PlayerSelect from './PlayerSelect'
 import CourseSelect from './CourseSelect'
 import NewGuestButton from './NewGuestButton'
@@ -55,8 +56,8 @@ const NewGame: React.FC<{}> = () => {
   }, [userId])
 
   const handleStartButtonClick = async () => {
-    const start_date = new Date().toISOString()
-    gamesService.createGame(layout, players, start_date).then(newGameId => {
+    const startDate = toISOStringWithTimezone(new Date())
+    gamesService.createGame(layout, players, startDate).then(newGameId => {
       setNewGameId(newGameId.id)
       setRedirect(true)
     })
