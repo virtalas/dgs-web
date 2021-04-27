@@ -113,7 +113,7 @@ const PlayerStrokeInput: React.FC<Props> = (props) => {
   const handleStrokeChange = (playerId: string, throws: boolean, event: React.ChangeEvent<HTMLInputElement>) => {
     let strokes = parseInt(event.target.value)
     strokes = isNaN(strokes) ? 0 : strokes
-    const playerIndex = scores.findIndex(playerScores => playerScores.playerId === playerId)
+    const playerIndex = scores.findIndex(playerScores => playerScores.player.id === playerId)
     if (throws) {
       // Update throws (strokes):
       scores[playerIndex].strokes[holeNum - 1] = strokes
@@ -145,7 +145,7 @@ const PlayerStrokeInput: React.FC<Props> = (props) => {
 
   const rows = scores.map((scoreInfo, index) => (
     <ListItem key={index}>
-      <ListItemText primary={scoreInfo.playerName} />
+      <ListItemText primary={scoreInfo.player.firstName} />
       <ListItemText
         className={classes.toParText}
         data-cy="toPar"
@@ -155,13 +155,13 @@ const PlayerStrokeInput: React.FC<Props> = (props) => {
       <div className={classes.circle}>
         <input
           className={classes.strokeInput}
-          onChange={event => handleStrokeChange(scoreInfo.playerId, false, event)}
+          onChange={event => handleStrokeChange(scoreInfo.player.id, false, event)}
           type="tel"
           value={scoreInfo.obs[holeNum - 1]}
           min="0"
           max="99"
           onFocus={e => e.target.value = '' /* Clear the field when it comes into focus. */}
-          onBlur={event => handleStrokeChange(scoreInfo.playerId, false, event)}
+          onBlur={event => handleStrokeChange(scoreInfo.player.id, false, event)}
           inputMode="numeric"
           pattern="[0-9]*">
         </input>
@@ -171,13 +171,13 @@ const PlayerStrokeInput: React.FC<Props> = (props) => {
         <div className={classes.circle}>
           <input
             className={classes.strokeInput}
-            onChange={event => handleStrokeChange(scoreInfo.playerId, true, event)}
+            onChange={event => handleStrokeChange(scoreInfo.player.id, true, event)}
             type="tel"
             value={scoreInfo.strokes[holeNum - 1]}
             min="0"
             max="99"
             onFocus={e => e.target.value = '' /* Clear the field when it comes into focus. */}
-            onBlur={event => handleStrokeChange(scoreInfo.playerId, true, event)}
+            onBlur={event => handleStrokeChange(scoreInfo.player.id, true, event)}
             inputMode="numeric"
             pattern="[0-9]*">
           </input>

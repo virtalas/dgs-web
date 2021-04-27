@@ -66,8 +66,8 @@ interface Props {
   setGame: (game: Game) => void,
   editOnly?: boolean,
   disableScoreEditing?: boolean,
-  availableConditions: Condition[],
-  availableWeatherConditions: Condition[],
+  availableConditions: Tag[],
+  availableWeatherConditions: Tag[],
 }
 
 // TODO: Display course name in big font, then layout name somewhere smaller?

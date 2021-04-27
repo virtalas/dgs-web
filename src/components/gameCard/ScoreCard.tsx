@@ -201,7 +201,7 @@ const ScoreCard: React.FC<Props> = (props) => {
       event.currentTarget.blur() // Unfocus/blur the field after inputting a number.
     } else {
       // No input (or invalid), restore the original stroke.
-      const playerScores = game.scores.find(scores => scores.playerName === playerName)
+      const playerScores = game.scores.find(scores => scores.player.firstName === playerName)
       if (throws) {
         event.currentTarget.value = String(playerScores?.strokes[holeIndex])
       } else {
@@ -225,7 +225,7 @@ const ScoreCard: React.FC<Props> = (props) => {
     <Fragment key={index}>
       <tr className={index + 1 === game.scores.length && !isEditing ? pnBottomRowClassName : pnRowClassName}>
         <td align="left">
-          {playerScores.playerName}
+          {playerScores.player.firstName}
         </td>
       </tr>
       {isEditing ? (
@@ -258,7 +258,7 @@ const ScoreCard: React.FC<Props> = (props) => {
       <tr className={classes.bottomRow}>
         {playerScores.obs.map((obCount: number, index: number) => (
           <td className={classes.obEdit} key={index}>
-            {createStrokeInput(classes.strokeEdit, playerScores.playerName, obCount, index, handleStrokeChange, false)}
+            {createStrokeInput(classes.strokeEdit, playerScores.player.firstName, obCount, index, handleStrokeChange, false)}
           </td>
         ))}
         <td></td>
@@ -300,7 +300,7 @@ const ScoreCard: React.FC<Props> = (props) => {
           if (isEditing) {
             return (
               <td className={scoreClass} key={index}>
-                {createStrokeInput(classes.strokeEdit, playerScores.playerName, strokeCount, index, handleStrokeChange, true)}
+                {createStrokeInput(classes.strokeEdit, playerScores.player.firstName, strokeCount, index, handleStrokeChange, true)}
               </td>
             )
           }
@@ -385,7 +385,7 @@ function updateScores(scores: PlayerScores[],
                       strokesAreThrows: boolean): PlayerScores[] {
   scores.forEach((playerScores, index, array: PlayerScores[]) => {
     // Update the stroke for the player in question
-    if (array[index].playerName === playerName) {
+    if (array[index].player.firstName === playerName) {
       if (strokesAreThrows) {
         array[index].strokes[holeIndex] = stroke
       } else {

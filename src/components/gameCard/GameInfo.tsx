@@ -68,8 +68,8 @@ interface Props {
   game: Game,
   setGame: (game: Game) => void,
   isEditing: boolean,
-  availableWeatherConditions: Condition[],
-  availableConditions: Condition[],
+  availableWeatherConditions: Tag[],
+  availableConditions: Tag[],
 }
 
 const GameInfo: React.FC<Props> = (props) => {
@@ -81,24 +81,33 @@ const GameInfo: React.FC<Props> = (props) => {
   const [temperature, setTemperature] = useState<string>(String(gameTemperature))
   const [comment, setComment] = useState<string>(game.comment)
 
-  const handlePlayerClipClick = (event: React.MouseEvent) => {
-    const name = event.currentTarget.textContent?.split('Illegal game')[1]
+  const handlePlayerChipClick = (event: React.MouseEvent) => {
+    const playerId = event.currentTarget.getAttribute('data-playerid')
+    const player = game.scores.find(scores => scores.player.id === playerId)?.player
+
     if (isEditing) {
-      if (game.illegalScorers.find(n => n === name)) {
-        game.illegalScorers = game.illegalScorers.filter(n => n !== name)
+      if (game.illegalScorers.find(player => player.id === playerId)) {
+        game.illegalScorers = game.illegalScorers.filter(player => player.id !== playerId)
       } else {
-        game.illegalScorers = game.illegalScorers.concat(String(name))
+        if (player) {
+          game.illegalScorers = game.illegalScorers.concat(player)
+        }
       }
       setGame(game)
     } else {
       // TODO
-      alert('Coming soon: Go to ' + name + '\'s page!')
+      alert('Coming soon: Go to player\'s page!')
     }
   }
 
-  const handleConditionChipClick = () => {
+  const handleTagChipClick = () => {
     // TODO
     alert('Coming soon: Search games by clicked condition!')
+  }
+
+  const handleAddTagClick = () => {
+    // TODO
+    alert('Coming soon: add a new tag!')
   }
 
   // TODO: temperature field shouldn't accept space (' ')
@@ -125,27 +134,29 @@ const GameInfo: React.FC<Props> = (props) => {
     setGame(game)
   }
 
-  const handleConditionToggle = (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-    const condition = event.currentTarget.querySelector('.MuiChip-label')?.textContent as Condition
-    if (!game.conditions.includes(condition)) {
-      game.conditions = game.conditions.concat(condition)
-    } else {
-      game.conditions = game.conditions.filter(c => c !== condition)
+  const handleConditionTagToggle = (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+    const tagId = event.currentTarget.getAttribute('data-tagid')
+    const tag = availableConditions.find(t => t.id === tagId)
+    if (arrayContainsTag(game.conditions, tag)) {
+      game.conditions = game.conditions.filter(t => t.id !== tagId)
+    } else if (tag) {
+      game.conditions = game.conditions.concat(tag)
     }
     setGame(game)
   }
 
-  const handleWeatherConditionToggle = (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-    const condition = event.currentTarget.querySelector('.MuiChip-label')?.textContent as Condition
-    if (!game.weatherConditions.includes(condition)) {
-      game.weatherConditions = game.weatherConditions.concat(condition)
-    } else {
-      game.weatherConditions = game.weatherConditions.filter(c => c !== condition)
+  const handleWeatherTagToggle = (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+    const tagId = event.currentTarget.getAttribute('data-tagid')
+    const tag = availableWeatherConditions.find(t => t.id === tagId)
+    if (arrayContainsTag(game.weatherConditions, tag)) {
+      game.weatherConditions = game.weatherConditions.filter(t => t.id !== tagId)
+    } else if (tag) {
+      game.weatherConditions = game.weatherConditions.concat(tag)
     }
     setGame(game)
   }
 
-  const selected = (condition: Condition): boolean => {
+  const tagIsSelected = (condition: Tag): boolean => {
     return game.weatherConditions.includes(condition) || game.conditions.includes(condition)
   }
 
@@ -154,12 +165,12 @@ const GameInfo: React.FC<Props> = (props) => {
 
   const conditions = (
     <div className={classes.chipRow}>
-      {game.temperature ? <Chip className={classes.chip} label={game.temperature + " °C"} onClick={handleConditionChipClick} /> : null}
-      {game.weatherConditions.map((condition: Condition, index: number) => (
-        <Chip className={classes.chip} label={condition} onClick={handleConditionChipClick} key={index} />
+      {game.temperature ? <Chip className={classes.chip} label={game.temperature + " °C"} onClick={handleTagChipClick} /> : null}
+      {game.weatherConditions.map((condition: Tag, index: number) => (
+        <Chip className={classes.chip} label={condition.name} onClick={handleTagChipClick} key={index} />
       ))}
-      {game.conditions.map((condition: Condition, index: number) => (
-        <Chip className={classes.chip} label={condition} onClick={handleConditionChipClick} key={index} />
+      {game.conditions.map((condition: Tag, index: number) => (
+        <Chip className={classes.chip} label={condition.name} onClick={handleTagChipClick} key={index} />
       ))}
     </div>
   )
@@ -192,41 +203,50 @@ const GameInfo: React.FC<Props> = (props) => {
     />
   ) : null
   
-  const editableConditions = isEditing && availableConditions.length > 0 ? (
+  const editableTags = isEditing && availableConditions.length > 0 ? (
     <div className={classes.chipRow}>
-      {availableWeatherConditions.map((condition: Condition, index: number) => (
+      {availableWeatherConditions.map((condition: Tag, index: number) => (
         <Chip
           data-cy="weatherConditionChip"
           className={classes.chip}
-          label={condition}
-          variant={selected(condition) ? 'default' : 'outlined'}
-          onClick={handleWeatherConditionToggle}
+          label={condition.name}
+          variant={tagIsSelected(condition) ? 'default' : 'outlined'}
+          onClick={handleWeatherTagToggle}
+          data-tagid={condition.id}
           key={index}
         />
       ))}
-      {availableConditions.map((condition: Condition, index: number) => (
+      {availableConditions.map((condition: Tag, index: number) => (
         <Chip
           className={classes.chip}
-          label={condition}
-          variant={selected(condition) ? 'default' : 'outlined'}
-          onClick={handleConditionToggle}
+          label={condition.name}
+          variant={tagIsSelected(condition) ? 'default' : 'outlined'}
+          onClick={handleConditionTagToggle}
+          data-tagid={condition.id}
           key={index}
         />
       ))}
+      <Chip
+          className={classes.chip}
+          label="add tag"
+          variant="outlined"
+          onClick={handleAddTagClick}
+        />
     </div>
   ) : null
 
-  const createColorChip = (styleClass: string, label: string, name: string, color: 'primary' | 'secondary', index: number) => {
-    const variant = isEditing && game.illegalScorers.find(n => n === name) ? 'default' : 'outlined'
-    const classs = isEditing && game.illegalScorers.find(n => n === name) ? classes.illegalChip : styleClass
+  const createColorChip = (styleClass: string, label: string, player: Player, color: 'primary' | 'secondary', index: number) => {
+    const variant = isEditing && game.illegalScorers.find(p => p.id === player.id) ? 'default' : 'outlined'
+    const classs = isEditing && game.illegalScorers.find(p => p.id === player.id) ? classes.illegalChip : styleClass
     return (
       <Chip
         classes={{ icon: classs } as any}
         icon={<Chip color={color} variant={variant} label={label} />}
-        label={name}
+        label={player.firstName}
         variant="outlined"
         color={color}
-        onClick={handlePlayerClipClick}
+        data-playerid={player.id}
+        onClick={handlePlayerChipClick}
         className={classes.chip}
         key={index}
       />
@@ -235,11 +255,11 @@ const GameInfo: React.FC<Props> = (props) => {
 
   const illegalAndHighScorers = (
     <div className={classes.chipRow}>
-      {isEditing ? null : game.highScorers.map((name: string, index: number) => {
-        return createColorChip(classes.highScoreChip, 'High score', name, 'primary', index)
+      {isEditing ? null : game.highScorers.map((player: Player, index: number) => {
+        return createColorChip(classes.highScoreChip, 'High score', player, 'primary', index)
       })}
-      {game.illegalScorers.map((name: string, index: number) => {
-        return createColorChip(classes.illegalChip, 'Illegal game', name, 'secondary', index)
+      {game.illegalScorers.map((player: Player, index: number) => {
+        return createColorChip(classes.illegalChip, 'Illegal game', player, 'secondary', index)
       })}
     </div>
   )
@@ -247,7 +267,7 @@ const GameInfo: React.FC<Props> = (props) => {
   const illegalScorerEdit = isEditing ? (
     <div className={classes.chipRow}>
       {game.scores.map((scores: PlayerScores, index: number) => {
-        return createColorChip(classes.illegalDisabledChip, 'Illegal game', scores.playerName, 'secondary', index)
+        return createColorChip(classes.illegalDisabledChip, 'Illegal game', scores.player, 'secondary', index)
       })}
     </div>
   ) : null
@@ -273,13 +293,20 @@ const GameInfo: React.FC<Props> = (props) => {
   const editingView = isEditing ? (
     <Paper className={classes.infoPaper} elevation={0}>
       {temperatureEdit}
-      {editableConditions}
+      {editableTags}
       {illegalScorerEdit}
       {commentEdit}
     </Paper>
   ) : null
 
   return isEditing ? editingView : normalView
+}
+
+function arrayContainsTag(array: Tag[], tag: Tag | undefined): boolean {
+  if (tag !== undefined && array.find(t => t.id === tag.id)) {
+    return true
+  }
+  return false
 }
 
 export default GameInfo

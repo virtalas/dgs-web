@@ -46,8 +46,8 @@ const useStyles = makeStyles((theme) => ({
 interface Props {
   gamesToShow: Game[],
   setGame: (game: Game) => void,
-  availableWeatherConditions: Condition[],
-  availableConditions: Condition[],
+  availableWeatherConditions: Tag[],
+  availableConditions: Tag[],
   isLoading: boolean,
   isError: boolean,
 }

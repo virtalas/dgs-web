@@ -1,6 +1,5 @@
 interface PlayerScores {
-  playerName: string,
-  playerId: string,
+  player: Player,
   strokes: number[], // TODO: change to throws
   obs: number[],
   total: number,

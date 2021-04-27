@@ -9,8 +9,8 @@ interface Game {
   comment: string,
   scores: PlayerScores[],
   tags: Tag[],
-  weatherConditions: Condition[], // TODO: get this from tags
-  conditions: Condition[], // TODO: get this from tags
-  highScorers: string[],  // TODO: just get this from filter(PlayerScores.high_score)
-  illegalScorers: string[], // TODO: just get this from filter(PlayerScores.legal)
+  weatherConditions: Tag[],
+  conditions: Tag[],
+  highScorers: Player[],
+  illegalScorers: Player[],
 }

@@ -61,8 +61,8 @@ const GameInput: React.FC<{}> = (props: any) => {
   const gameId = props.match.params.gameid // Props type as any to avoid props.match type problem.
 
   const [game, setGame] = useState<Game>()
-  const [availableWeatherConditions, setAvailableWeatherConditions] = useState<Condition[]>([])
-  const [availableConditions, setAvailableConditions] = useState<Condition[]>([])
+  const [availableWeatherConditions, setAvailableWeatherConditions] = useState<Tag[]>([])
+  const [availableConditions, setAvailableConditions] = useState<Tag[]>([])
   const [holeNum, setHoleNum] = useState(1) // TODO: Use findIndex() to start from first 0 stroked hole
   const [tab, setTab] = React.useState(scoreInputViewTab)
   const [updating, setUpdating] = useState(false)
