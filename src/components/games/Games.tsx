@@ -75,8 +75,10 @@ const Games: React.FC<Props> = (props) => {
   useEffect(() => {
     // Fetch available conditions (for editing, search)
     if (availableConditions.length === 0) {
-      gamesService.getAvailableWeatherConditions().then(c => setAvailableWeatherConditions(c))
-      gamesService.getAvailableConditions().then(c => setAvailableConditions(c))
+      gamesService.getAvailableConditions().then(conditions => {
+        setAvailableConditions(conditions.filter(tag => tag.condition))
+        setAvailableWeatherConditions(conditions.filter(tag => tag.weather_condition))  
+      })
     }
 
     if (fetchedMonths.includes(selectedMonth)) return // Don't refetch already fetched games.
@@ -101,6 +103,9 @@ const Games: React.FC<Props> = (props) => {
           setSelectedMonth(gameMonths[0].months[gameMonths[0].months.length - 1])
         }
         // Since selectedYear/Month changed, component rerenders and fetchGames() happens.
+      }).catch(e => {
+        setIsLoading(false)
+        setIsError(true)
       })
     } else {
       // Fetch games for selectedMonth.

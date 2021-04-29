@@ -1,59 +1,42 @@
 import axios from 'axios'
 
 import { API_ROOT } from '../apiConfig'
-import { apiGameResponseToGame } from '../types/api/ModelMappers'
+import { apiGameResponseToGame, gameToApiGame } from '../types/api/ModelMappers'
 
 // frontend: January = 0, backend: January = 1
 
 const getGames = async (year: number, month: number): Promise<Game[]> => {
-  try {
-    const response = await axios.get(`${API_ROOT}/games`, {
-      params: {
-        year: year,
-        month: month + 1,
-      },
-    })
-
-    const games = response.data.map((gameResponse: ApiGameResponse) => apiGameResponseToGame(gameResponse))
-    return games
-  } catch (e) {
-    console.log(e.response.data)
-    return Promise.reject()
-  }
+  const response = await axios.get(`${API_ROOT}/games`, {
+    params: {
+      year: year,
+      month: month + 1,
+    },
+  })
+  return response.data.map((gameResponse: ApiGameResponse) => apiGameResponseToGame(gameResponse))
 }
 
 const getMonthsThatHaveGames = async (): Promise<GameMonths[]> => {  
-  try {
-    const response = await axios.get(`${API_ROOT}/games/months`)
-    return response.data.map((gameMonth: GameMonths) => {
-      gameMonth.months = gameMonth.months.map(month => month - 1)
-      return gameMonth
-    })
-  } catch (e) {
-    console.log(e.response.data)
-    return Promise.reject()
-  }
+  const response = await axios.get(`${API_ROOT}/games/monthss`)
+  return response.data.map((gameMonth: GameMonths) => {
+    gameMonth.months = gameMonth.months.map(month => month - 1)
+    return gameMonth
+  })
 }
 
 const createGame = async (layout: Layout, players: Player[], start_date: string): Promise<{ id: string }> => {
-  try {
-    const response = await axios.post(`${API_ROOT}/games`, {
-      layout_id: layout.id,
-      start_date: start_date,
-      end_date: start_date,
-      comment: '',
-      temperature: null,
-      player_ids: players.map(player => player.id),
-    }, {
-      headers: {
-        'Content-Type': 'application/json',
-      }
-    })
-    return response.data
-  } catch (e) {
-    console.log(e.response.data)
-    return Promise.reject()
-  }
+  const response = await axios.post(`${API_ROOT}/games`, {
+    layout_id: layout.id,
+    start_date: start_date,
+    end_date: start_date,
+    comment: '',
+    temperature: null,
+    player_ids: players.map(player => player.id),
+  }, {
+    headers: {
+      'Content-Type': 'application/json',
+    }
+  })
+  return response.data
 }
 
 const getGame = async (id: string): Promise<Game> => {
@@ -62,36 +45,36 @@ const getGame = async (id: string): Promise<Game> => {
 }
 
 const updateGame = async (game: Game): Promise<Game> => {
-  try {
-    const response = await axios.put(`${API_ROOT}/games`, {
-      game: game,
-      scores: game.scores.map((playerScores: PlayerScores) => {
-        const legal = game.illegalScorers.find(player => player.id === playerScores.player.id) ? true : false
-        return {
-          player_id: playerScores.player.id,
-          throws: playerScores.strokes,
-          obs: playerScores.obs,
-          legal: legal,
-        }
-      }),
-    }, {
-      headers: {
-        'Content-Type': 'application/json',
+  const response = await axios.put(`${API_ROOT}/games`, {
+    game: gameToApiGame(game),
+    scores: game.scores.map((playerScores: PlayerScores) => {
+      const legal = game.illegalScorers.find(player => player.id === playerScores.player.id) ? true : false
+      return {
+        player_id: playerScores.player.id,
+        throws: playerScores.strokes,
+        obs: playerScores.obs,
+        legal: legal,
       }
-    })
-    return response.data
-  } catch (e) {
-    console.log(e.response.data)
-    return Promise.reject()
-  }
-}
-
-const getAvailableWeatherConditions = async (): Promise<Tag[]> => {
-  return [{id: '123gjrdöigj', name: 'rain', condition: false, weather_condition: true}]
+    }),
+  }, {
+    headers: {
+      'Content-Type': 'application/json',
+    }
+  })
+  return response.data
 }
 
 const getAvailableConditions = async (): Promise<Tag[]> => {
-  return [{id: 'fjsdlöjgsiejdk', name: 'LED', condition: true, weather_condition: false}]
+  const response = await axios.get(`${API_ROOT}/games/tags/conditions`)
+  return response.data
+}
+
+const getTags = async (): Promise<Tag[]> => {
+  // TODO
+  // Used when 'new tag' button is pressed, and existing tags are listed/shown.
+  return [{id: '123gjrdöigj', name: 'rain', condition: false, weather_condition: true},
+    {id: 'fjsdlöjgsiejdk', name: 'LED', condition: true, weather_condition: false},
+    {id: 'gjisörlgj', name: 'user added tag', condition: false, weather_condition: false}]
 }
 
 export default {
@@ -100,6 +83,6 @@ export default {
   createGame,
   getGame,
   updateGame,
-  getAvailableWeatherConditions,
+  getTags,
   getAvailableConditions,
 }

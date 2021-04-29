@@ -30,19 +30,7 @@ const App: React.FC<{}> = () => {
   }
 
   useEffect(() => {
-    const addTokenExpiryInterceptor = () => {
-      axios.interceptors.request.use(config => {
-        if (checkTokenExpired(existingToken)) {
-          handleLogout()
-        }  
-        return config
-      }, error => {
-        return Promise.reject(error)
-      })
-    }
-  
     if (existingToken) {
-      addTokenExpiryInterceptor()
       setUserId(extractUserId(existingToken))
     }  
   }, [existingToken])
@@ -59,6 +47,15 @@ const App: React.FC<{}> = () => {
 
   if (existingToken) {
     axios.defaults.headers.common['Authorization'] = 'Bearer ' + existingToken.access_token
+    axios.interceptors.request.use(config => {
+      if (checkTokenExpired(existingToken)) {
+        handleLogout()
+      }
+      return config
+    }, error => {
+      console.log(error.response ? error.response.data : error)
+      return Promise.reject(error)
+    })
   }
 
   return (

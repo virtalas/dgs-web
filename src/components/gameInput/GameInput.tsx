@@ -71,8 +71,10 @@ const GameInput: React.FC<{}> = (props: any) => {
     gamesService.getGame(gameId).then((fetchedGame) => {
       setGame(fetchedGame)
     })
-    gamesService.getAvailableWeatherConditions().then(c => setAvailableWeatherConditions(c))
-    gamesService.getAvailableConditions().then(c => setAvailableConditions(c))
+    gamesService.getAvailableConditions().then(conditions => {
+      setAvailableConditions(conditions.filter(tag => tag.condition))
+      setAvailableWeatherConditions(conditions.filter(tag => tag.weather_condition))
+    })
   }, [gameId])
 
   const updateGame = (game: Game) => {
