@@ -15,6 +15,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
+// TODO: Hide SortButton when no courses.
 // TODO: "Expand" arrow next to name, OR clicking takes to /courses/show/:id ?
 
 const Courses: React.FC<{}> = () => {

@@ -15,8 +15,13 @@ const getGames = async (year: number, month: number): Promise<Game[]> => {
   return response.data.map((gameResponse: ApiGameResponse) => apiGameResponseToGame(gameResponse))
 }
 
+const getGame = async (id: string): Promise<Game> => {
+  const response = await axios.get(`${API_ROOT}/games/${id}/game`)
+  return apiGameResponseToGame(response.data)
+}
+
 const getMonthsThatHaveGames = async (): Promise<GameMonths[]> => {  
-  const response = await axios.get(`${API_ROOT}/games/monthss`)
+  const response = await axios.get(`${API_ROOT}/games/months`)
   return response.data.map((gameMonth: GameMonths) => {
     gameMonth.months = gameMonth.months.map(month => month - 1)
     return gameMonth
@@ -39,13 +44,8 @@ const createGame = async (layout: Layout, players: Player[], start_date: string)
   return response.data
 }
 
-const getGame = async (id: string): Promise<Game> => {
-  // TODO: Replace mock data with API call.
-  return Promise.reject()
-}
-
 const updateGame = async (game: Game): Promise<Game> => {
-  const response = await axios.put(`${API_ROOT}/games`, {
+  const response = await axios.put(`${API_ROOT}/gamess`, {
     game: gameToApiGame(game),
     scores: game.scores.map((playerScores: PlayerScores) => {
       const legal = game.illegalScorers.find(player => player.id === playerScores.player.id) ? true : false

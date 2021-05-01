@@ -15,6 +15,7 @@ import ScoreInputView from './ScoreInputView'
 import HoleInfoView from './HoleInfoView'
 import GameInfoView from './GameInfoView'
 import MapView from './MapView'
+import NotificationBar from '../NotificationBar'
 
 const scoreInputViewTab = 0
 const holeInfoViewTab = 1
@@ -66,6 +67,7 @@ const GameInput: React.FC<{}> = (props: any) => {
   const [holeNum, setHoleNum] = useState(1) // TODO: Use findIndex() to start from first 0 stroked hole
   const [tab, setTab] = React.useState(scoreInputViewTab)
   const [updating, setUpdating] = useState(false)
+  const [updateError, setUpdateError] = useState(false)
 
   useEffect(() => {
     gamesService.getGame(gameId).then((fetchedGame) => {
@@ -78,11 +80,14 @@ const GameInput: React.FC<{}> = (props: any) => {
   }, [gameId])
 
   const updateGame = (game: Game) => {
-    console.log('update')
     if (game === undefined) return
     setUpdating(true)
+    setUpdateError(false)
     gamesService.updateGame(game).then(() => {
       setUpdating(false)
+    }).catch(error => {
+      setUpdating(false)
+      setUpdateError(true)
     })
     setGame(game)
   }
@@ -116,7 +121,6 @@ const GameInput: React.FC<{}> = (props: any) => {
     />
   )
 
-  // TODO
   const mapView = (
     <MapView mapURL={game ? game.layout.mapURL : ''} />
   )
@@ -156,18 +160,28 @@ const GameInput: React.FC<{}> = (props: any) => {
         holeNum={holeNum}
         par={game ? game.layout.holes[holeNum - 1].par : 0}
       />
+      
       {activeView}
-      <BottomNavigation
-        value={tab}
-        onChange={(event, newTab) => setTab(newTab)}
-        showLabels
-        className={classes.bottomNav}
-      >
-        <BottomNavigationAction label="Scores" icon={<EditIcon />} id="scoresTabButton" />
-        <BottomNavigationAction label="Stats" icon={<InfoIcon />} id="statsTabButton" />
-        <BottomNavigationAction label="Map" icon={<LocationOnIcon />} id="mapTabButton" />
-        <BottomNavigationAction label="Game info" icon={<DescriptionIcon id="gameInfoTabButton" />} />
-      </BottomNavigation>
+
+      <NotificationBar
+        open={updateError}
+        severity="error"
+        msg="An error occured while updating the game."
+        onClose={() => setUpdateError(false)}
+      />
+
+      <div className={classes.bottomNav}>
+        <BottomNavigation
+          value={tab}
+          onChange={(event, newTab) => setTab(newTab)}
+          showLabels
+        >
+          <BottomNavigationAction label="Scores" icon={<EditIcon />} id="scoresTabButton" />
+          <BottomNavigationAction label="Stats" icon={<InfoIcon />} id="statsTabButton" />
+          <BottomNavigationAction label="Map" icon={<LocationOnIcon />} id="mapTabButton" />
+          <BottomNavigationAction label="Game info" icon={<DescriptionIcon id="gameInfoTabButton" />} />
+        </BottomNavigation>
+      </div>
     </div>
   )
 }

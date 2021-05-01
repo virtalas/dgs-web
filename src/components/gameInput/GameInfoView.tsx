@@ -73,6 +73,7 @@ const GameInfoView: React.FC<Props> = (props) => {
           game={game}
           setGame={updateGame}
           editOnly={true}
+          autoUpdating={updating}
           disableScoreEditing={true}
           availableWeatherConditions={availableWeatherConditions}
           availableConditions={availableConditions}

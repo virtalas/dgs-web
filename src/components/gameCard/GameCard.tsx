@@ -65,6 +65,7 @@ interface Props {
   game: Game,
   setGame: (game: Game) => void,
   editOnly?: boolean,
+  autoUpdating?: boolean,
   disableScoreEditing?: boolean,
   availableConditions: Tag[],
   availableWeatherConditions: Tag[],
@@ -84,6 +85,7 @@ const GameCard: React.FC<Props> = (props) => {
     game,
     setGame,
     editOnly,
+    autoUpdating,
     disableScoreEditing,
     availableConditions,
     availableWeatherConditions
@@ -215,6 +217,7 @@ const GameCard: React.FC<Props> = (props) => {
       {isEditing && !editOnly ? cancelButton : null}
       {!isEditing && updateError ? errorIndicator : null}
       {updating && !updateError ? progressSpinner : editButton}
+      {autoUpdating ? progressSpinner : null}
       <ScoreCard game={game} setGame={setGame} isEditing={disableScoreEditing ? false : isEditing} />
       <GameInfo
         game={game}

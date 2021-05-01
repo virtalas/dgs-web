@@ -30,9 +30,6 @@ const mockPlayers = [
   }
 ]
 
-// TODO for all services (make a util):
-// Add Bearer token as a header. If token expires/invalid, catch and redirect to login (where?)
-
 const getPlayers = async (): Promise<Player[]> => {
   // TODO
   return mockPlayers
