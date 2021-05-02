@@ -15,10 +15,8 @@ const useStyles = makeStyles((theme) => ({
   },
   noCourses: {
     color: 'grey',
-    margin: 0,
-    position: 'absolute',
-    top: '20%',
-    left: '50%',
+    marginTop: '20%',
+    textAlign: 'center',
   },
 }))
 
