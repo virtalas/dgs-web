@@ -16,13 +16,14 @@ const useStyles = makeStyles((theme) => ({
   modalTable: {
     display: 'table',
   },
+  closeButton: {
+    margin: theme.spacing(2),
+  },
 }))
 
 interface Props {
   playerId: string,
 }
-
-// TODO: Type declaration for HighScores?
 
 const HighScores: React.FC<Props> = (props) => {
   const classes = useStyles()
@@ -91,6 +92,9 @@ const HighScores: React.FC<Props> = (props) => {
             ))}
           </TableBody>
         </Table>
+        <Button className={classes.closeButton} data-cy="closeModal" variant="outlined" onClick={handleHighScoresClose}>
+          Close
+        </Button>
       </CancellableModal>
     </div>
   )

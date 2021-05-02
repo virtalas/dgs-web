@@ -27,6 +27,14 @@ const NewSelection: React.FC<{}> = () => {
     { id: '', name: 'No courses', city: '', layouts: [], popularity: 0 }
   )
 
+  const newLayoutButtonDisabled = course.id.length === 0
+
+  const newLayoutButton = (
+    <Button id="newLayoutButton" variant="contained" color="primary" disabled={newLayoutButtonDisabled}>
+      New Layout
+    </Button>
+  )
+
   return (
     <div className={classes.page}>
       <Typography className={classes.paragraph} variant="h5">
@@ -41,6 +49,9 @@ const NewSelection: React.FC<{}> = () => {
         <Button id="newCourseButton" variant="contained" color="primary">New Course</Button>
       </NavLink>
 
+      <br />
+      <br />
+
       <Typography className={classes.paragraph} variant="h5">
         New layout for a course
       </Typography>
@@ -53,11 +64,14 @@ const NewSelection: React.FC<{}> = () => {
         course={course}
         setCourse={setCourse}
       />
+
       <br />
       
-      <NavLink className={classes.navLink} to={'/courses/new/layout/' + course.id}>
-        <Button id="newLayoutButton" variant="contained" color="primary">New Layout</Button>
-      </NavLink>
+      {newLayoutButtonDisabled ? newLayoutButton : (
+        <NavLink className={classes.navLink} to={'/courses/new/layout/' + course.id}>
+          {newLayoutButton}
+        </NavLink>
+      )}
     </div>
   )
 }

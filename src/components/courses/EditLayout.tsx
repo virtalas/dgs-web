@@ -28,7 +28,7 @@ const useStyles = makeStyles((theme) => ({
     marginTop: theme.spacing(4),
   },
   countInput: {
-    width: 130,
+    width: 145,
     height: 50,
     margin: theme.spacing(1),
     marginTop: theme.spacing(4),
@@ -71,13 +71,13 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 interface Props {
-  layout?: Layout, // Layout to edit, undefined if it's new.
+  layout?: Layout, // Layout to edit, or undefined if adding a new layout.
   course: Course,
   handleFinish: (layout: Layout) => void,
   handleCancel?: () => void,
 }
 
-// TODO: edit ability to disable holes
+// TODO: edit hole numbers: Button opens a modal with inputs 'Starts with hole number: ...', 'choose hole to delete'.
 // TODO: remove big decrease/increase count buttons if the native up/down arrows are OK.
 // TODO: List other layouts for the course that already exist
 
@@ -90,36 +90,39 @@ const EditLayout: React.FC<Props> = (props) => {
   const [name, setName] = useState('')
   const [description, setDescription] = useState('')
   const [mapURL, setMapURL] = useState('')
-  const [holeCount, setHoleCount] = useState(18)
-  const [pars, setPars] = useState<number[]>([])
-  const [holeNumbers, setHoleNumbers] = useState<number[]>([])
+  const [holes, setHoles] = useState<Hole[]>([])
 
-  const updateParsLength = (newHoleCount: number): number[] => {
-    while (pars.length !== newHoleCount) {
-      if (pars.length > newHoleCount) {
-        pars.pop()
+  const updateHoleCount = (newHoleCount: number) => {
+    // Temporarily accept zero to enable empty field while editing.
+    if (newHoleCount < 0 || newHoleCount >= 100) {
+      return
+    }
+    while (holes.length !== newHoleCount) {
+      if (holes.length > newHoleCount) {
+        holes.pop()
       } else {
-        pars.push(3)
+        holes.push({
+          number: holes.length + 1,
+          par: 3,
+        })
       }
     }
-    return pars
+    setHoles([...holes])
   }
 
   useEffect(() => {
-    if (newLayout) {
-      setPars(updateParsLength(18)) // Default hole count is 18.
+    if (layout) {
+      setName(layout.name)
+      setDescription(layout.description)
+      setMapURL(layout.mapURL)
+      setHoles(layout.holes)
     } else {
-      setName(layout ? layout.name : '')
-      setDescription(layout ? layout.description : '')
-      setMapURL(layout ? layout.mapURL : '')
-      setHoleCount(layout ? layout.holes.length : 18)
-      setPars(layout ? layout.holes.map(hole => hole.par) : [])
-      setHoleNumbers(layout ? layout.holes.map(hole => hole.number) : [])
+      updateHoleCount(18)
     }
-  }, [layout, newLayout]) // eslint-disable-line react-hooks/exhaustive-deps
+  }, [layout]) // eslint-disable-line react-hooks/exhaustive-deps
 
-  const totalPar = pars.reduce((total, currentValue) => total + currentValue, 0)
-  const numberOfZeroPars = pars.reduce((total, currentValue) => currentValue === 0 ? total + 1 : total, 0)
+  const totalPar = holes.reduce((total, hole) => total + hole.par, 0)
+  const numberOfZeroPars = holes.reduce((total, hole) => hole.par === 0 ? total + 1 : total, 0)
 
   const handleFinishClicked = () => {
     const layoutId = layout ? layout.id : ''
@@ -130,34 +133,25 @@ const EditLayout: React.FC<Props> = (props) => {
       name: name,
       description: description,
       mapURL: mapURL,
-      holes: pars.map((par, i) => { // TODO
-        return { number: i + 1, par: par }
-      }),
+      holes: holes,
       total: totalPar
     }
     handleFinish(inputtedLayout)
   }
 
   const handleCountDecrease = () => {
-    if (holeCount > 1) {
-      setHoleCount(holeCount - 1)
-      setPars(updateParsLength(holeCount - 1))
+    if (holes.length > 1) {
+      updateHoleCount(holes.length - 1)
     }
   }
 
   const handleCountIncrease = () => {
-    setHoleCount(holeCount + 1)
-    setPars(updateParsLength(holeCount + 1))
+    updateHoleCount(holes.length + 1)
   }
 
   const handleHoleCountChange = (event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
     const newHoleCount = Number(event.target.value)
-    // Temporarily accept zero to enable empty field while editing.
-    if (newHoleCount >= 0 && newHoleCount < 100) {
-      updateParsLength(newHoleCount)
-      setHoleCount(newHoleCount)
-      setPars(pars)
-    }
+    updateHoleCount(newHoleCount)
   }
 
   const handleParChange = (event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
@@ -166,9 +160,8 @@ const EditLayout: React.FC<Props> = (props) => {
 
     // Temporarily accept zero to enable empty field while editing.
     if (par >= 0 && par < 100) {
-      const newPars = [...pars]
-      newPars[holeIndex] = par
-      setPars(newPars)
+      holes[holeIndex].par = par
+      setHoles([...holes])
     }
   }
 
@@ -190,8 +183,8 @@ const EditLayout: React.FC<Props> = (props) => {
         className={classes.countInput}
         label="Number of holes"
         variant="outlined"
-        value={holeCount === 0 ? '' : holeCount}
-        error={holeCount === 0}
+        value={holes.length === 0 ? '' : holes.length}
+        error={holes.length === 0}
         type="number"
         onChange={handleHoleCountChange}
       />
@@ -205,14 +198,14 @@ const EditLayout: React.FC<Props> = (props) => {
     </Grid>
   )
 
-  const parInputs = pars.map((par, index) => (
+  const parInputs = holes.map((hole, index) => (
     <TextField
       key={'par' + index}
       className={classes.parInput}
       label={'Hole ' + (index + 1)}
       variant="outlined"
-      value={par === 0 ? '' : par}
-      error={par === 0}
+      value={hole.par === 0 ? '' : hole.par}
+      error={hole.par === 0}
       name={String(index)}
       type="number"
       onChange={handleParChange}
@@ -263,12 +256,12 @@ const EditLayout: React.FC<Props> = (props) => {
               Preview of the course map
             </Typography>
           ) : (
-              <img
-                className={classes.map}
-                src={mapURL}
-                alt="Course map"
-              />
-            )}
+            <img
+              className={classes.map}
+              src={mapURL}
+              alt="Course map"
+            />
+          )}
         </Paper>
 
         {newLayout ? holeCountControls : null}
@@ -309,7 +302,7 @@ const EditLayout: React.FC<Props> = (props) => {
             variant="contained"
             color="primary"
             onClick={handleFinishClicked}
-            disabled={name.length === 0 || numberOfZeroPars > 0 || holeCount === 0}
+            disabled={name.length === 0 || numberOfZeroPars > 0 || holes.length === 0}
           >
             {newLayout ? 'Create' : 'Update'}
           </Button>
