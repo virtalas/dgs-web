@@ -101,6 +101,8 @@ const Games: React.FC<Props> = (props) => {
         if (gameMonths && gameMonths.length > 0) {
           setSelectedYear(gameMonths[0].year)
           setSelectedMonth(gameMonths[0].months[gameMonths[0].months.length - 1])
+        } else {
+          setIsLoading(false)
         }
         // Since selectedYear/Month changed, component rerenders and fetchGames() happens.
       }).catch(e => {

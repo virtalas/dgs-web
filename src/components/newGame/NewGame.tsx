@@ -42,7 +42,7 @@ const NewGame: React.FC<{}> = () => {
     playersService.getPlayers().then(fetchedPlayers => {
       const user = fetchedPlayers.find(player => player.id === userId) as Player
       if (user) {
-        setPlayers([...players, user])
+        setPlayers(p => [...p, user])
       }
       setAllPlayers(fetchedPlayers)
     })

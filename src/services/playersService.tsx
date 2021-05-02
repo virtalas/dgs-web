@@ -3,38 +3,6 @@ import axios from 'axios'
 import { API_ROOT } from '../apiConfig'
 import { apiPlayerToPlayer } from '../types/api/ModelMappers'
 
-const mockPlayers = [
-  {
-    id: 'fgdghh',
-    firstName: 'Seppo',
-    guest: false,
-    admin: false,
-  }, {
-    id: 'hfyj',
-    firstName: 'Matti',
-    guest: false,
-    admin: false,
-  },
-  {
-    id: 'fdjskfl83fhsgls', // Fake logged in user.
-    firstName: 'Konsta',
-    guest: false,
-    admin: false,
-  },
-  {
-    id: 'gfsfdsf4gh',
-    firstName: 'Kaarle',
-    guest: false,
-    admin: false,
-  },
-  {
-    id: 'gfsfdsdsgs3sdff4gh',
-    firstName: 'Matilda',
-    guest: false,
-    admin: false,
-  }
-]
-
 const getPlayers = async (): Promise<Player[]> => {
   // TODO: getFriends(user) ?
   const response = await axios.get(`${API_ROOT}/users`)

@@ -45,14 +45,14 @@ const Players: React.FC<{}> = () => {
       setPlayers(p)
       setCurrentUser(p.find(player => player.id === userId))
     })
-  }, [players, userId])
+  }, [userId])
 
-  const generatePlayerCard = (userId: string | undefined) => {
-    return (
-      <Card data-cy="playerCard" key={'player' + currentUser?.id} className={classes.card}>
+  const generatePlayerCard = (player: Player | undefined) => {
+    return player ? (
+      <Card data-cy="playerCard" key={'player' + player.id} className={classes.card}>
         <CardContent>
           <Typography variant="h5" component="h2">
-            {currentUser?.firstName}
+            {player.firstName}
           </Typography>
 
           <Table className={classes.table} size="small">
@@ -95,22 +95,22 @@ const Players: React.FC<{}> = () => {
               </TableRow>
             </TableBody>
           </Table>
-
         </CardContent>
+
         <CardActions>
-          <HighScores key={'highscore' + currentUser?.id} playerId={currentUser ? currentUser.id : ''} />
+          <HighScores key={'highscore' + player.id} playerId={player.id} />
           <Button size="small" disabled>Average scores</Button>
         </CardActions>
       </Card>
-    )
+    ) : null
   }
 
   return (
     <div id="playersPage" className={classes.page}>
       {/* First the user's own card, then other players in alphabetical order. */}
-      {generatePlayerCard(userId)}
-      {players?.filter(player => player.id !== userId).map(player => (
-        generatePlayerCard(userId)
+      {generatePlayerCard(currentUser)}
+      {players?.filter(player => player.id !== currentUser?.id).map(player => (
+        generatePlayerCard(player)
       ))}
     </div>
   )

@@ -13,10 +13,14 @@ const useStyles = makeStyles((theme) => ({
     marginRight: 'auto',
     marginBottom: theme.spacing(11),
   },
+  noCourses: {
+    color: 'grey',
+    margin: 0,
+    position: 'absolute',
+    top: '20%',
+    left: '50%',
+  },
 }))
-
-// TODO: Hide SortButton when no courses.
-// TODO: "Expand" arrow next to name, OR clicking takes to /courses/show/:id ?
 
 const Courses: React.FC<{}> = () => {
   const classes = useStyles()
@@ -37,12 +41,16 @@ const Courses: React.FC<{}> = () => {
 
   return (
     <div id="coursesPage" className={classes.page}>
-      <SortButton
+      {courses.length > 0 ? (
+        <SortButton
         courses={courses}
         setCourses={setCourses}
         sortByPopularity={sortByPopularity}
         setSortByPopularity={setSortByPopularity}
       />
+      ) : (
+        <div className={classes.noCourses}>No courses</div>
+      )}
       {courseCards}
     </div>
   )
