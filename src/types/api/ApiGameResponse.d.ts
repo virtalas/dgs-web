@@ -6,6 +6,7 @@ interface ApiCourse {
 
 interface ApiPlayerScores {
     player_name: string,
+    player_last_name: string,
     player_id: string,
     throws: number[],
     obs: number[],

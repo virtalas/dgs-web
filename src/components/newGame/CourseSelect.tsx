@@ -39,16 +39,17 @@ const CourseSelect: React.FC<Props> = (props) => {
   const [courses, setCourses] = useState<Course[]>([course])
   const [sortByPopularity, setSortByPopularity] = useState(true)
 
-  function getActiveLayout(forCourse: Course): Layout {
+  const showLayoutSelect: boolean = (layout || setLayout) ? true : false
+
+  const getActiveLayout = (forCourse: Course): Layout | undefined => {
     const layout = forCourse.layouts.find(layout => layout.active)
-    return layout !== undefined ? layout : {
-      id: '', name: '', description: '', holes: [], total: 0, active: false, mapURL: ''
-    }
+    return layout
   }
 
-  function selectActiveLayout(forCourse: Course) {
-    if (setLayout) {
-      setLayout(getActiveLayout(forCourse))
+  const selectActiveLayout = (forCourse: Course) => {
+    const activeLayout = getActiveLayout(forCourse)
+    if (setLayout && activeLayout) {
+      setLayout(activeLayout)
     }
   }
 
@@ -106,7 +107,7 @@ const CourseSelect: React.FC<Props> = (props) => {
   )
 
   const layoutSelect = (
-    <FormControl variant="outlined" className={classes.formControl}>
+    <FormControl variant="outlined" className={classes.formControl} error={showLayoutSelect && !layout}>
       <InputLabel ref={inputLabel} htmlFor="layout-select">Layout</InputLabel>
       <Select
         value={layout ? layout.id : 0}
@@ -131,7 +132,7 @@ const CourseSelect: React.FC<Props> = (props) => {
         setSortByPopularity={setSortByPopularity}
       />
       <br />
-      {layout ? layoutSelect : null}
+      {showLayoutSelect ? layoutSelect : null}
     </div>
   )
 }

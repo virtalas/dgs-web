@@ -45,7 +45,7 @@ const createGame = async (layout: Layout, players: Player[], start_date: string)
 }
 
 const updateGame = async (game: Game): Promise<Game> => {
-  const response = await axios.put(`${API_ROOT}/gamess`, {
+  const response = await axios.put(`${API_ROOT}/games`, {
     game: gameToApiGame(game),
     scores: game.scores.map((playerScores: PlayerScores) => {
       const legal = game.illegalScorers.find(player => player.id === playerScores.player.id) ? true : false
@@ -70,11 +70,8 @@ const getAvailableConditions = async (): Promise<Tag[]> => {
 }
 
 const getTags = async (): Promise<Tag[]> => {
-  // TODO
-  // Used when 'new tag' button is pressed, and existing tags are listed/shown.
-  return [{id: '123gjrdöigj', name: 'rain', condition: false, weather_condition: true},
-    {id: 'fjsdlöjgsiejdk', name: 'LED', condition: true, weather_condition: false},
-    {id: 'gjisörlgj', name: 'user added tag', condition: false, weather_condition: false}]
+  const response = await axios.get(`${API_ROOT}/games/tags`)
+  return response.data
 }
 
 export default {

@@ -1,7 +1,7 @@
-interface Player {
+interface ApiPlayer {
   id: string,
-  firstName: string,
-  lastName: string,
+  first_name: string,
+  last_name: string,
   guest: boolean | undefined,
   admin: boolean | undefined,
 }

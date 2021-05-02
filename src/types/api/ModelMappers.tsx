@@ -1,9 +1,10 @@
 import { calculateToPar, calculateTotalScore } from '../../utils/ScoreUtil'
 
-const nameAndIdToPlayer = (firstName: string, id: string): Player => {
+const nameAndIdToPlayer = (firstName: string, lastName: string, id: string): Player => {
   return {
     id: id,
     firstName: firstName,
+    lastName: lastName,
     guest: undefined,
     admin: undefined,
   }
@@ -23,7 +24,7 @@ export const apiGameResponseToGame = (gameResponse: ApiGameResponse): Game => {
     scores: gameResponse.scores.map((playerScores: ApiPlayerScores) => {
       const total = calculateTotalScore(playerScores.throws, playerScores.obs)
       return {
-        player: nameAndIdToPlayer(playerScores.player_name, playerScores.player_id),
+        player: nameAndIdToPlayer(playerScores.player_name, playerScores.player_last_name, playerScores.player_id),
         strokes: playerScores.throws,
         obs: playerScores.obs,
         total: total,
@@ -33,8 +34,8 @@ export const apiGameResponseToGame = (gameResponse: ApiGameResponse): Game => {
     tags: gameResponse.game.tags,
     weatherConditions: gameResponse.game.tags.filter(tag => tag.weather_condition),
     conditions: gameResponse.game.tags.filter(tag => tag.condition),
-    highScorers: gameResponse.scores.filter(s => s.high_score).map(s => nameAndIdToPlayer(s.player_name, s.player_id)),
-    illegalScorers: gameResponse.scores.filter(s => s.legal).map(s => nameAndIdToPlayer(s.player_name, s.player_id)),
+    highScorers: gameResponse.scores.filter(s => s.high_score).map(s => nameAndIdToPlayer(s.player_name, s.player_last_name, s.player_id)),
+    illegalScorers: gameResponse.scores.filter(s => s.legal).map(s => nameAndIdToPlayer(s.player_name, s.player_last_name, s.player_id)),
   }
 }
 
@@ -47,5 +48,15 @@ export const gameToApiGame = (game: Game): ApiGame => {
     comment: game.comment,
     temperature: game.temperature,
     tags: game.tags.concat(game.conditions).concat(game.weatherConditions),
+  }
+}
+
+export const apiPlayerToPlayer = (apiPlayer: ApiPlayer): Player => {
+  return {
+    id: apiPlayer.id,
+    firstName: apiPlayer.first_name,
+    lastName: apiPlayer.last_name,
+    admin: apiPlayer.admin,
+    guest: apiPlayer.guest,
   }
 }

@@ -1,3 +1,8 @@
+import axios from 'axios'
+
+import { API_ROOT } from '../apiConfig'
+import { apiPlayerToPlayer } from '../types/api/ModelMappers'
+
 const mockPlayers = [
   {
     id: 'fgdghh',
@@ -31,12 +36,15 @@ const mockPlayers = [
 ]
 
 const getPlayers = async (): Promise<Player[]> => {
-  // TODO
-  return mockPlayers
+  // TODO: getFriends(user) ?
+  const response = await axios.get(`${API_ROOT}/users`)
+  return response.data.map((apiPlayer: ApiPlayer) => apiPlayerToPlayer(apiPlayer))
 }
 
 const playerNameAvailable = async (name: String): Promise<boolean> => {
-  // TODO: Backend checks that there is no player (guest or normal) with 'name'. Note: Trim trailing whitespace.
+  // TODO
+  // Backend checks that there is no player (guest or normal) with 'name'. Or check just guests common among friends?
+  // Note: Trim trailing whitespace.
   return name !== 'test'
 }
 

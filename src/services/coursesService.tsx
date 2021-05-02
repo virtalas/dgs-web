@@ -8,7 +8,7 @@ const getCourses = async (): Promise<Course[]> => {
 }
 
 const getCourse = async (courseId: string): Promise<Course> => {
-  const response = await axios.get(`${API_ROOT}/courses/${courseId}`)
+  const response = await axios.get(`${API_ROOT}/courses/${courseId}/course`)
   return response.data
 }
 

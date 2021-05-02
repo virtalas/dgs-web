@@ -51,10 +51,10 @@ const NewGuestButton: React.FC<Props> = (props) => {
 
   const handleAddGuest = () => {
     setDialogOpen(false)
-    // Add guest to players with empty ID. Backend should then later create the player when creating the game.
     const newGuest = {
       id: 'temp-id-' + guestName, // Unique ID needed for updating the selection list.
       firstName: guestName,
+      lastName: '',
       guest: true,
       admin: false,
     }
