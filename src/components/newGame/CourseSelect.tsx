@@ -20,8 +20,7 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 interface Props {
-  course: Course,
-  setCourse: (course: Course) => void,
+  onCourseChange?: (course: Course) => void,
   layout?: Layout,
   setLayout?: (layout: Layout) => void,
   setGameCreatable?: (creatable: boolean) => void,
@@ -34,21 +33,32 @@ interface Props {
 const CourseSelect: React.FC<Props> = (props) => {
   const classes = useStyles()
 
-  const { course, setCourse, layout, setLayout, setGameCreatable } = props
+  const { onCourseChange, layout, setLayout, setGameCreatable } = props
 
-  const [courses, setCourses] = useState<Course[]>([course])
+  const [course, setCourse] = useState<Course>()
+  const [courses, setCourses] = useState<Course[]>([])
   const [sortByPopularity, setSortByPopularity] = useState(true)
 
-  const showLayoutSelect: boolean = (layout || setLayout) ? true : false
+  const showLayoutSelect = setLayout !== undefined
 
-  const getActiveLayout = (forCourse: Course): Layout | undefined => {
+  const changeCourseTo = (selectedCourse: Course) => {
+    setCourse(selectedCourse)
+    if (onCourseChange) {
+      onCourseChange(selectedCourse)
+    }
+  }
+
+  const getActiveLayout = (forCourse?: Course): Layout | undefined => {
+    if (!forCourse) {
+      return undefined
+    }
     const layout = forCourse.layouts.find(layout => layout.active)
     return layout
   }
 
   const selectActiveLayout = (forCourse: Course) => {
     const activeLayout = getActiveLayout(forCourse)
-    if (setLayout && activeLayout) {
+    if (activeLayout && setLayout) {
       setLayout(activeLayout)
     }
   }
@@ -56,13 +66,13 @@ const CourseSelect: React.FC<Props> = (props) => {
   const handleCourseChange = (event: React.ChangeEvent<{ value: unknown }>, value: any) => {
     const selectedCourseId = value.props.value as string
     const selectedCourse = courses.find(course => course.id === selectedCourseId) as Course
-    setCourse(selectedCourse)
+    changeCourseTo(selectedCourse)
     selectActiveLayout(selectedCourse)
   }
 
   const handleLayoutChange = (event: React.ChangeEvent<{ value: unknown }>, value: any) => {
     const selectedLayoutId = value.props.value as string
-    const selectedLayout = course.layouts.find(layout => layout.id === selectedLayoutId) as Layout
+    const selectedLayout = course?.layouts.find(layout => layout.id === selectedLayoutId) as Layout
     if (setLayout) {
       setLayout(selectedLayout)
     }
@@ -76,7 +86,7 @@ const CourseSelect: React.FC<Props> = (props) => {
       }
       
       setCourses(sortCourses(fetchedCourses, sortByPopularity))
-      setCourse(fetchedCourses[0]) // Courses should be ordered by popularity (at least initially).
+      changeCourseTo(fetchedCourses[0]) // Courses should be ordered by popularity (at least initially).
       selectActiveLayout(fetchedCourses[0])
       if (setGameCreatable) {
         setGameCreatable(true) // Even if the fetching of players fails, one player (user) and a course is enough.
@@ -95,7 +105,7 @@ const CourseSelect: React.FC<Props> = (props) => {
     <FormControl variant="outlined" className={classes.formControl}>
       <InputLabel ref={inputLabel} htmlFor="course-select">Course</InputLabel>
       <Select
-        value={course.id}
+        value={course?.id ?? ''}
         onChange={handleCourseChange}
         input={<OutlinedInput labelWidth={labelWidth} name="course" id="course-select" />}
       >
@@ -107,18 +117,18 @@ const CourseSelect: React.FC<Props> = (props) => {
   )
 
   const layoutSelect = (
-    <FormControl variant="outlined" className={classes.formControl} error={showLayoutSelect && !layout}>
+    <FormControl variant="outlined" className={classes.formControl} error={layout === undefined && courses.length > 0}>
       <InputLabel ref={inputLabel} htmlFor="layout-select">Layout</InputLabel>
       <Select
-        value={layout ? layout.id : 0}
+        value={layout ? layout.id : ''}
         onChange={handleLayoutChange}
         input={<OutlinedInput labelWidth={labelWidth} name="layout" id="layout-select" />}
       >
-        {course.layouts.map((layout, index) => (
+        {course?.layouts.map((layout, index) => (
           <MenuItem value={layout.id} key={index}>{layout.name}{layout.active ? ' (active)' : ''}</MenuItem>
         ))}
       </Select>
-      <FormHelperText>{layout !== getActiveLayout(course) ? 'This layout will become active.' : ''}</FormHelperText>
+      <FormHelperText>{!layout?.active ? 'This layout will become active.' : ''}</FormHelperText>
     </FormControl>
   )
 

@@ -28,21 +28,15 @@ const NewGame: React.FC<{}> = () => {
   const [redirect, setRedirect] = useState(false)
   const [newGameId, setNewGameId] = useState('')
   const [gameCreatable, setGameCreatable] = useState(false)
-
-  const [course, setCourse] = useState<Course>(
-    { id: '', name: 'Loading...', city: '', layouts: [], popularity: 0 }
-  )
   const [layout, setLayout] = useState<Layout>()
   const [players, setPlayers] = useState<Player[]>([])
-
   const [allPlayers, setAllPlayers] = useState<Player[]>([])
 
   useEffect(() => {
-    // Fetch players.
     playersService.getPlayers().then(fetchedPlayers => {
       const user = fetchedPlayers.find(player => player.id === userId) as Player
       if (user) {
-        setPlayers(p => [...p, user])
+        setPlayers([user])
       }
       setAllPlayers(fetchedPlayers)
     })
@@ -62,12 +56,9 @@ const NewGame: React.FC<{}> = () => {
     return <Redirect to={'/games/' + newGameId + "/input"} />
   }
 
-  // TODO: 'Course', 'Layout', and 'Players' InputLabels are offset.
   return (
     <div id="newGamePage" className={classes.page}>
       <CourseSelect
-        course={course}
-        setCourse={setCourse}
         layout={layout}
         setLayout={setLayout}
         setGameCreatable={setGameCreatable}

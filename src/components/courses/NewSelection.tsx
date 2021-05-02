@@ -20,6 +20,8 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
+// TODO: Button next to 'New layout': 'Add as you play'
+
 const NewSelection: React.FC<{}> = () => {
   const classes = useStyles()
 
@@ -61,8 +63,7 @@ const NewSelection: React.FC<{}> = () => {
       </Typography>
 
       <CourseSelect
-        course={course}
-        setCourse={setCourse}
+        onCourseChange={setCourse}
       />
 
       <br />

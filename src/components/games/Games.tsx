@@ -42,13 +42,10 @@ const Games: React.FC<Props> = (props) => {
   const gameId = match.params.id
   const singleGameView = Boolean(gameId)
 
-  const currentYear = new Date().getFullYear()
-  const currentMonth = new Date().getMonth() - 1
-
   const [games, setGames] = useState<Game[]>([])
   const [fetchedMonths, setFetchedMonths] = useState<number[]>([])
-  const [selectedMonth, setSelectedMonth] = useState<number>(currentMonth) // 0 = January
-  const [selectedYear, setSelectedYear] = useState<number>(currentYear)
+  const [selectedMonth, setSelectedMonth] = useState<number>() // 0 = January
+  const [selectedYear, setSelectedYear] = useState<number>()
   const [monthsThatHaveGames, setMonthsThatHaveGames] = useState<GameMonths[]>()
   const [availableWeatherConditions, setAvailableWeatherConditions] = useState<Tag[]>([])
   const [availableConditions, setAvailableConditions] = useState<Tag[]>([])
@@ -60,16 +57,17 @@ const Games: React.FC<Props> = (props) => {
                                                             && game.endDate.getFullYear() === selectedYear)
 
   const fetchGames = () => {
-    gamesService.getGames(selectedYear, selectedMonth).then(fetchedGames => {
-      setFetchedMonths(months => months.concat([selectedMonth])) // Mark games for this month as fetched.
-      setGames(games => games.concat(fetchedGames))
-      setIsLoading(false)
-    })
-    .catch(e => {
-      console.log(e)
-      setIsLoading(false)
-      setIsError(true)
-    })
+    if (selectedYear && selectedMonth) {
+      gamesService.getGames(selectedYear, selectedMonth).then(fetchedGames => {
+        setFetchedMonths(months => months.concat([selectedMonth])) // Mark games for this month as fetched.
+        setGames(games => games.concat(fetchedGames))
+        setIsLoading(false)
+      })
+      .catch(e => {
+        setIsLoading(false)
+        setIsError(true)
+      })
+    }
   }
 
   useEffect(() => {
@@ -81,7 +79,7 @@ const Games: React.FC<Props> = (props) => {
       })
     }
 
-    if (fetchedMonths.includes(selectedMonth)) return // Don't refetch already fetched games.
+    if (fetchedMonths.includes(selectedMonth ?? -1)) return // Don't refetch already fetched games.
     setIsLoading(true)
 
     // Page for a single game:
@@ -134,7 +132,7 @@ const Games: React.FC<Props> = (props) => {
 
   const handleShowAllButton = () => setRedirect(true)
 
-  const monthControls = (
+  const monthControls = selectedYear && selectedMonth ? (
     <MonthControls
       selectedMonth={selectedMonth}
       setSelectedMonth={setSelectedMonth}
@@ -143,7 +141,7 @@ const Games: React.FC<Props> = (props) => {
       clearFetchedGames={clearFetchedGames}
       monthsThatHaveGames={monthsThatHaveGames}
     />
-  )
+  ) : null
 
   return (
     <div id="gamesPage" className={classes.root}>

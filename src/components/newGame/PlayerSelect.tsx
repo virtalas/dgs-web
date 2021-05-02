@@ -90,9 +90,12 @@ const PlayerSelect: React.FC<Props> = (props) => {
     setLabelWidth(inputLabel.current!.offsetWidth)
   }, [])
 
-  // TODO: Bigger list height so no need for scrolling.
+  const loading = players.length === 0 && allPlayers.length >= 0
+  const error = !loading && players.length === 0
+
+  // TODO: Bigger max list height so no need for scrolling.
   return (
-    <FormControl variant="outlined" className={classes.formControl} error={players.length === 0}>
+    <FormControl variant="outlined" className={classes.formControl} error={error}>
       <InputLabel ref={inputLabel} htmlFor="players-select">Players</InputLabel>
       <Select
         multiple
@@ -114,7 +117,7 @@ const PlayerSelect: React.FC<Props> = (props) => {
         ) : null}
         {guestList}
       </Select>
-      <FormHelperText>{players.length === 0 ? 'Choose at least one player' : ''}</FormHelperText>
+      <FormHelperText>{error ? 'Choose at least one player' : ''}</FormHelperText>
     </FormControl>
   )
 }

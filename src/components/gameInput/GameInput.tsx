@@ -7,7 +7,6 @@ import DescriptionIcon from '@material-ui/icons/Description'
 import InfoIcon from '@material-ui/icons/Info'
 import EditIcon from '@material-ui/icons/Edit'
 import LocationOnIcon from '@material-ui/icons/LocationOn'
-import CircularProgress from '@material-ui/core/CircularProgress'
 
 import HoleInfoBar from './HoleInfoBar'
 import gamesService from '../../services/gamesService'
@@ -16,6 +15,7 @@ import HoleInfoView from './HoleInfoView'
 import GameInfoView from './GameInfoView'
 import MapView from './MapView'
 import NotificationBar from '../NotificationBar'
+import LoadingView from '../LoadingView'
 
 const scoreInputViewTab = 0
 const holeInfoViewTab = 1
@@ -92,12 +92,9 @@ const GameInput: React.FC<{}> = (props: any) => {
     setGame(game)
   }
 
-  // Show loading screen while fetching game:
   if (game === undefined) {
     return (
-      <div className={classes.progressContainer}>
-        <CircularProgress className={classes.progress} />
-      </div>
+      <LoadingView />
     )
   }
 
