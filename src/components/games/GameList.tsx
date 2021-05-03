@@ -50,12 +50,13 @@ interface Props {
   availableConditions: Tag[],
   isLoading: boolean,
   isError: boolean,
+  onEditToggle: (isEditing: boolean) => void,
 }
 
 const GameList: React.FC<Props> = (props) => {
   const classes = useStyles()
 
-  const { gamesToShow, setGame, availableWeatherConditions, availableConditions, isLoading, isError } = props
+  const { gamesToShow, setGame, availableWeatherConditions, availableConditions, isLoading, isError, onEditToggle } = props
   
   return (
     <div>
@@ -67,6 +68,7 @@ const GameList: React.FC<Props> = (props) => {
               setGame={setGame}
               availableWeatherConditions={availableWeatherConditions}
               availableConditions={availableConditions}
+              onEditToggle={onEditToggle}
               key={game.id}
             />
           </div>

@@ -121,7 +121,7 @@ const GameInfo: React.FC<Props> = (props) => {
   }
 
   const handleTemperatureBlur = (_: React.FocusEvent<HTMLTextAreaElement | HTMLInputElement>) => {
-    game.temperature = temperature === '' ? null : Number(temperature)
+    game.temperature = temperature === '' ? undefined : Number(temperature)
     setGame(game)
   }
 

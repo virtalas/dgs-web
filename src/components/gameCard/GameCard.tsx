@@ -22,11 +22,18 @@ const useStyles = makeStyles((theme) => ({
   title: {
     color: 'white',
   },
-  actionButton: {
+  actionAreaBottomRight: {
     position: 'absolute',
     bottom: 10,
     right: 8,
     zIndex: 10,
+  },
+  actionAreaTopRight: {
+    position: 'absolute',
+    top: 10,
+    right: 8,
+    zIndex: 10,
+    color: 'white',
   },
   cancelButton: {
     position: 'absolute',
@@ -69,6 +76,7 @@ interface Props {
   disableScoreEditing?: boolean,
   availableConditions: Tag[],
   availableWeatherConditions: Tag[],
+  onEditToggle?: (isEditing: boolean) => void,
 }
 
 // TODO: Display course name in big font, then layout name somewhere smaller?
@@ -88,7 +96,8 @@ const GameCard: React.FC<Props> = (props) => {
     autoUpdating,
     disableScoreEditing,
     availableConditions,
-    availableWeatherConditions
+    availableWeatherConditions,
+    onEditToggle,
   } = props
 
   const [isEditing, setIsEditing] = useState(editOnly ? true : false) // to get rid of undefined
@@ -96,12 +105,20 @@ const GameCard: React.FC<Props> = (props) => {
   const [updateError, setUpdateError] = useState(false)
   const [originalGame, setOriginalGame] = useState<Game>()
 
-  // TODO: if game.creatorId == userId || user.isAdmin
+  const gameInfoIsShown = game.temperature ||
+                          game.weatherConditions.length ||
+                          game.conditions.length ||
+                          game.highScorers.length ||
+                          game.illegalScorers.length ||
+                          game.comment
+
+  const actionAreaClass = gameInfoIsShown ? classes.actionAreaBottomRight : classes.actionAreaTopRight
+
+  // TODO: if game.creatorId == userId || currentUser.isAdmin
   const allowedToEdit = true
 
   const toggleEdit = () => {
     if (isEditing) {
-      // TODO: Check that the spinner shows up
       gamesService.updateGame(game)
         .then(() => setUpdating(false))
         .catch(() => {
@@ -115,6 +132,11 @@ const GameCard: React.FC<Props> = (props) => {
     } else {
       setOriginalGame(_.cloneDeep(game))
     }
+
+    if (onEditToggle) {
+      onEditToggle(!isEditing)
+    }
+
     setIsEditing(!isEditing)
   }
 
@@ -141,18 +163,31 @@ const GameCard: React.FC<Props> = (props) => {
       game.endDate = newDate
       setGame(game)
     }
-  }
+  }                          
 
   const editButton = allowedToEdit && !editOnly ? (
     <IconButton
       data-cy="editGameButton"
       aria-label="edit"
-      className={classes.actionButton}
+      className={actionAreaClass}
       onClick={toggleEdit}
     >
-      {isEditing ? (<DoneIcon />) : (<EditIcon />)}
+      <EditIcon />
     </IconButton>
   ) : null
+
+  const doneButton = (
+    <IconButton
+      data-cy="editGameDoneButton"
+      aria-label="done"
+      className={classes.actionAreaBottomRight}
+      onClick={toggleEdit}
+    >
+      <DoneIcon />
+    </IconButton>
+  )
+
+  const lowerRightButton = isEditing ? doneButton : editButton
 
   const cancelButton = isEditing ? (
     <IconButton aria-label="edit" className={classes.cancelButton} onClick={handleCancelEdit}>
@@ -161,13 +196,13 @@ const GameCard: React.FC<Props> = (props) => {
   ) : null
 
   const progressSpinner = (
-    <div className={classes.actionButton}>
-      <CircularProgress className={classes.spinner} size={40} />
+    <div className={actionAreaClass}>
+      <CircularProgress className={classes.spinner} size={40} color={gameInfoIsShown ? 'primary' : 'inherit' } />
     </div>
   )
 
   const errorIndicator = (
-    <div className={classes.actionButton} title="Updating game failed">
+    <div className={actionAreaClass} title="Updating game failed">
       <ErrorOutlineIcon className={classes.error} fontSize="large" />
     </div>
   )
@@ -216,7 +251,7 @@ const GameCard: React.FC<Props> = (props) => {
       {isEditing ? gameDateEditing : gameDate}
       {isEditing && !editOnly ? cancelButton : null}
       {!isEditing && updateError ? errorIndicator : null}
-      {updating && !updateError ? progressSpinner : editButton}
+      {updating && !updateError ? progressSpinner : lowerRightButton}
       {autoUpdating ? progressSpinner : null}
       <ScoreCard game={game} setGame={setGame} isEditing={disableScoreEditing ? false : isEditing} />
       <GameInfo

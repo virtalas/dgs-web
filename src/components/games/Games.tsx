@@ -17,6 +17,7 @@ const useStyles = makeStyles((theme) => ({
     // No vertical scrolling even if views overflow:
     overflow: 'hidden',
     width: '100%',
+    paddingBottom: theme.spacing(12),
   },
   topControls: {
     paddingTop: theme.spacing(2),
@@ -25,7 +26,6 @@ const useStyles = makeStyles((theme) => ({
     width: '100%',
   },
   bottomControls: {
-    paddingBottom: theme.spacing(12),
     margin: 0,
     width: '100%',
   },
@@ -33,12 +33,13 @@ const useStyles = makeStyles((theme) => ({
 
 interface Props {
   match: any,
+  onEditToggle: (isEditing: boolean) => void,
 }
 
 const Games: React.FC<Props> = (props) => {
   const classes = useStyles()
 
-  const { match } = props
+  const { match, onEditToggle } = props
   const gameId = match.params.id
   const singleGameView = Boolean(gameId)
 
@@ -164,6 +165,7 @@ const Games: React.FC<Props> = (props) => {
         availableConditions={availableConditions}
         isLoading={isLoading}
         isError={isError}
+        onEditToggle={onEditToggle}
       />
 
       {gamesToShow.length > 2 ? (
