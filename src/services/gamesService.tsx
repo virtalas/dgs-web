@@ -48,7 +48,7 @@ const updateGame = async (game: Game): Promise<Game> => {
   const response = await axios.put(`${API_ROOT}/games`, {
     game: gameToApiGame(game),
     scores: game.scores.map((playerScores: PlayerScores) => {
-      const legal = game.illegalScorers.find(player => player.id === playerScores.player.id) ? true : false
+      const legal = game.illegalScorers.find(player => player.id === playerScores.player.id) ? false : true
       return {
         player_id: playerScores.player.id,
         throws: playerScores.strokes,
@@ -61,7 +61,7 @@ const updateGame = async (game: Game): Promise<Game> => {
       'Content-Type': 'application/json',
     }
   })
-  return response.data
+  return apiGameResponseToGame(response.data)
 }
 
 const getAvailableConditions = async (): Promise<Tag[]> => {

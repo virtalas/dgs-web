@@ -27,7 +27,7 @@ const App: React.FC<{}> = () => {
 
   const checkTokenExpired = (token: AuthToken): boolean => {
     const tokenData: { exp: string } = jwt(token.access_token)
-    return Date.now() >= parseInt(tokenData.exp) * 1000
+    return Date.now() > parseInt(tokenData.exp) * 1000
   }
 
   useEffect(() => {
@@ -38,11 +38,13 @@ const App: React.FC<{}> = () => {
   }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
   const handleLogin = (token: AuthToken) => {
+    console.log('App: handleLogin')
     localStorage.setItem('dgs-token', JSON.stringify(token))
     setUserId(extractUserId(token))
   }
 
   const handleLogout = () => {
+    console.log('App: handleLogout')
     localStorage.removeItem('dgs-token')
     // axiosSource?.cancel()
     setUserId(undefined)
@@ -51,7 +53,9 @@ const App: React.FC<{}> = () => {
   if (existingToken) {
     axios.defaults.headers.common['Authorization'] = 'Bearer ' + existingToken.access_token
     axios.interceptors.request.use(config => {
-      if (checkTokenExpired(existingToken)) {
+      console.log('checking token', existingToken)
+      if (checkTokenExpired(existingToken) && !config.url?.includes('login')) {
+        console.log('App: token expired, axios.interceptors:', config.url)
         handleLogout()
       }
       // config = { cancelToken: axiosSource?.token, ...config }

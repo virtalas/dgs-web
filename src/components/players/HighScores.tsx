@@ -19,6 +19,9 @@ const useStyles = makeStyles((theme) => ({
   closeButton: {
     margin: theme.spacing(2),
   },
+  indentedText: {
+    paddingLeft: theme.spacing(2),
+  }
 }))
 
 interface Props {
@@ -31,7 +34,7 @@ const HighScores: React.FC<Props> = (props) => {
   const { playerId } = props
   const [redirect, setRedirect] = useState(false)
   const [redirectGameId, setRedirectGameId] = useState('')
-  const [highScores, setHighScores] = useState<HighScore[]>()
+  const [highScores, setHighScores] = useState<CourseHighScores[]>()
   const [highScoresOpen, setHighScoresOpen] = useState(false)
 
   if (redirect) {
@@ -58,6 +61,49 @@ const HighScores: React.FC<Props> = (props) => {
     day: 'numeric',
   }
 
+  const courseNameRow = (courseHighScores: CourseHighScores) => (
+    <TableRow key={'scoreRow' + courseHighScores.courseName}>
+      <TableCell align="left">
+        {courseHighScores.courseName}
+      </TableCell>
+      <TableCell></TableCell>
+      <TableCell></TableCell>
+    </TableRow>
+  )
+
+  const layoutHighScoreRow = (layoutHighScore: LayoutHighScore) => (
+    <TableRow key={'scoreRow' + layoutHighScore.layoutName}>
+      <TableCell align="left">
+        <div className={classes.indentedText}>
+          {layoutHighScore.layoutName}
+        </div>
+      </TableCell>
+
+      <TableCell align="center">
+        {layoutHighScore.toPar}
+      </TableCell>
+
+      <TableCell align="right">
+        <Button
+          data-cy="highScoreGameButton"
+          variant="outlined"
+          size="small"
+          onClick={handleGameClick}
+          value={layoutHighScore.gameId}
+        >
+          {layoutHighScore.gameStartDate.toLocaleString('fi-FI', dateOptions)}
+        </Button>
+      </TableCell>
+    </TableRow>
+  )
+
+  const courseHighScoreRows = highScores?.map((courseHighScores: CourseHighScores) => [
+    courseNameRow(courseHighScores),
+    courseHighScores.layoutHighScores.map((layoutHighScore: LayoutHighScore) => (
+      layoutHighScoreRow(layoutHighScore)
+    ))
+  ])
+
   return (
     <div>
       <Button data-cy="highScoresButton" size="small" onClick={handleHighScoresOpen}>
@@ -67,29 +113,13 @@ const HighScores: React.FC<Props> = (props) => {
         <Table data-cy="highScoresTable" className={classes.modalTable} size="small">
           <TableHead>
             <TableRow>
-              <TableCell>Course</TableCell>
+              <TableCell>Course/Layout</TableCell>
               <TableCell>To Par</TableCell>
-              <TableCell>Game Card</TableCell>
+              <TableCell>Score Card</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            {highScores?.map((score: HighScore) => (
-              <TableRow key={'scoreRow' + score.courseName}>
-                <TableCell align="left">{score.courseName}</TableCell>
-                <TableCell align="center">{score.toPar}</TableCell>
-                <TableCell align="right">
-                  <Button
-                    data-cy="highScoreGameButton"
-                    variant="outlined"
-                    size="small"
-                    onClick={handleGameClick}
-                    value={score.gameId}
-                  >
-                    {score.gameDate.toLocaleString('fi-FI', dateOptions)}
-                  </Button>
-                </TableCell>
-              </TableRow>
-            ))}
+            {courseHighScoreRows}
           </TableBody>
         </Table>
         <Button className={classes.closeButton} data-cy="closeModal" variant="outlined" onClick={handleHighScoresClose}>

@@ -120,7 +120,10 @@ const GameCard: React.FC<Props> = (props) => {
   const toggleEdit = () => {
     if (isEditing) {
       gamesService.updateGame(game)
-        .then(() => setUpdating(false))
+        .then((returnedGame: Game) => {
+          setGame(returnedGame)
+          setUpdating(false)
+        })
         .catch(() => {
           setUpdateError(true)
           if (originalGame) {
@@ -247,7 +250,7 @@ const GameCard: React.FC<Props> = (props) => {
 
   return (
     <BlueCard>
-      <Typography variant="h6" className={classes.title}>{game.courseName}</Typography>
+      <Typography variant="h6" className={classes.title}>{game.courseName + ', ' + game.layout.name}</Typography>
       {isEditing ? gameDateEditing : gameDate}
       {isEditing && !editOnly ? cancelButton : null}
       {!isEditing && updateError ? errorIndicator : null}

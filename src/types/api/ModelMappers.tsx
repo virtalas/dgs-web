@@ -35,7 +35,7 @@ export const apiGameResponseToGame = (gameResponse: ApiGameResponse): Game => {
     weatherConditions: gameResponse.game.tags.filter(tag => tag.weather_condition),
     conditions: gameResponse.game.tags.filter(tag => tag.condition),
     highScorers: gameResponse.scores.filter(s => s.high_score).map(s => nameAndIdToPlayer(s.player_name, s.player_last_name, s.player_id)),
-    illegalScorers: gameResponse.scores.filter(s => s.legal).map(s => nameAndIdToPlayer(s.player_name, s.player_last_name, s.player_id)),
+    illegalScorers: gameResponse.scores.filter(s => !s.legal).map(s => nameAndIdToPlayer(s.player_name, s.player_last_name, s.player_id)),
   }
 }
 
@@ -58,5 +58,19 @@ export const apiPlayerToPlayer = (apiPlayer: ApiPlayer): Player => {
     lastName: apiPlayer.last_name,
     admin: apiPlayer.admin,
     guest: apiPlayer.guest,
+  }
+}
+
+export const apiCourseHighScoresToCourseHighScores = (highScores: ApiCourseHighScores): CourseHighScores => {
+  return {
+    courseName: highScores.course_name,
+    layoutHighScores: highScores.layout_high_scores.map(hs => {
+      return {
+        gameId: hs.game_id,
+        gameStartDate: new Date(hs.game_start_date),
+        layoutName: hs.layout_name,
+        toPar: hs.to_par,
+      }
+    })
   }
 }
