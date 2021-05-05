@@ -27,7 +27,7 @@ const App: React.FC<{}> = () => {
 
   const checkTokenExpired = (token: AuthToken): boolean => {
     const tokenData: { exp: string } = jwt(token.access_token)
-    return Date.now() > parseInt(tokenData.exp) * 1000
+    return Date.now() >= parseInt(tokenData.exp) * 1000
   }
 
   useEffect(() => {

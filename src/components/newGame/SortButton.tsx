@@ -19,8 +19,6 @@ interface Props {
   setSortByPopularity: (sortByPopularity: boolean) => void,
 }
 
-// TODO: Better layout for sort button.
-
 const SortButton: React.FC<Props> = (props) => {
   const classes = useStyles()
 
@@ -34,7 +32,7 @@ const SortButton: React.FC<Props> = (props) => {
   return (
     <FormControl variant="outlined" className={classes.formControl}>
       <FormHelperText>Sorted by</FormHelperText>
-      <Button variant="outlined" id="course-order" size="small" onClick={handleSortChange}>
+      <Button variant="outlined" id="course-order" size="small" onClick={handleSortChange} disabled={true}>
         {sortByPopularity ? 'Popularity' : 'Name'}
       </Button>
     </FormControl>

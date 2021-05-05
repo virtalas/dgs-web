@@ -110,27 +110,46 @@ const PlayerStrokeInput: React.FC<Props> = (props) => {
   const classes = useStyles()
   const { scores, holeNum, coursePars, onScoreChange, setTab, updating } = props
 
-  const handleStrokeChange = (playerId: string, throws: boolean, event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleStrokeChange = (playerId: string, isThrows: boolean, event: React.ChangeEvent<HTMLInputElement>) => {
     let strokes = parseInt(event.target.value)
     strokes = isNaN(strokes) ? 0 : strokes
     const playerIndex = scores.findIndex(playerScores => playerScores.player.id === playerId)
-    if (throws) {
-      // Update throws (strokes):
+
+    event.target.blur()
+    
+    if (isThrows && scores[playerIndex].strokes[holeNum - 1] !== strokes) {
       scores[playerIndex].strokes[holeNum - 1] = strokes
-    } else {
-      // Update OB strokes:
-      scores[playerIndex].obs[holeNum - 1] = strokes
+      onScoreChange(scores)
     }
-    event.target.blur() // Unfocus/blur the field after inputting a number.
-    onScoreChange(scores)
+    if (!isThrows && scores[playerIndex].obs[holeNum - 1] !== strokes) {
+      scores[playerIndex].obs[holeNum - 1] = strokes
+      onScoreChange(scores)
+    }
+  }
+
+  // Handles the case when the user clicks elsewhere, causing a blur event: .
+  const handleBlur = (playerId: string, isThrows: boolean, event: React.ChangeEvent<HTMLInputElement>) => {
+    let strokes = parseInt(event.target.value)
+    const playerIndex = scores.findIndex(playerScores => playerScores.player.id === playerId)
+
+    if (!isNaN(strokes)) {
+      return
+    }
+
+    if (isThrows) {
+      strokes = scores[playerIndex].strokes[holeNum - 1]
+    } else {
+      strokes = scores[playerIndex].obs[holeNum - 1]
+    }
+
+    event.target.value = String(strokes)
   }
 
   const handleParClick = () => {
-    const updatedScores= scores
-    updatedScores.forEach((playerScores: PlayerScores) => {
+    scores.forEach((playerScores: PlayerScores) => {
       playerScores.strokes[holeNum - 1] = coursePars[holeNum - 1]
     })
-    onScoreChange(updatedScores)
+    onScoreChange(scores)
   }
 
   const finishButton = (
@@ -161,7 +180,7 @@ const PlayerStrokeInput: React.FC<Props> = (props) => {
           min="0"
           max="99"
           onFocus={e => e.target.value = '' /* Clear the field when it comes into focus. */}
-          onBlur={event => handleStrokeChange(scoreInfo.player.id, false, event)}
+          onBlur={event => handleBlur(scoreInfo.player.id, false, event)}
           inputMode="numeric"
           pattern="[0-9]*">
         </input>
@@ -177,7 +196,7 @@ const PlayerStrokeInput: React.FC<Props> = (props) => {
             min="0"
             max="99"
             onFocus={e => e.target.value = '' /* Clear the field when it comes into focus. */}
-            onBlur={event => handleStrokeChange(scoreInfo.player.id, true, event)}
+            onBlur={event => handleBlur(scoreInfo.player.id, true, event)}
             inputMode="numeric"
             pattern="[0-9]*">
           </input>
