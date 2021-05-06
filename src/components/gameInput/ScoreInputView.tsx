@@ -5,7 +5,6 @@ import { isMobile } from 'react-device-detect'
 import { makeStyles } from '@material-ui/core/styles'
 import HoleNavigation from './HoleNavigation'
 import PlayerStrokeInput from './PlayerStrokeInput'
-import { gameInfoViewTab } from './GameInput'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -23,7 +22,7 @@ interface Props {
   swipeableViewStyle: any,
   holeNum: number,
   setHoleNum: (holeNum: number) => void,
-  setTab: (tab: number) => void,
+  goToPreviewAndFinish: () => void,
   updating: boolean,
 }
 
@@ -32,7 +31,7 @@ interface Props {
 const ScoreInputView: React.FC<Props> = (props) => {
   const classes = useStyles()
 
-  const { game, updateGame, swipeableViewStyle, holeNum, setHoleNum, setTab, updating } = props
+  const { game, updateGame, swipeableViewStyle, holeNum, setHoleNum, goToPreviewAndFinish, updating } = props
 
   const updateScores = (newScores: PlayerScores[]) => {
     newScores = calculateToParTotal(newScores, game.layout.holes.map(hole => hole.par))
@@ -52,7 +51,7 @@ const ScoreInputView: React.FC<Props> = (props) => {
   const handleNextHoleClick = () => {
     if (game === undefined) return
     if (holeNum === game.layout.holes.length) { // TODO: handle edited hole numbers, get holeNum from Hole.number
-      setTab(gameInfoViewTab)
+      goToPreviewAndFinish()
     } else {
       setHoleNum(holeNum + 1)
     }
@@ -83,7 +82,7 @@ const ScoreInputView: React.FC<Props> = (props) => {
               holeNum={index + 1}
               coursePars={game.layout.holes.map(hole => hole.par)}
               onScoreChange={updateScores}
-              setTab={setTab}
+              goToPreviewAndFinish={goToPreviewAndFinish}
               updating={updating}
               key={index}
             />

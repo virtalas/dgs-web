@@ -6,7 +6,6 @@ import ListItem from '@material-ui/core/ListItem'
 import ListItemText from '@material-ui/core/ListItemText'
 import { Button } from '@material-ui/core'
 
-import { gameInfoViewTab } from './GameInput'
 import { lightBlue, lightGrey, sneakyGrey, dirtyBlue } from '../../constants/Colors'
 
 const useStyles = makeStyles((theme) => ({
@@ -89,18 +88,12 @@ const useStyles = makeStyles((theme) => ({
   },
 }), { name: 'MuiHook' })
 
-const FinishButton = withStyles({
-  root: {
-    backgroundColor: dirtyBlue,
-  },
-})(Button)
-
 interface Props {
   scores: PlayerScores[],
   holeNum: number,
   coursePars: number[],
   onScoreChange: (newScores: PlayerScores[]) => void,
-  setTab: (tab: number) => void,
+  goToPreviewAndFinish: () => void,
   updating: boolean,
 }
 
@@ -108,7 +101,7 @@ interface Props {
 
 const PlayerStrokeInput: React.FC<Props> = (props) => {
   const classes = useStyles()
-  const { scores, holeNum, coursePars, onScoreChange, setTab, updating } = props
+  const { scores, holeNum, coursePars, onScoreChange, goToPreviewAndFinish, updating } = props
 
   const handleStrokeChange = (playerId: string, isThrows: boolean, event: React.ChangeEvent<HTMLInputElement>) => {
     let strokes = parseInt(event.target.value)
@@ -127,7 +120,7 @@ const PlayerStrokeInput: React.FC<Props> = (props) => {
     }
   }
 
-  // Handles the case when the user clicks elsewhere, causing a blur event: .
+  // Handles the case when the user clicks elsewhere, causing a blur event: display original strokes.
   const handleBlur = (playerId: string, isThrows: boolean, event: React.ChangeEvent<HTMLInputElement>) => {
     let strokes = parseInt(event.target.value)
     const playerIndex = scores.findIndex(playerScores => playerScores.player.id === playerId)
@@ -153,13 +146,12 @@ const PlayerStrokeInput: React.FC<Props> = (props) => {
   }
 
   const finishButton = (
-    <FinishButton
-      variant="contained"
-      color="primary"
-      onClick={() => setTab(gameInfoViewTab)}
+    <Button
+      variant="outlined"
+      onClick={() => goToPreviewAndFinish()}
     >
       Preview & Finish Game
-    </FinishButton>
+    </Button>
   )
 
   const rows = scores.map((scoreInfo, index) => (

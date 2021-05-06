@@ -10,9 +10,11 @@ import { AuthContext } from "./context/AuthContext"
 
 const theme = createMuiTheme({})
 
+const DEBUG = false
+
 const App: React.FC<{}> = () => {
-  const localToken = localStorage.getItem("dgs-token")
-  const existingToken = localToken !== null
+  let localToken = localStorage.getItem("dgs-token")
+  let existingToken = localToken !== null
                         && localToken !== undefined
                         && localToken !== 'undefined' 
                         ? JSON.parse(localToken as string)
@@ -46,12 +48,15 @@ const App: React.FC<{}> = () => {
   const handleLogout = () => {
     console.log('App: handleLogout')
     localStorage.removeItem('dgs-token')
+    localToken = null
+    existingToken = null
     // axiosSource?.cancel()
     setUserId(undefined)
   }
 
   if (existingToken) {
     axios.defaults.headers.common['Authorization'] = 'Bearer ' + existingToken.access_token
+
     axios.interceptors.request.use(config => {
       console.log('checking token', existingToken)
       if (checkTokenExpired(existingToken) && !config.url?.includes('login')) {
@@ -62,6 +67,15 @@ const App: React.FC<{}> = () => {
       return config
     }, error => {
       console.log(error.response ? error.response.data : error)
+      return Promise.reject(error)
+    })
+  }
+
+  if (DEBUG) {
+    axios.interceptors.response.use(response => {
+      console.log(response.data)
+      return response
+    }, function (error) {
       return Promise.reject(error)
     })
   }

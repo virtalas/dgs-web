@@ -20,7 +20,7 @@ import LoadingView from '../LoadingView'
 const scoreInputViewTab = 0
 const holeInfoViewTab = 1
 const mapViewTab = 2
-export const gameInfoViewTab = 3
+const gameInfoViewTab = 3
 
 // TODO: change tab bar (& app bar) color to gameInputBlue
 // TODO: SwipeableViews: When swiping starts, show big transparent grey hole number in the middle of the page. When swiping stops fade with animation after ~0.5 seconds.
@@ -83,13 +83,34 @@ const GameInput: React.FC<{}> = (props: any) => {
     if (game === undefined) return
     setUpdating(true)
     setUpdateError(false)
+
     gamesService.updateGame(game).then(() => {
       setUpdating(false)
     }).catch(error => {
       setUpdating(false)
       setUpdateError(true)
     })
+
     setGame(game)
+  }
+
+  const checkGameLegalities = () => {
+    if (game === undefined) return
+    const illegalScorers: Player[] = []
+
+    game.scores.forEach((playerScores: PlayerScores) => {
+      if (playerScores.strokes.includes(0)) {
+        illegalScorers.push(playerScores.player)
+      }
+    })
+    
+    game.illegalScorers = illegalScorers
+    setGame(game)
+  }
+
+  const handleGoToPreviewAndFinish = () => {
+    setTab(gameInfoViewTab)
+    checkGameLegalities()
   }
 
   if (game === undefined) {
@@ -105,7 +126,7 @@ const GameInput: React.FC<{}> = (props: any) => {
       swipeableViewStyle={classes.swipeableView}
       holeNum={holeNum}
       setHoleNum={setHoleNum}
-      setTab={setTab}
+      goToPreviewAndFinish={handleGoToPreviewAndFinish}
       updating={updating}
     />
   )

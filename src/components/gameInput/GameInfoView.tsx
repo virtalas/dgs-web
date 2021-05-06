@@ -51,8 +51,7 @@ const GameInfoView: React.FC<Props> = (props) => {
   const [redirect, setRedirect] = useState(false)
 
   useEffect(() => {
-    // Update the game finish time automatically.
-    game.endDate = new Date()
+    game.endDate = new Date() // Update the game finish time automatically.
     updateGame(game)
   }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
