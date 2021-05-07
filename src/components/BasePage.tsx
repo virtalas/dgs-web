@@ -71,23 +71,20 @@ const BasePage: React.FC<Props> = (props) => {
   let shouldRenderNewButton = editingGameCount === 0
   let newButtonPath: LocationDescriptor = '/'
   let newButtonClass = undefined
-  switch (location.pathname) {
-    case '/':
-    case '/games':
-      newButtonPath = '/games/new'
-      newButtonClass = classes.gamesFab
-      break
-    case '/courses':
-      newButtonPath = '/courses/new'
-      newButtonClass = classes.coursesFab
-      break
-      // TODO: Enable new player (login user) creation.
-    // case '/players':
-    //   newButtonPath = '/players/new'
-    //   newButtonColor = 'secondary'
-    default:
-      shouldRenderNewButton = false
-      break
+
+  if (location.pathname.startsWith('/games')) {
+    newButtonPath = '/games/new'
+    newButtonClass = classes.gamesFab
+  } else if (location.pathname.startsWith('/courses/new/layout')) {
+    shouldRenderNewButton = false
+  } else if (location.pathname.startsWith('/courses/view/')) {
+    newButtonPath = '/courses/new/layout/' + location.pathname.substring('/courses/view/'.length)
+    newButtonClass = classes.coursesFab
+  } else if (location.pathname.startsWith('/courses')) {
+    newButtonPath = '/courses/new'
+    newButtonClass = classes.coursesFab
+  } else {
+    shouldRenderNewButton = false
   }
 
   return (

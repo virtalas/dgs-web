@@ -20,20 +20,19 @@ const App: React.FC<{}> = () => {
                         ? JSON.parse(localToken as string)
                         : null
   const [userId, setUserId] = useState<string | undefined>()
-  // const [axiosSource, setAxiosSource] = useState<CancelTokenSource>()
 
   const extractUserId = (token: AuthToken) => {
     const tokenData: { sub: string } = jwt(token.access_token)
     return tokenData['sub']
   }
 
-  const checkTokenExpired = (token: AuthToken): boolean => {
+  const checkTokenExpired = (token?: AuthToken): boolean => {
+    if (!token) return false
     const tokenData: { exp: string } = jwt(token.access_token)
     return Date.now() >= parseInt(tokenData.exp) * 1000
   }
 
   useEffect(() => {
-    // setAxiosSource(axios.CancelToken.source())
     if (existingToken) {
       setUserId(extractUserId(existingToken))
     }
@@ -50,7 +49,6 @@ const App: React.FC<{}> = () => {
     localStorage.removeItem('dgs-token')
     localToken = null
     existingToken = null
-    // axiosSource?.cancel()
     setUserId(undefined)
   }
 
@@ -63,7 +61,6 @@ const App: React.FC<{}> = () => {
         console.log('App: token expired, axios.interceptors:', config.url)
         handleLogout()
       }
-      // config = { cancelToken: axiosSource?.token, ...config }
       return config
     }, error => {
       console.log(error.response ? error.response.data : error)
