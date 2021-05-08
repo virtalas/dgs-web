@@ -11,6 +11,7 @@ import OutlinedInput from '@material-ui/core/OutlinedInput'
 import coursesService from '../../services/coursesService'
 import SortButton from './SortButton'
 import { sortCourses } from './SortButton'
+import baseService from '../../services/baseService'
 
 const useStyles = makeStyles((theme) => ({
   formControl: {
@@ -79,8 +80,8 @@ const CourseSelect: React.FC<Props> = (props) => {
   }
 
   useEffect(() => {
-    // Fetch courses.
-    coursesService.getCourses().then(fetchedCourses => {
+    const cancelTokenSource = baseService.cancelTokenSource()
+    coursesService.getCourses(cancelTokenSource).then(fetchedCourses => {
       if (fetchedCourses.length === 0) {
         return
       }
@@ -92,6 +93,8 @@ const CourseSelect: React.FC<Props> = (props) => {
         setGameCreatable(true) // Even if the fetching of players fails, one player (user) and a course is enough.
       }
     })
+
+    return () => cancelTokenSource.cancel()
   }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
   // Used for outlined Select's input label.

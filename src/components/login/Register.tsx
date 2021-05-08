@@ -1,6 +1,7 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState, useRef } from 'react'
 import { Formik } from 'formik'
 import * as Yup from 'yup'
+import axios, { CancelTokenSource } from 'axios'
 
 import Button from '@material-ui/core/Button'
 import TextField from '@material-ui/core/TextField'
@@ -34,6 +35,10 @@ const Register: React.FC<{}> = () => {
 
   const [existingAccountError, setExistingAccountError] = useState(false)
 
+  const cancelTokenSourceRef = useRef<CancelTokenSource | null>(null)
+
+  useEffect(() => () => cancelTokenSourceRef.current?.cancel())
+
   if (authenticated) {
     return (<Redirect to='/' />)
   }
@@ -42,7 +47,8 @@ const Register: React.FC<{}> = () => {
     setExistingAccountError(false)
 
     try {
-      await authService.register(values.email, values.firstName, values.lastName, values.password)
+      cancelTokenSourceRef.current = axios.CancelToken.source()
+      await authService.register(values.email, values.firstName, values.lastName, values.password, cancelTokenSourceRef.current)
     } catch (error) {
       if (error.response && error.response.status === 409) {
         setExistingAccountError(true)

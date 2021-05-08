@@ -1,6 +1,8 @@
-import React, { useState, useEffect } from 'react'
+import { CancelTokenSource } from 'axios'
+import React, { useState, useEffect, useRef } from 'react'
 import { Redirect } from 'react-router-dom'
 
+import baseService from '../../services/baseService'
 import coursesService from '../../services/coursesService'
 import EditLayout from './EditLayout'
 
@@ -19,8 +21,12 @@ const NewLayout: React.FC<Props> = (props) => {
     { id: '', name: 'Loading...', city: '', layouts: [], popularity: 0 }
   )
 
+  const cancelTokenSourceRef = useRef<CancelTokenSource | null>(null)
+
   useEffect(() => {
-    coursesService.getCourse(courseId).then(c => setCourse(c))
+    cancelTokenSourceRef.current = baseService.cancelTokenSource()
+    coursesService.getCourse(courseId, cancelTokenSourceRef.current).then(c => setCourse(c))
+    return () => cancelTokenSourceRef.current?.cancel()
   }, [courseId])
 
   // TODO: Redirect to newly created Layout's view?
@@ -29,7 +35,8 @@ const NewLayout: React.FC<Props> = (props) => {
   }
 
   const handleCreateLayout = (layout: Layout) => {
-    coursesService.createLayout(courseId, layout).then(() => setRedirect(true))
+    cancelTokenSourceRef.current = baseService.cancelTokenSource()
+    coursesService.createLayout(courseId, layout, cancelTokenSourceRef.current).then(() => setRedirect(true))
   }
 
   return (

@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
+import { CancelTokenSource } from 'axios'
 
 import { makeStyles } from '@material-ui/core/styles'
 import BottomNavigation from '@material-ui/core/BottomNavigation'
@@ -16,6 +17,7 @@ import GameInfoView from './GameInfoView'
 import MapView from './MapView'
 import NotificationBar from '../NotificationBar'
 import LoadingView from '../LoadingView'
+import baseService from '../../services/baseService'
 
 const scoreInputViewTab = 0
 const holeInfoViewTab = 1
@@ -69,22 +71,30 @@ const GameInput: React.FC<{}> = (props: any) => {
   const [updating, setUpdating] = useState(false)
   const [updateError, setUpdateError] = useState(false)
 
+  const cancelTokenSourceRef = useRef<CancelTokenSource | null>(null)
+
   useEffect(() => {
-    gamesService.getGame(gameId).then((fetchedGame) => {
+    cancelTokenSourceRef.current = baseService.cancelTokenSource()
+
+    gamesService.getGame(gameId, cancelTokenSourceRef.current).then((fetchedGame) => {
       setGame(fetchedGame)
     })
-    gamesService.getAvailableConditions().then(conditions => {
+    
+    gamesService.getAvailableConditions(cancelTokenSourceRef.current).then(conditions => {
       setAvailableConditions(conditions.filter(tag => tag.condition))
       setAvailableWeatherConditions(conditions.filter(tag => tag.weather_condition))
     })
+
+    return () => cancelTokenSourceRef.current?.cancel()
   }, [gameId])
 
   const updateGame = (game: Game) => {
     if (game === undefined) return
     setUpdating(true)
     setUpdateError(false)
+    cancelTokenSourceRef.current = baseService.cancelTokenSource()
 
-    gamesService.updateGame(game).then(() => {
+    gamesService.updateGame(game, cancelTokenSourceRef.current).then(() => {
       setUpdating(false)
     }).catch(error => {
       setUpdating(false)

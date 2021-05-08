@@ -1,11 +1,11 @@
-import axios from 'axios'
+import { CancelTokenSource } from 'axios'
 
-import { API_ROOT } from '../apiConfig'
+import baseService from './baseService'
 import { apiPlayerToPlayer, apiCourseHighScoresToCourseHighScores } from '../types/api/ModelMappers'
 
-const getPlayers = async (): Promise<Player[]> => {
+const getPlayers = async (source: CancelTokenSource): Promise<Player[]> => {
   // TODO: getFriends(user) ?
-  const response = await axios.get(`${API_ROOT}/users`)
+  const response = await baseService.get('/users', source)
   return response.data.map((apiPlayer: ApiPlayer) => apiPlayerToPlayer(apiPlayer))
 }
 
@@ -16,12 +16,11 @@ const playerNameAvailable = async (name: String): Promise<boolean> => {
   return name !== 'test'
 }
 
-const getHighScores = async (playerId: string): Promise<CourseHighScores[]> => {
-  const response = await axios.get(`${API_ROOT}/users/highscores`, {
-    params: {
-      player_id: playerId,
-    },
+const getHighScores = async (playerId: string, source: CancelTokenSource): Promise<CourseHighScores[]> => {
+  const response = await baseService.get('/users/highscores', source, {
+    player_id: playerId,
   })
+
   const highScores = response.data.map((apiCourseHighScores: ApiCourseHighScores) => apiCourseHighScoresToCourseHighScores(apiCourseHighScores))
   return highScores.sort((a: CourseHighScores, b: CourseHighScores) => {
     if (a.courseName < b.courseName) {

@@ -1,4 +1,5 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState, useRef } from 'react'
+import { CancelTokenSource } from 'axios'
 import _ from 'lodash'
 
 import { makeStyles } from '@material-ui/core/styles'
@@ -17,6 +18,7 @@ import ScoreCard from './ScoreCard'
 import GameInfo from './GameInfo'
 import BlueCard from './BlueCard'
 import gamesService from '../../services/gamesService'
+import baseService from '../../services/baseService'
 
 const useStyles = makeStyles((theme) => ({
   title: {
@@ -117,9 +119,14 @@ const GameCard: React.FC<Props> = (props) => {
   // TODO: if game.creatorId == userId || currentUser.isAdmin
   const allowedToEdit = true
 
+  const cancelTokenSourceRef = useRef<CancelTokenSource | null>(null)
+
+  useEffect(() => cancelTokenSourceRef.current?.cancel())
+
   const toggleEdit = () => {
     if (isEditing) {
-      gamesService.updateGame(game)
+      cancelTokenSourceRef.current = baseService.cancelTokenSource()
+      gamesService.updateGame(game, cancelTokenSourceRef.current)
         .then((returnedGame: Game) => {
           setGame(returnedGame)
           setUpdating(false)

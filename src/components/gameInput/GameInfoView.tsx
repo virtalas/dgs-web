@@ -1,5 +1,6 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useRef } from 'react'
 import { Redirect } from 'react-router'
+import { CancelTokenSource } from 'axios'
 
 import { Button, Typography } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
@@ -7,6 +8,7 @@ import { makeStyles } from '@material-ui/core/styles'
 import GameCard from '../gameCard/GameCard'
 import { sneakyGrey } from '../../constants/Colors'
 import gamesService from '../../services/gamesService'
+import baseService from '../../services/baseService'
 
 const useStyles = makeStyles((theme) => ({
   gameContainer: {
@@ -50,13 +52,18 @@ const GameInfoView: React.FC<Props> = (props) => {
   const { game, updateGame, availableWeatherConditions, availableConditions, updating } = props
   const [redirect, setRedirect] = useState(false)
 
+  const cancelTokenSourceRef = useRef<CancelTokenSource | null>(null)
+
   useEffect(() => {
     game.endDate = new Date() // Update the game finish time automatically.
     updateGame(game)
+
+    return () => cancelTokenSourceRef.current?.cancel()
   }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
   const handleFinish = () => {
-    gamesService.updateGame(game)
+    cancelTokenSourceRef.current = baseService.cancelTokenSource()
+    gamesService.updateGame(game, cancelTokenSourceRef.current)
       .then(() => setRedirect(true))
       .catch(() => alert('Failed to send game.'))
   }

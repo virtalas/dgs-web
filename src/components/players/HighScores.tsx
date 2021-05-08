@@ -1,5 +1,6 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState, useRef } from 'react'
 import { Redirect } from 'react-router-dom'
+import axios, { CancelTokenSource } from 'axios'
 
 import { makeStyles } from '@material-ui/core/styles'
 import Button from '@material-ui/core/Button'
@@ -11,6 +12,7 @@ import TableRow from '@material-ui/core/TableRow'
 
 import playersService from '../../services/playersService'
 import CancellableModal from '../CancellableModal'
+import LoadingView from '../LoadingView'
 
 const useStyles = makeStyles((theme) => ({
   modalTable: {
@@ -36,15 +38,26 @@ const HighScores: React.FC<Props> = (props) => {
   const [redirectGameId, setRedirectGameId] = useState('')
   const [highScores, setHighScores] = useState<CourseHighScores[]>()
   const [highScoresOpen, setHighScoresOpen] = useState(false)
+  const [isLoading, setIsLoading] = useState(false)
+
+  const cancelTokenSourceRef = useRef<CancelTokenSource | null>(null)
+
+  useEffect(() => () => cancelTokenSourceRef.current?.cancel(), []) // eslint-disable-line react-hooks/exhaustive-deps
 
   if (redirect) {
     return <Redirect push to={'/games/view/' + redirectGameId} />
   }
 
   const handleHighScoresOpen = () => {
-    playersService.getHighScores(playerId).then(scores => setHighScores(scores))
+    cancelTokenSourceRef.current = axios.CancelToken.source()
+    setIsLoading(true)
     setHighScoresOpen(true)
-  };
+
+    playersService.getHighScores(playerId, cancelTokenSourceRef.current).then(scores => {
+      setIsLoading(false)
+      setHighScores(scores)
+    })
+  }
 
   const handleHighScoresClose = () => {
     setHighScoresOpen(false)
@@ -104,24 +117,33 @@ const HighScores: React.FC<Props> = (props) => {
     ))
   ])
 
+  const highScoresTable = (
+    <Table data-cy="highScoresTable" className={classes.modalTable} size="small">
+      <TableHead>
+        <TableRow>
+          <TableCell>Course/Layout</TableCell>
+          <TableCell>To Par</TableCell>
+          <TableCell>Score Card</TableCell>
+        </TableRow>
+      </TableHead>
+      <TableBody>
+        {courseHighScoreRows}
+      </TableBody>
+    </Table>
+  )
+
   return (
     <div>
       <Button data-cy="highScoresButton" size="small" onClick={handleHighScoresOpen}>
         High scores
       </Button>
       <CancellableModal modalOpen={highScoresOpen} onClose={handleHighScoresClose}>
-        <Table data-cy="highScoresTable" className={classes.modalTable} size="small">
-          <TableHead>
-            <TableRow>
-              <TableCell>Course/Layout</TableCell>
-              <TableCell>To Par</TableCell>
-              <TableCell>Score Card</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {courseHighScoreRows}
-          </TableBody>
-        </Table>
+        {isLoading ? (
+          <div>
+            <LoadingView />
+            <br /><br /><br /><br /><br />
+          </div>
+        ) : highScoresTable}
         <Button className={classes.closeButton} data-cy="closeModal" variant="outlined" onClick={handleHighScoresClose}>
           Close
         </Button>

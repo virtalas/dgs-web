@@ -4,6 +4,7 @@ import { makeStyles } from '@material-ui/core/styles'
 import coursesService from '../../services/coursesService'
 import CourseCard from './CourseCard'
 import SortButton from '../newGame/SortButton'
+import baseService from '../../services/baseService'
 
 const useStyles = makeStyles((theme) => ({
   page: {
@@ -27,7 +28,10 @@ const Courses: React.FC<{}> = () => {
   const [sortByPopularity, setSortByPopularity] = useState(true)
 
   useEffect(() => {
-    coursesService.getCourses().then(c => setCourses(c))
+    const cancelTokenSource = baseService.cancelTokenSource()
+    coursesService.getCourses(cancelTokenSource).then(c => setCourses(c))
+
+    return () => cancelTokenSource?.cancel()
   }, [])
 
   const courseCards = courses?.map(course => (

@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import { Redirect } from 'react-router'
+import { CancelTokenSource } from 'axios'
 
 import { makeStyles } from '@material-ui/core/styles'
 import Button from '@material-ui/core/Button'
@@ -11,6 +12,7 @@ import CourseSelect from './CourseSelect'
 import NewGuestButton from './NewGuestButton'
 import gamesService from '../../services/gamesService'
 import playersService from '../../services/playersService'
+import baseService from '../../services/baseService'
 
 const useStyles = makeStyles((theme) => ({
   page: {
@@ -32,20 +34,27 @@ const NewGame: React.FC<{}> = () => {
   const [players, setPlayers] = useState<Player[]>([])
   const [allPlayers, setAllPlayers] = useState<Player[]>([])
 
+  const cancelTokenSourceRef = useRef<CancelTokenSource | null>(null)
+
   useEffect(() => {
-    playersService.getPlayers().then(fetchedPlayers => {
+    cancelTokenSourceRef.current = baseService.cancelTokenSource()
+
+    playersService.getPlayers(cancelTokenSourceRef.current).then(fetchedPlayers => {
       const user = fetchedPlayers.find(player => player.id === userId) as Player
       if (user) {
         setPlayers([user])
       }
       setAllPlayers(fetchedPlayers)
     })
+
+    return () => cancelTokenSourceRef.current?.cancel()
   }, [userId])
 
   const handleStartButtonClick = async () => {
     const startDate = toISOStringWithTimezone(new Date())
     if (layout) {
-      gamesService.createGame(layout, players, startDate).then(newGameId => {
+      cancelTokenSourceRef.current = baseService.cancelTokenSource()
+      gamesService.createGame(layout, players, startDate, cancelTokenSourceRef.current).then(newGameId => {
         setNewGameId(newGameId.id)
         setRedirect(true)
       })

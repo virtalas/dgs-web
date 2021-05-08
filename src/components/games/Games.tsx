@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
+import { CancelTokenSource } from 'axios'
 
 import { makeStyles } from '@material-ui/core/styles'
 
@@ -7,6 +8,7 @@ import gamesService from '../../services/gamesService'
 import GameList from './GameList'
 import { Button, Grid } from '@material-ui/core'
 import { Redirect } from 'react-router-dom'
+import baseService from '../../services/baseService'
 
 // TODO: When the device is rotated, don't open the drawer -> show whole score card instead
 // TODO: Fetch prev and next month as well.
@@ -57,9 +59,12 @@ const Games: React.FC<Props> = (props) => {
   const gamesToShow = singleGameView ? games : games.filter(game => game.endDate.getMonth() === selectedMonth
                                                             && game.endDate.getFullYear() === selectedYear)
 
+  const cancelTokenSourceRef = useRef<CancelTokenSource | null>(null)
+
   const fetchGames = () => {
     if (selectedYear && selectedMonth) {
-      gamesService.getGames(selectedYear, selectedMonth).then(fetchedGames => {
+      cancelTokenSourceRef.current = baseService.cancelTokenSource()
+      gamesService.getGames(selectedYear, selectedMonth, cancelTokenSourceRef.current).then(fetchedGames => {
         setFetchedMonths(months => months.concat([selectedMonth])) // Mark games for this month as fetched.
         setGames(games => games.concat(fetchedGames))
         setIsLoading(false)
@@ -72,9 +77,11 @@ const Games: React.FC<Props> = (props) => {
   }
 
   useEffect(() => {
+    cancelTokenSourceRef.current = baseService.cancelTokenSource()
+
     // Fetch available conditions (for editing, search)
     if (availableConditions.length === 0) {
-      gamesService.getAvailableConditions().then(conditions => {
+      gamesService.getAvailableConditions(cancelTokenSourceRef.current).then(conditions => {
         setAvailableConditions(conditions.filter(tag => tag.condition))
         setAvailableWeatherConditions(conditions.filter(tag => tag.weather_condition))  
       })
@@ -86,7 +93,7 @@ const Games: React.FC<Props> = (props) => {
     // Page for a single game:
 
     if (singleGameView) {
-      gamesService.getGame(gameId).then(game => setGames([game]))
+      gamesService.getGame(gameId, cancelTokenSourceRef.current).then(game => setGames([game]))
       return
     }
 
@@ -94,7 +101,7 @@ const Games: React.FC<Props> = (props) => {
 
     if (!monthsThatHaveGames) {
       // First fetch a list of years and months that have games:
-      gamesService.getMonthsThatHaveGames().then((gameMonths: GameMonths[]) => {
+      gamesService.getMonthsThatHaveGames(cancelTokenSourceRef.current).then((gameMonths: GameMonths[]) => {
         setMonthsThatHaveGames(gameMonths)
         // Select the latest month & year that have games:
         if (gameMonths && gameMonths.length > 0) {
@@ -113,6 +120,7 @@ const Games: React.FC<Props> = (props) => {
       fetchGames()
     }
 
+    return () => cancelTokenSourceRef.current?.cancel()
   }, [selectedYear, selectedMonth]) // eslint-disable-line react-hooks/exhaustive-deps
 
   if (redirect) {

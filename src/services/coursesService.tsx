@@ -1,27 +1,23 @@
-import axios from "axios"
+import { CancelTokenSource } from "axios"
 
-import { API_ROOT } from '../apiConfig'
+import baseService from './baseService'
 
-const getCourses = async (): Promise<Course[]> => {
-  const response = await axios.get(`${API_ROOT}/courses`)
+const getCourses = async (source: CancelTokenSource): Promise<Course[]> => {
+  const response = await baseService.get('/courses', source)
   return response.data
 }
 
-const getCourse = async (courseId: string): Promise<Course> => {
-  const response = await axios.get(`${API_ROOT}/courses/${courseId}/course`)
+const getCourse = async (courseId: string, source: CancelTokenSource): Promise<Course> => {
+  const response = await baseService.get(`/courses/${courseId}/course`, source)
   return response.data
 }
 
-const createLayout = async (courseId: string, layout: Layout): Promise<Layout> => {
-  const response = await axios.post(`${API_ROOT}/courses/${courseId}/layout`, {
+const createLayout = async (courseId: string, layout: Layout, source: CancelTokenSource): Promise<Layout> => {
+  const response = await baseService.post(`/courses/${courseId}/layout`, source, {
     name: layout.name,
     description: layout.description,
     pars: layout.holes.map(hole => hole.par),
     mapURL: layout.mapURL,
-  }, {
-    headers: {
-      'Content-Type': 'application/json',
-    }
   })
   return response.data
 }
@@ -31,14 +27,10 @@ const updateLayout = async (layout: Layout): Promise<Layout> => {
   return layout
 }
 
-const createCourse = async (course: Course): Promise<Course> => {
-  const response = await axios.post(`${API_ROOT}/courses`, {
+const createCourse = async (course: Course, source: CancelTokenSource): Promise<Course> => {
+  const response = await baseService.post('/courses', source, {
     name: course.name,
     city: course.city,
-  }, {
-    headers: {
-      'Content-Type': 'application/json',
-    }
   })
   return response.data
 }

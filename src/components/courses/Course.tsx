@@ -11,6 +11,7 @@ import coursesService from '../../services/coursesService'
 import LayoutPaper from './LayoutPaper'
 import EditCourse from './EditCourse'
 import CancellableModal from '../CancellableModal'
+import baseService from '../../services/baseService'
 
 const useStyles = makeStyles((theme) => ({
   page: {
@@ -62,7 +63,10 @@ const Course: React.FC<Props> = (props) => {
   const [imgError, setImgError] = useState(false)
 
   useEffect(() => {
-    coursesService.getCourse(courseId).then(c => setCourse(c))
+    const cancelTokenSource = baseService.cancelTokenSource()
+    coursesService.getCourse(courseId, cancelTokenSource).then(c => setCourse(c))
+
+    return () => cancelTokenSource?.cancel()
   }, [courseId])
 
   const coverPictureURL = undefined // TODO: ability to upload a picture, course.coverPictureURL
@@ -151,8 +155,8 @@ const Course: React.FC<Props> = (props) => {
         <TableHead>
           <TableRow>
             <TableCell></TableCell>
+            <TableCell>Me</TableCell>
             <TableCell>All</TableCell>
-            <TableCell>My</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -178,8 +182,8 @@ const Course: React.FC<Props> = (props) => {
 
       <Typography component="p">
         On this course:
-        <Button disabled size="small">All games</Button>
         <Button disabled size="small">My games</Button>
+        <Button disabled size="small">All games</Button>
       </Typography>
 
       <br />

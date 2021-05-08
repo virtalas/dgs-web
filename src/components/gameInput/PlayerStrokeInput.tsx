@@ -1,12 +1,12 @@
 import React from 'react'
 
-import { makeStyles, withStyles } from '@material-ui/core/styles'
+import { makeStyles } from '@material-ui/core/styles'
 import List from '@material-ui/core/List'
 import ListItem from '@material-ui/core/ListItem'
 import ListItemText from '@material-ui/core/ListItemText'
 import { Button } from '@material-ui/core'
 
-import { lightBlue, lightGrey, sneakyGrey, dirtyBlue } from '../../constants/Colors'
+import { lightBlue, lightGrey, sneakyGrey } from '../../constants/Colors'
 
 const useStyles = makeStyles((theme) => ({
   root: {

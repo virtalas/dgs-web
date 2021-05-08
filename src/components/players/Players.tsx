@@ -5,6 +5,7 @@ import { makeStyles } from '@material-ui/core/styles'
 import { useAuth } from '../../context/AuthContext'
 import playersService from '../../services/playersService'
 import PlayerCard from './PlayerCard'
+import baseService from '../../services/baseService'
 
 const useStyles = makeStyles((theme) => ({
   page: {
@@ -24,11 +25,16 @@ const Players: React.FC<{}> = () => {
   const [players, setPlayers] = useState<Player[]>()
   const [currentUser, setCurrentUser] = useState<Player>()
 
+
   useEffect(() => {
-    playersService.getPlayers().then(p => {
+    const cancelTokenSource = baseService.cancelTokenSource()
+
+    playersService.getPlayers(cancelTokenSource).then(p => {
       setPlayers(p)
       setCurrentUser(p.find(player => player.id === userId))
     })
+
+    return () => cancelTokenSource?.cancel()
   }, [userId])
 
   return (
