@@ -37,7 +37,7 @@ const Register: React.FC<{}> = () => {
 
   const cancelTokenSourceRef = useRef<CancelTokenSource | null>(null)
 
-  useEffect(() => () => cancelTokenSourceRef.current?.cancel())
+  useEffect(() => () => cancelTokenSourceRef.current?.cancel(), [])
 
   if (authenticated) {
     return (<Redirect to='/' />)

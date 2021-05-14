@@ -68,6 +68,7 @@ const Games: React.FC<Props> = (props) => {
         setFetchedMonths(months => months.concat([selectedMonth])) // Mark games for this month as fetched.
         setGames(games => games.concat(fetchedGames))
         setIsLoading(false)
+        fetchConditionsIfEmpty()
       })
       .catch(e => {
         setIsLoading(false)
@@ -76,16 +77,19 @@ const Games: React.FC<Props> = (props) => {
     }
   }
 
-  useEffect(() => {
-    cancelTokenSourceRef.current = baseService.cancelTokenSource()
-
-    // Fetch available conditions (for editing, search)
+  // Fetch available conditions (for editing & search)
+  const fetchConditionsIfEmpty = () => {
     if (availableConditions.length === 0) {
+      cancelTokenSourceRef.current = baseService.cancelTokenSource()
       gamesService.getAvailableConditions(cancelTokenSourceRef.current).then(conditions => {
         setAvailableConditions(conditions.filter(tag => tag.condition))
         setAvailableWeatherConditions(conditions.filter(tag => tag.weather_condition))  
       })
     }
+  }
+
+  useEffect(() => {
+    cancelTokenSourceRef.current = baseService.cancelTokenSource()
 
     if (fetchedMonths.includes(selectedMonth ?? -1)) return // Don't refetch already fetched games.
     setIsLoading(true)
@@ -93,7 +97,10 @@ const Games: React.FC<Props> = (props) => {
     // Page for a single game:
 
     if (singleGameView) {
-      gamesService.getGame(gameId, cancelTokenSourceRef.current).then(game => setGames([game]))
+      gamesService.getGame(gameId, cancelTokenSourceRef.current).then(game => {
+        setGames([game])
+        fetchConditionsIfEmpty()
+      })
       return
     }
 

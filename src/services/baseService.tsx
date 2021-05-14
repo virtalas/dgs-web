@@ -3,6 +3,8 @@ import jwt from 'jwt-decode'
 
 import { API_ROOT } from '../apiConfig'
 
+let tokenExpiryInterceptor: number
+
 const get = (endpoint: string, source: CancelTokenSource, params?: any) => {
   return axios.get(API_ROOT + endpoint, {
     cancelToken: source.token,
@@ -44,9 +46,10 @@ const checkTokenExpired = (token?: AuthToken): boolean => {
 }
 
 const useTokenExpiryChecker = (handler: () => void, existingToken?: AuthToken) => {
-  axios.interceptors.request.use(config => {
+  removeTokenExpiryChecker()
+  tokenExpiryInterceptor = axios.interceptors.request.use(config => {
     if (checkTokenExpired(existingToken) && !config.url?.includes('login')) {
-      console.log('Token expired, request url:', config.url)
+      console.log('Token expired, request url:', config.url, 'token:', existingToken)
       handler()
     }
     return config
@@ -54,6 +57,12 @@ const useTokenExpiryChecker = (handler: () => void, existingToken?: AuthToken) =
     console.log(error.response ? error.response.data : error)
     return Promise.reject(error)
   })
+  console.log('added interceptor', tokenExpiryInterceptor)
+}
+
+const removeTokenExpiryChecker = () => {
+  console.log('eject interceptor', tokenExpiryInterceptor)
+  axios.interceptors.request.eject(tokenExpiryInterceptor)
 }
 
 const useAccessToken = (access_token: string) => {
@@ -75,6 +84,7 @@ export default {
   put,
   cancelTokenSource,
   useTokenExpiryChecker,
+  removeTokenExpiryChecker,
   useAccessToken,
   useResponseJSONLogger,
   extractUserId,

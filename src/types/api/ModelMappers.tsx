@@ -1,10 +1,11 @@
 import { calculateToPar, calculateTotalScore } from '../../utils/ScoreUtil'
 
-const nameAndIdToPlayer = (firstName: string, lastName: string, id: string): Player => {
+const playerScoresToPlayer = (playerScores: ApiPlayerScores): Player => {
   return {
-    id: id,
-    firstName: firstName,
-    lastName: lastName,
+    id: playerScores.player_id,
+    firstName: playerScores.player_name,
+    lastName: playerScores.player_last_name,
+    friendStatus: playerScores.friend_status,
     guest: undefined,
     admin: undefined,
   }
@@ -24,18 +25,18 @@ export const apiGameResponseToGame = (gameResponse: ApiGameResponse): Game => {
     scores: gameResponse.scores.map((playerScores: ApiPlayerScores) => {
       const total = calculateTotalScore(playerScores.throws, playerScores.obs)
       return {
-        player: nameAndIdToPlayer(playerScores.player_name, playerScores.player_last_name, playerScores.player_id),
+        player: playerScoresToPlayer(playerScores),
         strokes: playerScores.throws,
         obs: playerScores.obs,
         total: total,
         toPar: calculateToPar(playerScores.throws, total, gameResponse.layout.holes),
       }
     }),
-    tags: gameResponse.game.tags,
+    tags: gameResponse.game.tags.filter(tag => (!tag.condition && !tag.weather_condition)),
     weatherConditions: gameResponse.game.tags.filter(tag => tag.weather_condition),
     conditions: gameResponse.game.tags.filter(tag => tag.condition),
-    highScorers: gameResponse.scores.filter(s => s.high_score).map(s => nameAndIdToPlayer(s.player_name, s.player_last_name, s.player_id)),
-    illegalScorers: gameResponse.scores.filter(s => !s.legal).map(s => nameAndIdToPlayer(s.player_name, s.player_last_name, s.player_id)),
+    highScorers: gameResponse.scores.filter(s => s.high_score).map(s => playerScoresToPlayer(s)),
+    illegalScorers: gameResponse.scores.filter(s => !s.legal).map(s => playerScoresToPlayer(s)),
   }
 }
 
@@ -56,6 +57,7 @@ export const apiPlayerToPlayer = (apiPlayer: ApiPlayer): Player => {
     id: apiPlayer.id,
     firstName: apiPlayer.first_name,
     lastName: apiPlayer.last_name,
+    friendStatus: undefined,
     admin: apiPlayer.admin,
     guest: apiPlayer.guest,
   }

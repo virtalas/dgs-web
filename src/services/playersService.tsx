@@ -5,7 +5,7 @@ import { apiPlayerToPlayer, apiCourseHighScoresToCourseHighScores } from '../typ
 
 const getPlayers = async (source: CancelTokenSource): Promise<Player[]> => {
   // TODO: getFriends(user) ?
-  const response = await baseService.get('/users', source)
+  const response = await baseService.get('/users/friends', source)
   return response.data.map((apiPlayer: ApiPlayer) => apiPlayerToPlayer(apiPlayer))
 }
 
@@ -33,8 +33,38 @@ const getHighScores = async (playerId: string, source: CancelTokenSource): Promi
   })
 }
 
+const getFriendRequests = async (source: CancelTokenSource): Promise<FriendRequest[]> => {
+  const response = await baseService.get('/users/friends/requests', source)
+  return response.data
+}
+
+const acceptFriendRequest = async (friendId: string, source: CancelTokenSource): Promise<{}> => {
+  const response = await baseService.post('/users/friends/requests/accept', source, {
+    friend_id: friendId,
+  })
+  return response.data
+}
+
+const declineFriendRequest = async (friendId: string, source: CancelTokenSource): Promise<[]> => {
+  const response = await baseService.post('/users/friends/requests/decline', source, {
+    friend_id: friendId,
+  })
+  return response.data
+}
+
+const sendFriendRequest = async (friendId: string, source: CancelTokenSource): Promise<{}> => {
+  const response = await baseService.post('/users/friends/requests', source, {
+    friend_id: friendId,
+  })
+  return response.data
+}
+
 export default {
   getPlayers,
   playerNameAvailable,
   getHighScores,
+  getFriendRequests,
+  acceptFriendRequest,
+  declineFriendRequest,
+  sendFriendRequest,
 }

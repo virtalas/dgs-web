@@ -14,7 +14,7 @@ const NewCourse: React.FC<{}> = () => {
 
   const cancelTokenSourceRef = useRef<CancelTokenSource | null>(null)
 
-  useEffect(() => () => cancelTokenSourceRef.current?.cancel())
+  useEffect(() => () => cancelTokenSourceRef.current?.cancel(), [])
 
   // Redirect user to create a layout for the new course.
   if (redirect) {

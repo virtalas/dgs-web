@@ -121,7 +121,7 @@ const GameCard: React.FC<Props> = (props) => {
 
   const cancelTokenSourceRef = useRef<CancelTokenSource | null>(null)
 
-  useEffect(() => cancelTokenSourceRef.current?.cancel())
+  useEffect(() => () => cancelTokenSourceRef.current?.cancel(), [])
 
   const toggleEdit = () => {
     if (isEditing) {
@@ -131,7 +131,7 @@ const GameCard: React.FC<Props> = (props) => {
           setGame(returnedGame)
           setUpdating(false)
         })
-        .catch(() => {
+        .catch((e) => {
           setUpdateError(true)
           if (originalGame) {
             setGame(originalGame)

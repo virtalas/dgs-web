@@ -51,6 +51,7 @@ const updateGame = async (game: Game, source: CancelTokenSource): Promise<Game> 
       }
     }),
   })
+
   return apiGameResponseToGame(response.data)
 }
 

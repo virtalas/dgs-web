@@ -14,6 +14,7 @@ import {
 } from '../../constants/Colors'
 
 import { calculateToPar, calculateTotalScore } from '../../utils/ScoreUtil'
+import FriendRequestPrompt from '../players/FriendRequestPrompt'
 
 const cellHeightNormal = 26
 const cellHeightEdit = 35
@@ -221,11 +222,26 @@ const ScoreCard: React.FC<Props> = (props) => {
   let pnBottomRowClassName = isEditing ? classes.bottomRowEdit : classes.bottomRow
   let pnRowClassName = isEditing ? classes.playerNameEdit : ''
 
+  const playerNameCell = (player: Player) => {
+    if (player.friendStatus === undefined) {
+      return null
+    }
+    if (player.friendStatus === 'confirmed') {
+      return player.firstName
+    }
+    if (player.friendStatus === 'not_friends') {
+      return <FriendRequestPrompt player={player} />
+    }
+    if (player.friendStatus === 'pending') {
+      return <i>{player.firstName}</i>
+    }
+  }
+
   const playerNames = game.scores.map((playerScores, index) => (
     <Fragment key={index}>
       <tr className={index + 1 === game.scores.length && !isEditing ? pnBottomRowClassName : pnRowClassName}>
         <td align="left">
-          {playerScores.player.firstName}
+          {playerNameCell(playerScores.player)}
         </td>
       </tr>
       {isEditing ? (

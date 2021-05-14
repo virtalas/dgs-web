@@ -157,7 +157,13 @@ const GameInfo: React.FC<Props> = (props) => {
   }
 
   const tagIsSelected = (condition: Tag): boolean => {
-    return game.weatherConditions.includes(condition) || game.conditions.includes(condition)
+    if (game.weatherConditions.find(tag => tag.id === condition.id)) {
+      return true
+    }
+    if (game.conditions.find(tag => tag.id === condition.id)) {
+      return true
+    }
+    return false
   }
 
   game.conditions.sort()
@@ -203,7 +209,7 @@ const GameInfo: React.FC<Props> = (props) => {
     />
   ) : null
   
-  const editableTags = isEditing && availableConditions.length > 0 ? (
+  const editableTags = isEditing ? (
     <div className={classes.chipRow}>
       {availableWeatherConditions.map((condition: Tag, index: number) => (
         <Chip
