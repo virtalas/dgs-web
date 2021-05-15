@@ -6,7 +6,7 @@ interface ApiCourse {
 
 interface ApiPlayerScores {
     player_name: string,
-    player_last_name: string,
+    player_last_name: string | undefined,
     friend_status: 'confirmed' | 'pending' | 'not_friends',
     player_id: string,
     throws: number[],

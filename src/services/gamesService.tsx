@@ -33,7 +33,8 @@ const createGame = async (layout: Layout, players: Player[], start_date: string,
     end_date: start_date,
     comment: '',
     temperature: null,
-    player_ids: players.map(player => player.id),
+    player_ids: players.filter(player => !player.newGuest).map(player => player.id),
+    new_guest_names: players.filter(player => player.newGuest).map(player => player.firstName),
   })
   return response.data
 }

@@ -9,6 +9,7 @@ import TableBody from '@material-ui/core/TableBody'
 import TableCell from '@material-ui/core/TableCell'
 import TableHead from '@material-ui/core/TableHead'
 import TableRow from '@material-ui/core/TableRow'
+import Typography from '@material-ui/core/Typography'
 
 import playersService from '../../services/playersService'
 import CancellableModal from '../CancellableModal'
@@ -28,12 +29,13 @@ const useStyles = makeStyles((theme) => ({
 
 interface Props {
   playerId: string,
+  playerName: string,
 }
 
 const HighScores: React.FC<Props> = (props) => {
   const classes = useStyles()
 
-  const { playerId } = props
+  const { playerId, playerName } = props
   const [redirect, setRedirect] = useState(false)
   const [redirectGameId, setRedirectGameId] = useState('')
   const [highScores, setHighScores] = useState<CourseHighScores[]>()
@@ -143,7 +145,12 @@ const HighScores: React.FC<Props> = (props) => {
             <LoadingView />
             <br /><br /><br /><br /><br />
           </div>
-        ) : highScoresTable}
+        ) : (
+          <div>
+            <Typography variant="h6">{playerName}</Typography>
+            {highScoresTable}
+          </div>
+        )}
         <Button className={classes.closeButton} data-cy="closeModal" variant="outlined" onClick={handleHighScoresClose}>
           Close
         </Button>

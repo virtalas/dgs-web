@@ -9,6 +9,7 @@ import Button from '@material-ui/core/Button'
 
 import HighScores from './HighScores'
 import PlayerStats from './PlayerStats'
+import InviteGuestButton from './InviteGuestButton'
 
 const useStyles = makeStyles((theme) => ({
   card: {
@@ -21,13 +22,14 @@ const useStyles = makeStyles((theme) => ({
 
 interface Props {
   player: Player,
+  guest?: boolean,
 }
 
 // TODO: Average scores modal (pretty identical to High Scores, show only toPar and no total, vertically scrolling, years as columns).
 
 const PlayerCard: React.FC<Props> = (props) => {
   const classes = useStyles()
-  const { player } = props
+  const { player, guest } = props
 
   return player ? (
     <Card data-cy="playerCard" className={classes.card}>
@@ -39,10 +41,12 @@ const PlayerCard: React.FC<Props> = (props) => {
         <div className={classes.playerStats}>
           <PlayerStats />
         </div>
+
+        {(guest !== undefined && guest) ? <InviteGuestButton player={player} /> : null}
       </CardContent>
 
       <CardActions>
-        <HighScores key={'highscore' + player.id} playerId={player.id} />
+        <HighScores key={'highscore' + player.id} playerId={player.id} playerName={player.firstName} />
         <Button size="small" disabled>Average scores</Button>
       </CardActions>
 

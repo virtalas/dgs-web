@@ -29,8 +29,6 @@ const App: React.FC<{}> = () => {
   const handleLogin = (token: AuthToken) => {
     localStorage.setItem('dgs-token', JSON.stringify(token))
     setUserId(baseService.extractUserId(token))
-    // baseService.useAccessToken(token.access_token)
-    // baseService.useTokenExpiryChecker(handleLogout, existingToken)
   }
 
   const handleLogout = () => {

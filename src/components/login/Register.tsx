@@ -1,15 +1,11 @@
 import React, { useEffect, useState, useRef } from 'react'
-import { Formik } from 'formik'
-import * as Yup from 'yup'
 import axios, { CancelTokenSource } from 'axios'
 
-import Button from '@material-ui/core/Button'
-import TextField from '@material-ui/core/TextField'
 import { makeStyles } from '@material-ui/core/styles'
 import Link from '@material-ui/core/Link'
 import Grid from '@material-ui/core/Grid'
 
-import FormContainer from './FormContainer'
+import FormContainer from './AuthForm'
 
 import authService from '../../services/authService'
 import { useAuth } from '../../context/AuthContext'
@@ -29,9 +25,13 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-const Register: React.FC<{}> = () => {
+const Register: React.FC<{}> = (props: any) => {
   const classes = useStyles()
   const { authenticated, handleLogin } = useAuth()
+
+  const guestId = props.match.params.guestid
+  const isInvitation = guestId !== undefined
+  const guestName = getParameterByName('name')
 
   const [existingAccountError, setExistingAccountError] = useState(false)
 
@@ -48,7 +48,11 @@ const Register: React.FC<{}> = () => {
 
     try {
       cancelTokenSourceRef.current = axios.CancelToken.source()
-      await authService.register(values.email, values.firstName, values.lastName, values.password, cancelTokenSourceRef.current)
+      if (isInvitation) {
+        await authService.registerGuestAsUser(guestId, values.email, values.firstName, values.lastName, values.password, cancelTokenSourceRef.current)
+      } else {
+        await authService.register(values.email, values.firstName, values.lastName, values.password, cancelTokenSourceRef.current, guestId)
+      }
     } catch (error) {
       if (error.response && error.response.status === 409) {
         setExistingAccountError(true)
@@ -70,143 +74,47 @@ const Register: React.FC<{}> = () => {
     }
   }
 
+  let titleText
+  if (isInvitation) {
+    if (guestName) {
+      titleText = 'Hi, ' + guestName + "!"
+    } else {
+      titleText = 'Hi!'
+    }
+  } else {
+    titleText = 'Sign up'
+  }
+
   return (
-    <FormContainer title="Sign up">
-      <Formik
-        initialValues={{ email: '', firstName: '', lastName: '', password: '' }}
-        validationSchema={Yup.object().shape({
-          email: Yup.string()
-            .email()
-            .required('Required'),
-          firstName: Yup.string()
-            .required('Required'),
-          lastName: Yup.string()
-            .required('Required'),
-          password: Yup.string()
-            .required('No password provided.')
-            .min(8, 'Password is too short - should be 8 chars minimum.')
-        })}
-        onSubmit={(values, { setSubmitting }) => {
-          handleRegister(values, setSubmitting)
-        }}
+    <div>
+      <FormContainer
+        title={titleText}
+        subtitle={isInvitation ? "Welcome to Disc Golf Stats! Sign up here to create and view your and your friends' games, and much more!" : ''}
+        existingAccountError={existingAccountError}
+        handleRegister={handleRegister}
+        guestName={guestName ?? undefined}
       >
-        {props => {
-          const {
-            values,
-            touched,
-            errors,
-            isSubmitting,
-            handleChange,
-            handleBlur,
-            handleSubmit
-          } = props
-
-          return (
-            <form onSubmit={handleSubmit}>
-              <TextField
-                variant="outlined"
-                margin="normal"
-                fullWidth
-                id="email"
-                label="Email"
-                name="email"
-                autoComplete="email"
-                autoFocus
-                value={values.email}
-                onChange={handleChange}
-                onBlur={handleBlur}
-                error={
-                  ((errors.email ? errors.email.length > 0 : false) && touched.email) || existingAccountError
-                }
-              />
-              {errors.email && touched.email && (
-                <div className={classes.inputFeedback}>{errors.email}</div>
-              )}
-              {existingAccountError && (
-                <div className={classes.inputFeedback}>
-                  This email has already been registered with another account.
-                </div>
-              )}
-
-              <TextField
-                variant="outlined"
-                margin="normal"
-                fullWidth
-                id="firstName"
-                label="First name"
-                name="firstName"
-                autoComplete="given-name"
-                value={values.firstName}
-                onChange={handleChange}
-                onBlur={handleBlur}
-                error={(errors.firstName ? errors.firstName.length > 0 : false) && touched.firstName}
-              />
-              {errors.firstName && touched.firstName && (
-                <div className={classes.inputFeedback}>{errors.firstName}</div>
-              )}
-
-              <TextField
-                variant="outlined"
-                margin="normal"
-                fullWidth
-                id="lastName"
-                label="Family name"
-                name="lastName"
-                autoComplete="family-name"
-                value={values.lastName}
-                onChange={handleChange}
-                onBlur={handleBlur}
-                error={(errors.lastName ? errors.lastName.length > 0 : false) && touched.lastName}
-              />
-              {errors.lastName && touched.lastName && (
-                <div className={classes.inputFeedback}>{errors.lastName}</div>
-              )}
-
-              <TextField
-                variant="outlined"
-                margin="normal"
-                fullWidth
-                name="password"
-                label="Password"
-                type="password"
-                id="password"
-                autoComplete="new-password"
-                value={values.password}
-                onChange={handleChange}
-                onBlur={handleBlur}
-                error={(errors.password ? errors.password.length > 0 : false) && touched.password}
-              />
-              {errors.password && touched.password && (
-                <div className={classes.inputFeedback}>{errors.password}</div>
-              )}
-
-              <Button
-                type="submit"
-                id="signup"
-                fullWidth
-                variant="contained"
-                color="primary"
-                className={classes.submit}
-                disabled={isSubmitting}
-              >
-                Sign up
-              </Button>
-            </form>
-          )
-        }}
-      </Formik>
-
-      <Grid container className={classes.buttonsGrid}>
-        <Grid item xs>
+        <Grid container className={classes.buttonsGrid}>
+          <Grid item xs>
+          </Grid>
+          <Grid item>
+            <Link href="#/signin" variant="body2">
+              Already have an account? Sign in
+            </Link>
+          </Grid>
         </Grid>
-        <Grid item>
-          <Link href="#/signin" variant="body2">
-            Already have an account? Sign in
-          </Link>
-        </Grid>
-      </Grid>
-    </FormContainer>
+      </FormContainer>
+    </div>
   )
+}
+
+function getParameterByName(name: string, url = window.location.href) {
+  name = name.replace(/[\[\]]/g, '\\$&') // eslint-disable-line no-useless-escape
+  var regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)'),
+      results = regex.exec(url)
+  if (!results) return null
+  if (!results[2]) return ''
+  return decodeURIComponent(results[2].replace(/\+/g, ' '))
 }
 
 export default Register

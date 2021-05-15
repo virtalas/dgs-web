@@ -4,9 +4,10 @@ const playerScoresToPlayer = (playerScores: ApiPlayerScores): Player => {
   return {
     id: playerScores.player_id,
     firstName: playerScores.player_name,
-    lastName: playerScores.player_last_name,
+    lastName: playerScores.player_last_name ?? '',
     friendStatus: playerScores.friend_status,
     guest: undefined,
+    newGuest: undefined,
     admin: undefined,
   }
 }
@@ -58,8 +59,9 @@ export const apiPlayerToPlayer = (apiPlayer: ApiPlayer): Player => {
     firstName: apiPlayer.first_name,
     lastName: apiPlayer.last_name,
     friendStatus: undefined,
-    admin: apiPlayer.admin,
-    guest: apiPlayer.guest,
+    admin: apiPlayer.admin ?? undefined,
+    guest: apiPlayer.email === null,
+    newGuest: undefined,
   }
 }
 

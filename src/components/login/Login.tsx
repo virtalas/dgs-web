@@ -1,15 +1,9 @@
 import React, { useState } from 'react'
-import { Formik } from 'formik'
-import * as Yup from 'yup'
-
-import Button from '@material-ui/core/Button'
-import TextField from '@material-ui/core/TextField'
 import Link from '@material-ui/core/Link'
 import Grid from '@material-ui/core/Grid'
 import { makeStyles } from '@material-ui/core/styles'
 
-import FormContainer from './FormContainer'
-
+import AuthForm from './AuthForm'
 import authService from '../../services/authService'
 import { useAuth } from '../../context/AuthContext'
 import { Redirect } from 'react-router'
@@ -57,91 +51,11 @@ const SignIn: React.FC<{}> = () => {
   }
 
   return (
-    <FormContainer title="Sign in">
-      <Formik
-        initialValues={{ email: '', password: '' }}
-        validationSchema={Yup.object().shape({
-          email: Yup.string()
-            .email()
-            .required('Required'),
-          password: Yup.string()
-            .required('No password provided.')
-        })}
-        onSubmit={(values, { setSubmitting }) => {
-          loggedIn(values, setSubmitting)
-        }}
-      >
-        {props => {
-          const {
-            values,
-            touched,
-            errors,
-            isSubmitting,
-            handleChange,
-            handleBlur,
-            handleSubmit
-          } = props
-
-          return (
-            <form onSubmit={handleSubmit}>
-              <TextField
-                variant="outlined"
-                margin="normal"
-                fullWidth
-                id="email"
-                label="Email"
-                name="email"
-                autoComplete="email"
-                autoFocus
-                value={values.email}
-                onChange={handleChange}
-                onBlur={handleBlur}
-                error={((errors.email ? errors.email.length > 0 : false) && touched.email) || wrongCredentialsError}
-              />
-              {errors.email && touched.email && (
-                <div className={classes.inputFeedback}>{errors.email}</div>
-              )}
-
-              <TextField
-                variant="outlined"
-                margin="normal"
-                fullWidth
-                name="password"
-                label="Password"
-                type="password"
-                id="password"
-                autoComplete="new-password"
-                value={values.password}
-                onChange={handleChange}
-                onBlur={handleBlur}
-                error={((errors.password ? errors.password.length > 0 : false) && touched.password) || wrongCredentialsError}
-              />
-              {errors.password && touched.password && (
-                <div className={classes.inputFeedback}>{errors.password}</div>
-              )}
-
-              {wrongCredentialsError && (
-                <div className={classes.inputFeedback}>
-                  You have entered an invalid email or password.
-                </div>
-              )}
-
-              <Button
-                type="submit"
-                id="signin"
-                fullWidth
-                variant="contained"
-                color="primary"
-                className={classes.submit}
-                disabled={isSubmitting}
-              >
-                Sign in
-              </Button>
-            </form>
-          )
-        }}
-      </Formik>
-
+    <AuthForm
+      title="Sign in"
+      handleLogin={loggedIn}
+      wrongCredentialsError={wrongCredentialsError}
+    >
       <Grid container className={classes.buttonsGrid}>
         <Grid item xs>
           {/* <Link href="#" variant="body2">
@@ -154,7 +68,7 @@ const SignIn: React.FC<{}> = () => {
           </Link>
         </Grid>
       </Grid>
-    </FormContainer>
+    </AuthForm>
   )
   // <FormControlLabel
   //   control={<Checkbox value="remember" color="primary" />}

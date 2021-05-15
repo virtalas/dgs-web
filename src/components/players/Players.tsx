@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 
 import { makeStyles } from '@material-ui/core/styles'
+import Typography from '@material-ui/core/Typography'
 
 import { useAuth } from '../../context/AuthContext'
 import playersService from '../../services/playersService'
@@ -15,6 +16,9 @@ const useStyles = makeStyles((theme) => ({
     marginRight: 'auto',
     marginBottom: theme.spacing(11),
   },
+  guestsTitle: {
+    textAlign: 'center',
+  },
 }))
 
 
@@ -25,6 +29,8 @@ const Players: React.FC<{}> = () => {
   const [players, setPlayers] = useState<Player[]>()
   const [currentUser, setCurrentUser] = useState<Player>()
 
+  const friends = players?.filter(player => !player.guest).filter(player => player.id !== currentUser?.id)
+  const guests = players?.filter(player => player.guest)
 
   useEffect(() => {
     const cancelTokenSource = baseService.cancelTokenSource()
@@ -37,14 +43,24 @@ const Players: React.FC<{}> = () => {
     return () => cancelTokenSource?.cancel()
   }, [userId])
 
+  const generatePlayerCard = (player: Player, showGuestButton: boolean) =>
+    <PlayerCard key={'player' + player.id} player={player} guest={showGuestButton} />
+
   return (
     <div id="playersPage" className={classes.page}>
       {currentUser ? (
         <PlayerCard player={currentUser} />
       ) : null}
-      {players?.filter(player => player.id !== currentUser?.id).map(player => (
-        <PlayerCard key={'player' + player.id} player={player} />
-      ))}
+
+      {friends?.map(player => generatePlayerCard(player, false))}
+
+      {(guests && guests.length > 0) ? (
+        <div className={classes.guestsTitle}>
+          <Typography variant="h6">Guests</Typography>
+        </div>
+      ) : null}
+
+      {guests?.map(player => generatePlayerCard(player, true))}
     </div>
   )
 }

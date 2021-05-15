@@ -12,6 +12,7 @@ const Router: React.FC<{}> = () => {
     <HashRouter>
       <Switch>
         <Route path="/login" component={Login} />
+        <Route path="/register/:guestid" component={Register} />
         <Route path="/register" component={Register} />
         <PrivateRoute path="/games/:gameid/input" component={GameInput} />
         <PrivateRoute component={BasePage} />

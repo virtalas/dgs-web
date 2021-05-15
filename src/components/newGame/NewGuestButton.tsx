@@ -57,6 +57,7 @@ const NewGuestButton: React.FC<Props> = (props) => {
       lastName: '',
       friendStatus: undefined,
       guest: true,
+      newGuest: true,
       admin: false,
     }
     setPlayers([...players, newGuest])
