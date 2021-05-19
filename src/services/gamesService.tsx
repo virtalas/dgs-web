@@ -1,6 +1,6 @@
 import { CancelTokenSource } from 'axios'
 
-import { apiGameResponseToGame, gameToApiGame } from '../types/api/ModelMappers'
+import { apiGameResponseToGame, gameToApiGameUpdate } from '../types/api/ModelMappers'
 import baseService from './baseService'
 
 // frontend: January = 0, backend: January = 1
@@ -39,9 +39,13 @@ const createGame = async (layout: Layout, players: Player[], start_date: string,
   return response.data
 }
 
-const updateGame = async (game: Game, source: CancelTokenSource): Promise<Game> => {
+const updateGame = async (game: Game, userId: string | undefined, source: CancelTokenSource): Promise<Game> => {
+  if (userId === undefined) {
+    return Promise.reject()
+  }
+
   const response = await baseService.put('/games', source, {
-    game: gameToApiGame(game),
+    game: gameToApiGameUpdate(game, userId),
     scores: game.scores.map((playerScores: PlayerScores) => {
       const legal = game.illegalScorers.find(player => player.id === playerScores.player.id) ? false : true
       return {

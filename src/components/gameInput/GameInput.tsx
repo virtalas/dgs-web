@@ -9,6 +9,7 @@ import InfoIcon from '@material-ui/icons/Info'
 import EditIcon from '@material-ui/icons/Edit'
 import LocationOnIcon from '@material-ui/icons/LocationOn'
 
+import { useAuth } from '../../context/AuthContext'
 import HoleInfoBar from './HoleInfoBar'
 import gamesService from '../../services/gamesService'
 import ScoreInputView from './ScoreInputView'
@@ -61,6 +62,7 @@ const useStyles = makeStyles((theme) => ({
 
 const GameInput: React.FC<{}> = (props: any) => {
   const classes = useStyles()
+  const { userId } = useAuth()
   const gameId = props.match.params.gameid // Props type as any to avoid props.match type problem.
 
   const [game, setGame] = useState<Game>()
@@ -94,7 +96,7 @@ const GameInput: React.FC<{}> = (props: any) => {
     setUpdateError(false)
     cancelTokenSourceRef.current = baseService.cancelTokenSource()
 
-    gamesService.updateGame(game, cancelTokenSourceRef.current).then(() => {
+    gamesService.updateGame(game, userId, cancelTokenSourceRef.current).then(() => {
       setUpdating(false)
     }).catch(error => {
       setUpdating(false)
@@ -160,6 +162,7 @@ const GameInput: React.FC<{}> = (props: any) => {
       availableWeatherConditions={availableWeatherConditions}
       availableConditions={availableConditions}
       updating={updating}
+      userId={userId}
     />
   )
 

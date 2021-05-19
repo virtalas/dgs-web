@@ -40,6 +40,7 @@ interface Props {
   availableWeatherConditions: Tag[],
   availableConditions: Tag[],
   updating: boolean,
+  userId: string | undefined,
 }
 
 // TODO: Editable comment area (grey placeholder text: "Click to edit")
@@ -49,7 +50,7 @@ interface Props {
 const GameInfoView: React.FC<Props> = (props) => {
   const classes = useStyles()
 
-  const { game, updateGame, availableWeatherConditions, availableConditions, updating } = props
+  const { game, updateGame, availableWeatherConditions, availableConditions, updating, userId } = props
   const [redirect, setRedirect] = useState(false)
 
   const cancelTokenSourceRef = useRef<CancelTokenSource | null>(null)
@@ -63,7 +64,7 @@ const GameInfoView: React.FC<Props> = (props) => {
 
   const handleFinish = () => {
     cancelTokenSourceRef.current = baseService.cancelTokenSource()
-    gamesService.updateGame(game, cancelTokenSourceRef.current)
+    gamesService.updateGame(game, userId, cancelTokenSourceRef.current)
       .then(() => setRedirect(true))
       .catch(() => alert('Failed to send game.'))
   }

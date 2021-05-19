@@ -39,13 +39,15 @@ const NewGame: React.FC<{}> = () => {
   useEffect(() => {
     cancelTokenSourceRef.current = baseService.cancelTokenSource()
 
-    playersService.getPlayers(cancelTokenSourceRef.current).then(fetchedPlayers => {
-      const user = fetchedPlayers.find(player => player.id === userId) as Player
-      if (user) {
-        setPlayers([user])
-      }
-      setAllPlayers(fetchedPlayers)
-    })
+    playersService.getPlayers(cancelTokenSourceRef.current)
+      .then(fetchedPlayers => {
+        const user = fetchedPlayers.find(player => player.id === userId) as Player
+        if (user) {
+          setPlayers([user])
+        }
+        setAllPlayers(fetchedPlayers)
+      })
+      .catch(e => console.log('fetching players failed:', e))
 
     return () => cancelTokenSourceRef.current?.cancel()
   }, [userId])

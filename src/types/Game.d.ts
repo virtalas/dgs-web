@@ -6,7 +6,7 @@ interface Game {
   startDate: Date | undefined,
   endDate: Date,
   temperature: number | undefined,
-  comment: string,
+  comments: GameComment[],
   scores: PlayerScores[],
   tags: Tag[],
   weatherConditions: Tag[],

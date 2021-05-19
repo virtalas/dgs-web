@@ -75,6 +75,8 @@ const BasePage: React.FC<Props> = (props) => {
   if (location.pathname === '/') {
     newButtonPath = '/games/new'
     newButtonClass = classes.gamesFab
+  } else if (location.pathname.startsWith('/games/new')) {
+    shouldRenderNewButton = false
   } else if (location.pathname.startsWith('/games')) {
     newButtonPath = '/games/new'
     newButtonClass = classes.gamesFab

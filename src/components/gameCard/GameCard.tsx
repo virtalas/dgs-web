@@ -4,51 +4,23 @@ import _ from 'lodash'
 
 import { makeStyles } from '@material-ui/core/styles'
 import Typography from '@material-ui/core/Typography'
-import { IconButton, withStyles } from '@material-ui/core'
-import EditIcon from '@material-ui/icons/Edit'
-import DoneIcon from '@material-ui/icons/Done'
-import ClearIcon from '@material-ui/icons/Clear'
-import CircularProgress from '@material-ui/core/CircularProgress'
-import ErrorOutlineIcon from '@material-ui/icons/ErrorOutline'
+import { withStyles } from '@material-ui/core'
 import DayjsUtils from '@date-io/dayjs'
 import { MuiPickersUtilsProvider, DateTimePicker } from '@material-ui/pickers'
 import { MaterialUiPickersDate } from '@material-ui/pickers/typings/date'
 
+import { useAuth } from '../../context/AuthContext'
 import ScoreCard from './ScoreCard'
 import GameInfo from './GameInfo'
 import BlueCard from './BlueCard'
 import gamesService from '../../services/gamesService'
 import baseService from '../../services/baseService'
+import ActionButton from './ActionButton'
 
 const useStyles = makeStyles((theme) => ({
   title: {
     color: 'white',
   },
-  actionAreaBottomRight: {
-    position: 'absolute',
-    bottom: 10,
-    right: 8,
-    zIndex: 10,
-  },
-  actionAreaTopRight: {
-    position: 'absolute',
-    top: 10,
-    right: 8,
-    zIndex: 10,
-    color: 'white',
-  },
-  cancelButton: {
-    position: 'absolute',
-    bottom: 10,
-    right: 55,
-  },
-  spinner: {
-    padding: 5,
-  },
-  error: {
-    marginRight: 40,
-    color: 'red',
-  }
 }))
 
 const DatePicker = withStyles({
@@ -91,6 +63,8 @@ interface Props {
 
 const GameCard: React.FC<Props> = (props) => {
   const classes = useStyles()
+
+  const { userId } = useAuth()
   const {
     game,
     setGame,
@@ -112,33 +86,39 @@ const GameCard: React.FC<Props> = (props) => {
                           game.conditions.length ||
                           game.highScorers.length ||
                           game.illegalScorers.length ||
-                          game.comment
+                          game.comments.reduce((totalLength, comment) => totalLength + comment.content.length, 0)
 
-  const actionAreaClass = gameInfoIsShown ? classes.actionAreaBottomRight : classes.actionAreaTopRight
-
-  // TODO: if game.creatorId == userId || currentUser.isAdmin
-  const allowedToEdit = true
+  const userIsInGame = game.scores.find(s => s.player.id === userId) !== undefined
+  const allowedToEdit = userIsInGame // TODO: or currentUser.isAdmin
 
   const cancelTokenSourceRef = useRef<CancelTokenSource | null>(null)
 
   useEffect(() => () => cancelTokenSourceRef.current?.cancel(), [])
 
+  const sendUpdatedGame = (updatedGame?: Game) => {
+    cancelTokenSourceRef.current = baseService.cancelTokenSource()
+
+    const gameToSend = updatedGame !== undefined ? updatedGame : game
+
+    gamesService.updateGame(gameToSend, userId ?? '', cancelTokenSourceRef.current)
+      .then((returnedGame: Game) => {
+        setGame(returnedGame)
+        setUpdating(false)
+      })
+      .catch((e) => {
+        setUpdateError(true)
+        if (originalGame) {
+          setGame(originalGame)
+        }
+      })
+
+    setUpdating(true)
+    setUpdateError(false)
+  }
+
   const toggleEdit = () => {
     if (isEditing) {
-      cancelTokenSourceRef.current = baseService.cancelTokenSource()
-      gamesService.updateGame(game, cancelTokenSourceRef.current)
-        .then((returnedGame: Game) => {
-          setGame(returnedGame)
-          setUpdating(false)
-        })
-        .catch((e) => {
-          setUpdateError(true)
-          if (originalGame) {
-            setGame(originalGame)
-          }
-        })
-      setUpdating(true)
-      setUpdateError(false)
+      sendUpdatedGame()
     } else {
       setOriginalGame(_.cloneDeep(game))
     }
@@ -173,49 +153,39 @@ const GameCard: React.FC<Props> = (props) => {
       game.endDate = newDate
       setGame(game)
     }
-  }                          
+  }                       
+  
+  const showLoading = ((updating || autoUpdating) && !updateError) ?? false
 
   const editButton = allowedToEdit && !editOnly ? (
-    <IconButton
-      data-cy="editGameButton"
-      aria-label="edit"
-      className={actionAreaClass}
+    <ActionButton
+      variant="edit"
+      position={gameInfoIsShown ? 'bottom' : 'top'}
+      error={!isEditing && updateError}
+      loading={showLoading}
       onClick={toggleEdit}
-    >
-      <EditIcon />
-    </IconButton>
+    />
   ) : null
 
   const doneButton = (
-    <IconButton
-      data-cy="editGameDoneButton"
-      aria-label="done"
-      className={classes.actionAreaBottomRight}
+    <ActionButton
+      variant={editOnly ? 'loadingOnly' : 'ok'}
+      position="bottom"
+      loading={showLoading}
       onClick={toggleEdit}
-    >
-      <DoneIcon />
-    </IconButton>
+    />
   )
 
-  const lowerRightButton = isEditing ? doneButton : editButton
+  const actionButton = isEditing ? doneButton : editButton
 
-  const cancelButton = isEditing ? (
-    <IconButton aria-label="edit" className={classes.cancelButton} onClick={handleCancelEdit}>
-      <ClearIcon />
-    </IconButton>
+  const cancelButton = isEditing && !editOnly ? (
+    <ActionButton
+      variant="cancel"
+      position="bottom"
+      secondary={true}
+      onClick={handleCancelEdit}
+    />
   ) : null
-
-  const progressSpinner = (
-    <div className={actionAreaClass}>
-      <CircularProgress className={classes.spinner} size={40} color={gameInfoIsShown ? 'primary' : 'inherit' } />
-    </div>
-  )
-
-  const errorIndicator = (
-    <div className={actionAreaClass} title="Updating game failed">
-      <ErrorOutlineIcon className={classes.error} fontSize="large" />
-    </div>
-  )
 
   const dateOptions = {
     weekday: 'short',
@@ -258,18 +228,23 @@ const GameCard: React.FC<Props> = (props) => {
   return (
     <BlueCard>
       <Typography variant="h6" className={classes.title}>{game.courseName + ', ' + game.layout.name}</Typography>
+
       {isEditing ? gameDateEditing : gameDate}
-      {isEditing && !editOnly ? cancelButton : null}
-      {!isEditing && updateError ? errorIndicator : null}
-      {updating && !updateError ? progressSpinner : lowerRightButton}
-      {autoUpdating ? progressSpinner : null}
+
+      {cancelButton}
+      {actionButton}
+
       <ScoreCard game={game} setGame={setGame} isEditing={disableScoreEditing ? false : isEditing} />
+
       <GameInfo
         game={game}
         setGame={setGame}
+        sendGame={sendUpdatedGame}
+        show={Boolean(gameInfoIsShown)}
         isEditing={isEditing}
         availableWeatherConditions={availableWeatherConditions}
         availableConditions={availableConditions}
+        userId={userId}
       />
     </BlueCard>
   )

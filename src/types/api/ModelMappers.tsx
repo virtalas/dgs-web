@@ -22,7 +22,7 @@ export const apiGameResponseToGame = (gameResponse: ApiGameResponse): Game => {
     startDate: new Date(gameResponse.game.start_date),
     endDate: new Date(gameResponse.game.end_date),
     temperature: gameResponse.game.temperature,
-    comment: gameResponse.game.comment ?? '',
+    comments: gameResponse.game.comments.map(apiComment => apiCommentToComment(apiComment)),
     scores: gameResponse.scores.map((playerScores: ApiPlayerScores) => {
       const total = calculateTotalScore(playerScores.throws, playerScores.obs)
       return {
@@ -41,13 +41,22 @@ export const apiGameResponseToGame = (gameResponse: ApiGameResponse): Game => {
   }
 }
 
-export const gameToApiGame = (game: Game): ApiGame => {
+const apiCommentToComment = (apiComment: ApiComment): GameComment => {
+  return {
+    id: apiComment.id,
+    userId: apiComment.user_id,
+    content: apiComment.content,
+    createdDate: new Date(apiComment.created_date),
+  }
+}
+
+export const gameToApiGameUpdate = (game: Game, userId: string): ApiGameUpdate => {
   return {
     id: game.id,
     creator_id: game.creatorId,
     start_date: game.startDate,
     end_date: game.endDate,
-    comment: game.comment,
+    comment_content: game.comments.find(comment => comment.userId === userId)?.content ?? '',
     temperature: game.temperature,
     tags: game.tags.concat(game.conditions).concat(game.weatherConditions),
   }

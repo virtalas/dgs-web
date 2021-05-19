@@ -3,9 +3,10 @@ import { makeStyles } from '@material-ui/core/styles'
 import Paper from '@material-ui/core/Paper'
 import Typography from '@material-ui/core/Typography'
 import Chip from '@material-ui/core/Chip'
+import { InputAdornment, TextField } from '@material-ui/core'
 
 import { highScoreBlue, illegalRed } from '../../constants/Colors'
-import { InputAdornment, TextField } from '@material-ui/core'
+import PlayerCommentInput from './PlayerCommentInput'
 
 const chipHeight = 22
 
@@ -67,19 +68,30 @@ const useStyles = makeStyles((theme) => ({
 interface Props {
   game: Game,
   setGame: (game: Game) => void,
+  sendGame: (game?: Game) => void,
+  show: boolean,
   isEditing: boolean,
   availableWeatherConditions: Tag[],
   availableConditions: Tag[],
+  userId: string | undefined,
 }
 
 const GameInfo: React.FC<Props> = (props) => {
   const classes = useStyles()
-  const { game, setGame, isEditing, availableWeatherConditions, availableConditions } = props
+  const { game, setGame, sendGame, show, isEditing, availableWeatherConditions, availableConditions, userId } = props
+  const shouldShowInfoPaper = show
 
   // eslint-disable-next-line
   const gameTemperature = game.temperature != null || game.temperature != undefined ? game.temperature : ''
   const [temperature, setTemperature] = useState<string>(String(gameTemperature))
-  const [comment, setComment] = useState<string>(game.comment)
+  const usersComment = game.comments.find(c => c.userId === userId)
+  const [commentContent, setCommentContent] = useState<string | undefined>(usersComment?.content)
+
+  const sendGameCommentUpdate = (game?: Game) => {
+    const updatedUsersComment = game?.comments.find(c => c.userId === userId)
+    setCommentContent(updatedUsersComment?.content)
+    sendGame(game)
+  }
 
   const handlePlayerChipClick = (event: React.MouseEvent) => {
     const playerId = event.currentTarget.getAttribute('data-playerid')
@@ -126,12 +138,16 @@ const GameInfo: React.FC<Props> = (props) => {
   }
 
   const handleCommentChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setComment(event.target.value)
+    setCommentContent(event.target.value)
   }
 
   const handleCommentBlur = (event: React.FocusEvent<HTMLTextAreaElement | HTMLInputElement>) => {
-    game.comment = comment
-    setGame(game)
+    if (usersComment && commentContent !== undefined) {
+      const otherComments = game.comments.filter(c => c.userId !== userId)
+      usersComment.content = commentContent
+      game.comments = [usersComment, ...otherComments]
+      setGame(game)
+    }
   }
 
   const handleConditionTagToggle = (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
@@ -200,10 +216,10 @@ const GameInfo: React.FC<Props> = (props) => {
     <TextField
       id="commentEdit"
       className={classes.commentEdit}
-      value={comment}
+      value={commentContent}
       multiline={true}
       rowsMax={100}
-      placeholder="Enter a comment"
+      placeholder="Your comment"
       onChange={handleCommentChange}
       onBlur={handleCommentBlur}
     />
@@ -234,7 +250,7 @@ const GameInfo: React.FC<Props> = (props) => {
       ))}
       <Chip
           className={classes.chip}
-          label="add tag"
+          label="...add tag"
           variant="outlined"
           onClick={handleAddTagClick}
         />
@@ -278,29 +294,48 @@ const GameInfo: React.FC<Props> = (props) => {
     </div>
   ) : null
 
-  const shouldShowInfoPaper = game.temperature || game.weatherConditions.length || game.conditions.length ||
-                              game.highScorers.length || game.illegalScorers.length || game.comment
-
-  const normalView = shouldShowInfoPaper ? (
-    <Paper className = {classes.infoPaper} elevation = { 0} >
-      {conditions}
-      {illegalAndHighScorers}
+  let userCommentEmpty = true
+  
+  const comments = game.comments.map(comment => {
+    const commenter = game.scores.find(s => s.player.id === comment.userId)?.player
+    if (commenter?.id === userId && comment.content.length > 0) {
+      userCommentEmpty = false
+    }
+    return comment.content.length > 0 ? (
       <Typography
-        id="comment"
+        key={comment.id}
         className={classes.comment}
         align="left"
         variant="body1"
       >
-        {game.comment}
+        {commenter?.firstName}: {comment.content}
       </Typography>
+    ) : null
+  })
+
+  const userIsInGame = game.scores.find(s => s.player.id === userId) !== undefined
+  const showCommentPrompt = userCommentEmpty && userIsInGame
+
+  const normalView = shouldShowInfoPaper || showCommentPrompt ? (
+    <Paper className = {classes.infoPaper} elevation = {0}>
+      {conditions}
+      {illegalAndHighScorers}
+
+      {comments}
+
+      {showCommentPrompt ? (
+        <PlayerCommentInput game={game} userId={userId} sendGame={sendGameCommentUpdate} />
+      ) : null}
     </Paper>
   ) : null
 
   const editingView = isEditing ? (
     <Paper className={classes.infoPaper} elevation={0}>
       {temperatureEdit}
+      
       {editableTags}
       {illegalScorerEdit}
+
       {commentEdit}
     </Paper>
   ) : null
