@@ -22,6 +22,13 @@ interface ApiComment {
   created_date: Date,
 }
 
+interface ApiTag {
+  id: string | undefined,
+  name: string,
+  condition: bool,
+  weather_condition: bool,
+}
+
 interface ApiGame {
   id: string,
   creator_id: string,
@@ -29,17 +36,7 @@ interface ApiGame {
   end_date: datetime,
   comments: ApiComment[],
   temperature: double | undefined,
-  tags: Tag[],
-}
-
-interface ApiGameUpdate {
-  id: string,
-  creator_id: string,
-  start_date: datetime | undefined,
-  end_date: datetime,
-  comment_content: string,
-  temperature: double | undefined,
-  tags: Tag[],
+  tags: ApiTag[],
 }
 
 interface ApiGameResponse {

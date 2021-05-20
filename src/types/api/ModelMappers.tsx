@@ -33,11 +33,39 @@ export const apiGameResponseToGame = (gameResponse: ApiGameResponse): Game => {
         toPar: calculateToPar(playerScores.throws, total, gameResponse.layout.holes),
       }
     }),
-    tags: gameResponse.game.tags.filter(tag => (!tag.condition && !tag.weather_condition)),
-    weatherConditions: gameResponse.game.tags.filter(tag => tag.weather_condition),
-    conditions: gameResponse.game.tags.filter(tag => tag.condition),
-    highScorers: gameResponse.scores.filter(s => s.high_score).map(s => playerScoresToPlayer(s)),
-    illegalScorers: gameResponse.scores.filter(s => !s.legal).map(s => playerScoresToPlayer(s)),
+    tags: gameResponse.game.tags
+      .filter(tag => (!tag.condition && !tag.weather_condition))
+      .map(tag => apiTagToTag(tag)),
+    weatherConditions: gameResponse.game.tags
+      .filter(tag => tag.weather_condition)
+      .map(tag => apiTagToTag(tag)),
+    conditions: gameResponse.game.tags
+      .filter(tag => tag.condition)
+      .map(tag => apiTagToTag(tag)),
+    highScorers: gameResponse.scores
+      .filter(s => s.high_score)
+      .map(s => playerScoresToPlayer(s)),
+    illegalScorers: gameResponse.scores
+      .filter(s => !s.legal)
+      .map(s => playerScoresToPlayer(s)),
+  }
+}
+
+export const apiTagToTag = (apiTag: ApiTag): Tag => {
+  return {
+    id: apiTag.id ?? '',
+    name: apiTag.name,
+    condition: apiTag.condition,
+    weatherCondition: apiTag.weather_condition,
+  }
+}
+
+const tagToApiTag = (tag: Tag): ApiTag => {
+  return {
+    id: tag.id.includes('temp-id') ? undefined : tag.id,
+    name: tag.name,
+    condition: tag.condition,
+    weather_condition: tag.weatherCondition,
   }
 }
 
@@ -58,7 +86,7 @@ export const gameToApiGameUpdate = (game: Game, userId: string): ApiGameUpdate =
     end_date: game.endDate,
     comment_content: game.comments.find(comment => comment.userId === userId)?.content ?? '',
     temperature: game.temperature,
-    tags: game.tags.concat(game.conditions).concat(game.weatherConditions),
+    tags: game.tags.concat(game.conditions).concat(game.weatherConditions).map(tag => tagToApiTag(tag)),
   }
 }
 

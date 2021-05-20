@@ -1,6 +1,6 @@
 interface Tag {
-    id: string,
-    name: string,
-    condition: bool,
-    weather_condition: bool,
+  id: string,
+  name: string,
+  condition: bool,
+  weatherCondition: bool,
 }

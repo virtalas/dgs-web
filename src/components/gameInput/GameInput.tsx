@@ -84,7 +84,7 @@ const GameInput: React.FC<{}> = (props: any) => {
     
     gamesService.getAvailableConditions(cancelTokenSourceRef.current).then(conditions => {
       setAvailableConditions(conditions.filter(tag => tag.condition))
-      setAvailableWeatherConditions(conditions.filter(tag => tag.weather_condition))
+      setAvailableWeatherConditions(conditions.filter(tag => tag.weatherCondition))
     })
 
     return () => cancelTokenSourceRef.current?.cancel()

@@ -83,7 +83,7 @@ const Games: React.FC<Props> = (props) => {
       cancelTokenSourceRef.current = baseService.cancelTokenSource()
       gamesService.getAvailableConditions(cancelTokenSourceRef.current).then(conditions => {
         setAvailableConditions(conditions.filter(tag => tag.condition))
-        setAvailableWeatherConditions(conditions.filter(tag => tag.weather_condition))  
+        setAvailableWeatherConditions(conditions.filter(tag => tag.weatherCondition))  
       })
     }
   }
