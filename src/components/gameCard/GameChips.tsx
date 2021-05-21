@@ -104,39 +104,11 @@ const GameChips: React.FC<Props> = (props) => {
     alert('Coming soon: Search games by clicked condition/tag!')
   }
 
-  const handleTagToggle = () => {
-    // TODO: refactor handleConditionTagToggle etc into one function
-  }
-
-  const handleConditionTagToggle = (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-    const tagId = event.currentTarget.getAttribute('data-tagid')
-    const tag = availableConditions.find(t => t.id === tagId)
-    if (arrayContainsTag(game.conditions, tag)) {
-      game.conditions = game.conditions.filter(t => t.id !== tagId)
+  const handleTagToggle = (tag: Tag, arrayName: 'conditions' | 'weatherConditions' | 'tags') => {
+    if (arrayContainsTag(game[arrayName], tag)) {
+      game[arrayName] = game[arrayName].filter(t => t.id !== tag.id)
     } else if (tag) {
-      game.conditions = game.conditions.concat(tag)
-    }
-    setGame(game)
-  }
-
-  const handleWeatherTagToggle = (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-    const tagId = event.currentTarget.getAttribute('data-tagid')
-    const tag = availableWeatherConditions.find(t => t.id === tagId)
-    if (arrayContainsTag(game.weatherConditions, tag)) {
-      game.weatherConditions = game.weatherConditions.filter(t => t.id !== tagId)
-    } else if (tag) {
-      game.weatherConditions = game.weatherConditions.concat(tag)
-    }
-    setGame(game)
-  }
-
-  const handleUserTagToggle = (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-    const tagId = event.currentTarget.getAttribute('data-tagid')
-    const tag = editableUserTagsToShow.find(t => t.id === tagId)
-    if (arrayContainsTag(game.tags, tag)) {
-      game.tags = game.tags.filter(t => t.id !== tagId)
-    } else if (tag) {
-      game.tags = game.tags.concat(tag)
+      game[arrayName] = game[arrayName].concat(tag)
     }
     setGame(game)
   }
@@ -160,11 +132,6 @@ const GameChips: React.FC<Props> = (props) => {
     setGame(game)
   }
 
-  // TODO: by name (if need?)
-  // game.conditions.sort()
-  // game.weatherConditions.sort()
-  // game.tags.sort()
-
   const tagChips = !isEditing ? (
     <div className={classes.chipRow}>
       {game.temperature ? <Chip className={classes.chip} label={game.temperature + " °C"} onClick={handleTagChipClick} /> : null}
@@ -180,47 +147,42 @@ const GameChips: React.FC<Props> = (props) => {
     </div>
   ) : null
 
-  const createTagChip = () => {
-    // TODO: refactor <Chip> creation into one function
+  const createTagChip = (tag: Tag, onClick: () => void, index: number) => {
+    return (
+      <Chip
+        className={classes.chip}
+        label={tag.name}
+        variant={tagIsSelected(tag) ? 'default' : 'outlined'}
+        onClick={onClick}
+        key={index}
+      />
+    )
   }
   
   const editableTags = isEditing ? (
     <div className={classes.chipRow}>
-      {availableWeatherConditions.map((condition: Tag, index: number) => (
-        <Chip
-          data-cy="weatherConditionChip"
-          className={classes.chip}
-          label={condition.name}
-          variant={tagIsSelected(condition) ? 'default' : 'outlined'}
-          onClick={handleWeatherTagToggle}
-          data-tagid={condition.id}
-          key={index}
-        />
-      ))}
+      {availableWeatherConditions.map((condition: Tag, index: number) => {
+        const onClick = () => handleTagToggle(condition, 'weatherConditions')
+        return createTagChip(condition, onClick, index)
+      })}
 
-      {availableConditions.map((condition: Tag, index: number) => (
-        <Chip
-          className={classes.chip}
-          label={condition.name}
-          variant={tagIsSelected(condition) ? 'default' : 'outlined'}
-          onClick={handleConditionTagToggle}
-          data-tagid={condition.id}
-          key={index}
-        />
-      ))}
+      {availableConditions.map((condition: Tag, index: number) => {
+        const onClick = () => handleTagToggle(condition, 'conditions')
+        return createTagChip(condition, onClick, index)
+      })}
 
-      {editableUserTagsToShow.map((tag: Tag, index: number) => (
-        <Chip
-          className={classes.chip}
-          label={tag.name}
-          variant={tagIsSelected(tag) ? 'default' : 'outlined'}
-          onClick={handleUserTagToggle}
-          data-tagid={tag.id}
-          key={index}
-        />      
-      ))}
+      {editableUserTagsToShow.map((tag: Tag, index: number) => {
+        const onClick = () => handleTagToggle(tag, 'tags')
+        return createTagChip(tag, onClick, index)
+      })}
 
-      <AddTagButton chosenTags={editableUserTagsToShow} onTagChosen={handleUserTagChosen} />
+      <AddTagButton
+        chosenTags={editableUserTagsToShow}
+        onTagChosen={handleUserTagChosen}
+        availableConditions={availableConditions}
+        availableWeatherConditions={availableWeatherConditions}
+        chosenUserTagHistory={chosenUserTagHistory}
+      />
     </div>
   ) : null
 
@@ -273,7 +235,7 @@ const GameChips: React.FC<Props> = (props) => {
 }
 
 export function arrayContainsTag(array: Tag[], tag: Tag | undefined): boolean {
-  if (tag !== undefined && array.find(t => t.id === tag.id)) {
+  if (tag !== undefined && array.find(t => t.id === tag.id || t.name === tag.name)) {
     return true
   }
   return false

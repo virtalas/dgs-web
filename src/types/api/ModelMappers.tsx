@@ -33,15 +33,15 @@ export const apiGameResponseToGame = (gameResponse: ApiGameResponse): Game => {
         toPar: calculateToPar(playerScores.throws, total, gameResponse.layout.holes),
       }
     }),
-    tags: gameResponse.game.tags
+    tags: sortTags(gameResponse.game.tags
       .filter(tag => (!tag.condition && !tag.weather_condition))
-      .map(tag => apiTagToTag(tag)),
-    weatherConditions: gameResponse.game.tags
+      .map(tag => apiTagToTag(tag))),
+    weatherConditions: sortTags(gameResponse.game.tags
       .filter(tag => tag.weather_condition)
-      .map(tag => apiTagToTag(tag)),
-    conditions: gameResponse.game.tags
+      .map(tag => apiTagToTag(tag))),
+    conditions: sortTags(gameResponse.game.tags
       .filter(tag => tag.condition)
-      .map(tag => apiTagToTag(tag)),
+      .map(tag => apiTagToTag(tag))),
     highScorers: gameResponse.scores
       .filter(s => s.high_score)
       .map(s => playerScoresToPlayer(s)),
@@ -114,4 +114,10 @@ export const apiCourseHighScoresToCourseHighScores = (highScores: ApiCourseHighS
       }
     })
   }
+}
+
+export function sortTags(tags: Tag[]): Tag[] {
+  return tags.sort((a, b) => {
+    return a.name > b.name ? 1 : -1
+  })
 }

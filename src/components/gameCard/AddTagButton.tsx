@@ -31,21 +31,31 @@ const useStyles = makeStyles((theme) => ({
 interface Props {
   chosenTags: Tag[],
   onTagChosen: (tag: Tag) => void,
+  availableConditions: Tag[],
+  availableWeatherConditions: Tag[],
+  chosenUserTagHistory: Tag[],
 }
 
 const AddTagButton: React.FC<Props> = (props) => {
   const classes = useStyles()
-  const { chosenTags, onTagChosen } = props
+  const { chosenTags, onTagChosen, availableConditions, availableWeatherConditions, chosenUserTagHistory } = props
 
   const [dialogOpen, setDialogOpen] = useState(false)
   const [newTagName, setNewTagName] = useState('')
-  const [availableTags, setAvailableTags] = useState<Tag[]>([])
+  const [availableUserTags, setAvailableUserTags] = useState<Tag[]>([])
+  const [inputError, setInputError] = useState(false)
 
-  const tagsToShow = availableTags.filter(tag => !arrayContainsTag(chosenTags, tag))
+  const allTagNames = availableConditions
+    .concat(availableWeatherConditions)
+    .concat(availableUserTags)
+    .concat(chosenUserTagHistory)
+    .map(tag => tag.name)
+
+  const tagsToShow = availableUserTags.filter(tag => !arrayContainsTag(chosenTags, tag))
 
   useEffect(() => {
     const cancelTokenSource = baseService.cancelTokenSource()
-    gamesService.getUserTags(cancelTokenSource).then(tags => setAvailableTags(tags))
+    gamesService.getUserTags(cancelTokenSource).then(tags => setAvailableUserTags(tags))
 
     return () => cancelTokenSource?.cancel()
   }, [])
@@ -58,6 +68,7 @@ const AddTagButton: React.FC<Props> = (props) => {
   const handleTagNameChange = (event: React.ChangeEvent<{ value: unknown }>) => {
     const inputtedName = event.target.value as string
     setNewTagName(inputtedName)
+    setInputError(allTagNames.includes(inputtedName))
   }
 
   const handleAddTag = () => {
@@ -82,6 +93,8 @@ const AddTagButton: React.FC<Props> = (props) => {
         id="standard-basic"
         label="New tag"
         value={newTagName}
+        error={inputError}
+        helperText={inputError ? 'This tag already exists.' : null}
         onChange={handleTagNameChange}
       />
     </form>
@@ -122,7 +135,7 @@ const AddTagButton: React.FC<Props> = (props) => {
       <Button onClick={() => setDialogOpen(false)} color="primary">
         Cancel
       </Button>
-      <Button onClick={handleAddTag} color="primary" disabled={newTagName.length === 0}>
+      <Button onClick={handleAddTag} color="primary" disabled={newTagName.length === 0 || inputError}>
         Add
       </Button>
     </DialogActions>

@@ -1,6 +1,6 @@
 import { CancelTokenSource } from 'axios'
 
-import { apiGameResponseToGame, gameToApiGameUpdate, apiTagToTag } from '../types/api/ModelMappers'
+import { apiGameResponseToGame, gameToApiGameUpdate, apiTagToTag, sortTags } from '../types/api/ModelMappers'
 import baseService from './baseService'
 
 // frontend: January = 0, backend: January = 1
@@ -62,14 +62,14 @@ const updateGame = async (game: Game, userId: string | undefined, source: Cance
 
 const getAvailableConditions = async (source: CancelTokenSource): Promise<Tag[]> => {
   const response = await baseService.get('/games/tags/conditions', source)
-  return response.data.map((apiTag: ApiTag) => apiTagToTag(apiTag))
+  return sortTags(response.data.map((apiTag: ApiTag) => apiTagToTag(apiTag)))
 }
 
 const getUserTags = async (source: CancelTokenSource): Promise<Tag[]> => {
   const response = await baseService.get('/games/tags', source)
-  return response.data
+  return sortTags(response.data
     .filter((tag: ApiTag) => !tag.condition && !tag.weather_condition)
-    .map((tag: ApiTag) => apiTagToTag(tag))
+    .map((tag: ApiTag) => apiTagToTag(tag)))
 }
 
 export default {

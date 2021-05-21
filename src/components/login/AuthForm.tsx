@@ -238,7 +238,7 @@ const AuthForm: React.FC<Props> = props => {
                 className={classes.submit}
                 disabled={isSubmitting}
               >
-                Sign up
+                {isLogin ? "Sign in" : "Sign up"}
               </Button>
             </form>
           )

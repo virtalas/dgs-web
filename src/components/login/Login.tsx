@@ -62,7 +62,7 @@ const SignIn: React.FC<{}> = () => {
             Forgot password? (coming soon)
           </Link> */}
         </Grid>
-        <Grid item id="#signup">
+        <Grid item id="#signin">
           <Link href="#/register" variant="body2">
             Don't have an account? Sign up
           </Link>
