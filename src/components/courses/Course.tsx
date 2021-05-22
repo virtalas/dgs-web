@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
+import { CancelTokenSource } from 'axios'
 
 import { makeStyles } from '@material-ui/core/styles'
 import EditIcon from '@material-ui/icons/Edit'
@@ -16,10 +17,7 @@ import baseService from '../../services/baseService'
 const useStyles = makeStyles((theme) => ({
   page: {
     maxWidth: 600,
-    marginTop: theme.spacing(1),
-    marginLeft: 'auto',
-    marginRight: 'auto',
-    marginBottom: theme.spacing(1),    
+    margin: theme.spacing(1),
   },
   image: {
     width: '100%',
@@ -62,11 +60,13 @@ const Course: React.FC<Props> = (props) => {
   const [editCourseOpen, setEditCourseOpen] = useState(false)
   const [imgError, setImgError] = useState(false)
 
-  useEffect(() => {
-    const cancelTokenSource = baseService.cancelTokenSource()
-    coursesService.getCourse(courseId, cancelTokenSource).then(c => setCourse(c))
+  const cancelTokenSourceRef = useRef<CancelTokenSource | null>(null)
 
-    return () => cancelTokenSource?.cancel()
+  useEffect(() => {
+    cancelTokenSourceRef.current = baseService.cancelTokenSource()
+    coursesService.getCourse(courseId, cancelTokenSourceRef.current).then(c => setCourse(c))
+
+    return () => cancelTokenSourceRef.current?.cancel()
   }, [courseId])
 
   const coverPictureURL = undefined // TODO: ability to upload a picture, course.coverPictureURL
@@ -74,7 +74,8 @@ const Course: React.FC<Props> = (props) => {
   const handleEditCourse = () => setEditCourseOpen(true)
 
   const handleEditCourseFinished = (course: Course) => {
-    coursesService.updateCourse(course).then((c) => {
+    cancelTokenSourceRef.current = baseService.cancelTokenSource()
+    coursesService.updateCourse(course, cancelTokenSourceRef.current).then((c) => {
       setCourse(c)
       setEditCourseOpen(false)
     })
@@ -91,13 +92,13 @@ const Course: React.FC<Props> = (props) => {
     }
   }
 
-  const editCourseButton = (
+  const editCourseButton = course?.allowedToEdit ? (
     <IconButton id="editCourseButton" className={classes.editCourseButton} onClick={handleEditCourse}>
       <EditIcon />
     </IconButton>
-  )
+  ) : null
 
-  const editCourseModal = (
+  const editCourseModal = course?.allowedToEdit ? (
     <CancellableModal modalOpen={editCourseOpen} onClose={() => setEditCourseOpen(false)}>
       <EditCourse
         course={course}
@@ -105,78 +106,88 @@ const Course: React.FC<Props> = (props) => {
         handleCancel={() => setEditCourseOpen(false)}
       />
     </CancellableModal>
+  ) : null
+
+  const imageContainer = course ? (
+    <div className={classes.imageContainer}>
+      {(coverPictureURL && !imgError) ? (
+        <img
+          id="courseImage"
+          className={classes.image}
+          src={coverPictureURL}
+          alt="Course map"
+          onError={() => setImgError(true)}
+        />
+      ) : (
+        <Button
+          className={classes.mapPlaceholder}
+          size="small"
+          onClick={handleEditCourse}
+        >
+          Upload a picture
+        </Button>
+      )}
+    </div>
+  ) : (
+    <Skeleton className={classes.imageContainer} variant="rect" />
   )
+
+  const courseTitleRow = course ? (
+    <Grid
+      container
+      direction="row"
+      justify="flex-start"
+      alignItems="center"
+    >
+      <Typography id="courseNameCity" className={classes.title} variant="h4">
+        {course?.name}, {course?.city} {editCourseButton}
+      </Typography>
+    </Grid>
+  ) : (
+    <Skeleton variant="text" width={200} height={40} />
+  )
+
+  const statsTable = (
+    <Table size="small">
+      <TableHead>
+        <TableRow>
+          <TableCell></TableCell>
+          <TableCell>Me</TableCell>
+          <TableCell>All</TableCell>
+        </TableRow>
+      </TableHead>
+      <TableBody>
+        <TableRow>
+          <TableCell>Games played</TableCell>
+          <TableCell>x</TableCell>
+          <TableCell>x</TableCell>
+        </TableRow>
+        <TableRow>
+          <TableCell>Latest game</TableCell>
+          <TableCell>[x.x.x]</TableCell>
+          <TableCell>[x.x.x]</TableCell>
+        </TableRow>
+        <TableRow>
+          <TableCell>Average score</TableCell>
+          <TableCell>x</TableCell>
+          <TableCell>x</TableCell>
+        </TableRow>
+      </TableBody>
+    </Table>
+  )
+
+  const activeLayouts = course?.layouts.filter(layout => layout.active)
+  const inactiveLayouts = course?.layouts.filter(layout => !layout.active)
 
   return (
     <div id="coursePage" className={classes.page}>
-      {course ? (
-        <div className={classes.imageContainer}>
-          {(coverPictureURL && !imgError) ? (
-            <img
-              id="courseImage"
-              className={classes.image}
-              src={coverPictureURL}
-              alt="Course map"
-              onError={() => setImgError(true)}
-            />
-          ) : (
-            <Button
-              className={classes.mapPlaceholder}
-              size="small"
-              onClick={handleEditCourse}
-            >
-              Upload a picture
-            </Button>
-          )}
-        </div>
-      ) : (
-        <Skeleton className={classes.imageContainer} variant="rect" />
-      )}
-
+      {imageContainer}
       
-      {course ? (
-        <Grid
-          container
-          direction="row"
-          justify="flex-start"
-          alignItems="center"
-        >
-          <Typography id="courseNameCity" className={classes.title} variant="h4">
-            {course?.name}, {course?.city} {editCourseButton}
-          </Typography>
-        </Grid>
-      ) : (
-        <Skeleton variant="text" width={200} height={40} />
-      )}
+      {courseTitleRow}
       
       {editCourseModal}
 
-      <Table size="small">
-        <TableHead>
-          <TableRow>
-            <TableCell></TableCell>
-            <TableCell>Me</TableCell>
-            <TableCell>All</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          <TableRow>
-            <TableCell>Games played</TableCell>
-            <TableCell>x</TableCell>
-            <TableCell>x</TableCell>
-          </TableRow>
-          <TableRow>
-            <TableCell>Latest game</TableCell>
-            <TableCell>[x.x.x]</TableCell>
-            <TableCell>[x.x.x]</TableCell>
-          </TableRow>
-          <TableRow>
-            <TableCell>Average score</TableCell>
-            <TableCell>x</TableCell>
-            <TableCell>x</TableCell>
-          </TableRow>
-        </TableBody>
-      </Table>
+      {statsTable}
 
       <br />
 
@@ -188,23 +199,34 @@ const Course: React.FC<Props> = (props) => {
 
       <br />
 
-      <Typography variant="h5">Layouts</Typography>
+      <Typography variant="h5">Active layouts</Typography>
 
       <br />
 
-      {course?.layouts.map(layout => (
+      {course ? activeLayouts?.map(layout => (
         <LayoutPaper
           key={'layout-paper-' + layout.id}
           layout={layout}
           course={course}
           handleLayoutUpdated={handleLayoutUpdated}
         />
-      ))}
+      )) : null}
+
+      <Typography variant="h5">Inactive layouts</Typography>
+
+      <br />
+
+      {course ? inactiveLayouts?.map(layout => (
+        <LayoutPaper
+          key={'layout-paper-' + layout.id}
+          layout={layout}
+          course={course}
+          handleLayoutUpdated={handleLayoutUpdated}
+        />
+      )) : null}
 
       <Typography variant="h5">High scores</Typography>
-      <Typography>
-        [All scores] [My scores]
-      </Typography>
+      <Typography>[All scores] [My scores]</Typography>
 
       <Typography variant="h5">Scores per hole</Typography>
 

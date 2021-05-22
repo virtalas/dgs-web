@@ -5,8 +5,8 @@ import FormControl from '@material-ui/core/FormControl'
 import InputLabel from '@material-ui/core/InputLabel'
 import Select from '@material-ui/core/Select'
 import MenuItem from '@material-ui/core/MenuItem'
-import FormHelperText from '@material-ui/core/FormHelperText'
 import OutlinedInput from '@material-ui/core/OutlinedInput'
+import ListSubheader from '@material-ui/core/ListSubheader'
 
 import coursesService from '../../services/coursesService'
 import SortButton from './SortButton'
@@ -73,6 +73,11 @@ const CourseSelect: React.FC<Props> = (props) => {
 
   const handleLayoutChange = (event: React.ChangeEvent<{ value: unknown }>, value: any) => {
     const selectedLayoutId = value.props.value as string
+
+    if (!selectedLayoutId) {
+      return
+    }
+
     const selectedLayout = course?.layouts.find(layout => layout.id === selectedLayoutId) as Layout
     if (setLayout) {
       setLayout(selectedLayout)
@@ -119,6 +124,9 @@ const CourseSelect: React.FC<Props> = (props) => {
     </FormControl>
   )
 
+  const activeLayouts = course?.layouts.filter(layout => layout.active)
+  const inactiveLayouts = course?.layouts.filter(layout => !layout.active)
+
   const layoutSelect = (
     <FormControl variant="outlined" className={classes.formControl} error={layout === undefined && courses.length > 0}>
       <InputLabel ref={inputLabel} htmlFor="layout-select">Layout</InputLabel>
@@ -127,11 +135,22 @@ const CourseSelect: React.FC<Props> = (props) => {
         onChange={handleLayoutChange}
         input={<OutlinedInput labelWidth={labelWidth} name="layout" id="layout-select" />}
       >
-        {course?.layouts.map((layout, index) => (
-          <MenuItem value={layout.id} key={index}>{layout.name}{layout.active ? ' (active)' : ''}</MenuItem>
+        {activeLayouts && activeLayouts.length > 0 ? (
+          <ListSubheader>Active</ListSubheader>
+        ) : null}
+
+        {activeLayouts?.map((layout, index) => (
+          <MenuItem value={layout.id} key={index}>{layout.name}</MenuItem>
+        ))}
+        
+        {inactiveLayouts && inactiveLayouts.length > 0 ? (
+          <ListSubheader>Inactive</ListSubheader>
+        ) : null}
+
+        {inactiveLayouts?.map((layout, index) => (
+          <MenuItem value={layout.id} key={index}>{layout.name}</MenuItem>
         ))}
       </Select>
-      <FormHelperText>{!layout?.active ? 'This layout will become active.' : ''}</FormHelperText>
     </FormControl>
   )
 

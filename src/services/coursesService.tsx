@@ -1,4 +1,5 @@
 import { CancelTokenSource } from "axios"
+import { apiDetailedCourseToCourse, apiDetailedLayoutToLayout } from "../types/api/ModelMappers"
 
 import baseService from './baseService'
 
@@ -8,12 +9,12 @@ const getCourses = async (source: CancelTokenSource): Promise<Course[]> => {
 }
 
 const getCourse = async (courseId: string, source: CancelTokenSource): Promise<Course> => {
-  const response = await baseService.get(`/courses/${courseId}/course`, source)
-  return response.data
+  const response = await baseService.get(`/courses/${courseId}`, source)
+  return apiDetailedCourseToCourse(response.data)
 }
 
 const createLayout = async (courseId: string, layout: Layout, source: CancelTokenSource): Promise<Layout> => {
-  const response = await baseService.post(`/courses/${courseId}/layout`, source, {
+  const response = await baseService.post(`/courses/${courseId}/layouts`, source, {
     name: layout.name,
     description: layout.description,
     pars: layout.holes.map(hole => hole.par),
@@ -22,9 +23,12 @@ const createLayout = async (courseId: string, layout: Layout, source: CancelToke
   return response.data
 }
 
-const updateLayout = async (layout: Layout): Promise<Layout> => {
-  // TODO
-  return layout
+const updateLayoutActiveness = async (layout: Layout, source: CancelTokenSource): Promise<Layout> => {
+  const response = await baseService.put(`/courses/layouts/active`, source, {
+    id: layout.id,
+    active: layout.active
+  })
+  return response.data
 }
 
 const createCourse = async (course: Course, source: CancelTokenSource): Promise<Course> => {
@@ -35,9 +39,24 @@ const createCourse = async (course: Course, source: CancelTokenSource): Promise<
   return response.data
 }
 
-const updateCourse = async (course: Course): Promise<Course> => {
-  // TODO
-  return course
+const updateCourse = async (course: Course, source: CancelTokenSource): Promise<Course> => {
+  const response = await baseService.put('/courses', source, {
+    id: course.id,
+    name: course.name,
+    city: course.city,
+  })
+  return apiDetailedCourseToCourse(response.data)
+}
+
+const updateLayout = async (layout: Layout, source: CancelTokenSource): Promise<Layout> => {
+  const response = await baseService.put('/courses/layouts', source, {
+    id: layout.id,
+    active: layout.active,
+    name: layout.name,
+    description: layout.description,
+    mapURL: layout.mapURL,
+  })
+  return apiDetailedLayoutToLayout(response.data)
 }
 
 export default {
@@ -45,6 +64,7 @@ export default {
   getCourse,
   createLayout,
   createCourse,
-  updateLayout,
+  updateLayoutActiveness,
   updateCourse,
+  updateLayout,
 }

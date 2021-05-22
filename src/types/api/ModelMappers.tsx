@@ -116,6 +116,30 @@ export const apiCourseHighScoresToCourseHighScores = (highScores: ApiCourseHighS
   }
 }
 
+export const apiDetailedCourseToCourse = (apiDetailedCourse: ApiDetailedCourse): Course => {
+  return {
+    id: apiDetailedCourse.id,
+    name: apiDetailedCourse.name,
+    city: apiDetailedCourse.city,
+    layouts: apiDetailedCourse.layouts.map(apiDetailedLayout => apiDetailedLayoutToLayout(apiDetailedLayout)),
+    allowedToEdit: apiDetailedCourse.allowed_to_edit,
+    popularity: 0, // TODO
+  }
+}
+
+export const apiDetailedLayoutToLayout = (apiDetailedLayout: ApiDetailedLayout): Layout => {
+  return {
+    id: apiDetailedLayout.id,
+    active: apiDetailedLayout.active,
+    name: apiDetailedLayout.name,
+    description: apiDetailedLayout.description,
+    holes: apiDetailedLayout.holes,
+    total: apiDetailedLayout.total,
+    mapURL: apiDetailedLayout.mapURL,
+    allowedToEdit: apiDetailedLayout.allowed_to_edit,  
+  }
+}
+
 export function sortTags(tags: Tag[]): Tag[] {
   return tags.sort((a, b) => {
     return a.name > b.name ? 1 : -1

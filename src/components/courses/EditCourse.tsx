@@ -49,15 +49,13 @@ const EditCourse: React.FC<Props> = (props) => {
   }, [course, newCourse])
 
   const handleFinishClicked = () => {
-    const courseId = course ? course.id : ''
-    const layouts = course ? course.layouts : []
-    const numberOfGames = course ? course.popularity : 0
     const inputtedCourse = {
-      id: courseId,
+      id: course?.id ?? '',
       name: name,
       city: city,
-      layouts: layouts,
-      popularity: numberOfGames,
+      layouts: course ? course.layouts : [],
+      allowedToEdit: course?.allowedToEdit,
+      popularity: course?.popularity ?? 0,
     }
     handleFinish(inputtedCourse)
   }

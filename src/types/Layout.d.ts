@@ -6,4 +6,5 @@ interface Layout {
   holes: Hole[],
   total: number,
   mapURL: string,
+  allowedToEdit: boolean | undefined,
 }

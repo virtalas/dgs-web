@@ -125,16 +125,15 @@ const EditLayout: React.FC<Props> = (props) => {
   const numberOfZeroPars = holes.reduce((total, hole) => hole.par === 0 ? total + 1 : total, 0)
 
   const handleFinishClicked = () => {
-    const layoutId = layout ? layout.id : ''
-    const active = layout ? layout.active : false
     const inputtedLayout = {
-      id: layoutId,
-      active: active,
+      id: layout?.id ?? '',
+      active: layout?.active ?? false,
       name: name,
       description: description,
       mapURL: mapURL,
       holes: holes,
-      total: totalPar
+      total: totalPar,
+      allowedToEdit: layout?.allowedToEdit
     }
     handleFinish(inputtedLayout)
   }

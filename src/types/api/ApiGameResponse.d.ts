@@ -1,9 +1,3 @@
-interface ApiCourse {
-  id: string,
-  name: string,
-  city: string,
-}
-
 interface ApiPlayerScores {
   player_name: string,
   player_last_name: string | undefined,
