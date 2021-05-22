@@ -26,7 +26,7 @@ const NewSelection: React.FC<{}> = () => {
   const classes = useStyles()
 
   const [course, setCourse] = useState<Course>(
-    { id: '', name: 'No courses', city: '', layouts: [], allowedToEdit: undefined, popularity: 0 }
+    { id: '', name: 'No courses', city: '', layouts: [], allowedToEdit: undefined, numberOfGames: 0 }
   )
 
   const newLayoutButtonDisabled = course.id.length === 0

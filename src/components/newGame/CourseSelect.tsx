@@ -27,7 +27,6 @@ interface Props {
   setGameCreatable?: (creatable: boolean) => void,
 }
 
-// TODO: Layout selection when multiple active layouts
 // TODO: Spread controls out if there is space. They are too packed together on desktop.
 // TODO: Search function for courses.
 

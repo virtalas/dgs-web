@@ -2,6 +2,8 @@ interface ApiCourse {
   id: string,
   name: string,
   city: string,
+  layouts: Layout[],
+  number_of_games: number,
 }
 
 interface ApiDetailedCourse {
@@ -10,6 +12,7 @@ interface ApiDetailedCourse {
   city: string,
   layouts: ApiDetailedLayout[],
   allowed_to_edit: boolean,
+  number_of_games: number,
 }
 
 interface ApiDetailedLayout {

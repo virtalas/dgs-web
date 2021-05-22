@@ -1,11 +1,11 @@
 import { CancelTokenSource } from "axios"
-import { apiDetailedCourseToCourse, apiDetailedLayoutToLayout } from "../types/api/ModelMappers"
+import { apiDetailedCourseToCourse, apiDetailedLayoutToLayout, apiCourseToCourse } from "../types/api/ModelMappers"
 
 import baseService from './baseService'
 
 const getCourses = async (source: CancelTokenSource): Promise<Course[]> => {
   const response = await baseService.get('/courses', source)
-  return response.data
+  return response.data.map((apiCourse: ApiCourse) => apiCourseToCourse(apiCourse))
 }
 
 const getCourse = async (courseId: string, source: CancelTokenSource): Promise<Course> => {

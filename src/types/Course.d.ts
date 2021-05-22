@@ -4,5 +4,5 @@ interface Course {
   city: string,
   layouts: Layout[],
   allowedToEdit: boolean | undefined,
-  popularity: number, // TODO: Change to numberOfGames
+  numberOfGames: number,
 }

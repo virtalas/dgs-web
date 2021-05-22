@@ -25,14 +25,15 @@ const SortButton: React.FC<Props> = (props) => {
   const { courses, setCourses, sortByPopularity, setSortByPopularity } = props
 
   const handleSortChange = () => {
-    setCourses(sortCourses(courses, !sortByPopularity))
+    const sorted = sortCourses(courses, !sortByPopularity)
+    setCourses(sorted)
     setSortByPopularity(!sortByPopularity)
   }
 
   return (
     <FormControl variant="outlined" className={classes.formControl}>
       <FormHelperText>Sorted by</FormHelperText>
-      <Button variant="outlined" id="course-order" size="small" onClick={handleSortChange} disabled={true}>
+      <Button variant="outlined" id="course-order" size="small" onClick={handleSortChange}>
         {sortByPopularity ? 'Popularity' : 'Name'}
       </Button>
     </FormControl>
@@ -42,7 +43,7 @@ const SortButton: React.FC<Props> = (props) => {
 export function sortCourses(courses: Course[], sortByPopularity: boolean): Course[] {
   return courses.sort((a, b) => {
     if (sortByPopularity) {
-      return b.popularity - a.popularity
+      return b.numberOfGames - a.numberOfGames
     }
     return a.name > b.name ? 1 : -1
   })

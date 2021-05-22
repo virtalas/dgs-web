@@ -55,7 +55,7 @@ const EditCourse: React.FC<Props> = (props) => {
       city: city,
       layouts: course ? course.layouts : [],
       allowedToEdit: course?.allowedToEdit,
-      popularity: course?.popularity ?? 0,
+      numberOfGames: course?.numberOfGames ?? 0,
     }
     handleFinish(inputtedCourse)
   }

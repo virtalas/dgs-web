@@ -159,7 +159,7 @@ const Course: React.FC<Props> = (props) => {
       <TableBody>
         <TableRow>
           <TableCell>Games played</TableCell>
-          <TableCell>x</TableCell>
+          <TableCell>{course?.numberOfGames}</TableCell>
           <TableCell>x</TableCell>
         </TableRow>
         <TableRow>

@@ -116,6 +116,17 @@ export const apiCourseHighScoresToCourseHighScores = (highScores: ApiCourseHighS
   }
 }
 
+export const apiCourseToCourse = (apiCourse: ApiCourse): Course => {
+  return {
+    id: apiCourse.id,
+    name: apiCourse.name,
+    city: apiCourse.city,
+    layouts: apiCourse.layouts,
+    allowedToEdit: undefined,
+    numberOfGames: apiCourse.number_of_games,
+  }
+}
+
 export const apiDetailedCourseToCourse = (apiDetailedCourse: ApiDetailedCourse): Course => {
   return {
     id: apiDetailedCourse.id,
@@ -123,7 +134,7 @@ export const apiDetailedCourseToCourse = (apiDetailedCourse: ApiDetailedCourse):
     city: apiDetailedCourse.city,
     layouts: apiDetailedCourse.layouts.map(apiDetailedLayout => apiDetailedLayoutToLayout(apiDetailedLayout)),
     allowedToEdit: apiDetailedCourse.allowed_to_edit,
-    popularity: 0, // TODO
+    numberOfGames: apiDetailedCourse.number_of_games,
   }
 }
 
