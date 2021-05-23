@@ -8,6 +8,7 @@ import Typography from '@material-ui/core/Typography'
 
 import { sneakyGrey } from '../../constants/Colors'
 import Grid from '@material-ui/core/Grid'
+import { allowedToEditExplanation } from '../../constants/Strings'
 
 const inputMaxWidth = 400
 const inputWidth = '90%'
@@ -67,6 +68,11 @@ const useStyles = makeStyles((theme) => ({
   },
   totalPar: {
     marginTop: theme.spacing(2),
+  },
+  explanation: {
+    marginTop: theme.spacing(2),
+    width: '70%',
+    textAlign: 'center',
   },
 }))
 
@@ -177,7 +183,8 @@ const EditLayout: React.FC<Props> = (props) => {
         onClick={handleCountDecrease}
       >
         –
-          </Button>
+      </Button>
+
       <TextField
         className={classes.countInput}
         label="Number of holes"
@@ -187,13 +194,14 @@ const EditLayout: React.FC<Props> = (props) => {
         type="number"
         onChange={handleHoleCountChange}
       />
+
       <Button
         className={classes.countButton}
         variant="outlined"
         onClick={handleCountIncrease}
       >
         +
-          </Button>
+      </Button>
     </Grid>
   )
 
@@ -305,6 +313,17 @@ const EditLayout: React.FC<Props> = (props) => {
           >
             {newLayout ? 'Create' : 'Update'}
           </Button>
+        </Grid>
+
+        <Grid
+          container
+          direction="row"
+          justify="center"
+          alignItems="center"
+        >
+          <Typography className={classes.explanation} component="p" variant="caption">
+            {allowedToEditExplanation + 'layout.'}
+          </Typography>
         </Grid>
       </Grid>
     </div>

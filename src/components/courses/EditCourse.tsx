@@ -4,6 +4,7 @@ import { makeStyles } from '@material-ui/core/styles'
 import TextField from '@material-ui/core/TextField'
 import Typography from '@material-ui/core/Typography'
 import Button from '@material-ui/core/Button'
+import { allowedToEditExplanation } from '../../constants/Strings'
 
 const inputMaxWidth = 400
 const inputWidth = '90%'
@@ -20,6 +21,11 @@ const useStyles = makeStyles((theme) => ({
   createButton: {
     margin: theme.spacing(3),
     marginBottom: 0,
+  },
+  explanation: {
+    marginTop: theme.spacing(2),
+    width: '70%',
+    textAlign: 'left',
   },
 }))
 
@@ -104,6 +110,10 @@ const EditCourse: React.FC<Props> = (props) => {
       >
         {newCourse ? 'Create' : 'Update'}
       </Button>
+
+      <Typography className={classes.explanation} component="p" variant="caption">
+        {allowedToEditExplanation + 'course.'}
+      </Typography>
     </div>
   )
 }
