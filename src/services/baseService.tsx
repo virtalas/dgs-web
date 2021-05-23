@@ -30,6 +30,16 @@ const put = (endpoint: string, source: CancelTokenSource, data?: any) => {
   })
 }
 
+const delete_ = (endpoint: string, source: CancelTokenSource, data?: any) => {
+  return axios.delete(API_ROOT + endpoint, {
+    cancelToken: source.token,
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: data,
+  })
+}
+
 const cancelTokenSource = (): CancelTokenSource => {
   return axios.CancelToken.source()
 }
@@ -82,6 +92,7 @@ export default {
   get,
   post,
   put,
+  delete_,
   cancelTokenSource,
   useTokenExpiryChecker,
   removeTokenExpiryChecker,

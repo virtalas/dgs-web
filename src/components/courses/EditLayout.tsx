@@ -66,6 +66,10 @@ const useStyles = makeStyles((theme) => ({
     margin: theme.spacing(3),
     marginBottom: 0,
   },
+  deleteButton: {
+    margin: theme.spacing(2),
+    marginBottom: 0,
+  },
   totalPar: {
     marginTop: theme.spacing(2),
   },
@@ -81,6 +85,7 @@ interface Props {
   course: Course,
   handleFinish: (layout: Layout) => void,
   handleCancel?: () => void,
+  handleDelete?: () => void,
 }
 
 // TODO: edit hole numbers: Button opens a modal with inputs 'Starts with hole number: ...', 'choose hole to delete'.
@@ -90,7 +95,7 @@ interface Props {
 const EditLayout: React.FC<Props> = (props) => {
   const classes = useStyles()
 
-  const { layout, course, handleFinish, handleCancel } = props
+  const { layout, course, handleFinish, handleCancel, handleDelete } = props
   const newLayout = layout ? false : true
 
   const [name, setName] = useState('')
@@ -219,6 +224,16 @@ const EditLayout: React.FC<Props> = (props) => {
     />
   ))
 
+  const deleteButton = !newLayout ? (
+    <Button
+      className={classes.deleteButton}
+      color="secondary"
+      onClick={() => handleDelete ? handleDelete() : null}
+    >
+      Delete
+    </Button>
+  ) : null
+
   return (
     <div id="editLayout" className={classes.page}>
       <Grid
@@ -324,6 +339,15 @@ const EditLayout: React.FC<Props> = (props) => {
           <Typography className={classes.explanation} component="p" variant="caption">
             {allowedToEditExplanation + 'layout.'}
           </Typography>
+        </Grid>
+
+        <Grid
+          container
+          direction="row"
+          justify="center"
+          alignItems="center"
+        >
+          {deleteButton}
         </Grid>
       </Grid>
     </div>

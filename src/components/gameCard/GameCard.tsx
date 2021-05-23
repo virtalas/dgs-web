@@ -45,6 +45,7 @@ const DatePicker = withStyles({
 interface Props {
   game: Game,
   setGame: (game: Game) => void,
+  onGameDeleted?: (game: Game) => void,
   editOnly?: boolean,
   autoUpdating?: boolean,
   disableScoreEditing?: boolean,
@@ -68,6 +69,7 @@ const GameCard: React.FC<Props> = (props) => {
   const {
     game,
     setGame,
+    onGameDeleted,
     editOnly,
     autoUpdating,
     disableScoreEditing,
@@ -153,7 +155,18 @@ const GameCard: React.FC<Props> = (props) => {
       game.endDate = newDate
       setGame(game)
     }
-  }                       
+  }
+
+  const handleDelete = () => {
+    // TODO: Use Material ui Dialog component
+    if (!window.confirm('Delete game?')) {
+      return
+    }
+
+    cancelTokenSourceRef.current = baseService.cancelTokenSource()
+    gamesService.deleteGame(game, cancelTokenSourceRef.current)
+      .then(() => onGameDeleted ? onGameDeleted(game) : null)
+  }
   
   const showLoading = ((updating || autoUpdating) && !updateError) ?? false
 
@@ -184,6 +197,16 @@ const GameCard: React.FC<Props> = (props) => {
       position="bottom"
       secondary={true}
       onClick={handleCancelEdit}
+    />
+  ) : null
+
+  const deleteButton = isEditing && !editOnly ? (
+    <ActionButton
+      variant="delete"
+      position="bottom"
+      third={true}
+      loading={showLoading}
+      onClick={handleDelete}
     />
   ) : null
 
@@ -231,6 +254,7 @@ const GameCard: React.FC<Props> = (props) => {
 
       {isEditing ? gameDateEditing : gameDate}
 
+      {deleteButton}
       {cancelButton}
       {actionButton}
 

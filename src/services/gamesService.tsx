@@ -60,6 +60,13 @@ const updateGame = async (game: Game, userId: string | undefined, source: Cance
   return apiGameResponseToGame(response.data)
 }
 
+const deleteGame = async (game: Game, source: CancelTokenSource): Promise<{}> => {
+  const response = await baseService.delete_('/games', source, {
+    id: game.id,
+  })
+  return response.data
+}
+
 const getAvailableConditions = async (source: CancelTokenSource): Promise<Tag[]> => {
   const response = await baseService.get('/games/tags/conditions', source)
   return sortTags(response.data.map((apiTag: ApiTag) => apiTagToTag(apiTag)))
@@ -80,4 +87,5 @@ export default {
   updateGame,
   getUserTags,
   getAvailableConditions,
+  deleteGame,
 }

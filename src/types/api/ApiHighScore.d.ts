@@ -2,7 +2,7 @@ interface ApiLayoutHighScore {
   layout_name: string,
   to_par: number,
   game_id: string,
-  game_start_date: Date,
+  game_end_date: Date,
 }
 
 interface ApiCourseHighScores {

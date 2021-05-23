@@ -34,7 +34,7 @@ const SortButton: React.FC<Props> = (props) => {
     <FormControl variant="outlined" className={classes.formControl}>
       <FormHelperText>Sorted by</FormHelperText>
       <Button variant="outlined" id="course-order" size="small" onClick={handleSortChange}>
-        {sortByPopularity ? 'Popularity' : 'Name'}
+        {sortByPopularity ? 'Most played' : 'Name'}
       </Button>
     </FormControl>
   )

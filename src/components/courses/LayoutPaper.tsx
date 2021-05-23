@@ -30,12 +30,13 @@ interface Props {
   layout: Layout,
   course: Course,
   handleLayoutUpdated: (layout: Layout) => void,
+  handleLayoutDeleted: (layout: Layout) => void,
 }
 
 const LayoutPaper: React.FC<Props> = (props) => {
   const classes = useStyles()
 
-  const { layout, course, handleLayoutUpdated } = props
+  const { layout, course, handleLayoutUpdated, handleLayoutDeleted } = props
   const [modalOpen, setModalOpen] = useState(false)
 
   const cancelTokenSourceRef = useRef<CancelTokenSource | null>(null)
@@ -63,6 +64,16 @@ const LayoutPaper: React.FC<Props> = (props) => {
       handleLayoutUpdated(updatedLayout)
       setModalOpen(false)
     })
+  }
+
+  const handleDelete = () => {
+    if (!window.confirm('Delete this layout? All games on this layout will be deleted as well.')) {
+      return
+    }
+
+    cancelTokenSourceRef.current = baseService.cancelTokenSource()
+    coursesService.deleteLayout(layout, cancelTokenSourceRef.current)
+      .then(() => handleLayoutDeleted ? handleLayoutDeleted(layout) : null)
   }
 
   const editButton = layout.allowedToEdit ? (
@@ -136,6 +147,7 @@ const LayoutPaper: React.FC<Props> = (props) => {
           course={course}
           handleFinish={handleUpdateLayout}
           handleCancel={() => setModalOpen(false)}
+          handleDelete={handleDelete}
         />
       </CancellableModal>
     </Paper>

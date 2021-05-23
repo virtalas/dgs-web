@@ -108,7 +108,7 @@ export const apiCourseHighScoresToCourseHighScores = (highScores: ApiCourseHighS
     layoutHighScores: highScores.layout_high_scores.map(hs => {
       return {
         gameId: hs.game_id,
-        gameStartDate: new Date(hs.game_start_date),
+        gameEndDate: new Date(hs.game_end_date),
         layoutName: hs.layout_name,
         toPar: hs.to_par,
       }

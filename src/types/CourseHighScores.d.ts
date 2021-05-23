@@ -2,7 +2,7 @@ interface LayoutHighScore {
   layoutName: string,
   toPar: number,
   gameId: string,
-  gameStartDate: Date,
+  gameEndDate: Date,
 }
 
 interface CourseHighScores {

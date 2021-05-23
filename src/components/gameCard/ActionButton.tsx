@@ -6,6 +6,7 @@ import ErrorOutlineIcon from '@material-ui/icons/ErrorOutline'
 import EditIcon from '@material-ui/icons/Edit'
 import DoneIcon from '@material-ui/icons/Done'
 import ClearIcon from '@material-ui/icons/Clear'
+import DeleteIcon from '@material-ui/icons/Delete'
 import CircularProgress from '@material-ui/core/CircularProgress'
 
 const useStyles = makeStyles((theme) => ({
@@ -27,6 +28,11 @@ const useStyles = makeStyles((theme) => ({
     bottom: 10,
     right: 55,
   },
+  actionAreaBottomThird: {
+    position: 'absolute',
+    bottom: 10,
+    right: 100,
+  },
   spinner: {
     padding: 5,
   },
@@ -40,9 +46,10 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 interface Props {
-  variant:  'ok' | 'edit' | 'cancel' | 'loadingOnly',
+  variant:  'ok' | 'edit' | 'cancel' | 'delete' | 'loadingOnly',
   position: 'top' | 'bottom',
   secondary?: boolean,
+  third?: boolean,
   loading?: boolean,
   error?: boolean,
   fillBackground?: boolean,
@@ -51,7 +58,7 @@ interface Props {
 
 const ActionButton: React.FC<Props> = (props) => {
   const classes = useStyles()
-  const { variant, position, secondary, loading, error, fillBackground, onClick } = props
+  const { variant, position, secondary, third, loading, error, fillBackground, onClick } = props
 
   let className = position === 'top' ? classes.actionAreaTopRight : classes.actionAreaBottomRight
   
@@ -61,6 +68,8 @@ const ActionButton: React.FC<Props> = (props) => {
 
   if (secondary) {
     className = classes.actionAreaBottomSecondary
+  } else if (third) {
+    className = classes.actionAreaBottomThird
   }
 
   const progressSpinner = (
@@ -86,6 +95,9 @@ const ActionButton: React.FC<Props> = (props) => {
       break
     case 'cancel':
       icon = <ClearIcon />
+      break
+    case 'delete':
+      icon = <DeleteIcon />
       break
     default:
       icon = null

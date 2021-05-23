@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react'
+import { Redirect } from 'react-router-dom'
 import { CancelTokenSource } from 'axios'
 
 import { makeStyles } from '@material-ui/core/styles'
@@ -59,6 +60,7 @@ const Course: React.FC<Props> = (props) => {
   const [course, setCourse] = useState<Course>()
   const [editCourseOpen, setEditCourseOpen] = useState(false)
   const [imgError, setImgError] = useState(false)
+  const [redirect, setRedirect] = useState(false)
 
   const cancelTokenSourceRef = useRef<CancelTokenSource | null>(null)
 
@@ -68,6 +70,10 @@ const Course: React.FC<Props> = (props) => {
 
     return () => cancelTokenSourceRef.current?.cancel()
   }, [courseId])
+
+  if (redirect) {
+    return <Redirect push to={'/courses'} />
+  }
 
   const coverPictureURL = undefined // TODO: ability to upload a picture, course.coverPictureURL
 
@@ -92,6 +98,24 @@ const Course: React.FC<Props> = (props) => {
     }
   }
 
+  const handleDeleteCourse = () => {
+    if (!window.confirm('Delete this course? All layouts and games on this course will be deleted as well.')) {
+      return
+    }
+
+    if (course) {
+      cancelTokenSourceRef.current = baseService.cancelTokenSource()
+      coursesService.deleteCourse(course, cancelTokenSourceRef.current).then(() => setRedirect(true))
+    }
+  }
+
+  const handleLayoutDeleted = (layout: Layout) => {
+    if (course) {
+      const updatedLayouts = course?.layouts.filter(l => l.id !== layout.id)
+      setCourse({...course, layouts: updatedLayouts})
+    }
+  }
+
   const editCourseButton = course?.allowedToEdit ? (
     <IconButton id="editCourseButton" className={classes.editCourseButton} onClick={handleEditCourse}>
       <EditIcon />
@@ -104,6 +128,7 @@ const Course: React.FC<Props> = (props) => {
         course={course}
         handleFinish={handleEditCourseFinished}
         handleCancel={() => setEditCourseOpen(false)}
+        handleDelete={handleDeleteCourse}
       />
     </CancellableModal>
   ) : null
@@ -209,6 +234,7 @@ const Course: React.FC<Props> = (props) => {
           layout={layout}
           course={course}
           handleLayoutUpdated={handleLayoutUpdated}
+          handleLayoutDeleted={handleLayoutDeleted}
         />
       )) : null}
 
@@ -222,6 +248,7 @@ const Course: React.FC<Props> = (props) => {
           layout={layout}
           course={course}
           handleLayoutUpdated={handleLayoutUpdated}
+          handleLayoutDeleted={handleLayoutDeleted}
         />
       )) : null}
 

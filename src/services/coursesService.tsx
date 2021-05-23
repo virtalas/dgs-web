@@ -59,6 +59,20 @@ const updateLayout = async (layout: Layout, source: CancelTokenSource): Promise<
   return apiDetailedLayoutToLayout(response.data)
 }
 
+const deleteCourse = async (course: Course, source: CancelTokenSource): Promise<{}> => {
+  const response = await baseService.delete_('/courses', source, {
+    id: course.id,
+  })
+  return response.data
+}
+
+const deleteLayout = async (layout: Layout, source: CancelTokenSource): Promise<{}> => {
+  const response = await baseService.delete_('/courses/layouts', source, {
+    id: layout.id,
+  })
+  return response.data
+}
+
 export default {
   getCourses,
   getCourse,
@@ -67,4 +81,6 @@ export default {
   updateLayoutActiveness,
   updateCourse,
   updateLayout,
+  deleteCourse,
+  deleteLayout,
 }

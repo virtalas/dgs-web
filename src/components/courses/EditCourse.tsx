@@ -22,6 +22,10 @@ const useStyles = makeStyles((theme) => ({
     margin: theme.spacing(3),
     marginBottom: 0,
   },
+  deleteButton: {
+    margin: theme.spacing(2),
+    marginBottom: 0,
+  },
   explanation: {
     marginTop: theme.spacing(2),
     width: '70%',
@@ -33,6 +37,7 @@ interface Props {
   course?: Course, // Course to edit, undefined if it's new.
   handleFinish: (course: Course) => void,
   handleCancel?: () => void,
+  handleDelete?: () => void,
 }
 
 // TODO: Feature for uploading a picture of the course. (use same preview as NewLayout.tsx)
@@ -40,7 +45,7 @@ interface Props {
 const EditCourse: React.FC<Props> = (props) => {
   const classes = useStyles()
 
-  const { course, handleFinish, handleCancel } = props
+  const { course, handleFinish, handleCancel, handleDelete } = props
 
   const [name, setName] = useState('')
   const [city, setCity] = useState('')
@@ -65,6 +70,16 @@ const EditCourse: React.FC<Props> = (props) => {
     }
     handleFinish(inputtedCourse)
   }
+
+  const deleteButton = !newCourse ? (
+    <Button
+      className={classes.deleteButton}
+      color="secondary"
+      onClick={() => handleDelete ? handleDelete() : null}
+    >
+      Delete
+    </Button>
+  ) : null
 
   return (
     <div className={classes.page}>
@@ -114,6 +129,8 @@ const EditCourse: React.FC<Props> = (props) => {
       <Typography className={classes.explanation} component="p" variant="caption">
         {allowedToEditExplanation + 'course.'}
       </Typography>
+
+      {deleteButton}
     </div>
   )
 }

@@ -106,7 +106,7 @@ const HighScores: React.FC<Props> = (props) => {
           onClick={handleGameClick}
           value={layoutHighScore.gameId}
         >
-          {layoutHighScore.gameStartDate.toLocaleString('fi-FI', dateOptions)}
+          {layoutHighScore.gameEndDate.toLocaleString('fi-FI', dateOptions)}
         </Button>
       </TableCell>
     </TableRow>

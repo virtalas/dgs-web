@@ -146,6 +146,11 @@ const Games: React.FC<Props> = (props) => {
     setGames([...updatedGames])
   }
 
+  const onGameDeleted = (game: Game) => {
+    const updatedGames = games.filter(g => g.id !== game.id)
+    setGames([...updatedGames])
+  }
+
   const handleShowAllButton = () => setRedirect(true)
 
   const monthControls = selectedYear && selectedMonth ? (
@@ -176,6 +181,7 @@ const Games: React.FC<Props> = (props) => {
       <GameList
         gamesToShow={gamesToShow}
         setGame={setGame}
+        onGameDeleted={onGameDeleted}
         availableWeatherConditions={availableWeatherConditions}
         availableConditions={availableConditions}
         isLoading={isLoading}

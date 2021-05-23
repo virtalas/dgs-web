@@ -46,6 +46,7 @@ const useStyles = makeStyles((theme) => ({
 interface Props {
   gamesToShow: Game[],
   setGame: (game: Game) => void,
+  onGameDeleted: (game: Game) => void,
   availableWeatherConditions: Tag[],
   availableConditions: Tag[],
   isLoading: boolean,
@@ -56,7 +57,7 @@ interface Props {
 const GameList: React.FC<Props> = (props) => {
   const classes = useStyles()
 
-  const { gamesToShow, setGame, availableWeatherConditions, availableConditions, isLoading, isError, onEditToggle } = props
+  const { gamesToShow, setGame, onGameDeleted, availableWeatherConditions, availableConditions, isLoading, isError, onEditToggle } = props
   
   return (
     <div>
@@ -66,6 +67,7 @@ const GameList: React.FC<Props> = (props) => {
             <GameCard
               game={game}
               setGame={setGame}
+              onGameDeleted={onGameDeleted}
               availableWeatherConditions={availableWeatherConditions}
               availableConditions={availableConditions}
               onEditToggle={onEditToggle}
