@@ -40,9 +40,6 @@ const useStyles = makeStyles((theme) => ({
     marginRight: 40,
     color: 'red',
   },
-  filledBackground: {
-    backgroundColor: 'white',
-  },
 }))
 
 interface Props {
@@ -52,20 +49,15 @@ interface Props {
   third?: boolean,
   loading?: boolean,
   error?: boolean,
-  fillBackground?: boolean,
   onClick: () => void,
 }
 
 const ActionButton: React.FC<Props> = (props) => {
   const classes = useStyles()
-  const { variant, position, secondary, third, loading, error, fillBackground, onClick } = props
+  const { variant, position, secondary, third, loading, error, onClick } = props
 
   let className = position === 'top' ? classes.actionAreaTopRight : classes.actionAreaBottomRight
   
-  if (fillBackground) {
-    className = className + ' ' + classes.filledBackground
-  }
-
   if (secondary) {
     className = classes.actionAreaBottomSecondary
   } else if (third) {

@@ -10,28 +10,26 @@ const useStyles = makeStyles(() => ({
     width: '100%',
     paddingRight: 80,
   },
-  buttonsContainer: {
-    backgroundColor: 'red',
-    background: 'red',
-  },
 }))
 
 interface Props {
   game: Game,
   userId: string | undefined,
   sendGame: (game?: Game) => void,
+  setIsCommentPromptDirty: (isDirty: boolean) => void,
 }
 
 const PlayerCommentInput: React.FC<Props> = (props) => {
   const classes = useStyles()
-  const { game, userId, sendGame } = props
+  const { game, userId, sendGame, setIsCommentPromptDirty } = props
 
-  const [commentContent, setCommentContent] = useState<string>('')
+  const [commentContent, setCommentContent] = useState('')
 
   let loading = false
 
   const handleNewPlayerCommentChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setCommentContent(event.target.value)
+    setIsCommentPromptDirty(event.target.value.length > 0)
   }
 
   const handleSendComment = () => {
@@ -56,7 +54,14 @@ const PlayerCommentInput: React.FC<Props> = (props) => {
     }
 
     game.comments = updatedComments
+    setCommentContent('')
+    setIsCommentPromptDirty(false)
     sendGame(game)
+  }
+
+  const handleCancelComment = () => {
+    setCommentContent('')
+    setIsCommentPromptDirty(false)
   }
 
   const cancelButton = loading ? null : (
@@ -64,7 +69,7 @@ const PlayerCommentInput: React.FC<Props> = (props) => {
       variant="cancel"
       position="bottom"
       secondary={true}
-      onClick={() => setCommentContent('')}
+      onClick={handleCancelComment}
     />
   )
 
@@ -76,7 +81,6 @@ const PlayerCommentInput: React.FC<Props> = (props) => {
         variant="ok"
         position="bottom"
         loading={loading}
-        fillBackground={true}
         onClick={handleSendComment}
       />
     </div>

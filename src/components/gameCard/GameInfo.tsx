@@ -38,11 +38,22 @@ interface Props {
   availableWeatherConditions: Tag[],
   availableConditions: Tag[],
   userId: string | undefined,
+  setIsCommentPromptDirty: (isDirty: boolean) => void,
 }
 
 const GameInfo: React.FC<Props> = (props) => {
   const classes = useStyles()
-  const { game, setGame, sendGame, show, isEditing, availableWeatherConditions, availableConditions, userId } = props
+  const {
+    game,
+    setGame,
+    sendGame,
+    show,
+    isEditing,
+    availableWeatherConditions,
+    availableConditions,
+    userId,
+    setIsCommentPromptDirty,
+  } = props
   const shouldShowInfoPaper = show
 
   // eslint-disable-next-line
@@ -155,7 +166,12 @@ const GameInfo: React.FC<Props> = (props) => {
       {comments}
 
       {showCommentPrompt ? (
-        <PlayerCommentInput game={game} userId={userId} sendGame={sendGameCommentUpdate} />
+        <PlayerCommentInput
+          game={game}
+          userId={userId}
+          sendGame={sendGameCommentUpdate}
+          setIsCommentPromptDirty={setIsCommentPromptDirty}
+        />
       ) : null}
     </Paper>
   ) : null

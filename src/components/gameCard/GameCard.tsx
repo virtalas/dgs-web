@@ -79,6 +79,7 @@ const GameCard: React.FC<Props> = (props) => {
   } = props
 
   const [isEditing, setIsEditing] = useState(editOnly ? true : false) // to get rid of undefined
+  const [isCommentPromptDirty, setIsCommentPromptDirty] = useState(false)
   const [updating, setUpdating] = useState(false)
   const [updateError, setUpdateError] = useState(false)
   const [originalGame, setOriginalGame] = useState<Game>()
@@ -170,7 +171,7 @@ const GameCard: React.FC<Props> = (props) => {
   
   const showLoading = ((updating || autoUpdating) && !updateError) ?? false
 
-  const editButton = allowedToEdit && !editOnly ? (
+  const editButton = allowedToEdit && !editOnly && !isCommentPromptDirty ? (
     <ActionButton
       variant="edit"
       position={gameInfoIsShown ? 'bottom' : 'top'}
@@ -269,6 +270,7 @@ const GameCard: React.FC<Props> = (props) => {
         availableWeatherConditions={availableWeatherConditions}
         availableConditions={availableConditions}
         userId={userId}
+        setIsCommentPromptDirty={setIsCommentPromptDirty}
       />
     </BlueCard>
   )

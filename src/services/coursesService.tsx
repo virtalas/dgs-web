@@ -9,12 +9,12 @@ const getCourses = async (source: CancelTokenSource): Promise<Course[]> => {
 }
 
 const getCourse = async (courseId: string, source: CancelTokenSource): Promise<Course> => {
-  const response = await baseService.get(`/courses/${courseId}`, source)
+  const response = await baseService.get(`/courses/${courseId}/course`, source)
   return apiDetailedCourseToCourse(response.data)
 }
 
 const createLayout = async (courseId: string, layout: Layout, source: CancelTokenSource): Promise<Layout> => {
-  const response = await baseService.post(`/courses/${courseId}/layouts`, source, {
+  const response = await baseService.post(`/courses/${courseId}/layout`, source, {
     name: layout.name,
     description: layout.description,
     pars: layout.holes.map(hole => hole.par),

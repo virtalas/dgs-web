@@ -19,7 +19,7 @@ export const apiGameResponseToGame = (gameResponse: ApiGameResponse): Game => {
     creatorId: gameResponse.game.creator_id,
     courseName: gameResponse.course.name,
     layout: { ...gameResponse.layout, total: layoutTotalPar},
-    startDate: new Date(gameResponse.game.start_date),
+    startDate: gameResponse.game.start_date ? new Date(gameResponse.game.start_date) : undefined,
     endDate: new Date(gameResponse.game.end_date),
     temperature: gameResponse.game.temperature,
     comments: gameResponse.game.comments.map(apiComment => apiCommentToComment(apiComment)),
