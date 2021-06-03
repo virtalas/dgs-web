@@ -151,6 +151,15 @@ export const apiDetailedLayoutToLayout = (apiDetailedLayout: ApiDetailedLayout):
   }
 }
 
+export function sortCourses(courses: Course[], sortByPopularity: boolean): Course[] {
+  return courses.sort((a, b) => {
+    if (sortByPopularity) {
+      return b.numberOfGames - a.numberOfGames
+    }
+    return a.name > b.name ? 1 : -1
+  })
+}
+
 export function sortTags(tags: Tag[]): Tag[] {
   return tags.sort((a, b) => {
     return a.name > b.name ? 1 : -1

@@ -10,7 +10,7 @@ import ListSubheader from '@material-ui/core/ListSubheader'
 
 import coursesService from '../../services/coursesService'
 import SortButton from './SortButton'
-import { sortCourses } from './SortButton'
+import { sortCourses } from '../../types/api/ModelMappers'
 import baseService from '../../services/baseService'
 
 const useStyles = makeStyles((theme) => ({

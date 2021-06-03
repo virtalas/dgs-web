@@ -4,6 +4,7 @@ import { makeStyles } from '@material-ui/core/styles'
 import Button from '@material-ui/core/Button'
 import FormControl from '@material-ui/core/FormControl'
 import FormHelperText from '@material-ui/core/FormHelperText'
+import { sortCourses } from '../../types/api/ModelMappers'
 
 const useStyles = makeStyles((theme) => ({
   formControl: {
@@ -38,15 +39,6 @@ const SortButton: React.FC<Props> = (props) => {
       </Button>
     </FormControl>
   )
-}
-
-export function sortCourses(courses: Course[], sortByPopularity: boolean): Course[] {
-  return courses.sort((a, b) => {
-    if (sortByPopularity) {
-      return b.numberOfGames - a.numberOfGames
-    }
-    return a.name > b.name ? 1 : -1
-  })
 }
 
 export default SortButton
