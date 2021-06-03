@@ -18,6 +18,14 @@ const useStyles = makeStyles((theme) => ({
   page: {
     margin: 20,
   },
+  
+  // Used to fix/mask a bug that appears in Safari:
+  // The text color does not change to white going from disabled to enabled.
+  disabledButton: {
+    "&:disabled": {
+      color: 'white',
+    }
+  },
 }))
 
 // TODO: Update style: Don't use outlined buttons.
@@ -67,6 +75,8 @@ const NewGame: React.FC<{}> = () => {
     return <Redirect to={'/games/' + newGameId + "/input"} />
   }
 
+  const newGameButtonDisabled = !gameCreatable || layout === undefined
+
   return (
     <div id="newGamePage" className={classes.page}>
       <CourseSelect
@@ -74,6 +84,7 @@ const NewGame: React.FC<{}> = () => {
         setLayout={setLayout}
         setGameCreatable={setGameCreatable}
       />
+
       <PlayerSelect
         players={players}
         setPlayers={setPlayers}
@@ -81,6 +92,7 @@ const NewGame: React.FC<{}> = () => {
         setGameCreatable={setGameCreatable}
       />
       <br/>
+
       <NewGuestButton
         setPlayers={setPlayers}
         players={players}
@@ -88,12 +100,14 @@ const NewGame: React.FC<{}> = () => {
         allPlayers={allPlayers}
       />
       <br/>
+
       <Button
         id="newGameButton"
+        classes={{ disabled: classes.disabledButton }}
         variant="contained"
         color="primary"
         onClick={handleStartButtonClick}
-        disabled={!gameCreatable || layout === undefined}
+        disabled={newGameButtonDisabled}
       >
         New game
       </Button>
