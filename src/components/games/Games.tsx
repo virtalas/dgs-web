@@ -62,7 +62,7 @@ const Games: React.FC<Props> = (props) => {
   const cancelTokenSourceRef = useRef<CancelTokenSource | null>(null)
 
   const fetchGames = () => {
-    if (selectedYear && selectedMonth) {
+    if (selectedYear !== undefined && selectedMonth !== undefined) {
       cancelTokenSourceRef.current = baseService.cancelTokenSource()
       gamesService.getGames(selectedYear, selectedMonth, cancelTokenSourceRef.current).then(fetchedGames => {
         setFetchedMonths(months => months.concat([selectedMonth])) // Mark games for this month as fetched.
@@ -153,7 +153,7 @@ const Games: React.FC<Props> = (props) => {
 
   const handleShowAllButton = () => setRedirect(true)
 
-  const monthControls = selectedYear && selectedMonth ? (
+  const monthControls = selectedYear !== undefined && selectedMonth !== undefined ? (
     <MonthControls
       selectedMonth={selectedMonth}
       setSelectedMonth={setSelectedMonth}
