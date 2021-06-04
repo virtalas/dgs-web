@@ -111,7 +111,7 @@ const LayoutPaper: React.FC<Props> = (props) => {
       {layout.holes.map((hole, index) => (
         <div key={'layout-par-' + index}>
           <Box className={classes.layoutParBox} fontWeight="fontWeightBold">
-            {index + 1}
+            {hole.number}
           </Box>
           <Box className={classes.layoutParBox}>
             {hole.par}

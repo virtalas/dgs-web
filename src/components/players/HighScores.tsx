@@ -23,7 +23,7 @@ const useStyles = makeStyles((theme) => ({
     margin: theme.spacing(2),
   },
   indentedText: {
-    paddingLeft: theme.spacing(2),
+    paddingLeft: theme.spacing(3),
   }
 }))
 
@@ -79,7 +79,7 @@ const HighScores: React.FC<Props> = (props) => {
   const courseNameRow = (courseHighScores: CourseHighScores) => (
     <TableRow key={'scoreRow' + courseHighScores.courseName}>
       <TableCell align="left">
-        {courseHighScores.courseName}
+        <b>{courseHighScores.courseName}</b>
       </TableCell>
       <TableCell></TableCell>
       <TableCell></TableCell>

@@ -19,6 +19,8 @@ const useStyles = makeStyles((theme) => ({
   page: {
     maxWidth: 600,
     margin: theme.spacing(1),
+    marginLeft: 'auto',
+    marginRight: 'auto',
   },
   image: {
     width: '100%',
@@ -36,9 +38,13 @@ const useStyles = makeStyles((theme) => ({
   },
   title: {
     marginTop: theme.spacing(2),
+    marginLeft: theme.spacing(2),
   },
   editCourseButton: {
     marginLeft: theme.spacing(1),
+  },
+  sectionTitle: {
+    marginLeft: theme.spacing(2),
   },
 }))
 
@@ -224,7 +230,7 @@ const Course: React.FC<Props> = (props) => {
 
       <br />
 
-      <Typography variant="h5">Active layouts</Typography>
+      <Typography className={classes.sectionTitle} variant="h5">Active layouts</Typography>
 
       <br />
 
@@ -238,7 +244,7 @@ const Course: React.FC<Props> = (props) => {
         />
       )) : null}
 
-      <Typography variant="h5">Inactive layouts</Typography>
+      <Typography className={classes.sectionTitle} variant="h5">Inactive layouts</Typography>
 
       <br />
 
@@ -252,12 +258,12 @@ const Course: React.FC<Props> = (props) => {
         />
       )) : null}
 
-      <Typography variant="h5">High scores</Typography>
+      <Typography className={classes.sectionTitle} variant="h5">High scores</Typography>
       <Typography>[All scores] [My scores]</Typography>
 
-      <Typography variant="h5">Scores per hole</Typography>
+      <Typography className={classes.sectionTitle} variant="h5">Scores per hole</Typography>
 
-      <Typography variant="h5">Development of high scores</Typography>
+      <Typography className={classes.sectionTitle} variant="h5">Development of high scores</Typography>
     </div>
   )
 }

@@ -214,7 +214,7 @@ const EditLayout: React.FC<Props> = (props) => {
     <TextField
       key={'par' + index}
       className={classes.parInput}
-      label={'Hole ' + (index + 1)}
+      label={'Hole ' + hole.number}
       variant="outlined"
       value={hole.par === 0 ? '' : hole.par}
       error={hole.par === 0}

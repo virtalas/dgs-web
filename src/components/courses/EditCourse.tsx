@@ -31,6 +31,11 @@ const useStyles = makeStyles((theme) => ({
     width: '70%',
     textAlign: 'left',
   },
+  disabledButton: {
+    "&:disabled": {
+      color: 'white',
+    }
+  },
 }))
 
 interface Props {
@@ -117,6 +122,7 @@ const EditCourse: React.FC<Props> = (props) => {
 
       <Button
         className={classes.createButton}
+        classes={{ disabled: classes.disabledButton }}
         variant="contained"
         id="submitCourseButton"
         color="primary"
