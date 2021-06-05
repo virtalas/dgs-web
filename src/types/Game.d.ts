@@ -2,6 +2,7 @@ interface Game {
   id: string,
   creatorId: string,
   courseName: string,
+  courseId: string,
   layout: Layout,
   startDate: Date | undefined,
   endDate: Date,

@@ -54,6 +54,10 @@ const EditCourse: React.FC<Props> = (props) => {
 
   const [name, setName] = useState('')
   const [city, setCity] = useState('')
+  const [lat, setLat] = useState('')
+  const [lon, setLon] = useState('')
+  const [latError, setLatError] = useState(false)
+  const [lonError, setLonError] = useState(false)
 
   const newCourse = course ? false : true
 
@@ -61,6 +65,8 @@ const EditCourse: React.FC<Props> = (props) => {
     if (!newCourse) {
       setName(course ? course.name : '')
       setCity(course ? course.city : '')
+      setLat(course && course.lat ? String(course.lat) : '')
+      setLon(course && course.lon ? String(course.lon) : '')
     }
   }, [course, newCourse])
 
@@ -69,12 +75,35 @@ const EditCourse: React.FC<Props> = (props) => {
       id: course?.id ?? '',
       name: name,
       city: city,
+      lat: lat.length > 0 ? Number(lat) : undefined,
+      lon: lon.length > 0 ? Number(lon) : undefined,
       layouts: course ? course.layouts : [],
       allowedToEdit: course?.allowedToEdit,
       numberOfGames: course?.numberOfGames ?? 0,
     }
     handleFinish(inputtedCourse)
   }
+
+  const handleLatitudeChange = (e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
+    const input = e.target.value
+    if (isNaN(Number(input)) && input !== '-') {
+      return
+    }
+    setLat(input)
+    const newLat = Number(input)
+    setLatError(!(newLat >= -90 && newLat <= 90))
+  }
+
+  const handleLongitudeChange = (e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
+    const input = e.target.value
+    if (isNaN(Number(input)) && input !== '-') {
+      return
+    }
+    setLon(input)
+    const newLon = Number(input)
+    setLonError(!(newLon >= -180 && newLon <= 180))
+  }
+
 
   const deleteButton = !newCourse ? (
     <Button
@@ -106,8 +135,25 @@ const EditCourse: React.FC<Props> = (props) => {
         label="City"
         data-cy="courseCityInput"
         value={city}
-        required
         onChange={e => setCity(e.target.value)}
+      />
+
+      <TextField
+        className={classes.formControl}
+        label="Latitude"
+        data-cy="courseLatInput"
+        value={lat ? lat : ''}
+        error={latError}
+        onChange={handleLatitudeChange}
+      />
+
+      <TextField
+        className={classes.formControl}
+        label="Longitude"
+        data-cy="courseLonInput"
+        value={lon ? lon : ''}
+        error={lonError}
+        onChange={handleLongitudeChange}
       />
 
       {newCourse ? null : (
@@ -127,7 +173,7 @@ const EditCourse: React.FC<Props> = (props) => {
         id="submitCourseButton"
         color="primary"
         onClick={handleFinishClicked}
-        disabled={name.length === 0 || city.length === 0}
+        disabled={name.length === 0 || city.length === 0 || latError || lonError}
       >
         {newCourse ? 'Create' : 'Update'}
       </Button>

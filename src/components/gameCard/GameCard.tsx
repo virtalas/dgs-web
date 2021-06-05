@@ -219,9 +219,9 @@ const GameCard: React.FC<Props> = (props) => {
     hour: 'numeric',
     minute: 'numeric',
   }
-  const endDateTime = game.endDate.toLocaleString('fi-FI', dateOptions)
-  const endTime = game.endDate.toLocaleString('fi-FI', { hour: 'numeric', minute: 'numeric' })
-  const startDateTime = game.startDate ? game.startDate.toLocaleString('fi-FI', dateOptions) : null
+  const endDateTime = game.endDate.toLocaleString('en-FI', dateOptions)
+  const endTime = game.endDate.toLocaleString('en-FI', { hour: 'numeric', minute: 'numeric' })
+  const startDateTime = game.startDate ? game.startDate.toLocaleString('en-FI', dateOptions) : null
   const dateTime = startDateTime ? startDateTime + ' - ' + endTime : endDateTime
   const gameDate = (
     <Typography variant="subtitle1" className={classes.title}>{dateTime}</Typography>

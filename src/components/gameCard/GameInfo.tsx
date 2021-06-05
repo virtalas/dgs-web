@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { makeStyles } from '@material-ui/core/styles'
 import Paper from '@material-ui/core/Paper'
 import Typography from '@material-ui/core/Typography'
@@ -56,12 +56,17 @@ const GameInfo: React.FC<Props> = (props) => {
   } = props
   const shouldShowInfoPaper = show
 
-  // eslint-disable-next-line
-  const gameTemperature = game.temperature != null || game.temperature != undefined ? game.temperature : ''
-  const [temperature, setTemperature] = useState<string>(String(gameTemperature))
+  const [temperature, setTemperature] = useState<string>('')
   const usersComment = game.comments.find(c => c.userId === userId)
   const [commentContent, setCommentContent] = useState<string | undefined>(usersComment?.content)
   const [chosenUserTagHistory, setChosenUserTagHistory] = useState<Tag[]>([])
+
+  useEffect(() => {
+    // Check with '!=' on purpose to catch a string 'null'.
+    // eslint-disable-next-line
+    const gameTemperature = (game.temperature != null || game.temperature != undefined) ? String(game.temperature) : ''
+    setTemperature(gameTemperature)
+  }, [game])
 
   const sendGameCommentUpdate = (game?: Game) => {
     const updatedUsersComment = game?.comments.find(c => c.userId === userId)

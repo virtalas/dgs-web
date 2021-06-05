@@ -60,8 +60,6 @@ const ScoreInputView: React.FC<Props> = (props) => {
   // Render hole navigation buttons for desktop.
   const holeNavigation = isMobile ? null : (
     <HoleNavigation
-      holeNum={holeNum}
-      showPar={true}
       onPrevHole={handlePrevHoleClick}
       onNextHole={handleNextHoleClick}
     />
@@ -86,21 +84,10 @@ const ScoreInputView: React.FC<Props> = (props) => {
               updating={updating}
               key={index}
             />
-            {/*
-            <Button
-              variant="outlined"
-              size="medium"
-              color="default"
-              className={classes.par}
-              onClick={handleParClick}
-              key={'par' + index}
-            >
-              Par
-            </Button>
-            */}
           </div>
         ))}
       </SwipeableViews>
+
       {holeNavigation}
     </div>
   )

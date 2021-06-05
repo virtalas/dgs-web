@@ -36,6 +36,8 @@ const createCourse = async (course: Course, source: CancelTokenSource): Promise<
   const response = await baseService.post('/courses', source, {
     name: course.name,
     city: course.city,
+    lat: course.lat,
+    lon: course.lon,
   })
   return response.data
 }
@@ -45,6 +47,8 @@ const updateCourse = async (course: Course, source: CancelTokenSource): Promise<
     id: course.id,
     name: course.name,
     city: course.city,
+    lat: course.lat,
+    lon: course.lon,
   })
   return apiDetailedCourseToCourse(response.data)
 }

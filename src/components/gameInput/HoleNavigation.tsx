@@ -1,7 +1,6 @@
 import React from 'react'
 
 import Fab from '@material-ui/core/Fab'
-import Button from '@material-ui/core/Button'
 import { makeStyles } from '@material-ui/core/styles'
 import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos'
 import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIos'
@@ -9,9 +8,6 @@ import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIos'
 const buttonHeight = 110
 const buttonEdgeMargin = 2
 const buttonBottomMargin = 13
-
-const parButtonWidth = 80
-const parButtonHeight = 40
 
 const useStyles = makeStyles((theme) => ({
   prevHole: {
@@ -34,27 +30,16 @@ const useStyles = makeStyles((theme) => ({
       right: '25%',
     },
   },
-  par: {
-    margin: 'auto',
-    position: 'fixed',
-    left: window.innerWidth / 2 - parButtonWidth / 2, // Place it in the center.
-    bottom: buttonBottomMargin + '%',
-    width: parButtonWidth,
-    height: parButtonHeight,
-  }
 }))
 
 interface Props {
-  holeNum: number,
-  showPar: boolean,
   onPrevHole: Function,
   onNextHole: Function,
-  onPar?: Function,
 }
 
 const HoleNavigation: React.FC<Props> = (props) => {
   const classes = useStyles()
-  const { showPar, onPrevHole, onNextHole, onPar } = props
+  const { onPrevHole, onNextHole } = props
 
   return (
     <div>
@@ -67,21 +52,7 @@ const HoleNavigation: React.FC<Props> = (props) => {
       >
         <ArrowBackIosIcon />
       </Fab>
-      {showPar ? (
-        <Button
-          variant="contained"
-          size="medium"
-          color="primary"
-          className={classes.par}
-          onClick={() => {
-            if (typeof onPar !== 'undefined') {
-              onPar()
-            }
-          }}
-        >
-          Par
-        </Button>
-      ) : null}
+
       <Fab
         disableRipple
         color="primary"

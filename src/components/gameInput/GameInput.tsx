@@ -19,6 +19,7 @@ import MapView from './MapView'
 import NotificationBar from '../NotificationBar'
 import LoadingView from '../LoadingView'
 import baseService from '../../services/baseService'
+import weatherService from '../../services/weatherService'
 
 const scoreInputViewTab = 0
 const holeInfoViewTab = 1
@@ -27,7 +28,6 @@ const gameInfoViewTab = 3
 
 // TODO: change tab bar (& app bar) color to gameInputBlue
 // TODO: SwipeableViews: When swiping starts, show big transparent grey hole number in the middle of the page. When swiping stops fade with animation after ~0.5 seconds.
-// TODO Consider?: Group feature: When saving the game, choose which groups it belongs to
 
 const useStyles = makeStyles((theme) => ({
   swipeableView: {
@@ -120,9 +120,35 @@ const GameInput: React.FC<{}> = (props: any) => {
     setGame(game)
   }
 
+  const updateGameWeatherConditions = () => {
+    if (game === undefined) return
+    cancelTokenSourceRef.current = baseService.cancelTokenSource()
+    weatherService.getLocalWeather(game.courseId, cancelTokenSourceRef.current)
+      .then(localWeather => {
+        if (game === undefined) return
+        console.log('Setting weather information with', localWeather)
+
+        if (localWeather.rain) {
+          game.weatherConditions = addTagIfExists('rain', game.weatherConditions, availableWeatherConditions)
+        }
+        if (localWeather.snow) {
+          game.weatherConditions = addTagIfExists('snow', game.weatherConditions, availableWeatherConditions)
+        }
+        if (new Date().getTime() > new Date(localWeather.sunsetTime * 1000).getTime()) {
+          game.weatherConditions = addTagIfExists('dark', game.weatherConditions, availableWeatherConditions)
+        }
+        if (localWeather.windSpeed > 4) {
+          game.weatherConditions = addTagIfExists('windy', game.weatherConditions, availableWeatherConditions)
+        }
+        game.temperature = localWeather.temperature
+        setGame({...game})
+      })
+  }
+
   const handleGoToPreviewAndFinish = () => {
     setTab(gameInfoViewTab)
     checkGameLegalities()
+    updateGameWeatherConditions()
   }
 
   if (game === undefined) {
@@ -215,6 +241,15 @@ const GameInput: React.FC<{}> = (props: any) => {
       </div>
     </div>
   )
+}
+
+function addTagIfExists(tagName: string, tags: Tag[], availableTags: Tag[]): Tag[] {
+  const tag = availableTags.find(t => t.name === tagName)
+  if (!tag) {
+    return tags
+  } else {
+    return [tag, ...tags]
+  }
 }
 
 export default GameInput
