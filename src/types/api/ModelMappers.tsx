@@ -14,6 +14,7 @@ const playerScoresToPlayer = (playerScores: ApiPlayerScores): Player => {
 
 export const apiGameResponseToGame = (gameResponse: ApiGameResponse): Game => {
   const layoutTotalPar = gameResponse.layout.holes.map((hole: Hole) => hole.par).reduce((a: number, b: number) => a + b)
+  const comments = gameResponse.game.comments.map(apiComment => apiCommentToComment(apiComment))
   return {
     id: gameResponse.game.id,
     creatorId: gameResponse.game.creator_id,
@@ -23,7 +24,7 @@ export const apiGameResponseToGame = (gameResponse: ApiGameResponse): Game => {
     startDate: gameResponse.game.start_date ? new Date(gameResponse.game.start_date) : undefined,
     endDate: new Date(gameResponse.game.end_date),
     temperature: gameResponse.game.temperature,
-    comments: gameResponse.game.comments.map(apiComment => apiCommentToComment(apiComment)),
+    comments: sortGameComments(comments),
     scores: gameResponse.scores.map((playerScores: ApiPlayerScores) => {
       const total = calculateTotalScore(playerScores.throws, playerScores.obs)
       return {
@@ -178,5 +179,14 @@ export function sortCourses(courses: Course[], sortByPopularity: boolean): Cours
 export function sortTags(tags: Tag[]): Tag[] {
   return tags.sort((a, b) => {
     return a.name > b.name ? 1 : -1
+  })
+}
+
+export function sortGameComments(comments: GameComment[]): GameComment[] {
+  return comments.sort((a, b) => {
+    let same = a.createdDate.getTime() === b.createdDate.getTime()
+    if (same) return 0
+    if (a.createdDate > b.createdDate) return 1
+    return -1
   })
 }
