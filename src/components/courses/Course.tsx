@@ -14,6 +14,7 @@ import LayoutPaper from './LayoutPaper'
 import EditCourse from './EditCourse'
 import CancellableModal from '../CancellableModal'
 import baseService from '../../services/baseService'
+import weatherService from '../../services/weatherService'
 
 const useStyles = makeStyles((theme) => ({
   page: {
@@ -35,6 +36,22 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: 'lightgrey',
     width: '100%',
     height: '100%',
+  },
+  weatherContainer: {
+    marginLeft: theme.spacing(1),
+    width: 130,
+    height: 40,
+  },
+  weatherFlexbox: {
+    display: 'flex',
+    alignItems: 'center',
+  },
+  weatherImage: {
+    width: 50,
+    height: 50,
+  },
+  temperature: {
+    verticalAlign: 'center',
   },
   title: {
     marginTop: theme.spacing(2),
@@ -66,19 +83,30 @@ const Course: React.FC<Props> = (props) => {
   const [course, setCourse] = useState<DetailedCourse>()
   const [editCourseOpen, setEditCourseOpen] = useState(false)
   const [imgError, setImgError] = useState(false)
+  const [localWeather, setLocalWeather] = useState<LocalWeather>()
   const [redirect, setRedirect] = useState(false)
 
   const cancelTokenSourceRef = useRef<CancelTokenSource | null>(null)
 
   useEffect(() => {
     cancelTokenSourceRef.current = baseService.cancelTokenSource()
-    coursesService.getCourse(courseId, cancelTokenSourceRef.current).then(c => setCourse(c))
+    coursesService.getCourse(courseId, cancelTokenSourceRef.current)
+      .then(fetchedCourse => {
+        setCourse(fetchedCourse)
+        fetchLocalWeather()
+      })
 
     return () => cancelTokenSourceRef.current?.cancel()
   }, [courseId])
 
   if (redirect) {
     return <Redirect push to={'/courses'} />
+  }
+
+  const fetchLocalWeather = () => {
+    cancelTokenSourceRef.current = baseService.cancelTokenSource()
+    weatherService.getLocalWeather(courseId, cancelTokenSourceRef.current)
+      .then(lw => setLocalWeather(lw))
   }
 
   const coverPictureURL = undefined // TODO: ability to upload a picture, course.coverPictureURL
@@ -178,6 +206,24 @@ const Course: React.FC<Props> = (props) => {
     <Skeleton variant="text" width={200} height={40} />
   )
 
+  const weatherIcon = (
+    <div className={classes.weatherContainer}>
+      {localWeather ? (
+        <div className={classes.weatherFlexbox}>
+          <img
+            className={classes.weatherImage}
+            src={localWeather?.iconURL}
+            alt="Current weather on the course"
+          />
+
+          <Typography className={classes.temperature} variant="caption">
+            {localWeather.temperature} °C
+          </Typography>
+        </div>
+      ) : null}
+    </div>
+  )
+
   const statsTable = (
     <Table size="small">
       <TableHead>
@@ -215,6 +261,8 @@ const Course: React.FC<Props> = (props) => {
       {imageContainer}
       
       {courseTitleRow}
+
+      {weatherIcon}
       
       {editCourseModal}
 
