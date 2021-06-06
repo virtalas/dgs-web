@@ -77,8 +77,6 @@ const EditCourse: React.FC<Props> = (props) => {
       city: city,
       lat: lat.length > 0 ? Number(lat) : undefined,
       lon: lon.length > 0 ? Number(lon) : undefined,
-      layouts: course ? course.layouts : [],
-      allowedToEdit: course?.allowedToEdit,
       numberOfGames: course?.numberOfGames ?? 0,
     }
     handleFinish(inputtedCourse)

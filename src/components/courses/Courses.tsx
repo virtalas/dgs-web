@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 
 import { makeStyles } from '@material-ui/core/styles'
 import coursesService from '../../services/coursesService'
-import CourseCard from './CourseCard'
+import CourseListCard from './CourseListCard'
 import SortButton from '../newGame/SortButton'
 import baseService from '../../services/baseService'
 import LoadingView from '../LoadingView'
@@ -25,13 +25,13 @@ const useStyles = makeStyles((theme) => ({
 const Courses: React.FC<{}> = () => {
   const classes = useStyles()
 
-  const [courses, setCourses] = useState<Course[]>([])
+  const [courses, setCourses] = useState<ListCourse[]>([])
   const [sortByPopularity, setSortByPopularity] = useState(true)
   const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
     const cancelTokenSource = baseService.cancelTokenSource()
-    coursesService.getCourses(cancelTokenSource).then(c => {
+    coursesService.getListCourses(cancelTokenSource).then(c => {
       setCourses(c)
       setIsLoading(false)
     })
@@ -40,7 +40,7 @@ const Courses: React.FC<{}> = () => {
   }, [])
 
   const courseCards = courses?.map(course => (
-    <CourseCard
+    <CourseListCard
       key={'course-card-' + course.id}
       course={course}
     />

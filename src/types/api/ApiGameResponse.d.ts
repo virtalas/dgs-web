@@ -36,6 +36,6 @@ interface ApiGame {
 interface ApiGameResponse {
   game: ApiGame,
   course: ApiCourse,
-  layout: Layout,
+  layout: GameLayout,
   scores: ApiPlayerScores[],
 }

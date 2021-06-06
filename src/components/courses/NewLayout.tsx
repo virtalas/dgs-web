@@ -18,7 +18,7 @@ const NewLayout: React.FC<Props> = (props) => {
 
   const [redirect, setRedirect] = useState(false)
   const [course, setCourse] = useState<Course>(
-    { id: '', name: 'Loading...', city: '', lat: undefined, lon: undefined, layouts: [], allowedToEdit: undefined, numberOfGames: 0 }
+    { id: '', name: 'Loading...', city: '', lat: undefined, lon: undefined, numberOfGames: 0 }
   )
 
   const cancelTokenSourceRef = useRef<CancelTokenSource | null>(null)
@@ -34,7 +34,7 @@ const NewLayout: React.FC<Props> = (props) => {
     return <Redirect to={'/courses'} />
   }
 
-  const handleCreateLayout = (layout: Layout) => {
+  const handleCreateLayout = (layout: DetailedLayout) => {
     cancelTokenSourceRef.current = baseService.cancelTokenSource()
     coursesService.createLayout(courseId, layout, cancelTokenSourceRef.current).then(() => setRedirect(true))
   }

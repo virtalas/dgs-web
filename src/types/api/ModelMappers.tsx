@@ -19,7 +19,7 @@ export const apiGameResponseToGame = (gameResponse: ApiGameResponse): Game => {
     creatorId: gameResponse.game.creator_id,
     courseName: gameResponse.course.name,
     courseId: gameResponse.course.id,
-    layout: { ...gameResponse.layout, total: layoutTotalPar},
+    layout: { ...gameResponse.layout, total: layoutTotalPar, mapURL: gameResponse.layout.mapURL},
     startDate: gameResponse.game.start_date ? new Date(gameResponse.game.start_date) : undefined,
     endDate: new Date(gameResponse.game.end_date),
     temperature: gameResponse.game.temperature,
@@ -117,33 +117,43 @@ export const apiCourseHighScoresToCourseHighScores = (highScores: ApiCourseHighS
   }
 }
 
-export const apiCourseToCourse = (apiCourse: ApiCourse): Course => {
+export const apiListCourseToListCourse = (apiListCourse: ApiListCourse): ListCourse => {
   return {
-    id: apiCourse.id,
-    name: apiCourse.name,
-    city: apiCourse.city,
-    lat: apiCourse.lat,
-    lon: apiCourse.lon,
-    layouts: apiCourse.layouts,
-    allowedToEdit: undefined,
-    numberOfGames: apiCourse.number_of_games,
+    id: apiListCourse.id,
+    name: apiListCourse.name,
+    city: apiListCourse.city,
+    lat: apiListCourse.lat,
+    lon: apiListCourse.lon,
+    numberOfGames: apiListCourse.number_of_games,
   }
 }
 
-export const apiDetailedCourseToCourse = (apiDetailedCourse: ApiDetailedCourse): Course => {
+export const apiBasicCourseToBasicCourse = (apiBasicCourse: ApiBasicCourse): BasicCourse => {
+  return {
+    id: apiBasicCourse.id,
+    name: apiBasicCourse.name,
+    city: apiBasicCourse.city,
+    lat: apiBasicCourse.lat,
+    lon: apiBasicCourse.lon,
+    layouts: apiBasicCourse.layouts,
+    numberOfGames: apiBasicCourse.number_of_games,
+  }
+}
+
+export const apiDetailedCourseToDetailedCourse = (apiDetailedCourse: ApiDetailedCourse): DetailedCourse => {
   return {
     id: apiDetailedCourse.id,
     name: apiDetailedCourse.name,
     city: apiDetailedCourse.city,
     lat: apiDetailedCourse.lat,
     lon: apiDetailedCourse.lon,
-    layouts: apiDetailedCourse.layouts.map(apiDetailedLayout => apiDetailedLayoutToLayout(apiDetailedLayout)),
+    layouts: apiDetailedCourse.layouts.map(apiDetailedLayout => apiDetailedLayoutToDetailedLayout(apiDetailedLayout)),
     allowedToEdit: apiDetailedCourse.allowed_to_edit,
     numberOfGames: apiDetailedCourse.number_of_games,
   }
 }
 
-export const apiDetailedLayoutToLayout = (apiDetailedLayout: ApiDetailedLayout): Layout => {
+export const apiDetailedLayoutToDetailedLayout = (apiDetailedLayout: ApiDetailedLayout): DetailedLayout => {
   return {
     id: apiDetailedLayout.id,
     active: apiDetailedLayout.active,

@@ -3,7 +3,7 @@ interface Game {
   creatorId: string,
   courseName: string,
   courseId: string,
-  layout: Layout,
+  layout: GameLayout,
   startDate: Date | undefined,
   endDate: Date,
   temperature: number | undefined,

@@ -81,9 +81,9 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 interface Props {
-  layout?: Layout, // Layout to edit, or undefined if adding a new layout.
+  layout?: DetailedLayout, // Layout to edit, or undefined if adding a new layout.
   course: Course,
-  handleFinish: (layout: Layout) => void,
+  handleFinish: (layout: DetailedLayout) => void,
   handleCancel?: () => void,
   handleDelete?: () => void,
 }
@@ -144,7 +144,7 @@ const EditLayout: React.FC<Props> = (props) => {
       mapURL: mapURL,
       holes: holes,
       total: totalPar,
-      allowedToEdit: layout?.allowedToEdit
+      allowedToEdit: layout?.allowedToEdit ?? false,
     }
     handleFinish(inputtedLayout)
   }

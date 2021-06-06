@@ -4,6 +4,7 @@ import { Redirect } from 'react-router-dom'
 import { makeStyles } from '@material-ui/core/styles'
 import Typography from '@material-ui/core/Typography'
 import { Card, CardContent, CardActionArea } from '@material-ui/core'
+import { sneakyGrey } from '../../constants/Colors'
 
 const useStyles = makeStyles((theme) => ({
   card: {
@@ -23,17 +24,27 @@ const useStyles = makeStyles((theme) => ({
     width: '100%',
     height: '100%',
   },
+  cardContent: {
+    display: 'flex',
+    justifyContent: 'space-between',
+  },
+  gameCountText: {
+    alignSelf: 'flex-end',
+    color: sneakyGrey,
+  },
 }))
 
 interface Props {
-  course: Course,
+  course: ListCourse,
 }
 
-const CourseCard: React.FC<Props> = (props) => {
+const CourseListCard: React.FC<Props> = (props) => {
   const classes = useStyles()
 
   const { course } = props
-  const coverPictureURL = course.layouts.find(layout => layout.active)?.mapURL
+  // TODO: Use Course.coverPictureURL etc
+  // const coverPictureURL = course.layouts.find(layout => layout.active)?.mapURL
+  const coverPictureURL = undefined
   const [redirect, setRedirect] = useState(false)
 
   if (redirect) {
@@ -56,9 +67,13 @@ const CourseCard: React.FC<Props> = (props) => {
           </div>
         ) : null}
 
-        <CardContent>
+        <CardContent className={classes.cardContent}>
           <Typography variant="h5">
             {course.name}, {course.city}
+          </Typography>
+
+          <Typography variant="subtitle2" className={classes.gameCountText}>
+            {course.numberOfGames} games (you)
           </Typography>
         </CardContent>
       </CardActionArea>
@@ -66,4 +81,4 @@ const CourseCard: React.FC<Props> = (props) => {
   )
 }
 
-export default CourseCard
+export default CourseListCard

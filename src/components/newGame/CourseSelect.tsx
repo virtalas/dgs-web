@@ -35,20 +35,20 @@ const CourseSelect: React.FC<Props> = (props) => {
 
   const { onCourseChange, layout, setLayout, setGameCreatable } = props
 
-  const [course, setCourse] = useState<Course>()
+  const [course, setCourse] = useState<BasicCourse>()
   const [courses, setCourses] = useState<Course[]>([])
   const [sortByPopularity, setSortByPopularity] = useState(true)
 
   const showLayoutSelect = setLayout !== undefined
 
-  const changeCourseTo = (selectedCourse: Course) => {
+  const changeCourseTo = (selectedCourse: BasicCourse) => {
     setCourse(selectedCourse)
     if (onCourseChange) {
       onCourseChange(selectedCourse)
     }
   }
 
-  const getActiveLayout = (forCourse?: Course): Layout | undefined => {
+  const getActiveLayout = (forCourse?: BasicCourse): Layout | undefined => {
     if (!forCourse) {
       return undefined
     }
@@ -56,7 +56,7 @@ const CourseSelect: React.FC<Props> = (props) => {
     return layout
   }
 
-  const selectActiveLayout = (forCourse: Course) => {
+  const selectActiveLayout = (forCourse: BasicCourse) => {
     const activeLayout = getActiveLayout(forCourse)
     if (activeLayout && setLayout) {
       setLayout(activeLayout)
@@ -65,7 +65,7 @@ const CourseSelect: React.FC<Props> = (props) => {
 
   const handleCourseChange = (event: React.ChangeEvent<{ value: unknown }>, value: any) => {
     const selectedCourseId = value.props.value as string
-    const selectedCourse = courses.find(course => course.id === selectedCourseId) as Course
+    const selectedCourse = courses.find(course => course.id === selectedCourseId) as BasicCourse
     changeCourseTo(selectedCourse)
     selectActiveLayout(selectedCourse)
   }
@@ -85,7 +85,7 @@ const CourseSelect: React.FC<Props> = (props) => {
 
   useEffect(() => {
     const cancelTokenSource = baseService.cancelTokenSource()
-    coursesService.getCourses(cancelTokenSource).then(fetchedCourses => {
+    coursesService.getBasicCourses(cancelTokenSource).then(fetchedCourses => {
       if (fetchedCourses.length === 0) {
         return
       }
@@ -132,6 +132,7 @@ const CourseSelect: React.FC<Props> = (props) => {
       <Select
         value={layout ? layout.id : ''}
         onChange={handleLayoutChange}
+        disabled={course ? course.layouts.length <= 1 : false}
         input={<OutlinedInput labelWidth={labelWidth} name="layout" id="layout-select" />}
       >
         {activeLayouts && activeLayouts.length > 0 ? (

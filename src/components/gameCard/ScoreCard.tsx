@@ -397,7 +397,7 @@ function updateScores(scores: PlayerScores[],
                       playerName: string,
                       holeIndex: number,
                       stroke: number,
-                      layout: Layout,
+                      layout: GameLayout,
                       strokesAreThrows: boolean): PlayerScores[] {
   scores.forEach((playerScores, index, array: PlayerScores[]) => {
     // Update the stroke for the player in question

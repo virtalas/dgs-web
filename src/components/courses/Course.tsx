@@ -63,7 +63,7 @@ const Course: React.FC<Props> = (props) => {
   const { match } = props
   const courseId = match.params.id
 
-  const [course, setCourse] = useState<Course>()
+  const [course, setCourse] = useState<DetailedCourse>()
   const [editCourseOpen, setEditCourseOpen] = useState(false)
   const [imgError, setImgError] = useState(false)
   const [redirect, setRedirect] = useState(false)
@@ -93,7 +93,7 @@ const Course: React.FC<Props> = (props) => {
     })
   }
 
-  const handleLayoutUpdated = (layout: Layout) => {
+  const handleLayoutUpdated = (layout: DetailedLayout) => {
     setImgError(false)
     if (course) {
       const layoutIndex = course.layouts.findIndex(l => l.id === layout.id)

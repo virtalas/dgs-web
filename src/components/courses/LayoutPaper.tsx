@@ -27,9 +27,9 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 interface Props {
-  layout: Layout,
+  layout: DetailedLayout,
   course: Course,
-  handleLayoutUpdated: (layout: Layout) => void,
+  handleLayoutUpdated: (layout: DetailedLayout) => void,
   handleLayoutDeleted: (layout: Layout) => void,
 }
 
@@ -50,7 +50,7 @@ const LayoutPaper: React.FC<Props> = (props) => {
     handleUpdateLayoutActiveness(layout)
   }
 
-  const handleUpdateLayoutActiveness = (updatedLayout: Layout) => {
+  const handleUpdateLayoutActiveness = (updatedLayout: DetailedLayout) => {
     cancelTokenSourceRef.current = baseService.cancelTokenSource()
     coursesService.updateLayoutActiveness(updatedLayout, cancelTokenSourceRef.current).then(l => {
       handleLayoutUpdated(updatedLayout)
@@ -58,7 +58,7 @@ const LayoutPaper: React.FC<Props> = (props) => {
     })
   }
 
-  const handleUpdateLayout = (updatedLayout: Layout) => {
+  const handleUpdateLayout = (updatedLayout: DetailedLayout) => {
     cancelTokenSourceRef.current = baseService.cancelTokenSource()
     coursesService.updateLayout(updatedLayout, cancelTokenSourceRef.current).then(l => {
       handleLayoutUpdated(updatedLayout)

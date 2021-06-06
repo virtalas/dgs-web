@@ -1,10 +1,19 @@
-interface ApiCourse {
+interface ApiListCourse {
   id: string,
   name: string,
   city: string,
-  lat: number,
-  lon: number,
-  layouts: Layout[],
+  lat: number | undefined,
+  lon: number | undefined,
+  number_of_games: number,
+}
+
+interface ApiBasicCourse {
+  id: string,
+  name: string,
+  city: string,
+  lat: number | undefined,
+  lon: number | undefined,
+  layouts: ApiBasicLayout[],
   number_of_games: number,
 }
 
@@ -17,6 +26,12 @@ interface ApiDetailedCourse {
   layouts: ApiDetailedLayout[],
   allowed_to_edit: boolean,
   number_of_games: number,
+}
+
+interface ApiBasicLayout {
+  id: string,
+  active: boolean,
+  name: string,
 }
 
 interface ApiDetailedLayout {
