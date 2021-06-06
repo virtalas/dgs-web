@@ -43,8 +43,6 @@ const useStyles = makeStyles((theme) => ({
     bottom: theme.spacing(3),
     right: theme.spacing(3),
     zIndex: 2,
-    backgroundColor: '#3f50b5',
-    color: 'white',
   },
   coursesFab: {
     position: 'fixed',
@@ -53,6 +51,9 @@ const useStyles = makeStyles((theme) => ({
     zIndex: 2,
     backgroundColor: 'green',
     color: 'white',
+    '&:hover': {
+      backgroundColor: 'darkgreen',
+    },
   },
 }))
 
@@ -71,23 +72,28 @@ const BasePage: React.FC<Props> = (props) => {
   let shouldRenderNewButton = editingGameCount === 0
   let newButtonPath: LocationDescriptor = '/'
   let newButtonClass = undefined
+  let newButtonColor: "inherit" | "default" | "primary" | "secondary" | undefined = 'default'
 
   if (location.pathname === '/') {
     newButtonPath = '/games/new'
     newButtonClass = classes.gamesFab
+    newButtonColor = 'primary'
   } else if (location.pathname.startsWith('/games/new')) {
     shouldRenderNewButton = false
   } else if (location.pathname.startsWith('/games')) {
     newButtonPath = '/games/new'
     newButtonClass = classes.gamesFab
+    newButtonColor = 'primary'
   } else if (location.pathname.startsWith('/courses/new')) {
     shouldRenderNewButton = false
   } else if (location.pathname.startsWith('/courses/view/')) {
     newButtonPath = '/courses/new/layout/' + location.pathname.substring('/courses/view/'.length)
     newButtonClass = classes.coursesFab
+    newButtonColor = 'inherit'
   } else if (location.pathname.startsWith('/courses')) {
     newButtonPath = '/courses/new'
     newButtonClass = classes.coursesFab
+    newButtonColor = 'inherit'
   } else {
     shouldRenderNewButton = false
   }
@@ -116,7 +122,7 @@ const BasePage: React.FC<Props> = (props) => {
           {shouldRenderNewButton ? (
             <NavLink to={newButtonPath} className={classes.navLink} id="newButton">
               {/* Usage of 'any': https://material-ui.com/guides/typescript/#usage-of-component-property */}
-              <Fab color="inherit" aria-label="Add" className={newButtonClass}>
+              <Fab color={newButtonColor} aria-label="Add" className={newButtonClass}>
                 <AddIcon />
               </Fab>
             </NavLink>

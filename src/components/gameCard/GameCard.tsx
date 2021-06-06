@@ -129,7 +129,6 @@ const GameCard: React.FC<Props> = (props) => {
     if (onEditToggle) {
       onEditToggle(!isEditing)
     }
-
     setIsEditing(!isEditing)
   }
 
@@ -137,6 +136,9 @@ const GameCard: React.FC<Props> = (props) => {
     if (window.confirm('Cancel editing?')) {
       if (originalGame) {
         setGame(originalGame)
+      }
+      if (onEditToggle) {
+        onEditToggle(!isEditing)
       }
       setIsEditing(!isEditing)
     }
@@ -166,7 +168,14 @@ const GameCard: React.FC<Props> = (props) => {
 
     cancelTokenSourceRef.current = baseService.cancelTokenSource()
     gamesService.deleteGame(game, cancelTokenSourceRef.current)
-      .then(() => onGameDeleted ? onGameDeleted(game) : null)
+      .then(() => {
+        if (onEditToggle) {
+          onEditToggle(false)
+        }
+        if (onGameDeleted) {
+          onGameDeleted(game)
+        }
+      })
   }
   
   const showLoading = ((updating || autoUpdating) && !updateError) ?? false
