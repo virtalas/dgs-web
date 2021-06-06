@@ -215,6 +215,7 @@ const GameInput: React.FC<{}> = (props: any) => {
       <HoleInfoBar
         showInfo={tab !== gameInfoViewTab}
         holeNum={holeNum}
+        game={game}
         par={game ? game.layout.holes[holeNum - 1].par : 0}
       />
       

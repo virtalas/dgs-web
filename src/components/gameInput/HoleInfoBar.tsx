@@ -1,5 +1,6 @@
-import React from 'react'
-import { NavLink } from 'react-router-dom'
+import React, { useEffect, useRef, useState } from 'react'
+import { NavLink, Redirect } from 'react-router-dom'
+import { CancelTokenSource } from 'axios'
 
 import { makeStyles } from '@material-ui/core/styles'
 import AppBar from '@material-ui/core/AppBar'
@@ -11,6 +12,8 @@ import Menu from '@material-ui/core/Menu'
 import MenuItem from '@material-ui/core/MenuItem'
 
 import { dirtyBlue } from '../../constants/Colors'
+import gamesService from '../../services/gamesService'
+import baseService from '../../services/baseService'
 
 const useStyles = makeStyles((theme) => ({
   menuButton: {
@@ -40,12 +43,23 @@ interface Props {
   showInfo: boolean,
   holeNum: number,
   par: number,
+  game: Game,
 }
 
 const HoleInfoBar: React.FC<Props> = (props) => {
   const classes = useStyles()
-  const { showInfo, holeNum, par } = props
+  const { showInfo, holeNum, par, game } = props
+
   const [anchorEl, setAnchorEl] = React.useState<EventTarget | null>(null)
+  const [redirect, setRedirect] = useState(false)
+
+  const cancelTokenSourceRef = useRef<CancelTokenSource | null>(null)
+
+  useEffect(() => () => cancelTokenSourceRef.current?.cancel(), [])
+
+  if (redirect) {
+    return <Redirect push to={'/games'} />
+  }
 
   const handleClick = (event: MouseEvent): void => {
     setAnchorEl(event.currentTarget)
@@ -53,6 +67,15 @@ const HoleInfoBar: React.FC<Props> = (props) => {
 
   const handleClose = () => {
     setAnchorEl(null)
+  }
+
+  const handleDeleteGame = () => {
+    if (!window.confirm('Delete game?')) {
+      return
+    }
+
+    cancelTokenSourceRef.current = baseService.cancelTokenSource()
+    gamesService.deleteGame(game, cancelTokenSourceRef.current).then(() => setRedirect(true))
   }
 
   return (
@@ -77,7 +100,7 @@ const HoleInfoBar: React.FC<Props> = (props) => {
             <NavLink to="/" className={classes.navLink}>
               <MenuItem onClick={handleClose}>Home page</MenuItem>
             </NavLink>
-            <MenuItem onClick={handleClose} className={classes.deleteGame}>Delete game</MenuItem>
+            <MenuItem onClick={handleDeleteGame} className={classes.deleteGame}>Delete game</MenuItem>
           </Menu>
         </Toolbar>
       </AppBar>
