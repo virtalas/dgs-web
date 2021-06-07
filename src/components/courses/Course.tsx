@@ -89,6 +89,12 @@ const Course: React.FC<Props> = (props) => {
   const cancelTokenSourceRef = useRef<CancelTokenSource | null>(null)
 
   useEffect(() => {
+    const fetchLocalWeather = () => {
+      cancelTokenSourceRef.current = baseService.cancelTokenSource()
+      weatherService.getLocalWeather(courseId, cancelTokenSourceRef.current)
+        .then(lw => setLocalWeather(lw))
+    }
+    
     cancelTokenSourceRef.current = baseService.cancelTokenSource()
     coursesService.getCourse(courseId, cancelTokenSourceRef.current)
       .then(fetchedCourse => {
@@ -101,12 +107,6 @@ const Course: React.FC<Props> = (props) => {
 
   if (redirect) {
     return <Redirect push to={'/courses'} />
-  }
-
-  const fetchLocalWeather = () => {
-    cancelTokenSourceRef.current = baseService.cancelTokenSource()
-    weatherService.getLocalWeather(courseId, cancelTokenSourceRef.current)
-      .then(lw => setLocalWeather(lw))
   }
 
   const coverPictureURL = undefined // TODO: ability to upload a picture, course.coverPictureURL

@@ -138,6 +138,9 @@ const AuthForm: React.FC<Props> = props => {
               name="email"
               autoComplete="email"
               autoFocus
+              inputProps={{
+                autocapitalize: "off",
+              }}
               value={values.email}
               onChange={handleChange}
               onBlur={handleBlur}

@@ -4,7 +4,9 @@ import { makeStyles } from '@material-ui/core/styles'
 import TextField from '@material-ui/core/TextField'
 import Typography from '@material-ui/core/Typography'
 import Button from '@material-ui/core/Button'
+
 import { allowedToEditExplanation } from '../../constants/Strings'
+import DisableableButton from '../DisableableButton'
 
 const inputMaxWidth = 400
 const inputWidth = '90%'
@@ -30,11 +32,6 @@ const useStyles = makeStyles((theme) => ({
     marginTop: theme.spacing(2),
     width: '70%',
     textAlign: 'left',
-  },
-  disabledButton: {
-    "&:disabled": {
-      color: 'white',
-    }
   },
 }))
 
@@ -164,17 +161,13 @@ const EditCourse: React.FC<Props> = (props) => {
         </Button>
       )}
 
-      <Button
-        className={classes.createButton}
-        classes={{ disabled: classes.disabledButton }}
-        variant="contained"
-        id="submitCourseButton"
-        color="primary"
-        onClick={handleFinishClicked}
-        disabled={name.length === 0 || city.length === 0 || latError || lonError}
-      >
-        {newCourse ? 'Create' : 'Update'}
-      </Button>
+      <div className={classes.createButton}>
+        <DisableableButton
+          text={newCourse ? 'Create' : 'Update'}
+          onClick={handleFinishClicked}
+          disabled={name.length === 0 || city.length === 0 || latError || lonError}
+        />
+      </div>
 
       <Typography className={classes.explanation} component="p" variant="caption">
         {allowedToEditExplanation + 'course.'}

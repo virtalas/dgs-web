@@ -13,18 +13,11 @@ import NewGuestButton from './NewGuestButton'
 import gamesService from '../../services/gamesService'
 import playersService from '../../services/playersService'
 import baseService from '../../services/baseService'
+import DisableableButton from '../DisableableButton'
 
 const useStyles = makeStyles((theme) => ({
   page: {
     margin: 20,
-  },
-  
-  // Used to fix/mask a bug that appears in Safari:
-  // The text color does not change to white going from disabled to enabled.
-  disabledButton: {
-    "&:disabled": {
-      color: 'white',
-    }
   },
 }))
 
@@ -101,16 +94,11 @@ const NewGame: React.FC<{}> = () => {
       />
       <br/>
 
-      <Button
-        id="newGameButton"
-        classes={{ disabled: classes.disabledButton }}
-        variant="contained"
-        color="primary"
+      <DisableableButton
+        text="Start game"
         onClick={handleStartButtonClick}
         disabled={newGameButtonDisabled}
-      >
-        New game
-      </Button>
+      />
     </div>
   )
 }

@@ -16,11 +16,17 @@ import { chipHeight } from './GameInfo'
 import gamesService from '../../services/gamesService'
 import baseService from '../../services/baseService'
 import { arrayContainsTag } from './GameChips'
+import DisableableButton from '../DisableableButton'
 
 const useStyles = makeStyles((theme) => ({
   chip: {
     height: chipHeight,
     marginRight: 5,
+  },
+  addTagButtonChip: {
+    height: chipHeight,
+    marginRight: 5,
+    color: 'blue',
   },
   dialogContainer: {
     display: 'flex',
@@ -135,16 +141,20 @@ const AddTagButton: React.FC<Props> = (props) => {
       <Button onClick={() => setDialogOpen(false)} color="primary">
         Cancel
       </Button>
-      <Button onClick={handleAddTag} color="primary" disabled={newTagName.length === 0 || inputError}>
-        Add
-      </Button>
+
+      <DisableableButton
+        text="Add"
+        variant="text"
+        onClick={handleAddTag}
+        disabled={newTagName.length === 0 || inputError}
+      />
     </DialogActions>
   )
 
   return (
     <div>
       <Chip
-        className={classes.chip}
+        className={classes.addTagButtonChip}
         label="...add tag"
         variant="outlined"
         onClick={handleOpen}
