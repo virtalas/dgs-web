@@ -25,11 +25,8 @@ const useStyles = makeStyles((theme) => ({
     height: '100%',
   },
   cardContent: {
-    display: 'flex',
-    justifyContent: 'space-between',
   },
   gameCountText: {
-    alignSelf: 'flex-end',
     color: sneakyGrey,
   },
 }))
@@ -73,7 +70,7 @@ const CourseListCard: React.FC<Props> = (props) => {
           </Typography>
 
           <Typography variant="subtitle2" className={classes.gameCountText}>
-            {course.numberOfGames} games (you)
+            You played here {course.numberOfGames} {course.numberOfGames === 1 ? 'time' : 'times'}
           </Typography>
         </CardContent>
       </CardActionArea>

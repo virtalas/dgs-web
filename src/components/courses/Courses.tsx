@@ -14,6 +14,8 @@ const useStyles = makeStyles((theme) => ({
     marginLeft: 'auto',
     marginRight: 'auto',
     marginBottom: theme.spacing(11),
+    paddingLeft: theme.spacing(1),
+    paddingRight: theme.spacing(1),
   },
   noCourses: {
     color: 'grey',
