@@ -44,6 +44,7 @@ export const apiGameResponseToGame = (gameResponse: ApiGameResponse): Game => {
     conditions: sortTags(gameResponse.game.tags
       .filter(tag => tag.condition)
       .map(tag => apiTagToTag(tag))),
+    photoURLs: [], // TODO
     highScorers: gameResponse.scores
       .filter(s => s.high_score)
       .map(s => playerScoresToPlayer(s)),

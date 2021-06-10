@@ -110,7 +110,7 @@ const AddTagButton: React.FC<Props> = (props) => {
     <List
       component="nav"
       subheader={
-        <ListSubheader component="div" id="nested-list-subheader">
+        <ListSubheader disableSticky component="div" id="nested-list-subheader">
           Existing tags
         </ListSubheader>
       }

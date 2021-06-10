@@ -12,6 +12,7 @@ interface Game {
   tags: Tag[],
   weatherConditions: Tag[],
   conditions: Tag[],
+  photoURLs: string[],
   highScorers: Player[],
   illegalScorers: Player[],
 }

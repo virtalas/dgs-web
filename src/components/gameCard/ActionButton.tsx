@@ -26,12 +26,12 @@ const useStyles = makeStyles((theme) => ({
   actionAreaBottomSecondary: {
     position: 'absolute',
     bottom: 10,
-    right: 55,
+    right: 68,
   },
   actionAreaBottomThird: {
     position: 'absolute',
     bottom: 10,
-    right: 100,
+    right: 128,
   },
   spinner: {
     padding: 5,

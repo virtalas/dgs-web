@@ -6,6 +6,7 @@ import { InputAdornment, TextField } from '@material-ui/core'
 
 import PlayerCommentInput from './PlayerCommentInput'
 import GameChips from './GameChips'
+import GamePhotos from './GamePhotos'
 
 export const chipHeight = 22
 
@@ -20,12 +21,12 @@ const useStyles = makeStyles((theme) => ({
   },
   temperatureEdit: {
     width: 130,
-    marginBottom: 10,
+    marginBottom: theme.spacing(2),
   },
   commentEdit: {
     width: '100%',
     marginTop: 10,
-    marginBottom: 40, // Make room for 'Save' and 'Cancel' buttons.
+    marginBottom: 50, // Make room for 'Save' and 'Cancel' buttons.
   },
 }), { name: 'MuiHook' })
 
@@ -164,9 +165,19 @@ const GameInfo: React.FC<Props> = (props) => {
     />
   )
 
+  const gamePhotos = (
+    <GamePhotos
+      game={game}
+      setGame={setGame}
+      isEditing={isEditing}
+    />
+  )
+
   const normalView = shouldShowInfoPaper || showCommentPrompt ? (
     <Paper className = {classes.infoPaper} elevation = {0}>
       {gameChips}
+
+      {gamePhotos}
 
       {comments}
 
@@ -186,6 +197,8 @@ const GameInfo: React.FC<Props> = (props) => {
       {temperatureEdit}
       
       {gameChips}
+
+      {gamePhotos}
 
       {commentEdit}
     </Paper>
