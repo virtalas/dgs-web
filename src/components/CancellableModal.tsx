@@ -31,9 +31,9 @@ interface Props {
 }
 
 const CancellableModal: React.FC<Props> = (props) => {
-  const classes = useStyles()
-
   const { modalOpen, onClose } = props
+  
+  const classes = useStyles()
 
   return (
     <Modal

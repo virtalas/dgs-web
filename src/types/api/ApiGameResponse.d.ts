@@ -23,6 +23,12 @@ interface ApiTag {
   weather_condition: bool,
 }
 
+interface ApiPhoto {
+  id: string,
+  url: string,
+  thumbnail_url: string,
+}
+
 interface ApiGame {
   id: string,
   creator_id: string,
@@ -31,6 +37,7 @@ interface ApiGame {
   comments: ApiComment[],
   temperature: double | undefined,
   tags: ApiTag[],
+  photos: ApiPhoto[],
 }
 
 interface ApiGameResponse {

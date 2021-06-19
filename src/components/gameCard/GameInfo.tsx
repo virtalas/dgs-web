@@ -13,7 +13,7 @@ export const chipHeight = 22
 const useStyles = makeStyles((theme) => ({
   infoPaper: {
     marginBottom: 10,
-    padding: 6,
+    padding: theme.spacing(1),
     textAlign: 'left',
   },
   comment: {

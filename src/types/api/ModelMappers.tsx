@@ -44,7 +44,7 @@ export const apiGameResponseToGame = (gameResponse: ApiGameResponse): Game => {
     conditions: sortTags(gameResponse.game.tags
       .filter(tag => tag.condition)
       .map(tag => apiTagToTag(tag))),
-    photoURLs: [], // TODO
+    photos: gameResponse.game.photos.map(apiPhoto => apiPhotoToPhoto(apiPhoto)),
     highScorers: gameResponse.scores
       .filter(s => s.high_score)
       .map(s => playerScoresToPlayer(s)),
@@ -78,6 +78,14 @@ const apiCommentToComment = (apiComment: ApiComment): GameComment => {
     userId: apiComment.user_id,
     content: apiComment.content,
     createdDate: new Date(apiComment.created_date),
+  }
+}
+
+export const apiPhotoToPhoto =(apiPhoto: ApiPhoto): Photo => {
+  return {
+    id: apiPhoto.id,
+    url: apiPhoto.url,
+    thumbnailUrl: apiPhoto.thumbnail_url,
   }
 }
 

@@ -134,6 +134,7 @@ const GameCard: React.FC<Props> = (props) => {
 
   const handleCancelEdit = () => {
     if (window.confirm('Cancel editing?')) {
+      // TODO: Check if any new photos were added; call DELETE for them to the API.
       if (originalGame) {
         setGame(originalGame)
       }
