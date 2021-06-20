@@ -11,13 +11,25 @@ const useStyles = makeStyles((theme) => ({
     marginTop: theme.spacing(4),
     marginBottom: theme.spacing(4),
   },
+  // Centering image from: https://stackoverflow.com/a/18869078
   image: {
+    maxHeight: '1000%',
+    maxWidth: '100%',
     width: '100%',
+    height: 'auto',
+    position: 'absolute',
+    top: 0,
+    bottom: 0,
+    left: 0,
+    right: 0,
+    margin: 'auto',
   },
   imageContainer: {
-    width: '100%',
     height: 100,
+    width: '100%',
     overflow: 'hidden',
+    display: 'inline-block',
+    position: 'relative',
   },
   mapPlaceholder: {
     backgroundColor: 'lightgrey',
@@ -39,9 +51,7 @@ const CourseListCard: React.FC<Props> = (props) => {
   const classes = useStyles()
 
   const { course } = props
-  // TODO: Use Course.coverPictureURL etc
-  // const coverPictureURL = course.layouts.find(layout => layout.active)?.mapURL
-  const coverPictureURL = undefined
+  const coverPictureURL = course.photo?.thumbnailUrl
   const [redirect, setRedirect] = useState(false)
 
   if (redirect) {
@@ -59,7 +69,7 @@ const CourseListCard: React.FC<Props> = (props) => {
             <img
               className={classes.image}
               src={coverPictureURL}
-              alt="Course map"
+              alt=""
             />
           </div>
         ) : null}

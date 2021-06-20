@@ -9,7 +9,9 @@ interface Course {
 }
 
 // Used for lists of courses
-interface ListCourse extends Course {}
+interface ListCourse extends Course {
+  photo: Photo | undefined,
+}
 
 // Used for lists of courses and their layouts (without holes)
 interface BasicCourse extends Course {
@@ -18,6 +20,7 @@ interface BasicCourse extends Course {
 
 // Used for full info on a course and it's layouts (including holes)
 interface DetailedCourse extends Course {
+  photo: Photo | undefined,
   layouts: DetailedLayout[],
   allowedToEdit: boolean,
 }

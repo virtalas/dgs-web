@@ -14,7 +14,7 @@ const getListCourses = async (source: CancelTokenSource): Promise<ListCourse[]> 
     'list': true,
   })
   const courses = response.data.map((apiCourse: ApiListCourse) => apiListCourseToListCourse(apiCourse))
-  return sortCourses(courses, true)
+  return sortCourses(courses, true) as ListCourse[]
 }
 
 const getBasicCourses = async (source: CancelTokenSource): Promise<BasicCourse[]> => {

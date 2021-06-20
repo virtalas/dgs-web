@@ -53,7 +53,11 @@ const Courses: React.FC<{}> = () => {
       {courses.length > 0 ? (
         <SortButton
           courses={courses}
-          setCourses={setCourses}
+          setCourses={(sortedCourses: Course[] | ListCourse[]) => {
+            if (sortedCourses as ListCourse[]) {
+              setCourses(sortedCourses as ListCourse[])
+            }
+          }}
           sortByPopularity={sortByPopularity}
           setSortByPopularity={setSortByPopularity}
         />

@@ -27,6 +27,7 @@
     "lodash": "^4.17.20",
     "react-device-detect": "^1.13.1",
     "react-dom": "^16.13.1",
+    "react-easy-crop": "^3.5.1",
     "react-image-file-resizer": "^0.4.4",
     "react-map-interaction": "^2.0.0",
     "react-router-dom": "^5.2.0",

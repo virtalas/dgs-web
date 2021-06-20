@@ -5,6 +5,7 @@ interface ApiListCourse {
   lat: number | undefined,
   lon: number | undefined,
   number_of_games: number,
+  photo: ApiPhoto | undefined,
 }
 
 interface ApiBasicCourse {
@@ -26,6 +27,7 @@ interface ApiDetailedCourse {
   layouts: ApiDetailedLayout[],
   allowed_to_edit: boolean,
   number_of_games: number,
+  photo: ApiPhoto | undefined,
 }
 
 interface ApiBasicLayout {

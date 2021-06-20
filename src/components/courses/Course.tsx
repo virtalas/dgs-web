@@ -20,17 +20,32 @@ const useStyles = makeStyles((theme) => ({
   page: {
     maxWidth: 600,
     margin: theme.spacing(1),
-    marginLeft: 'auto',
-    marginRight: 'auto',
+    [theme.breakpoints.up('md')]: {
+      marginLeft: 'auto',
+      marginRight: 'auto',
+    },
   },
+  // Centering image from: https://stackoverflow.com/a/18869078
   image: {
-    width: '100%',
+    maxHeight: '1000%',
+    maxWidth: '100%',
+    width: 'auto',
+    height: 'auto',
+    position: 'absolute',
+    top: 0,
+    bottom: 0,
+    left: 0,
+    right: 0,
+    margin: 'auto',
   },
   imageContainer: {
-    width: '100%',
     height: 180,
+    width: '100%',
     borderRadius: 5,
+    borderCollapse: 'separate',
     overflow: 'hidden',
+    display: 'inline-block',
+    position: 'relative',
   },
   mapPlaceholder: {
     backgroundColor: 'lightgrey',
@@ -109,7 +124,7 @@ const Course: React.FC<Props> = (props) => {
     return <Redirect push to={'/courses'} />
   }
 
-  const coverPictureURL = undefined // TODO: ability to upload a picture, course.coverPictureURL
+  const coverPictureURL = course?.photo?.url
 
   const handleEditCourse = () => setEditCourseOpen(true)
 

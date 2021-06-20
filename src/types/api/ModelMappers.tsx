@@ -135,6 +135,7 @@ export const apiListCourseToListCourse = (apiListCourse: ApiListCourse): ListCou
     lat: apiListCourse.lat,
     lon: apiListCourse.lon,
     numberOfGames: apiListCourse.number_of_games,
+    photo: apiListCourse.photo ? apiPhotoToPhoto(apiListCourse.photo) : undefined,
   }
 }
 
@@ -160,6 +161,7 @@ export const apiDetailedCourseToDetailedCourse = (apiDetailedCourse: ApiDetailed
     layouts: apiDetailedCourse.layouts.map(apiDetailedLayout => apiDetailedLayoutToDetailedLayout(apiDetailedLayout)),
     allowedToEdit: apiDetailedCourse.allowed_to_edit,
     numberOfGames: apiDetailedCourse.number_of_games,
+    photo: apiDetailedCourse.photo ? apiPhotoToPhoto(apiDetailedCourse.photo) : undefined,
   }
 }
 

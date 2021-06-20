@@ -7,6 +7,7 @@ import Button from '@material-ui/core/Button'
 
 import { allowedToEditExplanation } from '../../constants/Strings'
 import DisableableButton from '../DisableableButton'
+import CoursePhotoButton from './CoursePhotoButton'
 
 const inputMaxWidth = 400
 const inputWidth = '90%'
@@ -36,13 +37,11 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 interface Props {
-  course?: Course, // Course to edit, undefined if it's new.
+  course?: DetailedCourse, // Course to edit, undefined if it's new.
   handleFinish: (course: Course) => void,
   handleCancel?: () => void,
   handleDelete?: () => void,
 }
-
-// TODO: Feature for uploading a picture of the course. (use same preview as NewLayout.tsx)
 
 const EditCourse: React.FC<Props> = (props) => {
   const classes = useStyles()
@@ -55,6 +54,7 @@ const EditCourse: React.FC<Props> = (props) => {
   const [lon, setLon] = useState('')
   const [latError, setLatError] = useState(false)
   const [lonError, setLonError] = useState(false)
+  const [photo, setPhoto] = useState<Photo>()
 
   const newCourse = course ? false : true
 
@@ -64,6 +64,7 @@ const EditCourse: React.FC<Props> = (props) => {
       setCity(course ? course.city : '')
       setLat(course && course.lat ? String(course.lat) : '')
       setLon(course && course.lon ? String(course.lon) : '')
+      setPhoto(course && course.photo ? course.photo : undefined)
     }
   }, [course, newCourse])
 
@@ -75,6 +76,7 @@ const EditCourse: React.FC<Props> = (props) => {
       lat: lat.length > 0 ? Number(lat) : undefined,
       lon: lon.length > 0 ? Number(lon) : undefined,
       numberOfGames: course?.numberOfGames ?? 0,
+      photo: photo,
     }
     handleFinish(inputtedCourse)
   }
@@ -98,7 +100,6 @@ const EditCourse: React.FC<Props> = (props) => {
     const newLon = Number(input)
     setLonError(!(newLon >= -180 && newLon <= 180))
   }
-
 
   const deleteButton = !newCourse ? (
     <Button
@@ -149,6 +150,12 @@ const EditCourse: React.FC<Props> = (props) => {
         value={lon ? lon : ''}
         error={lonError}
         onChange={handleLongitudeChange}
+      />
+
+      <CoursePhotoButton
+        course={course}
+        photo={photo}
+        setPhoto={setPhoto}
       />
 
       {newCourse ? null : (

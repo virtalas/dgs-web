@@ -14,8 +14,8 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 interface Props {
-  courses: Course[],
-  setCourses: (courses: Course[]) => void,
+  courses: Course[] | ListCourse[],
+  setCourses: (courses: Course[] | ListCourse[]) => void,
   sortByPopularity: boolean,
   setSortByPopularity: (sortByPopularity: boolean) => void,
 }
