@@ -12,9 +12,9 @@ import { makeStyles } from '@material-ui/core/styles'
 
 import GroupIcon from '@material-ui/icons/Group'
 import PlaceIcon from '@material-ui/icons/Place'
-import InsertChartIcon from '@material-ui/icons/InsertChart'
-import InfoIcon from '@material-ui/icons/Info'
-import BallotIcon from '@material-ui/icons/Ballot'
+// import InsertChartIcon from '@material-ui/icons/InsertChart'
+// import InfoIcon from '@material-ui/icons/Info'
+// import BallotIcon from '@material-ui/icons/Ballot'
 import ExitToApp from '@material-ui/icons/ExitToApp'
 import DiscGolfBasket from './DiscGolfBasket'
 
@@ -76,7 +76,9 @@ const NavigationDrawer: React.FC<Props> = (props) => {
           </ListItem>
         </NavLink>
       </List>
-      <Divider />
+
+      {/* TODO: */}
+      {/* <Divider />
       <List>
         <NavLink to="/graphs" className={classes.navLink}>
           <ListItem button disabled>
@@ -96,8 +98,10 @@ const NavigationDrawer: React.FC<Props> = (props) => {
             <ListItemText primary="Info" />
           </ListItem>
         </NavLink>
-      </List>
+      </List> */}
+
       <Divider />
+
       <List>
         <ListItem button onClick={loggedOut}>
           <ListItemIcon><ExitToApp /></ListItemIcon>

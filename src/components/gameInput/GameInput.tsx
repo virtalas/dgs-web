@@ -5,7 +5,7 @@ import { makeStyles } from '@material-ui/core/styles'
 import BottomNavigation from '@material-ui/core/BottomNavigation'
 import BottomNavigationAction from '@material-ui/core/BottomNavigationAction'
 import DescriptionIcon from '@material-ui/icons/Description'
-import InfoIcon from '@material-ui/icons/Info'
+// import InfoIcon from '@material-ui/icons/Info'
 import EditIcon from '@material-ui/icons/Edit'
 import LocationOnIcon from '@material-ui/icons/LocationOn'
 
@@ -13,7 +13,7 @@ import { useAuth } from '../../context/AuthContext'
 import HoleInfoBar from './HoleInfoBar'
 import gamesService from '../../services/gamesService'
 import ScoreInputView from './ScoreInputView'
-import HoleInfoView from './HoleInfoView'
+// import HoleInfoView from './HoleInfoView'
 import GameInfoView from './GameInfoView'
 import MapView from './MapView'
 import NotificationBar from '../NotificationBar'
@@ -22,9 +22,9 @@ import baseService from '../../services/baseService'
 import weatherService from '../../services/weatherService'
 
 const scoreInputViewTab = 0
-const holeInfoViewTab = 1
-const mapViewTab = 2
-const gameInfoViewTab = 3
+// const holeInfoViewTab = 1
+const mapViewTab = 1
+const gameInfoViewTab = 2
 
 // TODO: change tab bar (& app bar) color to gameInputBlue
 // TODO: SwipeableViews: When swiping starts, show big transparent grey hole number in the middle of the page. When swiping stops fade with animation after ~0.5 seconds.
@@ -169,13 +169,13 @@ const GameInput: React.FC<{}> = (props: any) => {
     />
   )
 
-  const holeInfoView = (
-    <HoleInfoView
-      holeNum={holeNum}
-      setHoleNum={setHoleNum}
-      swipeableViewStyle={classes.swipeableView}
-    />
-  )
+  // const holeInfoView = (
+  //   <HoleInfoView
+  //     holeNum={holeNum}
+  //     setHoleNum={setHoleNum}
+  //     swipeableViewStyle={classes.swipeableView}
+  //   />
+  // )
 
   const mapView = (
     <MapView mapURL={game ? game.layout.mapURL : ''} />
@@ -197,9 +197,9 @@ const GameInput: React.FC<{}> = (props: any) => {
     case scoreInputViewTab:
       activeView = scoreInputView
       break
-    case holeInfoViewTab:
-      activeView = holeInfoView
-      break
+    // case holeInfoViewTab:
+    //   activeView = holeInfoView
+    //   break
     case mapViewTab:
       activeView = mapView
       break
@@ -235,7 +235,8 @@ const GameInput: React.FC<{}> = (props: any) => {
           showLabels
         >
           <BottomNavigationAction label="Scores" icon={<EditIcon />} id="scoresTabButton" />
-          <BottomNavigationAction label="Stats" icon={<InfoIcon />} id="statsTabButton" />
+          {/* TODO: */}
+          {/* <BottomNavigationAction label="Stats" icon={<InfoIcon />} id="statsTabButton" /> */}
           <BottomNavigationAction label="Map" icon={<LocationOnIcon />} id="mapTabButton" />
           <BottomNavigationAction label="Game info" icon={<DescriptionIcon id="gameInfoTabButton" />} />
         </BottomNavigation>

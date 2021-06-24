@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { Redirect } from 'react-router-dom'
 import { CancelTokenSource } from 'axios'
 
@@ -6,7 +6,15 @@ import { makeStyles } from '@material-ui/core/styles'
 import EditIcon from '@material-ui/icons/Edit'
 import Typography from '@material-ui/core/Typography'
 import Button from '@material-ui/core/Button'
-import { Grid, IconButton, Table, TableCell, TableHead, TableRow, TableBody } from '@material-ui/core'
+import {
+  Grid,
+  IconButton,
+  // Table,
+  // TableCell,
+  // TableHead,
+  // TableRow,
+  // TableBody
+} from '@material-ui/core'
 import Skeleton from '@material-ui/lab/Skeleton'
 
 import coursesService from '../../services/coursesService'
@@ -103,11 +111,11 @@ const Course: React.FC<Props> = (props) => {
 
   const cancelTokenSourceRef = useRef<CancelTokenSource | null>(null)
 
-  const fetchLocalWeather = () => {
+  const fetchLocalWeather = useCallback(() => {
     cancelTokenSourceRef.current = baseService.cancelTokenSource()
     weatherService.getLocalWeather(courseId, cancelTokenSourceRef.current)
       .then(lw => setLocalWeather(lw))
-  }
+  }, [courseId])
 
   useEffect(() => {    
     cancelTokenSourceRef.current = baseService.cancelTokenSource()
@@ -118,7 +126,7 @@ const Course: React.FC<Props> = (props) => {
       })
 
     return () => cancelTokenSourceRef.current?.cancel()
-  }, [courseId])
+  }, [courseId, fetchLocalWeather])
 
   if (redirect) {
     return <Redirect push to={'/courses'} />
@@ -239,34 +247,34 @@ const Course: React.FC<Props> = (props) => {
     </div>
   )
 
-  const statsTable = (
-    <Table size="small">
-      <TableHead>
-        <TableRow>
-          <TableCell></TableCell>
-          <TableCell>Me</TableCell>
-          <TableCell>All</TableCell>
-        </TableRow>
-      </TableHead>
-      <TableBody>
-        <TableRow>
-          <TableCell>Games played</TableCell>
-          <TableCell>{course?.numberOfGames}</TableCell>
-          <TableCell>x</TableCell>
-        </TableRow>
-        <TableRow>
-          <TableCell>Latest game</TableCell>
-          <TableCell>[x.x.x]</TableCell>
-          <TableCell>[x.x.x]</TableCell>
-        </TableRow>
-        <TableRow>
-          <TableCell>Average score</TableCell>
-          <TableCell>x</TableCell>
-          <TableCell>x</TableCell>
-        </TableRow>
-      </TableBody>
-    </Table>
-  )
+  // const statsTable = (
+  //   <Table size="small">
+  //     <TableHead>
+  //       <TableRow>
+  //         <TableCell></TableCell>
+  //         <TableCell>Me</TableCell>
+  //         <TableCell>All</TableCell>
+  //       </TableRow>
+  //     </TableHead>
+  //     <TableBody>
+  //       <TableRow>
+  //         <TableCell>Games played</TableCell>
+  //         <TableCell>{course?.numberOfGames}</TableCell>
+  //         <TableCell>x</TableCell>
+  //       </TableRow>
+  //       <TableRow>
+  //         <TableCell>Latest game</TableCell>
+  //         <TableCell>[x.x.x]</TableCell>
+  //         <TableCell>[x.x.x]</TableCell>
+  //       </TableRow>
+  //       <TableRow>
+  //         <TableCell>Average score</TableCell>
+  //         <TableCell>x</TableCell>
+  //         <TableCell>x</TableCell>
+  //       </TableRow>
+  //     </TableBody>
+  //   </Table>
+  // )
 
   const activeLayouts = course?.layouts.filter(layout => layout.active)
   const inactiveLayouts = course?.layouts.filter(layout => !layout.active)
@@ -281,15 +289,17 @@ const Course: React.FC<Props> = (props) => {
       
       {editCourseModal}
 
-      {statsTable}
+      {/* TODO: */}
+      {/* {statsTable} */}
 
       <br />
 
-      <Typography component="p">
+      {/* TODO: */}
+      {/* <Typography component="p">
         On this course:
         <Button disabled size="small">My games</Button>
         <Button disabled size="small">All games</Button>
-      </Typography>
+      </Typography> */}
 
       <br />
 
@@ -321,12 +331,15 @@ const Course: React.FC<Props> = (props) => {
         />
       )) : null}
 
-      <Typography className={classes.sectionTitle} variant="h5">High scores</Typography>
-      <Typography>[All scores] [My scores]</Typography>
+      {/* TODO: */}
+      {/* <Typography className={classes.sectionTitle} variant="h5">High scores</Typography>
+      <Typography>[All scores] [My scores]</Typography> */}
 
-      <Typography className={classes.sectionTitle} variant="h5">Scores per hole</Typography>
+      {/* TODO: */}
+      {/* <Typography className={classes.sectionTitle} variant="h5">Scores per hole</Typography> */}
 
-      <Typography className={classes.sectionTitle} variant="h5">Development of high scores</Typography>
+      {/* TODO: */}
+      {/* <Typography className={classes.sectionTitle} variant="h5">Development of high scores</Typography> */}
     </div>
   )
 }
