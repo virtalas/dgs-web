@@ -170,10 +170,11 @@ const EditCourse: React.FC<Props> = (props) => {
 
       <div className={classes.createButton}>
         <DisableableButton
-          text={newCourse ? 'Create' : 'Update'}
           onClick={handleFinishClicked}
           disabled={name.length === 0 || city.length === 0 || latError || lonError}
-        />
+        >
+          {newCourse ? 'Create' : 'Update'}
+        </DisableableButton>
       </div>
 
       <Typography className={classes.explanation} component="p" variant="caption">

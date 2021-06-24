@@ -143,11 +143,12 @@ const AddTagButton: React.FC<Props> = (props) => {
       </Button>
 
       <DisableableButton
-        text="Add"
         variant="text"
         onClick={handleAddTag}
         disabled={newTagName.length === 0 || inputError}
-      />
+      >
+        Add
+      </DisableableButton>
     </DialogActions>
   )
 

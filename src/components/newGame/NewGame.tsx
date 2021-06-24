@@ -94,10 +94,11 @@ const NewGame: React.FC<{}> = () => {
       <br/>
 
       <DisableableButton
-        text="Start game"
         onClick={handleStartButtonClick}
         disabled={newGameButtonDisabled}
-      />
+      >
+        Start game
+      </DisableableButton>
     </div>
   )
 }

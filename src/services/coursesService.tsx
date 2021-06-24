@@ -31,7 +31,7 @@ const getCourse = async (courseId: string, source: CancelTokenSource): Promise<D
 }
 
 const createLayout = async (courseId: string, layout: DetailedLayout, source: CancelTokenSource): Promise<DetailedLayout> => {
-  const response = await baseService.post(`/courses/${courseId}/layout`, source, {
+  const response = await baseService.post(`/courses/${courseId}/layouts`, source, {
     name: layout.name,
     description: layout.description,
     pars: layout.holes.map(hole => hole.par),

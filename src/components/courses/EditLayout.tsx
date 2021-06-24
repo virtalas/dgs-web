@@ -9,6 +9,7 @@ import Typography from '@material-ui/core/Typography'
 import { sneakyGrey } from '../../constants/Colors'
 import Grid from '@material-ui/core/Grid'
 import { allowedToEditExplanation } from '../../constants/Strings'
+import DisableableButton from '../DisableableButton'
 
 const inputMaxWidth = 400
 const inputWidth = '90%'
@@ -318,16 +319,15 @@ const EditLayout: React.FC<Props> = (props) => {
             </Button>
           )}
 
-          <Button
-            id="submitLayoutButton"
-            className={classes.createButton}
-            variant="contained"
-            color="primary"
-            onClick={handleFinishClicked}
-            disabled={name.length === 0 || numberOfZeroPars > 0 || holes.length === 0}
-          >
-            {newLayout ? 'Create' : 'Update'}
-          </Button>
+          <div className={classes.createButton}>
+            <DisableableButton
+              variant="contained"
+              onClick={handleFinishClicked}
+              disabled={name.length === 0 || numberOfZeroPars > 0 || holes.length === 0}
+            >
+              {newLayout ? 'Create' : 'Update'}
+            </DisableableButton>
+          </div>
         </Grid>
 
         <Grid

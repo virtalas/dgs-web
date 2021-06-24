@@ -14,7 +14,6 @@ const useStyles = makeStyles((theme) => ({
 interface Props {
   onClick: () => void,
   disabled: boolean,
-  text: string,
   variant?: 'contained' | 'text',
 }
 
@@ -24,7 +23,7 @@ interface Props {
 
 const DisableableButton: React.FC<Props> = (props) => {
   const classes = useStyles()
-  const { onClick, disabled, text, variant } = props
+  const { onClick, disabled, variant } = props
 
   const buttonVariant = variant ? variant : 'contained'
 
@@ -39,7 +38,7 @@ const DisableableButton: React.FC<Props> = (props) => {
       onClick={onClick}
       disabled={disabled}
     >
-      {text}
+      {props.children}
     </Button>
   )
 
@@ -52,7 +51,7 @@ const DisableableButton: React.FC<Props> = (props) => {
           color="primary"
           disabled={true}
         >
-          {text}
+          {props.children}
         </Button>
       ) : null}
 
@@ -62,7 +61,7 @@ const DisableableButton: React.FC<Props> = (props) => {
           color="primary"
           onClick={onClick}
         >
-          {text}
+          {props.children}
         </Button>
       )}
     </div>

@@ -29,9 +29,8 @@ const NewLayout: React.FC<Props> = (props) => {
     return () => cancelTokenSourceRef.current?.cancel()
   }, [courseId])
 
-  // TODO: Redirect to newly created Layout's view?
   if (redirect) {
-    return <Redirect to={'/courses'} />
+    return <Redirect to={'/courses/view/' + courseId} />
   }
 
   const handleCreateLayout = (layout: DetailedLayout) => {

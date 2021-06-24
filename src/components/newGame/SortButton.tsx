@@ -34,7 +34,13 @@ const SortButton: React.FC<Props> = (props) => {
   return (
     <FormControl variant="outlined" className={classes.formControl}>
       <FormHelperText>Sorted by</FormHelperText>
-      <Button variant="outlined" id="course-order" size="small" onClick={handleSortChange}>
+      <Button
+        variant="outlined"
+        id="course-order"
+        size="small"
+        onClick={handleSortChange}
+        disabled={courses.length <= 1}
+      >
         {sortByPopularity ? 'Most played' : 'Name'}
       </Button>
     </FormControl>

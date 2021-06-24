@@ -114,6 +114,7 @@ const CourseSelect: React.FC<Props> = (props) => {
       <Select
         value={course?.id ?? ''}
         onChange={handleCourseChange}
+        disabled={courses ? courses.length <= 1 : true}
         input={<OutlinedInput labelWidth={labelWidth} name="course" id="course-select" />}
       >
         {courses.map((course, index) => (

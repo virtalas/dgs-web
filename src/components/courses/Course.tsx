@@ -103,13 +103,13 @@ const Course: React.FC<Props> = (props) => {
 
   const cancelTokenSourceRef = useRef<CancelTokenSource | null>(null)
 
-  useEffect(() => {
-    const fetchLocalWeather = () => {
-      cancelTokenSourceRef.current = baseService.cancelTokenSource()
-      weatherService.getLocalWeather(courseId, cancelTokenSourceRef.current)
-        .then(lw => setLocalWeather(lw))
-    }
-    
+  const fetchLocalWeather = () => {
+    cancelTokenSourceRef.current = baseService.cancelTokenSource()
+    weatherService.getLocalWeather(courseId, cancelTokenSourceRef.current)
+      .then(lw => setLocalWeather(lw))
+  }
+
+  useEffect(() => {    
     cancelTokenSourceRef.current = baseService.cancelTokenSource()
     coursesService.getCourse(courseId, cancelTokenSourceRef.current)
       .then(fetchedCourse => {
@@ -128,12 +128,12 @@ const Course: React.FC<Props> = (props) => {
 
   const handleEditCourse = () => setEditCourseOpen(true)
 
-  const handleEditCourseFinished = (course: Course) => {
+  const handleEditCourseFinished = async (course: Course) => {
     cancelTokenSourceRef.current = baseService.cancelTokenSource()
-    coursesService.updateCourse(course, cancelTokenSourceRef.current).then((c) => {
-      setCourse(c)
-      setEditCourseOpen(false)
-    })
+    const updatedCourse = await coursesService.updateCourse(course, cancelTokenSourceRef.current)
+    setCourse(updatedCourse)
+    setEditCourseOpen(false)
+    fetchLocalWeather()
   }
 
   const handleLayoutUpdated = (layout: DetailedLayout) => {
