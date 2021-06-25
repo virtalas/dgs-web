@@ -3,6 +3,13 @@ export const dateFrom = (dateString: string) => {
   return new Date(dateString.replace(/-/g, "/"))
 }
 
+export const areOnSameDay = (d1: Date | undefined, d2: Date | undefined): Boolean => {
+  if (!d1 || !d2) return false
+  return d1.getFullYear() === d2.getFullYear() &&
+    d1.getMonth() === d2.getMonth() &&
+    d1.getDate() === d2.getDate()
+}
+
 export const toISOStringWithTimezone = (date: Date): string => {
   var tzo = -date.getTimezoneOffset(),
     dif = tzo >= 0 ? '+' : '-',

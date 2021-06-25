@@ -139,11 +139,14 @@ const Games: React.FC<Props> = (props) => {
     setGames([]) // Clear fetched games if year changed.
   }
 
+  // Called after a child has updated a game.
   const setGame = (game: Game) => {
     let gameToUpdate = games.find(g => g.id === game.id) as Game
     let updateIndex = games.indexOf(gameToUpdate)
     const updatedGames = games.fill(game, updateIndex, updateIndex + 1)
     setGames([...updatedGames])
+
+    // TODO: Fetch gameMonths again. Make current fetching in useEffect into a function and call that. Also, remove lint disabler comment and use useCallback() for all
   }
 
   const onGameDeleted = (game: Game) => {

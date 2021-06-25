@@ -16,6 +16,7 @@ import BlueCard from './BlueCard'
 import gamesService from '../../services/gamesService'
 import baseService from '../../services/baseService'
 import ActionButton from './ActionButton'
+import { areOnSameDay } from '../../utils/DateUtils'
 
 const useStyles = makeStyles((theme) => ({
   title: {
@@ -229,10 +230,16 @@ const GameCard: React.FC<Props> = (props) => {
     hour: 'numeric',
     minute: 'numeric',
   }
+  
   const endDateTime = game.endDate.toLocaleString('en-FI', dateOptions)
   const endTime = game.endDate.toLocaleString('en-FI', { hour: 'numeric', minute: 'numeric' })
+  const endString = areOnSameDay(game.startDate, game.endDate) ? endTime : endDateTime
+
   const startDateTime = game.startDate ? game.startDate.toLocaleString('en-FI', dateOptions) : null
-  const dateTime = startDateTime ? startDateTime + ' - ' + endTime : endDateTime
+  const startString = startDateTime ? startDateTime + ' - ' : ''
+
+  const dateTime = startString + endString
+
   const gameDate = (
     <Typography variant="subtitle1" className={classes.title}>{dateTime}</Typography>
   )
