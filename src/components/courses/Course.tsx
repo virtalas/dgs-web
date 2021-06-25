@@ -55,7 +55,7 @@ const useStyles = makeStyles((theme) => ({
     display: 'inline-block',
     position: 'relative',
   },
-  mapPlaceholder: {
+  photoPlaceholder: {
     backgroundColor: 'lightgrey',
     width: '100%',
     height: '100%',
@@ -111,7 +111,8 @@ const Course: React.FC<Props> = (props) => {
 
   const cancelTokenSourceRef = useRef<CancelTokenSource | null>(null)
 
-  const fetchLocalWeather = useCallback(() => {
+  const fetchLocalWeather = useCallback((forCourse: DetailedCourse) => {
+    if (!forCourse.lat || !forCourse.lon) return
     cancelTokenSourceRef.current = baseService.cancelTokenSource()
     weatherService.getLocalWeather(courseId, cancelTokenSourceRef.current)
       .then(lw => setLocalWeather(lw))
@@ -122,7 +123,7 @@ const Course: React.FC<Props> = (props) => {
     coursesService.getCourse(courseId, cancelTokenSourceRef.current)
       .then(fetchedCourse => {
         setCourse(fetchedCourse)
-        fetchLocalWeather()
+        fetchLocalWeather(fetchedCourse)
       })
 
     return () => cancelTokenSourceRef.current?.cancel()
@@ -141,7 +142,7 @@ const Course: React.FC<Props> = (props) => {
     const updatedCourse = await coursesService.updateCourse(course, cancelTokenSourceRef.current)
     setCourse(updatedCourse)
     setEditCourseOpen(false)
-    fetchLocalWeather()
+    fetchLocalWeather(updatedCourse)
   }
 
   const handleLayoutUpdated = (layout: DetailedLayout) => {
@@ -190,25 +191,31 @@ const Course: React.FC<Props> = (props) => {
     </CancellableModal>
   ) : null
 
-  const imageContainer = course ? (
+  const addPhotoButton = course?.allowedToEdit ? (
     <div className={classes.imageContainer}>
+      <Button
+        className={classes.photoPlaceholder}
+        size="small"
+        onClick={handleEditCourse}
+      >
+        Upload a picture
+      </Button>
+    </div>
+  ) : null
+
+  const imageContainer = course ? (
+    <div>
       {(coverPictureURL && !imgError) ? (
-        <img
-          id="courseImage"
-          className={classes.image}
-          src={coverPictureURL}
-          alt="Course map"
-          onError={() => setImgError(true)}
-        />
-      ) : (
-        <Button
-          className={classes.mapPlaceholder}
-          size="small"
-          onClick={handleEditCourse}
-        >
-          Upload a picture
-        </Button>
-      )}
+        <div className={classes.imageContainer}>
+          <img
+            id="courseImage"
+            className={classes.image}
+            src={coverPictureURL}
+            alt="Course map"
+            onError={() => setImgError(true)}
+          />
+        </div>
+      ) : addPhotoButton}
     </div>
   ) : (
     <Skeleton className={classes.imageContainer} variant="rect" />
@@ -303,7 +310,9 @@ const Course: React.FC<Props> = (props) => {
 
       <br />
 
-      <Typography className={classes.sectionTitle} variant="h5">Active layouts</Typography>
+      {activeLayouts && activeLayouts.length > 0 ? (
+        <Typography className={classes.sectionTitle} variant="h5">Active layouts</Typography>
+      ) : null}
 
       <br />
 
@@ -317,7 +326,9 @@ const Course: React.FC<Props> = (props) => {
         />
       )) : null}
 
-      <Typography className={classes.sectionTitle} variant="h5">Inactive layouts</Typography>
+      {inactiveLayouts && inactiveLayouts.length > 0 ? (
+        <Typography className={classes.sectionTitle} variant="h5">Inactive layouts</Typography>
+      ) : null}
 
       <br />
 

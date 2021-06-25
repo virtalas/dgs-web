@@ -23,7 +23,7 @@ const useStyles = makeStyles((theme) => ({
 interface Props {
   onCourseChange?: (course: Course) => void,
   layout?: Layout,
-  setLayout?: (layout: Layout) => void,
+  setLayout?: (layout: Layout | undefined) => void,
   setGameCreatable?: (creatable: boolean) => void,
 }
 
@@ -58,7 +58,7 @@ const CourseSelect: React.FC<Props> = (props) => {
 
   const selectActiveLayout = (forCourse: BasicCourse) => {
     const activeLayout = getActiveLayout(forCourse)
-    if (activeLayout && setLayout) {
+    if (setLayout) {
       setLayout(activeLayout)
     }
   }
