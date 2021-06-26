@@ -83,7 +83,7 @@ const useStyles = makeStyles((theme) => ({
 
 interface Props {
   layout?: DetailedLayout, // Layout to edit, or undefined if adding a new layout.
-  course: Course,
+  course?: Course, // undefined while loading
   handleFinish: (layout: DetailedLayout) => void,
   handleCancel?: () => void,
   handleDelete?: () => void,
@@ -245,7 +245,8 @@ const EditLayout: React.FC<Props> = (props) => {
       >
         <Typography className={classes.formControl} variant="h5">
           {newLayout ? 'New ' : 'Edit '}
-          Layout for {course.name}, {course.city}
+          Layout
+          {course ? ` for ${course.name}, ${course.city}` : ''}
         </Typography>
 
         <TextField

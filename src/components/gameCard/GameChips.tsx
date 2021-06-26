@@ -1,9 +1,10 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { makeStyles } from '@material-ui/core/styles'
 import Chip from '@material-ui/core/Chip'
 
 import { highScoreBlue, illegalRed } from '../../constants/Colors'
 import AddTagButton from './AddTagButton'
+import { Redirect } from 'react-router-dom'
 
 export const chipHeight = 22
 
@@ -59,6 +60,8 @@ const GameChips: React.FC<Props> = (props) => {
   const classes = useStyles()
   const { game, setGame, isEditing, availableWeatherConditions, availableConditions, chosenUserTagHistory, setChosenUserTagHistory } = props
 
+  const [playerRedirect, setPlayerRedirect] = useState(false)
+
   const editableUserTagsToShow = [...game.tags, ...chosenUserTagHistory.filter(tag => !arrayContainsTag(game.tags, tag))]
 
   useEffect(() => {
@@ -67,6 +70,10 @@ const GameChips: React.FC<Props> = (props) => {
       setChosenUserTagHistory([...userTagsNotInHistory, ...chosenUserTagHistory])
     }
   }, []) // eslint-disable-line react-hooks/exhaustive-deps
+
+  if (playerRedirect) {
+    return <Redirect push to={'/players'} />
+  }
 
   const handlePlayerChipClick = (event: React.MouseEvent) => {
     const playerId = event.currentTarget.getAttribute('data-playerid')
@@ -82,14 +89,13 @@ const GameChips: React.FC<Props> = (props) => {
       }
       setGame(game)
     } else {
-      // TODO
-      alert('Coming soon: Go to player\'s page!')
+      setPlayerRedirect(true)
     }
   }
 
   const handleTagChipClick = () => {
     // TODO
-    alert('Coming soon: Search games by clicked condition/tag!')
+    alert('Coming soon(ish): Search games by clicked tag!')
   }
 
   const handleTagToggle = (tag: Tag, arrayName: 'conditions' | 'weatherConditions' | 'tags') => {

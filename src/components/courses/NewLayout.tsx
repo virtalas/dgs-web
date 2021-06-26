@@ -17,9 +17,7 @@ const NewLayout: React.FC<Props> = (props) => {
   const courseId = match.params.id
 
   const [redirect, setRedirect] = useState(false)
-  const [course, setCourse] = useState<Course>(
-    { id: '', name: 'Loading...', city: '', lat: undefined, lon: undefined, numberOfGames: 0 }
-  )
+  const [course, setCourse] = useState<Course>()
 
   const cancelTokenSourceRef = useRef<CancelTokenSource | null>(null)
 
