@@ -42,7 +42,11 @@ interface ApiGame {
 
 interface ApiGameResponse {
   game: ApiGame,
-  course: ApiCourse,
+  course: {
+    id: string,
+    name: string,
+    city: string,
+  },
   layout: GameLayout,
   scores: ApiPlayerScores[],
 }

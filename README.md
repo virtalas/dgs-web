@@ -8,6 +8,14 @@ Disc Golf Stats web frontend built with ReactJS & TypeScript.
 2. Run the project: `$ npm start`
 3. The app will be running at http://localhost:3000/ (https disabled for developmet environment).
 
+### Production
+
+Add a .env file at the root:
+
+```
+echo REACT_APP_API_ROOT=api_root_here > .env
+```
+
 ### Testing
 
 Using GitHub Actions.
