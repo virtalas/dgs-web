@@ -42,6 +42,9 @@ const useStyles = makeStyles((theme) => ({
     height: trHeightEdit,
   },
   obEdit: {
+    background: 'white',
+  },
+  obEditDark: {
     background: chipGrey,
   },
   /*
@@ -273,7 +276,7 @@ const ScoreCard: React.FC<Props> = (props) => {
     return isEditing ? (
       <tr className={classes.bottomRow}>
         {playerScores.obs.map((obCount: number, index: number) => (
-          <td className={classes.obEdit} key={index}>
+          <td className={obCount > 0 ? classes.obEditDark : classes.obEdit} key={index}>
             {createStrokeInput(classes.strokeEdit, playerScores.player.firstName, obCount, index, handleStrokeChange, false)}
           </td>
         ))}
@@ -416,12 +419,14 @@ function updateScores(scores: PlayerScores[],
   return scores
 }
 
-function createStrokeInput(className: string,
-                            playerName: string,
-                            strokeCount: number,
-                            index: number,
-                            handleStrokeChange: (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void,
-                            throws: boolean) {
+function createStrokeInput(
+  className: string,
+  playerName: string,
+  strokeCount: number,
+  index: number,
+  handleStrokeChange: (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void,
+  throws: boolean
+) {
   return (
     <input
       data-cy="strokeEdit"
