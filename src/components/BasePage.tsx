@@ -42,7 +42,7 @@ const useStyles = makeStyles((theme) => ({
     position: 'fixed',
     bottom: theme.spacing(3),
     right: theme.spacing(3),
-    zIndex: 2,
+    zIndex: 11,
   },
   coursesFab: {
     position: 'fixed',

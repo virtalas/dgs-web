@@ -107,7 +107,7 @@ const GamePhotos: React.FC<Props> = (props) => {
   }
 
   const photos = game.photos.map((photo, index) => (
-    <div className={classes.addPhotoButton}>
+    <div className={classes.addPhotoButton} key={index}>
       <Thumbnail
         isEditing={isEditing}
         thumbnailMaxHeight={thumbnailMaxDimension}
