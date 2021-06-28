@@ -32,6 +32,7 @@ const Thumbnail: React.FC<Props> = (props) => {
     image: {
       width: '100%',
       height: '100%',
+      objectFit: 'cover',
     },
     buttonIcon: {
       opacity: 0.85,

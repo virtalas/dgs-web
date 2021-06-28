@@ -1,10 +1,14 @@
-import React, { useState } from 'react'
+import React, { useRef, useState } from 'react'
 import { Redirect } from 'react-router-dom'
 
 import { makeStyles } from '@material-ui/core/styles'
 import Typography from '@material-ui/core/Typography'
 import { Card, CardContent, CardActionArea } from '@material-ui/core'
 import { sneakyGrey } from '../../constants/Colors'
+import { useEffect } from 'react'
+import { CancelTokenSource } from 'axios'
+import baseService from '../../services/baseService'
+import photosService from '../../services/photosService'
 
 const useStyles = makeStyles((theme) => ({
   card: {
@@ -51,8 +55,23 @@ const CourseListCard: React.FC<Props> = (props) => {
   const classes = useStyles()
 
   const { course } = props
-  const coverPictureURL = course.photo?.thumbnailUrl
+  const [coverPictureURL, setCoverPictureUrl] = useState<string>()
   const [redirect, setRedirect] = useState(false)
+
+  const cancelTokenSourceRef = useRef<CancelTokenSource | null>(null)
+
+  useEffect(() => {
+    const fetchThumbnailUrls = async () => {
+      if (!course.photo) return
+      cancelTokenSourceRef.current = baseService.cancelTokenSource()
+      const urls = await photosService.getPhotoUrls([course.photo?.thumbnailKey], cancelTokenSourceRef.current)
+      if (!urls || urls.length === 0) return
+      setCoverPictureUrl(urls[0])
+    }
+
+    fetchThumbnailUrls()
+    return () => cancelTokenSourceRef.current?.cancel()
+  }, [course.photo])
 
   if (redirect) {
     return <Redirect push to={'/courses/view/' + course.id} />

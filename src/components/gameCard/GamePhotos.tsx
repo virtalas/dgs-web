@@ -13,7 +13,7 @@ import { resizeFile } from '../../utils/PhotoUtils'
 import Thumbnail from '../photo/Thumbnail'
 
 const thumbnailMaxDimension = 70
-const photoMaxDimension = 1000
+const photoMaxDimension = 1300
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -79,23 +79,22 @@ const GamePhotos: React.FC<Props> = (props) => {
   }
 
   useEffect(() => {
-    const fetchThumbnailUrls = () => {
+    const fetchThumbnailUrls = async () => {
       if (game.photos.length === 0) return
       if (game.photos[0].thumbnailUrl) return
+
       cancelTokenSourceRef.current = baseService.cancelTokenSource()
-  
-      photosService.getPhotoUrls(game.photos.map(photo => photo.thumbnailKey), cancelTokenSourceRef.current)
-        .then(urls => {
-          if (!urls) return
-  
-          const modifiedPhotos = [...game.photos]
-          for (let i = 0; i < modifiedPhotos.length; i++) {
-            modifiedPhotos[i].thumbnailUrl = urls[i]
-          }
-  
-          game.photos = modifiedPhotos
-          setGame(game)
-        })
+      const urls = await photosService.getPhotoUrls(game.photos.map(photo => photo.thumbnailKey), cancelTokenSourceRef.current)
+      
+      if (!urls) return
+
+      const modifiedPhotos = [...game.photos]
+      for (let i = 0; i < modifiedPhotos.length; i++) {
+        modifiedPhotos[i].thumbnailUrl = urls[i]
+      }
+
+      game.photos = modifiedPhotos
+      setGame(game)
     }
 
     fetchThumbnailUrls()

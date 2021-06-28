@@ -15,7 +15,6 @@ import {
   // TableRow,
   // TableBody
 } from '@material-ui/core'
-import Skeleton from '@material-ui/lab/Skeleton'
 
 import coursesService from '../../services/coursesService'
 import LayoutPaper from './LayoutPaper'
@@ -217,9 +216,7 @@ const Course: React.FC<Props> = (props) => {
         </div>
       ) : addPhotoButton}
     </div>
-  ) : (
-    <Skeleton className={classes.imageContainer} variant="rect" />
-  )
+  ) : null
 
   const courseTitleRow = course ? (
     <Grid
@@ -232,9 +229,7 @@ const Course: React.FC<Props> = (props) => {
         {course?.name}, {course?.city} {editCourseButton}
       </Typography>
     </Grid>
-  ) : (
-    <Skeleton variant="text" width={200} height={40} />
-  )
+  ) : null
 
   const weatherIcon = (
     <div className={classes.weatherContainer}>
