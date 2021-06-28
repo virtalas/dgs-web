@@ -55,10 +55,52 @@ const GamePhotos: React.FC<Props> = (props) => {
 
   const [photoViewerOpen, setPhotoViewerOpen] = useState(false)
   const [clickedPhoto, setClickedPhoto] = useState<Photo>()
+  const [photoUrlsFetched, setPhotoUrlsFetched] = useState(false)
 
   const cancelTokenSourceRef = useRef<CancelTokenSource | null>(null)
 
-  useEffect(() => () => cancelTokenSourceRef.current?.cancel(), [])
+  const fetchPhotoUrls = () => {
+    if (game.photos.length === 0) return
+    cancelTokenSourceRef.current = baseService.cancelTokenSource()
+
+    photosService.getPhotoUrls(game.photos.map(photo => photo.key), cancelTokenSourceRef.current)
+      .then(urls => {
+        if (!urls) return
+
+        const modifiedPhotos = [...game.photos]
+        for (let i = 0; i < modifiedPhotos.length; i++) {
+          modifiedPhotos[i].url = urls[i]
+        }
+
+        game.photos = modifiedPhotos
+        setGame(game)
+        setPhotoUrlsFetched(true)
+      })
+  }
+
+  useEffect(() => {
+    const fetchThumbnailUrls = () => {
+      if (game.photos.length === 0) return
+      if (game.photos[0].thumbnailUrl) return
+      cancelTokenSourceRef.current = baseService.cancelTokenSource()
+  
+      photosService.getPhotoUrls(game.photos.map(photo => photo.thumbnailKey), cancelTokenSourceRef.current)
+        .then(urls => {
+          if (!urls) return
+  
+          const modifiedPhotos = [...game.photos]
+          for (let i = 0; i < modifiedPhotos.length; i++) {
+            modifiedPhotos[i].thumbnailUrl = urls[i]
+          }
+  
+          game.photos = modifiedPhotos
+          setGame(game)
+        })
+    }
+
+    fetchThumbnailUrls()
+    return () => cancelTokenSourceRef.current?.cancel()
+  }, [])  // eslint-disable-line react-hooks/exhaustive-deps
 
   const handlePhotoSelection = async (event: React.ChangeEvent<HTMLInputElement>) => {
     let photoData: any
@@ -77,7 +119,7 @@ const GamePhotos: React.FC<Props> = (props) => {
     cancelTokenSourceRef.current = baseService.cancelTokenSource()
     const photo = await photosService.uploadGamePhoto(game.id, photoData, thumbnailData, cancelTokenSourceRef.current)
 
-    game.photos = [photo, ...game.photos]
+    game.photos = [...game.photos, photo]
     setGame(game)
   }
 
@@ -87,15 +129,17 @@ const GamePhotos: React.FC<Props> = (props) => {
         cancelTokenSourceRef.current = baseService.cancelTokenSource()
         photosService.deletePhoto(photo, cancelTokenSourceRef.current)
           .then(() => {
-            game.photos = game.photos.filter(p => p.url !== photo.url)
+            game.photos = game.photos.filter(p => p.id !== photo.id)
             setGame(game)
           })
           .catch(error => {
-            window.alert('Photo deletion failed.')
-            console.log('Photo deletion failed:', error)
+            window.alert('Photo deletion failed: ' + error)
           })
       }
     } else {
+      if (!photoUrlsFetched) {
+        fetchPhotoUrls()
+      }
       setClickedPhoto(photo)
       setPhotoViewerOpen(true)
     }
@@ -111,7 +155,7 @@ const GamePhotos: React.FC<Props> = (props) => {
       <Thumbnail
         isEditing={isEditing}
         thumbnailMaxHeight={thumbnailMaxDimension}
-        url={photo.url}
+        photo={photo}
         handlePhotoClick={() => handlePhotoClick(photo)}
       />
     </div>

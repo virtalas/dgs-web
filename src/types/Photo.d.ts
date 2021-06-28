@@ -1,5 +1,8 @@
 interface Photo {
   id: string,
-  url: string,
-  thumbnailUrl: string,
+  key: string,
+  url: string | undefined,
+  thumbnailKey: string,
+  thumbnailUrl: string | undefined,
+  createdDate: Date,
 }

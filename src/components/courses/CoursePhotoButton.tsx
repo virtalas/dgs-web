@@ -95,7 +95,7 @@ const CoursePhotoButton: React.FC<Props> = (props) => {
 
       <Thumbnail
         isEditing={true}
-        url={photo ? photo.thumbnailUrl : undefined}
+        photo={photo}
         thumbnailMaxHeight={courseThumbnailMaxHeight}
         thumbnailMaxWidth={courseThumbnailMaxWidth}
         handlePhotoSelection={handlePhotoSelection}

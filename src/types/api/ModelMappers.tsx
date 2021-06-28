@@ -15,6 +15,7 @@ const playerScoresToPlayer = (playerScores: ApiPlayerScores): Player => {
 export const apiGameResponseToGame = (gameResponse: ApiGameResponse): Game => {
   const layoutTotalPar = gameResponse.layout.holes.map((hole: Hole) => hole.par).reduce((a: number, b: number) => a + b)
   const comments = gameResponse.game.comments.map(apiComment => apiCommentToComment(apiComment))
+  const photos = gameResponse.game.photos.map(apiPhoto => apiPhotoToPhoto(apiPhoto))
   return {
     id: gameResponse.game.id,
     creatorId: gameResponse.game.creator_id,
@@ -24,7 +25,7 @@ export const apiGameResponseToGame = (gameResponse: ApiGameResponse): Game => {
     startDate: gameResponse.game.start_date ? new Date(gameResponse.game.start_date) : undefined,
     endDate: new Date(gameResponse.game.end_date),
     temperature: gameResponse.game.temperature,
-    comments: sortGameComments(comments),
+    comments: sortByCreatedDate(comments),
     scores: gameResponse.scores.map((playerScores: ApiPlayerScores) => {
       const total = calculateTotalScore(playerScores.throws, playerScores.obs)
       return {
@@ -44,7 +45,7 @@ export const apiGameResponseToGame = (gameResponse: ApiGameResponse): Game => {
     conditions: sortTags(gameResponse.game.tags
       .filter(tag => tag.condition)
       .map(tag => apiTagToTag(tag))),
-    photos: gameResponse.game.photos.map(apiPhoto => apiPhotoToPhoto(apiPhoto)),
+    photos: sortByCreatedDate(photos),
     highScorers: gameResponse.scores
       .filter(s => s.high_score)
       .map(s => playerScoresToPlayer(s)),
@@ -84,8 +85,11 @@ const apiCommentToComment = (apiComment: ApiComment): GameComment => {
 export const apiPhotoToPhoto =(apiPhoto: ApiPhoto): Photo => {
   return {
     id: apiPhoto.id,
+    key: apiPhoto.key,
     url: apiPhoto.url,
+    thumbnailKey: apiPhoto.thumbnail_key,
     thumbnailUrl: apiPhoto.thumbnail_url,
+    createdDate: new Date(apiPhoto.created_date),
   }
 }
 
@@ -193,8 +197,8 @@ export function sortTags(tags: Tag[]): Tag[] {
   })
 }
 
-export function sortGameComments(comments: GameComment[]): GameComment[] {
-  return comments.sort((a, b) => {
+export function sortByCreatedDate(array: { createdDate: Date }[]): any {
+  return array.sort((a, b) => {
     let same = a.createdDate.getTime() === b.createdDate.getTime()
     if (same) return 0
     if (a.createdDate > b.createdDate) return 1

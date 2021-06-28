@@ -12,13 +12,13 @@ interface Props {
   isEditing: boolean,
   thumbnailMaxHeight: number,
   thumbnailMaxWidth?: number,
-  url?: string,
+  photo?: Photo,
   handlePhotoSelection?: (event: React.ChangeEvent<HTMLInputElement>) => void,
   handlePhotoClick?: () => void,
 }
 
 const Thumbnail: React.FC<Props> = (props) => {
-  const { isEditing, thumbnailMaxHeight, thumbnailMaxWidth, url, handlePhotoSelection, handlePhotoClick } = props
+  const { isEditing, thumbnailMaxHeight, thumbnailMaxWidth, photo, handlePhotoSelection, handlePhotoClick } = props
 
   const useStyles = makeStyles((theme) => ({
     addPhotoPaper: {
@@ -48,7 +48,7 @@ const Thumbnail: React.FC<Props> = (props) => {
   
   const classes = useStyles()
 
-  const icon = url ? (
+  const icon = photo ? (
     <DeleteIcon className={classes.buttonIcon} />
   ) : (
     <PhotoCameraIcon className={classes.buttonIcon} />
@@ -56,15 +56,15 @@ const Thumbnail: React.FC<Props> = (props) => {
   
   const paper = (
     <Paper className={classes.addPhotoPaper} elevation={0}>
-      {url ? (
-        <img className={classes.image} src={url} alt="" />
+      {photo?.thumbnailUrl ? (
+        <img className={classes.image} src={photo?.thumbnailUrl} alt="" />
       ) : null}
 
       {isEditing ? icon : null}
     </Paper>
   )
 
-  const input = url ? null : (
+  const input = isEditing && !photo ? (
     <input
       type="file"
       name="img"
@@ -72,7 +72,7 @@ const Thumbnail: React.FC<Props> = (props) => {
       hidden
       onChange={handlePhotoSelection}
     />
-  )
+  ) : null
 
   return (
     <ButtonBase

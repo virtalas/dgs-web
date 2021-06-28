@@ -30,8 +30,15 @@ const deletePhoto = async (photo: Photo, source: CancelTokenSource): Promise<{}>
   return response.data
 }
 
+const getPhotoUrls = async (keys: string[], source: CancelTokenSource): Promise<string[]> => {
+  const params = keys.map(key => 'key=' + key).join('&')
+  const response = await baseService.get('/photos/urls?' + params, source)
+  return response.data.map((urlResponse: { url: string | undefined }) => urlResponse.url)
+}
+
 export default {
   uploadGamePhoto,
   deletePhoto,
   uploadCoursePhoto,
+  getPhotoUrls,
 }

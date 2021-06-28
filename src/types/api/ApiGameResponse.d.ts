@@ -25,8 +25,11 @@ interface ApiTag {
 
 interface ApiPhoto {
   id: string,
-  url: string,
-  thumbnail_url: string,
+  key: string,
+  url: string | undefined,
+  thumbnail_key: string,
+  thumbnail_url: string | undefined,
+  created_date: Date,
 }
 
 interface ApiGame {
