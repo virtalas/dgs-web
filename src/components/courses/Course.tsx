@@ -231,7 +231,7 @@ const Course: React.FC<Props> = (props) => {
     </Grid>
   ) : null
 
-  const weatherIcon = (
+  const weatherIcon = (course && course.lat && course.lon) ? (
     <div className={classes.weatherContainer}>
       {localWeather ? (
         <div className={classes.weatherFlexbox}>
@@ -247,7 +247,7 @@ const Course: React.FC<Props> = (props) => {
         </div>
       ) : null}
     </div>
-  )
+  ) : null
 
   // const statsTable = (
   //   <Table size="small">

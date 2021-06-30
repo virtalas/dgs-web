@@ -10,7 +10,7 @@ export const resizeFile = (file: Blob, thumbnailMaxHeight: number, thumbnailMaxW
       maxWidth,
       maxHeight,
       'JPEG',
-      thumbnail ? 65 : 90,
+      thumbnail ? 65 : 80,
       0,
       (uri) => resolve(uri),
       'base64'

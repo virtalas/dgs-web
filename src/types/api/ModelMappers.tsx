@@ -16,6 +16,17 @@ export const apiGameResponseToGame = (gameResponse: ApiGameResponse): Game => {
   const layoutTotalPar = gameResponse.layout.holes.map((hole: Hole) => hole.par).reduce((a: number, b: number) => a + b)
   const comments = gameResponse.game.comments.map(apiComment => apiCommentToComment(apiComment))
   const photos = gameResponse.game.photos.map(apiPhoto => apiPhotoToPhoto(apiPhoto))
+  const scores = gameResponse.scores.map((playerScores: ApiPlayerScores) => {
+    const total = calculateTotalScore(playerScores.throws, playerScores.obs)
+    return {
+      player: playerScoresToPlayer(playerScores),
+      strokes: playerScores.throws,
+      obs: playerScores.obs,
+      total: total,
+      toPar: calculateToPar(playerScores.throws, total, gameResponse.layout.holes),
+    }
+  })
+
   return {
     id: gameResponse.game.id,
     creatorId: gameResponse.game.creator_id,
@@ -26,16 +37,7 @@ export const apiGameResponseToGame = (gameResponse: ApiGameResponse): Game => {
     endDate: new Date(gameResponse.game.end_date),
     temperature: gameResponse.game.temperature,
     comments: sortByCreatedDate(comments),
-    scores: gameResponse.scores.map((playerScores: ApiPlayerScores) => {
-      const total = calculateTotalScore(playerScores.throws, playerScores.obs)
-      return {
-        player: playerScoresToPlayer(playerScores),
-        strokes: playerScores.throws,
-        obs: playerScores.obs,
-        total: total,
-        toPar: calculateToPar(playerScores.throws, total, gameResponse.layout.holes),
-      }
-    }),
+    scores: sortByToPar(scores),
     tags: sortTags(gameResponse.game.tags
       .filter(tag => (!tag.condition && !tag.weather_condition))
       .map(tag => apiTagToTag(tag))),
@@ -202,6 +204,15 @@ export function sortByCreatedDate(array: { createdDate: Date }[]): any {
     let same = a.createdDate.getTime() === b.createdDate.getTime()
     if (same) return 0
     if (a.createdDate > b.createdDate) return 1
+    return -1
+  })
+}
+
+export function sortByToPar(scores: PlayerScores[]): PlayerScores[] {
+  return scores.sort((a, b) => {
+    let same = a.toPar === b.toPar
+    if (same) return b.total - a.total // Same toPar but lower total means they skipped holes, meaning illegal round.
+    if (a.toPar > b.toPar) return 1
     return -1
   })
 }

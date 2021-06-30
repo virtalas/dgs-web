@@ -150,8 +150,11 @@ const GameInfo: React.FC<Props> = (props) => {
     ) : null
   })
 
+  const threeMonthsAgo = new Date().setMonth(new Date().getMonth() - 3)
+  const gameEndedLessThanThreeMonthsAgo = +game.endDate > +threeMonthsAgo
+
   const userIsInGame = game.scores.find(s => s.player.id === userId) !== undefined
-  const showCommentPrompt = userCommentEmpty && userIsInGame
+  const showCommentPrompt = userCommentEmpty && userIsInGame && gameEndedLessThanThreeMonthsAgo
 
   const gameChips = (
     <GameChips

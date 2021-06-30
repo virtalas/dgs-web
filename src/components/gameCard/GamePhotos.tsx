@@ -13,7 +13,7 @@ import { resizeFile } from '../../utils/PhotoUtils'
 import Thumbnail from '../photo/Thumbnail'
 
 const thumbnailMaxDimension = 70
-const photoMaxDimension = 1300
+const photoMaxDimension = 1200
 
 const useStyles = makeStyles((theme) => ({
   root: {
