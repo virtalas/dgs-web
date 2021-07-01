@@ -6,7 +6,7 @@ import Paper from '@material-ui/core/Paper'
 import PhotoCameraIcon from '@material-ui/icons/PhotoCamera'
 import DeleteIcon from '@material-ui/icons/Delete'
 
-const thumbnailScale = 0.85
+const thumbnailScale = 0.70
 
 interface Props {
   isEditing: boolean,
