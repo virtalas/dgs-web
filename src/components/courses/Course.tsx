@@ -279,8 +279,6 @@ const Course: React.FC<Props> = (props) => {
       {/* TODO: */}
       {/* {statsTable} */}
 
-      <br />
-
       {/* TODO: */}
       {/* <Typography component="p">
         On this course:
@@ -291,10 +289,12 @@ const Course: React.FC<Props> = (props) => {
       <br />
 
       {activeLayouts && activeLayouts.length > 0 ? (
-        <Typography className={classes.sectionTitle} variant="h5">Active layouts</Typography>
+        <div>
+          <br />
+          <Typography className={classes.sectionTitle} variant="h5">Active layouts</Typography>
+          <br />
+        </div>
       ) : null}
-
-      <br />
 
       {course ? activeLayouts?.map(layout => (
         <LayoutPaper
@@ -307,10 +307,12 @@ const Course: React.FC<Props> = (props) => {
       )) : null}
 
       {inactiveLayouts && inactiveLayouts.length > 0 ? (
-        <Typography className={classes.sectionTitle} variant="h5">Inactive layouts</Typography>
+        <div>
+          <br />
+          <Typography className={classes.sectionTitle} variant="h5">Inactive layouts</Typography>
+          <br />
+        </div>
       ) : null}
-
-      <br />
 
       {course ? inactiveLayouts?.map(layout => (
         <LayoutPaper
