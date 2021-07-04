@@ -56,6 +56,7 @@ const GamePhotos: React.FC<Props> = (props) => {
   const [photoViewerOpen, setPhotoViewerOpen] = useState(false)
   const [clickedPhoto, setClickedPhoto] = useState<Photo>()
   const [photoUrlsFetched, setPhotoUrlsFetched] = useState(false)
+  const [isUploading, setIsUploading] = useState(false)
 
   const cancelTokenSourceRef = useRef<CancelTokenSource | null>(null)
 
@@ -115,8 +116,10 @@ const GamePhotos: React.FC<Props> = (props) => {
       return
     }
 
+    setIsUploading(true)
     cancelTokenSourceRef.current = baseService.cancelTokenSource()
     const photo = await photosService.uploadGamePhoto(game.id, photoData, thumbnailData, cancelTokenSourceRef.current)
+    setIsUploading(false)
 
     game.photos = [...game.photos, photo]
     setGame(game)
@@ -164,6 +167,7 @@ const GamePhotos: React.FC<Props> = (props) => {
     <div className={classes.addPhotoButton}>
       <Thumbnail
         isEditing={isEditing}
+        isLoading={isUploading}
         thumbnailMaxHeight={thumbnailMaxDimension}
         handlePhotoSelection={handlePhotoSelection}
       />

@@ -5,6 +5,8 @@ import ButtonBase from '@material-ui/core/ButtonBase'
 import Paper from '@material-ui/core/Paper'
 import PhotoCameraIcon from '@material-ui/icons/PhotoCamera'
 import DeleteIcon from '@material-ui/icons/Delete'
+import CircularProgress from '@material-ui/core/CircularProgress'
+import LoadingView from '../LoadingView'
 
 const thumbnailScale = 0.70
 
@@ -13,12 +15,13 @@ interface Props {
   thumbnailMaxHeight: number,
   thumbnailMaxWidth?: number,
   photo?: Photo,
+  isLoading?: boolean,
   handlePhotoSelection?: (event: React.ChangeEvent<HTMLInputElement>) => void,
   handlePhotoClick?: () => void,
 }
 
 const Thumbnail: React.FC<Props> = (props) => {
-  const { isEditing, thumbnailMaxHeight, thumbnailMaxWidth, photo, handlePhotoSelection, handlePhotoClick } = props
+  const { isEditing, thumbnailMaxHeight, thumbnailMaxWidth, photo, isLoading, handlePhotoSelection, handlePhotoClick } = props
 
   const useStyles = makeStyles((theme) => ({
     addPhotoPaper: {
@@ -49,11 +52,17 @@ const Thumbnail: React.FC<Props> = (props) => {
   
   const classes = useStyles()
 
-  const icon = photo ? (
+  let icon = photo ? (
     <DeleteIcon className={classes.buttonIcon} />
   ) : (
     <PhotoCameraIcon className={classes.buttonIcon} />
   )
+
+  if (isLoading) {
+    icon = (
+      <LoadingView />
+    )
+  }
   
   const paper = (
     <Paper className={classes.addPhotoPaper} elevation={0}>
@@ -80,6 +89,7 @@ const Thumbnail: React.FC<Props> = (props) => {
       focusRipple
       component="label"
       onClick={handlePhotoClick}
+      disabled={isLoading}
     >
       {paper}
       {input}

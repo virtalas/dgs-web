@@ -37,6 +37,7 @@ const CoursePhotoButton: React.FC<Props> = (props) => {
   const [photoString, setPhotoString] = useState<string>()
   const [photoFile, setPhotoFile] = useState<File>()
   const [photoCropperOpen, setPhotoCropperOpen] = useState(false)
+  const [isSending, setIsSending] = useState(false)
 
   const cancelTokenSourceRef = useRef<CancelTokenSource | null>(null)
 
@@ -65,8 +66,10 @@ const CoursePhotoButton: React.FC<Props> = (props) => {
       const photoData = await resizeFile(croppedPhotoString, coverPhotoMaxHeight, coverPhotoMaxWidth, false)
       const thumbnailData = await resizeFile(croppedPhotoString, courseThumbnailMaxHeight, courseThumbnailMaxWidth, true)
   
+      setIsSending(true)
       cancelTokenSourceRef.current = baseService.cancelTokenSource()
       const photo = await photosService.uploadCoursePhoto(course?.id ?? '', photoData, thumbnailData, cancelTokenSourceRef.current)
+      setIsSending(false)
       setPhoto(photo)
     } catch(e) {
       window.alert('Resize failed: ' + e)
@@ -96,6 +99,7 @@ const CoursePhotoButton: React.FC<Props> = (props) => {
 
       <Thumbnail
         isEditing={true}
+        isLoading={isSending}
         photo={photo}
         thumbnailMaxHeight={courseThumbnailMaxHeight}
         thumbnailMaxWidth={courseThumbnailMaxWidth}
