@@ -159,13 +159,14 @@ export const apiBasicCourseToBasicCourse = (apiBasicCourse: ApiBasicCourse): Bas
 }
 
 export const apiDetailedCourseToDetailedCourse = (apiDetailedCourse: ApiDetailedCourse): DetailedCourse => {
+  const layouts = apiDetailedCourse.layouts.map(apiDetailedLayout => apiDetailedLayoutToDetailedLayout(apiDetailedLayout))
   return {
     id: apiDetailedCourse.id,
     name: apiDetailedCourse.name,
     city: apiDetailedCourse.city,
     lat: apiDetailedCourse.lat,
     lon: apiDetailedCourse.lon,
-    layouts: apiDetailedCourse.layouts.map(apiDetailedLayout => apiDetailedLayoutToDetailedLayout(apiDetailedLayout)),
+    layouts: sortByName(layouts),
     allowedToEdit: apiDetailedCourse.allowed_to_edit,
     numberOfGames: apiDetailedCourse.number_of_games,
     photo: apiDetailedCourse.photo ? apiPhotoToPhoto(apiDetailedCourse.photo) : undefined,
@@ -214,6 +215,15 @@ export function sortByToPar(scores: PlayerScores[]): PlayerScores[] {
     let same = a.toPar === b.toPar
     if (same) return b.total - a.total // Same toPar but lower total means they skipped holes, meaning illegal round.
     if (a.toPar > b.toPar) return 1
+    return -1
+  })
+}
+
+function sortByName(array: DetailedLayout[]): DetailedLayout[] {
+  return array.sort((a, b) => {
+    let same = a.name === b.name
+    if (same) return 0
+    if (a.name > b.name) return 1
     return -1
   })
 }
