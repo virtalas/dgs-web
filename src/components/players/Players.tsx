@@ -7,16 +7,18 @@ import { useAuth } from '../../context/AuthContext'
 import playersService from '../../services/playersService'
 import PlayerCard from './PlayerCard'
 import baseService from '../../services/baseService'
+import { pageMaxWidth } from '../BasePage'
 
 const useStyles = makeStyles((theme) => ({
   page: {
-    maxWidth: 600,
+    maxWidth: pageMaxWidth,
     marginTop: theme.spacing(1),
     marginLeft: 'auto',
     marginRight: 'auto',
     marginBottom: theme.spacing(11),
   },
   guestsTitle: {
+    marginTop: theme.spacing(5),
     textAlign: 'center',
   },
 }))

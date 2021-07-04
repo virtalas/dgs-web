@@ -25,10 +25,11 @@ import weatherService from '../../services/weatherService'
 import { coverPhotoMaxHeight } from './CoursePhotoButton'
 import { coverPhotoMaxWidth } from './CoursePhotoButton'
 import { courseThumbnailMaxHeight } from './CoursePhotoButton'
+import { pageMaxWidth } from '../BasePage'
 
 const useStyles = makeStyles((theme) => ({
   page: {
-    maxWidth: 600,
+    maxWidth: pageMaxWidth,
     margin: theme.spacing(1),
     [theme.breakpoints.up('md')]: {
       marginLeft: 'auto',

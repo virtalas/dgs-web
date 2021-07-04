@@ -25,6 +25,7 @@ import Info from './info/Info'
 import { appBarHeight } from './AppBar'
 
 export const drawerWidth = 240
+export const pageMaxWidth = 610
 
 const useStyles = makeStyles((theme) => ({
   root: {

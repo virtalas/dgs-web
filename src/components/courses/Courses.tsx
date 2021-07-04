@@ -6,10 +6,11 @@ import CourseListCard from './CourseListCard'
 import SortButton from '../newGame/SortButton'
 import baseService from '../../services/baseService'
 import LoadingView from '../LoadingView'
+import { pageMaxWidth } from '../BasePage'
 
 const useStyles = makeStyles((theme) => ({
   page: {
-    maxWidth: 600,
+    maxWidth: pageMaxWidth,
     marginTop: theme.spacing(1),
     marginLeft: 'auto',
     marginRight: 'auto',
