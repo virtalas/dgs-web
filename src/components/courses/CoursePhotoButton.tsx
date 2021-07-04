@@ -10,9 +10,10 @@ import Thumbnail from '../photo/Thumbnail'
 import PhotoCropper from '../photo/PhotoCropper'
 import CancellableModal from '../CancellableModal'
 
-export const courseThumbnailMaxHeight = 100
-export const courseThumbnailMaxWidth = 350
-const photoMaxDimension = 1000
+export const courseThumbnailMaxHeight = 121 // 425 * 0,28571429 (aspect ratio)
+export const courseThumbnailMaxWidth = 425
+export const coverPhotoMaxHeight = 200
+export const coverPhotoMaxWidth = 702 // 200 * 0,28571429 (aspect ratio)
 
 const useStyles = makeStyles((theme) => ({
   photoLabel: {
@@ -61,8 +62,8 @@ const CoursePhotoButton: React.FC<Props> = (props) => {
     setPhotoCropperOpen(false)
 
     try {
-      const photoData = await resizeFile(photoFile, photoMaxDimension, photoMaxDimension, photoMaxDimension, false)
-      const thumbnailData = await resizeFile(croppedPhotoString, courseThumbnailMaxHeight, courseThumbnailMaxWidth, photoMaxDimension, true)
+      const photoData = await resizeFile(croppedPhotoString, coverPhotoMaxHeight, coverPhotoMaxWidth, false)
+      const thumbnailData = await resizeFile(croppedPhotoString, courseThumbnailMaxHeight, courseThumbnailMaxWidth, true)
   
       cancelTokenSourceRef.current = baseService.cancelTokenSource()
       const photo = await photosService.uploadCoursePhoto(course?.id ?? '', photoData, thumbnailData, cancelTokenSourceRef.current)

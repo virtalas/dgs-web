@@ -145,7 +145,7 @@ const GameInfo: React.FC<Props> = (props) => {
         align="left"
         variant="body1"
       >
-        {commenter?.firstName}: {comment.content}
+        {commenter?.firstName ?? 'Admin'}: {comment.content}
       </Typography>
     ) : null
   })

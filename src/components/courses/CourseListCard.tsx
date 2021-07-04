@@ -16,6 +16,7 @@ const useStyles = makeStyles((theme) => ({
     marginBottom: theme.spacing(4),
   },
   // Centering image from: https://stackoverflow.com/a/18869078
+  // Center image vertically inside imageContainer
   image: {
     maxHeight: '1000%',
     maxWidth: '100%',
@@ -83,7 +84,7 @@ const CourseListCard: React.FC<Props> = (props) => {
     <Card className={classes.card}>
       <CardActionArea data-cy="courseCard" onClick={handleClick}>
         
-        {coverPictureURL ? (
+        {course.photo ? (
           <div className={classes.imageContainer}>
             <img
               className={classes.image}

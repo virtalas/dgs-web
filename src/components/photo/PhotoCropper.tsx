@@ -60,6 +60,7 @@ const PhotoCropper: React.FC<Props> = (props) => {
       <div className={classes.cropperContainer}>
         <Cropper
           image={imageString}
+          showGrid={false}
           crop={crop}
           zoom={zoom}
           aspect={courseThumbnailMaxWidth / courseThumbnailMaxHeight}

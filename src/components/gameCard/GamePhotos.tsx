@@ -108,8 +108,8 @@ const GamePhotos: React.FC<Props> = (props) => {
     try {
       // @ts-ignore: Object is possibly 'null'.
       const file = event.target.files[0]
-      photoData = await resizeFile(file, thumbnailMaxDimension, thumbnailMaxDimension, photoMaxDimension, false)
-      thumbnailData = await resizeFile(file, thumbnailMaxDimension, thumbnailMaxDimension, photoMaxDimension, true)
+      photoData = await resizeFile(file, photoMaxDimension, photoMaxDimension, false)
+      thumbnailData = await resizeFile(file, thumbnailMaxDimension, thumbnailMaxDimension, true)
     } catch (err) {
       window.alert('Photo compression or cropping failed:' + err)
       return

@@ -22,6 +22,9 @@ import EditCourse from './EditCourse'
 import CancellableModal from '../CancellableModal'
 import baseService from '../../services/baseService'
 import weatherService from '../../services/weatherService'
+import { coverPhotoMaxHeight } from './CoursePhotoButton'
+import { coverPhotoMaxWidth } from './CoursePhotoButton'
+import { courseThumbnailMaxHeight } from './CoursePhotoButton'
 
 const useStyles = makeStyles((theme) => ({
   page: {
@@ -32,32 +35,18 @@ const useStyles = makeStyles((theme) => ({
       marginRight: 'auto',
     },
   },
-  // Centering image from: https://stackoverflow.com/a/18869078
   image: {
-    maxHeight: '1000%',
+    width: coverPhotoMaxWidth,
     maxWidth: '100%',
-    width: 'auto',
-    height: 'auto',
-    position: 'absolute',
-    top: 0,
-    bottom: 0,
-    left: 0,
-    right: 0,
-    margin: 'auto',
-  },
-  imageContainer: {
-    height: 180,
-    width: '100%',
+    maxHeight: coverPhotoMaxHeight,
     borderRadius: 5,
     borderCollapse: 'separate',
     overflow: 'hidden',
-    display: 'inline-block',
-    position: 'relative',
   },
   photoPlaceholder: {
     backgroundColor: 'lightgrey',
     width: '100%',
-    height: '100%',
+    height: courseThumbnailMaxHeight,
   },
   weatherContainer: {
     marginLeft: theme.spacing(1),
@@ -191,29 +180,25 @@ const Course: React.FC<Props> = (props) => {
   ) : null
 
   const addPhotoButton = course?.allowedToEdit ? (
-    <div className={classes.imageContainer}>
-      <Button
-        className={classes.photoPlaceholder}
-        size="small"
-        onClick={handleEditCourse}
-      >
-        Upload a picture
-      </Button>
-    </div>
+    <Button
+      className={classes.photoPlaceholder}
+      size="small"
+      onClick={handleEditCourse}
+    >
+      Upload a picture
+    </Button>
   ) : null
 
   const imageContainer = course ? (
     <div>
-      {(coverPictureURL && !imgError) ? (
-        <div className={classes.imageContainer}>
-          <img
-            id="courseImage"
-            className={classes.image}
-            src={coverPictureURL}
-            alt="Course map"
-            onError={() => setImgError(true)}
-          />
-        </div>
+      {(course.photo && !imgError) ? (
+        <img
+          id="courseImage"
+          className={classes.image}
+          src={coverPictureURL}
+          alt="Course map"
+          onError={() => setImgError(true)}
+        />
       ) : addPhotoButton}
     </div>
   ) : null

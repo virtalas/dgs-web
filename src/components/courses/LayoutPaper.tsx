@@ -139,7 +139,8 @@ const LayoutPaper: React.FC<Props> = (props) => {
         {layout.description}
       </Typography>
 
-      <Button disabled size="small">Layout map</Button>
+      {/* TODO */}
+      {/* <Button size="small">Layout map</Button> */}
 
       <CancellableModal modalOpen={modalOpen} onClose={() => setModalOpen(false)}>
         <EditLayout

@@ -1,9 +1,6 @@
 import Resizer from 'react-image-file-resizer'
 
-export const resizeFile = (file: Blob, thumbnailMaxHeight: number, thumbnailMaxWidth: number, photoMaxDimension: number, thumbnail: boolean) => {
-  const maxWidth = thumbnail ? thumbnailMaxWidth : photoMaxDimension
-  const maxHeight = thumbnail ? thumbnailMaxHeight : photoMaxDimension
-
+export const resizeFile = (file: Blob, maxHeight: number, maxWidth: number, thumbnail: boolean) => {
   return new Promise((resolve) => {
     Resizer.imageFileResizer(
       file,
