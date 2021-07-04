@@ -223,7 +223,7 @@ function sortByName(array: DetailedLayout[]): DetailedLayout[] {
   return array.sort((a, b) => {
     let same = a.name === b.name
     if (same) return 0
-    if (a.name > b.name) return 1
+    if (a.name < b.name) return 1
     return -1
   })
 }
