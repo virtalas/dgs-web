@@ -185,9 +185,6 @@ interface Props {
   isEditing: boolean,
 }
 
-// TODO: when tapping to edit a stroke/ob, move cursor to end
-// TODO: Update game & backend when unfocus.
-
 const ScoreCard: React.FC<Props> = (props) => {
   const classes = useStyles()
   const { game, setGame, isEditing } = props
@@ -215,7 +212,7 @@ const ScoreCard: React.FC<Props> = (props) => {
   }
 
   const holeNumbers = game.layout.holes.map((hole: Hole, index: number) => (
-    <td key={index}>{index + 1}</td>
+    <td key={index}>{hole.number}</td>
   ))
 
   const coursePars = game.layout.holes.map((hole: Hole, index: number) => (
