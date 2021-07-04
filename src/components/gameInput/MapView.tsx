@@ -46,7 +46,7 @@ const MapView: React.FC<Props> = (props) => {
           </div>
         </MapInteractionCSS>
       ) : (
-        <div><br /><br /><br /><br /><br />No course map added.</div>
+        <div><br /><br /><br /><br /><br />No layout map added.</div>
       )}
     </div>
   )

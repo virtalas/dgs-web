@@ -4,26 +4,29 @@ import { makeStyles } from '@material-ui/core/styles'
 import List from '@material-ui/core/List'
 import ListItem from '@material-ui/core/ListItem'
 import ListItemText from '@material-ui/core/ListItemText'
-import { Button } from '@material-ui/core'
+import Button from '@material-ui/core/Button'
+import Typography from '@material-ui/core/Typography'
 
 import { lightBlue, lightGrey, sneakyGrey } from '../../constants/Colors'
 
+const circleWidth = 50
+
 const useStyles = makeStyles((theme) => ({
   root: {
-    paddingTop: theme.spacing(8),
+    paddingTop: theme.spacing(7),
   },
   circle: {
-    width: 40,
-    height: 40,
+    width: circleWidth,
+    height: circleWidth,
     borderRadius: '50%',
     background: lightBlue,
     textAlign: 'center',
     margin: 'auto',
-    paddingRight: 1, // Align par button with throw inputs.
+    marginLeft: theme.spacing(3),
   },
   parCircle: {
-    width: 39,
-    height: 39,
+    width: circleWidth - 1,
+    height: circleWidth - 1,
     borderRadius: '50%',
     borderStyle: 'solid',
     borderWidth: 1,
@@ -41,46 +44,35 @@ const useStyles = makeStyles((theme) => ({
     boxSizing: 'border-box',
     textAlign: 'center',
     display: 'inline-block',
-    paddingTop: 4,
+    paddingTop: 9,
     margin: 'auto',
-    width: 40,
+    width: 50,
     outline: 'none',
   },
   parButtonText: {
     lineHeight: 1,
-    fontSize: 17,
+    fontSize: 19,
     fontWeight: 400,
     textAlign: 'center',
-    paddingTop: 10,
+    paddingTop: 15,
     margin: 'auto',
-    width: 40,
   },
-  throwInputText: {
-    marginRight: '5%', // First align with par button, then move left with paddingRight.
-    paddingRight: 36,
-    width: 70,
-    textAlign: 'right',
+  headerText: {
+    width: circleWidth,
+    marginLeft: theme.spacing(3),
   },
-  obInputText: {
-    width: 40,
-    marginRight: 9,
-    textAlign: 'right',
+  headerTextOb: {
+    textAlign: 'center',
   },
-  throwInputContainer: {
-    position: 'absolute',
-    right: '5%',
-  },
-  toParText: {
-    width: 20,
-    paddingLeft: 20,
+  rowRightSideContainer: {
+    display: 'flex',
+    justifyContent: 'flex-end',
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: 'white', // Cut off player names that are too long.
   },
   syncText: {
     color: sneakyGrey,
-  },
-  parButton: {
-    position: 'absolute',
-    right: '5%',
-    top: 2,
   },
   finishButton: {
     width: 155,
@@ -145,40 +137,51 @@ const PlayerStrokeInput: React.FC<Props> = (props) => {
     onScoreChange(scores)
   }
 
-  const finishButton = (
-    <Button
-      variant="outlined"
-      onClick={() => goToPreviewAndFinish()}
-    >
-      Preview & Finish Game
-    </Button>
+  const headerRow = (
+    <ListItem>
+      <ListItemText>
+        <Typography variant="overline">Player</Typography>
+      </ListItemText>
+
+      <div className={classes.rowRightSideContainer}>
+        <ListItemText className={classes.headerText}>
+          <Typography variant="overline">To par</Typography>
+        </ListItemText>
+        <ListItemText className={classes.headerText + ' ' + classes.headerTextOb}>
+          <Typography variant="overline">OB</Typography>
+        </ListItemText>
+        <ListItemText className={classes.headerText}>
+          <Typography variant="overline">Throws</Typography>
+        </ListItemText>
+      </div>
+    </ListItem>
   )
 
-  const rows = scores.map((scoreInfo, index) => (
+  const scoreInputRows = scores.map((scoreInfo, index) => (
     <ListItem key={index}>
       <ListItemText primary={scoreInfo.player.firstName} />
-      <ListItemText
-        className={classes.toParText}
-        data-cy="toPar"
-        primary={scoreInfo.toPar > 0 ? '+' + scoreInfo.toPar : scoreInfo.toPar}
-      />
-      <ListItemText primary="OB:" className={classes.obInputText} />
-      <div className={classes.circle}>
-        <input
-          className={classes.strokeInput}
-          onChange={event => handleStrokeChange(scoreInfo.player.id, false, event)}
-          type="tel"
-          value={scoreInfo.obs[holeNum - 1]}
-          min="0"
-          max="99"
-          onFocus={e => e.target.value = '' /* Clear the field when it comes into focus. */}
-          onBlur={event => handleBlur(scoreInfo.player.id, false, event)}
-          inputMode="numeric"
-          pattern="[0-9]*">
-        </input>
-      </div>
-      <ListItemText primary="Throws:" className={classes.throwInputText} />
-      <div className={classes.throwInputContainer}>
+
+      <div className={classes.rowRightSideContainer}>
+        <ListItemText
+          data-cy="toPar"
+          primary={scoreInfo.toPar > 0 ? '+' + scoreInfo.toPar : scoreInfo.toPar}
+        />
+
+        <div className={classes.circle}>
+          <input
+            className={classes.strokeInput}
+            onChange={event => handleStrokeChange(scoreInfo.player.id, false, event)}
+            type="tel"
+            value={scoreInfo.obs[holeNum - 1]}
+            min="0"
+            max="99"
+            onFocus={e => e.target.value = '' /* Clear the field when it comes into focus. */}
+            onBlur={event => handleBlur(scoreInfo.player.id, false, event)}
+            inputMode="numeric"
+            pattern="[0-9]*">
+          </input>
+        </div>
+
         <div className={classes.circle}>
           <input
             className={classes.strokeInput}
@@ -197,23 +200,42 @@ const PlayerStrokeInput: React.FC<Props> = (props) => {
     </ListItem>
   ))
 
+  const syncTextAndParButtonRow = (
+    <ListItem>
+      <ListItemText className={classes.syncText}>
+        {updating ? 'Syncing game...' : 'Game synced.'}
+      </ListItemText>
+
+      <div className={classes.rowRightSideContainer}>
+        <ListItemText>
+          <div className={classes.parCircle} onClick={handleParClick}>
+            <div className={classes.parButtonText} data-cy="parCircleButton">Par</div>
+          </div>
+        </ListItemText>
+      </div>
+    </ListItem>
+  )
+
+  const finishButton = (
+    <Button
+      variant="outlined"
+      onClick={() => goToPreviewAndFinish()}
+    >
+      Preview & Finish Game
+    </Button>
+  )
+
+  const finishButtonRow = holeNum === coursePars.length ? (
+    <ListItem className={classes.finishButton}>{finishButton}</ListItem>
+  ) : null
+
   return (
     <div className={classes.root}>
       <List>
-        {rows}
-        <ListItem>
-          <ListItemText className={classes.syncText}>
-            {updating ? 'Syncing game...' : 'Game synced.'}
-          </ListItemText>
-          <ListItemText className={classes.parButton}>
-            <div className={classes.parCircle} onClick={handleParClick}>
-              <div className={classes.parButtonText} data-cy="parCircleButton">Par</div>
-            </div>
-          </ListItemText>
-        </ListItem>
-        {holeNum === coursePars.length ? (
-          <ListItem className={classes.finishButton}>{finishButton}</ListItem>
-        ) : null}
+        {headerRow}
+        {scoreInputRows}
+        {syncTextAndParButtonRow}
+        {finishButtonRow}
       </List>
     </div>
   )
