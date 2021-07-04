@@ -92,9 +92,6 @@ const GameCard: React.FC<Props> = (props) => {
                           game.illegalScorers.length ||
                           game.comments.reduce((totalLength, comment) => totalLength + comment.content.length, 0)
 
-  const userIsInGame = game.scores.find(s => s.player.id === userId) !== undefined
-  const allowedToEdit = userIsInGame // TODO: or currentUser.isAdmin
-
   const cancelTokenSourceRef = useRef<CancelTokenSource | null>(null)
 
   useEffect(() => () => cancelTokenSourceRef.current?.cancel(), [])
@@ -182,7 +179,7 @@ const GameCard: React.FC<Props> = (props) => {
   
   const showLoading = ((updating || autoUpdating) && !updateError) ?? false
 
-  const editButton = allowedToEdit && !editOnly && !isCommentPromptDirty ? (
+  const editButton = game.allowedToEdit && !editOnly && !isCommentPromptDirty ? (
     <ActionButton
       variant="edit"
       position={gameInfoIsShown ? 'bottom' : 'top'}

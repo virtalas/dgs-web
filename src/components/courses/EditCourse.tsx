@@ -131,6 +131,7 @@ const EditCourse: React.FC<Props> = (props) => {
         label="City"
         data-cy="courseCityInput"
         value={city}
+        required
         onChange={e => setCity(e.target.value)}
       />
 

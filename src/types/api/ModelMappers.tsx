@@ -54,6 +54,7 @@ export const apiGameResponseToGame = (gameResponse: ApiGameResponse): Game => {
     illegalScorers: gameResponse.scores
       .filter(s => !s.legal)
       .map(s => playerScoresToPlayer(s)),
+    allowedToEdit: gameResponse.game.allowed_to_edit,
   }
 }
 

@@ -15,4 +15,5 @@ interface Game {
   photos: Photo[],
   highScorers: Player[],
   illegalScorers: Player[],
+  allowedToEdit: boolean,
 }

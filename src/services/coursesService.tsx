@@ -75,6 +75,7 @@ const updateLayout = async (layout: DetailedLayout, source: CancelTokenSource): 
     active: layout.active,
     name: layout.name,
     description: layout.description,
+    pars: layout.holes.map(hole => hole.par),
     mapURL: layout.mapURL,
   })
   return apiDetailedLayoutToDetailedLayout(response.data)

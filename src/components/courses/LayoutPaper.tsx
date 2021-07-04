@@ -60,8 +60,8 @@ const LayoutPaper: React.FC<Props> = (props) => {
 
   const handleUpdateLayout = (updatedLayout: DetailedLayout) => {
     cancelTokenSourceRef.current = baseService.cancelTokenSource()
-    coursesService.updateLayout(updatedLayout, cancelTokenSourceRef.current).then(l => {
-      handleLayoutUpdated(updatedLayout)
+    coursesService.updateLayout(updatedLayout, cancelTokenSourceRef.current).then(returnedLayout => {
+      handleLayoutUpdated(returnedLayout)
       setModalOpen(false)
     })
   }

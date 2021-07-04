@@ -41,6 +41,7 @@ interface ApiGame {
   temperature: double | undefined,
   tags: ApiTag[],
   photos: ApiPhoto[],
+  allowed_to_edit: boolean,
 }
 
 interface ApiGameResponse {
