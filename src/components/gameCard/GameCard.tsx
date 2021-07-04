@@ -90,6 +90,7 @@ const GameCard: React.FC<Props> = (props) => {
                           game.conditions.length ||
                           game.highScorers.length ||
                           game.illegalScorers.length ||
+                          game.tags.length ||
                           game.comments.reduce((totalLength, comment) => totalLength + comment.content.length, 0)
 
   const cancelTokenSourceRef = useRef<CancelTokenSource | null>(null)
