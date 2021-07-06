@@ -58,9 +58,9 @@ const PhotoViewer: React.FC<Props> = (props) => {
 
   const syncCurrentPhoto = (direction: 'left' | 'right') => {
     let photoIndex = photos.findIndex(photo => photo.id === currentSlidePhoto?.id ?? '')
-    if (direction === 'left' && photoIndex > 0) {
+    if (direction === 'right' && photoIndex > 0) {
       photoIndex--
-    } else if (photoIndex < photos.length - 1) {
+    } else if (direction === 'left' && photoIndex < photos.length - 1) {
       photoIndex++
     }
     setCurrentSlidePhoto(photos[photoIndex])
@@ -69,8 +69,6 @@ const PhotoViewer: React.FC<Props> = (props) => {
   const sliderSettings = {
     className: classes.slider,
     dots: false,
-    infinite: false,
-    speed: 500,
     slidesToShow: 1,
     slidesToScroll: 1,
     initialSlide: initialSelectedIndex,
@@ -94,6 +92,7 @@ const PhotoViewer: React.FC<Props> = (props) => {
     if (currentSlidePhoto && imageDimensions[currentSlidePhoto.id]) {
       return imageDimensions[currentSlidePhoto.id].width * value.scale
     } else {
+      console.log('calculateScaledPhotoWidth: failed to calculate scaled photo width')
       return 0
     }
   }
