@@ -85,6 +85,7 @@ const PhotoViewer: React.FC<Props> = (props) => {
     if (currentSlidePhoto && imageDimensions[currentSlidePhoto.id]) {
       return imageDimensions[currentSlidePhoto.id].height * value.scale
     } else {
+      console.log('calculateScaledPhotoHeight: failed to calculate scaled photo height')
       return 0
     }
   }
@@ -130,7 +131,7 @@ const PhotoViewer: React.FC<Props> = (props) => {
 
   const handleCloseClick = (e: any) => {
     const scaledPhotoHeight = calculateScaledPhotoHeight()
-    const posY = e.clientY ? e.clientY : e.targetTouches[0].pageY
+    const posY = e.clientY ? e.clientY : e.targetTouches[0].clientY
     if (posY > sliderTopMargin + scaledPhotoHeight) {
       handleClose()
     }
