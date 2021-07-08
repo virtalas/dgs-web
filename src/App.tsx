@@ -14,6 +14,7 @@ const theme = createMuiTheme({})
 const App: React.FC<{}> = () => {
   let localToken = localStorage.getItem("dgs-token")
   let existingToken = localToken !== null
+                        && localToken !== 'null'
                         && localToken !== undefined
                         && localToken !== 'undefined' 
                         ? JSON.parse(localToken as string)
@@ -39,7 +40,7 @@ const App: React.FC<{}> = () => {
     setUserId(undefined)
   }
 
-  if (existingToken) {
+  if (existingToken !== null) {
     baseService.useAccessToken(existingToken.access_token)
     baseService.useTokenExpiryChecker(handleLogout, existingToken)
   }
