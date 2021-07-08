@@ -242,17 +242,18 @@ const GameCard: React.FC<Props> = (props) => {
     <Typography variant="subtitle1" className={classes.title}>{dateTime}</Typography>
   )
 
-  // TODO: Validation for date, calendar value picker?
   const gameDateEditing = (
     <MuiPickersUtilsProvider utils={DayjsUtils}>
-      <DatePicker
-        margin="normal"
-        id="gamedate-start-edit"
-        label="Start date"
-        format="HH:mm DD.MM.YYYY"
-        value={game.startDate}
-        onChange={handleStartDateChange}
-      />
+      {game.startDate ? (
+        <DatePicker
+          margin="normal"
+          id="gamedate-start-edit"
+          label="Start date"
+          format="HH:mm DD.MM.YYYY"
+          value={game.startDate}
+          onChange={handleStartDateChange}
+        />
+      ) : null}
       <DatePicker
         margin="normal"
         id="gamedate-end-edit"
