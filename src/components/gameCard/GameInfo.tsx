@@ -28,6 +28,9 @@ const useStyles = makeStyles((theme) => ({
     marginTop: 10,
     marginBottom: 50, // Make room for 'Save' and 'Cancel' buttons.
   },
+  commentPlayerName: {
+    fontWeight: 450,
+  },
 }), { name: 'MuiHook' })
 
 interface Props {
@@ -145,7 +148,10 @@ const GameInfo: React.FC<Props> = (props) => {
         align="left"
         variant="body1"
       >
-        <b>{commenter?.firstName ?? 'Admin'}</b>: {comment.content}
+        <span className={classes.commentPlayerName}>
+          {commenter?.firstName ?? 'Admin'}
+        </span>
+        : {comment.content}
       </Typography>
     ) : null
   })
