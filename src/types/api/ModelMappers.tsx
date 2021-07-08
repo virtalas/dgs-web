@@ -189,6 +189,8 @@ export const apiDetailedLayoutToDetailedLayout = (apiDetailedLayout: ApiDetailed
 export function sortCourses(courses: Course[], sortByPopularity: boolean): Course[] {
   return courses.sort((a, b) => {
     if (sortByPopularity) {
+      const same = a.numberOfGames === b.numberOfGames
+      if (same) return a.name > b.name ? 1 : -1
       return b.numberOfGames - a.numberOfGames
     }
     return a.name > b.name ? 1 : -1
