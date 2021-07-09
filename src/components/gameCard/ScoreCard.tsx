@@ -223,6 +223,9 @@ const ScoreCard: React.FC<Props> = (props) => {
   let pnRowClassName = isEditing ? classes.playerNameEdit : ''
 
   const playerNameCell = (player: Player) => {
+    if (player.guest) {
+      return player.firstName
+    }
     if (player.friendStatus === undefined) {
       return null
     }

@@ -54,7 +54,7 @@ const NewGuestButton: React.FC<Props> = (props) => {
     const newGuest = {
       id: 'temp-id-' + guestName, // Unique ID needed for updating the selection list.
       firstName: guestName,
-      lastName: '',
+      lastName: undefined,
       friendStatus: undefined,
       guest: true,
       newGuest: true,

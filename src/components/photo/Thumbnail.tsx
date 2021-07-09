@@ -5,7 +5,6 @@ import ButtonBase from '@material-ui/core/ButtonBase'
 import Paper from '@material-ui/core/Paper'
 import PhotoCameraIcon from '@material-ui/icons/PhotoCamera'
 import DeleteIcon from '@material-ui/icons/Delete'
-import CircularProgress from '@material-ui/core/CircularProgress'
 import LoadingView from '../LoadingView'
 
 const thumbnailScale = 0.70

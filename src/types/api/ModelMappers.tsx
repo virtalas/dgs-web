@@ -4,9 +4,9 @@ const playerScoresToPlayer = (playerScores: ApiPlayerScores): Player => {
   return {
     id: playerScores.player_id,
     firstName: playerScores.player_name,
-    lastName: playerScores.player_last_name ?? '',
+    lastName: playerScores.player_last_name,
     friendStatus: playerScores.friend_status,
-    guest: undefined,
+    guest: playerScores.guest,
     newGuest: undefined,
     admin: undefined,
   }
