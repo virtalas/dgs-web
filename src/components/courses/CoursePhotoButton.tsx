@@ -107,6 +107,10 @@ const CoursePhotoButton: React.FC<Props> = (props) => {
         handlePhotoClick={handlePhotoClick}
       />
 
+      <Typography className={classes.photoLabel} variant="caption" component="p"> 
+        NOTE: If the photo turns black, try selecting a smaller photo size.
+      </Typography>
+
       <CancellableModal modalOpen={photoCropperOpen} onClose={() => setPhotoCropperOpen(false)}>
         {photoString ? (
           <PhotoCropper imageString={photoString} handleCropFinished={handleCropFinished} />

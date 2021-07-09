@@ -4,6 +4,7 @@ import { makeStyles } from '@material-ui/core/styles'
 import TextField from '@material-ui/core/TextField'
 import Typography from '@material-ui/core/Typography'
 import Button from '@material-ui/core/Button'
+import Grid from '@material-ui/core/Grid'
 
 import { allowedToEditExplanation } from '../../constants/Strings'
 import DisableableButton from '../DisableableButton'
@@ -159,24 +160,31 @@ const EditCourse: React.FC<Props> = (props) => {
         setPhoto={setPhoto}
       />
 
-      {newCourse ? null : (
-        <Button
-          className={classes.createButton}
-          variant="contained"
-          onClick={handleCancel}
-        >
-          Cancel
-        </Button>
-      )}
+      <Grid
+        container
+        direction="row"
+        justify="flex-start"
+        alignItems="center"
+      >
+        {newCourse ? null : (
+          <Button
+            className={classes.createButton}
+            variant="contained"
+            onClick={handleCancel}
+          >
+            Cancel
+          </Button>
+        )}
 
-      <div className={classes.createButton}>
-        <DisableableButton
-          onClick={handleFinishClicked}
-          disabled={name.length === 0 || city.length === 0 || latError || lonError}
-        >
-          {newCourse ? 'Create' : 'Update'}
-        </DisableableButton>
-      </div>
+        <div className={classes.createButton}>
+          <DisableableButton
+            onClick={handleFinishClicked}
+            disabled={name.length === 0 || city.length === 0 || latError || lonError}
+          >
+            {newCourse ? 'Create' : 'Update'}
+          </DisableableButton>
+        </div>
+      </Grid>
 
       <Typography className={classes.explanation} component="p" variant="caption">
         {allowedToEditExplanation + 'course.'}

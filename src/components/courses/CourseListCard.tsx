@@ -80,6 +80,10 @@ const CourseListCard: React.FC<Props> = (props) => {
 
   const handleClick = () => setRedirect(true)
 
+  const gameCountText = course.numberOfGames > 0 ?
+    `You have played here ${course.numberOfGames} ${course.numberOfGames === 1 ? 'time' : 'times'}` :
+    `You haven't played here yet`
+
   return (
     <Card className={classes.card}>
       <CardActionArea data-cy="courseCard" onClick={handleClick}>
@@ -100,7 +104,7 @@ const CourseListCard: React.FC<Props> = (props) => {
           </Typography>
 
           <Typography variant="subtitle2" className={classes.gameCountText}>
-            You played here {course.numberOfGames} {course.numberOfGames === 1 ? 'time' : 'times'}
+            {gameCountText}
           </Typography>
         </CardContent>
       </CardActionArea>
