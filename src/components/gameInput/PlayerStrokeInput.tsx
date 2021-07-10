@@ -51,7 +51,7 @@ const useStyles = makeStyles((theme) => ({
   },
   parButtonText: {
     lineHeight: 1,
-    fontSize: 19,
+    fontSize: 20,
     fontWeight: 400,
     textAlign: 'center',
     paddingTop: 15,
@@ -63,6 +63,9 @@ const useStyles = makeStyles((theme) => ({
   },
   headerTextOb: {
     textAlign: 'center',
+  },
+  playerNameText: {
+    fontSize: 20,
   },
   rowRightSideContainer: {
     display: 'flex',
@@ -159,13 +162,18 @@ const PlayerStrokeInput: React.FC<Props> = (props) => {
 
   const scoreInputRows = scores.map((scoreInfo, index) => (
     <ListItem key={index}>
-      <ListItemText primary={scoreInfo.player.firstName} />
+      <ListItemText>
+        <span className={classes.playerNameText}>
+          {scoreInfo.player.firstName}
+        </span>
+      </ListItemText>
 
       <div className={classes.rowRightSideContainer}>
-        <ListItemText
-          data-cy="toPar"
-          primary={scoreInfo.toPar > 0 ? '+' + scoreInfo.toPar : scoreInfo.toPar}
-        />
+        <ListItemText>
+          <span className={classes.playerNameText}>
+            {scoreInfo.toPar > 0 ? '+' + scoreInfo.toPar : scoreInfo.toPar}
+          </span>
+        </ListItemText>
 
         <div className={classes.circle}>
           <input
