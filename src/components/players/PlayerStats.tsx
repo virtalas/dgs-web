@@ -12,6 +12,7 @@ import AccordionSummary from '@material-ui/core/AccordionSummary'
 import AccordionDetails from '@material-ui/core/AccordionDetails'
 import Typography from '@material-ui/core/Typography'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
+import CircularProgress from '@material-ui/core/CircularProgress'
 
 import baseService from '../../services/baseService'
 import playersService from '../../services/playersService'
@@ -42,6 +43,8 @@ const PlayerStats: React.FC<Props> = props => {
   const { playerId } = props
 
   const [countStats, setCountStats] = useState<PlayerCountStats>()
+  const [expanded, setExpanded] = useState(false)
+  const [isLoading, setIsLoading] = useState(false)
 
   const cancelTokenSourceRef = useRef<CancelTokenSource | null>(null)
 
@@ -49,18 +52,25 @@ const PlayerStats: React.FC<Props> = props => {
 
   const fetchPlayerCountStatsIfNeeded = async () => {
     if (countStats) return
+    setIsLoading(true)
     cancelTokenSourceRef.current = baseService.cancelTokenSource()
     const userCountStats = await playersService.getPlayerCountStats(playerId, cancelTokenSourceRef.current)
     setCountStats(userCountStats)
+    setIsLoading(false)
+  }
+
+  const toggleExpand = async () => {
+    setExpanded(!expanded)
+    fetchPlayerCountStatsIfNeeded()
   }
 
   return (
-    <Accordion className={classes.accordion} elevation={0}>
+    <Accordion className={classes.accordion} elevation={0} expanded={expanded}>
       
       <AccordionSummary
-        expandIcon={<ExpandMoreIcon />}
+        expandIcon={isLoading ? <CircularProgress size={20} /> : <ExpandMoreIcon />}
         id="panel1a-header"
-        onClick={fetchPlayerCountStatsIfNeeded}
+        onClick={toggleExpand}
       >
         <Typography className={classes.heading}>Stats</Typography>
       </AccordionSummary>
