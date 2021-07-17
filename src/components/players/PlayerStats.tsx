@@ -1,4 +1,6 @@
-import React from 'react'
+import React, { useEffect, useRef, useState } from 'react'
+
+import { CancelTokenSource } from 'axios'
 
 import { makeStyles } from '@material-ui/core/styles'
 import Table from '@material-ui/core/Table'
@@ -11,6 +13,9 @@ import AccordionDetails from '@material-ui/core/AccordionDetails'
 import Typography from '@material-ui/core/Typography'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
 
+import baseService from '../../services/baseService'
+import playersService from '../../services/playersService'
+
 const useStyles = makeStyles((theme) => ({
   table: {
     marginTop: theme.spacing(1),
@@ -20,18 +25,42 @@ const useStyles = makeStyles((theme) => ({
     fontWeight: theme.typography.fontWeightRegular,
   },
   accordion: {
-  }
+    border: '1px solid lightgrey',
+  },
+  lastRowCell: {
+    borderBottom: 'none',
+  },
 }))
 
-const PlayerStats: React.FC<{}> = () => {
+interface Props {
+  playerId: string,
+}
+
+const PlayerStats: React.FC<Props> = props => {
   const classes = useStyles()
 
+  const { playerId } = props
+
+  const [countStats, setCountStats] = useState<PlayerCountStats>()
+
+  const cancelTokenSourceRef = useRef<CancelTokenSource | null>(null)
+
+  useEffect(() => () => cancelTokenSourceRef.current?.cancel(), [])
+
+  const fetchPlayerCountStatsIfNeeded = async () => {
+    if (countStats) return
+    cancelTokenSourceRef.current = baseService.cancelTokenSource()
+    const userCountStats = await playersService.getPlayerCountStats(playerId, cancelTokenSourceRef.current)
+    setCountStats(userCountStats)
+  }
+
   return (
-    <Accordion className={classes.accordion}>
+    <Accordion className={classes.accordion} elevation={0}>
       
       <AccordionSummary
         expandIcon={<ExpandMoreIcon />}
         id="panel1a-header"
+        onClick={fetchPlayerCountStatsIfNeeded}
       >
         <Typography className={classes.heading}>Stats</Typography>
       </AccordionSummary>
@@ -40,30 +69,38 @@ const PlayerStats: React.FC<{}> = () => {
         <Table className={classes.table} size="small">
           <TableBody>
             <TableRow>
-              <TableCell>Games played</TableCell>
-              <TableCell align="right">XXX</TableCell>
+              <TableCell>Games</TableCell>
+              <TableCell align="right">
+                {countStats ? countStats.gameCount : ''}
+              </TableCell>
             </TableRow>
-            <TableRow>
+            {/* <TableRow>
               <TableCell>Throws</TableCell>
               <TableCell align="right">XXX</TableCell>
-            </TableRow>
-            <TableRow>
+            </TableRow> */}
+            {/* <TableRow>
               <TableCell>Latest game</TableCell>
               <TableCell align="right">XXX</TableCell>
-            </TableRow>
+            </TableRow> */}
             <TableRow>
               <TableCell>Hole in ones</TableCell>
-              <TableCell align="right">XXX</TableCell>
+              <TableCell align="right">
+                {countStats ? countStats.holeInOneCount : ''}
+              </TableCell>
             </TableRow>
             <TableRow>
-              <TableCell>Eagles (not hole in one)</TableCell>
-              <TableCell align="right">XXX</TableCell>
+              <TableCell>Eagles (excluding hole in ones)</TableCell>
+              <TableCell align="right">
+                {countStats ? countStats.eagleCount : ''}
+              </TableCell>
             </TableRow>
             <TableRow>
-              <TableCell>Birdies</TableCell>
-              <TableCell align="right">XXX</TableCell>
+              <TableCell className={classes.lastRowCell}>Birdies</TableCell>
+              <TableCell className={classes.lastRowCell} align="right">
+                {countStats ? countStats.birdieCount : ''}
+              </TableCell>
             </TableRow>
-            <TableRow>
+            {/* <TableRow>
               <TableCell>Most played courses</TableCell>
               <TableCell align="right">1. XXX</TableCell>
             </TableRow>
@@ -74,7 +111,7 @@ const PlayerStats: React.FC<{}> = () => {
             <TableRow>
               <TableCell></TableCell>
               <TableCell align="right">3. XXX</TableCell>
-            </TableRow>
+            </TableRow> */}
           </TableBody>
         </Table>
       </AccordionDetails>

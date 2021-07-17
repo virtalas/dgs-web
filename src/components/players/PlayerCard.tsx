@@ -8,8 +8,8 @@ import CardContent from '@material-ui/core/CardContent'
 // import Button from '@material-ui/core/Button'
 
 import HighScores from './HighScores'
-// import PlayerStats from './PlayerStats'
 import InviteGuestButton from './InviteGuestButton'
+import PlayerStats from './PlayerStats'
 
 const useStyles = makeStyles((theme) => ({
   card: {
@@ -39,10 +39,9 @@ const PlayerCard: React.FC<Props> = (props) => {
           {player.firstName}
         </Typography>
 
-        {/* TODO: */}
-        {/* <div className={classes.playerStats}>
-          <PlayerStats />
-        </div> */}
+        <div className={classes.playerStats}>
+          <PlayerStats playerId={player.id} />
+        </div>
 
         {(guest !== undefined && guest) ? <InviteGuestButton player={player} /> : null}
       </CardContent>

@@ -33,6 +33,16 @@ const getHighScores = async (playerId: string, source: CancelTokenSource): Promi
   })
 }
 
+const getPlayerCountStats = async (playerId: string, source: CancelTokenSource): Promise<PlayerCountStats> => {
+  const response = await baseService.get(`/users/${playerId}/stats`, source)
+  return {
+    gameCount: response.data.game_count,
+    birdieCount: response.data.birdie_count,
+    eagleCount: response.data.eagle_count,
+    holeInOneCount: response.data.hole_in_one_count,  
+  }
+}
+
 const getFriendRequests = async (source: CancelTokenSource): Promise<FriendRequest[]> => {
   const response = await baseService.get('/users/friends/requests', source)
   return response.data
@@ -67,4 +77,5 @@ export default {
   acceptFriendRequest,
   declineFriendRequest,
   sendFriendRequest,
+  getPlayerCountStats,
 }
