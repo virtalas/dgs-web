@@ -101,7 +101,9 @@ const PlayerStats: React.FC<Props> = props => {
             <TableRow>
               <TableCell>Eagles (excluding hole in ones)</TableCell>
               <TableCell align="right">
-                {countStats ? countStats.eagleCount : ''}
+                {countStats ? countStats.eagleCount : (
+                  <div style={{ width: 20 }}></div>
+                )}
               </TableCell>
             </TableRow>
             <TableRow>
