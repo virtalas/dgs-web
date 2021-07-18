@@ -12,6 +12,7 @@ import coursesService from '../../services/coursesService'
 import SortButton from './SortButton'
 import { sortCourses } from '../../types/api/ModelMappers'
 import baseService from '../../services/baseService'
+import { getUserLocation } from '../../utils/Utils'
 
 const useStyles = makeStyles((theme) => ({
   formControl: {
@@ -88,16 +89,7 @@ const CourseSelect: React.FC<Props> = (props) => {
       console.log('Failed to access location: navigator.geolocation not supported')
       return
     }
-
-    navigator.geolocation.getCurrentPosition(position => {
-      const lat = Number(position.coords.latitude)
-      const lon = Number(position.coords.longitude)
-      console.log('Current location:', lat, lon)
-      if (completion) completion(lat, lon)
-    }, error => {
-      console.log('Failed to access location:', error)
-      if (completion) completion(undefined, undefined)
-    })
+    getUserLocation(completion)
   }
 
   const attemptToSelectClosestCourse = async (sortedCourses: Course[]) => {

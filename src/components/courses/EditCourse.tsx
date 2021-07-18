@@ -9,6 +9,7 @@ import Grid from '@material-ui/core/Grid'
 import { allowedToEditExplanation } from '../../constants/Strings'
 import DisableableButton from '../DisableableButton'
 import CoursePhotoButton from './CoursePhotoButton'
+import { getUserLocation } from '../../utils/Utils'
 
 const inputMaxWidth = 400
 const inputWidth = '90%'
@@ -20,7 +21,10 @@ const useStyles = makeStyles((theme) => ({
   formControl: {
     maxWidth: inputMaxWidth,
     width: inputWidth,
-    marginTop: theme.spacing(1),
+    marginTop: theme.spacing(2),
+  },
+  locationButton: {
+    marginTop: theme.spacing(2),
   },
   createButton: {
     margin: theme.spacing(3),
@@ -102,6 +106,17 @@ const EditCourse: React.FC<Props> = (props) => {
     setLonError(!(newLon >= -180 && newLon <= 180))
   }
 
+  const handleGetCurrentLocation = () => {
+    const locationDataInputted = lat.length > 0 || lon.length > 0
+    if (locationDataInputted && !window.confirm('Override the currently set latitude and longitude?')) return
+    
+    getUserLocation((lat, lon) => {
+      if (!lat || !lon) return
+      setLat(String(lat))
+      setLon(String(lon))
+    })
+  }
+
   const deleteButton = !newCourse ? (
     <Button
       className={classes.deleteButton}
@@ -153,6 +168,15 @@ const EditCourse: React.FC<Props> = (props) => {
         error={lonError}
         onChange={handleLongitudeChange}
       />
+      
+      <Button
+        className={classes.locationButton}
+        variant="outlined"
+        size="small"
+        onClick={handleGetCurrentLocation}
+      >
+        Use my location
+      </Button>
 
       <CoursePhotoButton
         course={course}

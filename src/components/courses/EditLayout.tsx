@@ -21,7 +21,7 @@ const useStyles = makeStyles((theme) => ({
   formControl: {
     maxWidth: inputMaxWidth,
     width: inputWidth,
-    marginTop: theme.spacing(1),
+    marginTop: theme.spacing(2),
   },
   countButton: {
     width: 50,
