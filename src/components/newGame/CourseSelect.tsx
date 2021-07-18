@@ -83,20 +83,59 @@ const CourseSelect: React.FC<Props> = (props) => {
     }
   }
 
+  const attemptToGetUserLocation = (completion?: (lat: number | undefined, lon: number | undefined) => void) => {
+    if (!navigator.geolocation) {
+      console.log('Failed to access location: navigator.geolocation not supported')
+      return
+    }
+
+    navigator.geolocation.getCurrentPosition(position => {
+      const lat = Number(position.coords.latitude)
+      const lon = Number(position.coords.longitude)
+      console.log('Current location:', lat, lon)
+      if (completion) completion(lat, lon)
+    }, error => {
+      console.log('Failed to access location:', error)
+      if (completion) completion(undefined, undefined)
+    })
+  }
+
+  const attemptToSelectClosestCourse = async (sortedCourses: Course[]) => {
+    attemptToGetUserLocation((userLat: number | undefined, userLon: number | undefined) => {
+      if (userLat === undefined || userLon === undefined || sortedCourses.length === 0) {
+        // No location information available: Choose the most visited course.
+        changeCourseTo(sortedCourses[0] as BasicCourse)
+        selectActiveLayout(sortedCourses[0] as BasicCourse)  
+        return
+      }
+  
+      const distance = (to: Course) => {
+        if (!to.lat || !to.lon) return Number.MAX_SAFE_INTEGER
+        return Math.sqrt(Math.pow(userLat - to.lat, 2) + Math.pow(userLon - to.lon, 2))
+      }
+    
+      const closestCourse = sortedCourses.reduce((a, b) => distance(a) < distance(b) ? a : b)
+      changeCourseTo(closestCourse as BasicCourse)
+      selectActiveLayout(closestCourse as BasicCourse)
+    })
+  }
+
   useEffect(() => {
     const cancelTokenSource = baseService.cancelTokenSource()
-    coursesService.getBasicCourses(cancelTokenSource).then(fetchedCourses => {
+    coursesService.getBasicCourses(cancelTokenSource).then(async (fetchedCourses) => {
       if (fetchedCourses.length === 0) {
         return
       }
-      
-      setCourses(sortCourses(fetchedCourses, sortByPopularity))
-      changeCourseTo(fetchedCourses[0]) // Courses should be ordered by popularity (at least initially).
-      selectActiveLayout(fetchedCourses[0])
+      const sortedFetchedCourses = sortCourses(fetchedCourses, sortByPopularity)
+      setCourses(sortedFetchedCourses)
       if (setGameCreatable) {
         setGameCreatable(true) // Even if the fetching of players fails, one player (user) and a course is enough.
       }
+      attemptToSelectClosestCourse(sortedFetchedCourses)
     })
+
+    // Ping the user to give their location first, then it can be accessed without a prompt once courses arrive.
+    attemptToGetUserLocation()
 
     return () => cancelTokenSource.cancel()
   }, []) // eslint-disable-line react-hooks/exhaustive-deps
@@ -128,12 +167,12 @@ const CourseSelect: React.FC<Props> = (props) => {
   const inactiveLayouts = course?.layouts.filter(layout => !layout.active)
 
   const layoutSelect = (
-    <FormControl variant="outlined" className={classes.formControl} error={layout === undefined && courses.length > 0}>
+    <FormControl variant="outlined" className={classes.formControl} error={course !== undefined && layout === undefined}>
       <InputLabel ref={inputLabel} htmlFor="layout-select">Layout</InputLabel>
       <Select
         value={layout ? layout.id : ''}
         onChange={handleLayoutChange}
-        disabled={course ? course.layouts.length <= 1 : false}
+        disabled={course ? course.layouts.length <= 1 : true}
         input={<OutlinedInput labelWidth={labelWidth} name="layout" id="layout-select" />}
       >
         {activeLayouts && activeLayouts.length > 0 ? (

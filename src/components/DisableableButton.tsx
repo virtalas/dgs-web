@@ -14,18 +14,17 @@ const useStyles = makeStyles((theme) => ({
 interface Props {
   onClick: () => void,
   disabled: boolean,
-  variant?: 'contained' | 'text',
+  variant?: 'contained' | 'text' | 'outlined',
+  size?: 'small',
 }
 
-// This component exists to fi a Material UI bug (?) in Safari:
+// This component exists to fix a Material UI bug (?) in Safari:
 // When a button is disabled by a React hook and becomes enabled, the style does not update correctly.
-// The text color does not change to white going from disabled to enabled.
+// Specifically, the text color does not change when going from disabled to enabled.
 
 const DisableableButton: React.FC<Props> = (props) => {
   const classes = useStyles()
-  const { onClick, disabled, variant } = props
-
-  const buttonVariant = variant ? variant : 'contained'
+  const { onClick, disabled, variant, size } = props
 
   // For contained buttons, we can just have the text color always be white.
   const containedButton = (
@@ -40,6 +39,31 @@ const DisableableButton: React.FC<Props> = (props) => {
     >
       {props.children}
     </Button>
+  )
+
+  // For outlined buttons, the text color has to change, so use two buttons.
+  const outlinedButton = (
+    <div>
+      {disabled ? (
+        <Button
+          variant="outlined"
+          size={size ? size : 'medium'}
+          disabled={true}
+        >
+          {props.children}
+        </Button>
+      ) : null}
+
+      {disabled ? null : (
+        <Button
+          variant="outlined"
+          size={size ? size : 'medium'}
+          onClick={onClick}
+        >
+          {props.children}
+        </Button>
+      )}
+    </div>
   )
 
   // For text buttons, the text color has to change, so use two buttons.
@@ -67,7 +91,16 @@ const DisableableButton: React.FC<Props> = (props) => {
     </div>
   )
 
-  return buttonVariant === 'contained' ? containedButton : textButton
+  switch (variant) {
+    case "contained":
+      return containedButton
+    case "outlined":
+      return outlinedButton
+    case "text":
+      return textButton
+    default:
+      return containedButton
+  }
 }
 
 export default DisableableButton

@@ -1,15 +1,19 @@
 import React from 'react'
 
 import { makeStyles } from '@material-ui/core/styles'
-import Button from '@material-ui/core/Button'
 import FormControl from '@material-ui/core/FormControl'
 import FormHelperText from '@material-ui/core/FormHelperText'
 import { sortCourses } from '../../types/api/ModelMappers'
+import DisableableButton from '../DisableableButton'
 
 const useStyles = makeStyles((theme) => ({
   formControl: {
-    margin: 5,
+    marginLeft: 5,
+    marginTop: 9,
     minWidth: 120,
+  },
+  buttonText: {
+    minWidth: 100,
   },
 }))
 
@@ -34,15 +38,17 @@ const SortButton: React.FC<Props> = (props) => {
   return (
     <FormControl variant="outlined" className={classes.formControl}>
       <FormHelperText>Sorted by</FormHelperText>
-      <Button
+      
+      <DisableableButton
         variant="outlined"
-        id="course-order"
         size="small"
         onClick={handleSortChange}
         disabled={courses.length <= 1}
       >
-        {sortByPopularity ? 'Most played' : 'Name'}
-      </Button>
+        <div className={classes.buttonText}>
+          {sortByPopularity ? 'Most played' : 'Name'}
+        </div>
+      </DisableableButton>
     </FormControl>
   )
 }
