@@ -101,9 +101,17 @@ const CourseSelect: React.FC<Props> = (props) => {
         return
       }
   
+      // https://stackoverflow.com/a/21623206
       const distance = (to: Course) => {
         if (!to.lat || !to.lon) return Number.MAX_SAFE_INTEGER
-        return Math.sqrt(Math.pow(userLat - to.lat, 2) + Math.pow(userLon - to.lon, 2))
+
+        const p = 0.017453292519943295 // Math.PI / 180
+        const c = Math.cos
+        const a = 0.5 - c((to.lat - userLat) * p)/2 +
+                c(userLat * p) * c(to.lat * p) *
+                (1 - c((to.lon - userLon) * p))/2
+
+        return 12742 * Math.asin(Math.sqrt(a)) // 2 * R; R = 6371 km
       }
     
       const closestCourse = sortedCourses.reduce((a, b) => distance(a) < distance(b) ? a : b)
