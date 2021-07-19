@@ -13,6 +13,7 @@ import SortButton from './SortButton'
 import { sortCourses } from '../../types/api/ModelMappers'
 import baseService from '../../services/baseService'
 import { getUserLocation } from '../../utils/Utils'
+import { CourseSort } from '../../types/enums/CourseSort'
 
 const useStyles = makeStyles((theme) => ({
   formControl: {
@@ -38,7 +39,7 @@ const CourseSelect: React.FC<Props> = (props) => {
 
   const [course, setCourse] = useState<BasicCourse>()
   const [courses, setCourses] = useState<Course[]>([])
-  const [sortByPopularity, setSortByPopularity] = useState(true)
+  const [sortBy, setSortBy] = useState(CourseSort.byName)
 
   const showLayoutSelect = setLayout !== undefined
 
@@ -126,7 +127,7 @@ const CourseSelect: React.FC<Props> = (props) => {
       if (fetchedCourses.length === 0) {
         return
       }
-      const sortedFetchedCourses = sortCourses(fetchedCourses, sortByPopularity)
+      const sortedFetchedCourses = sortCourses(fetchedCourses, sortBy)
       setCourses(sortedFetchedCourses)
       if (setGameCreatable) {
         setGameCreatable(true) // Even if the fetching of players fails, one player (user) and a course is enough.
@@ -157,7 +158,9 @@ const CourseSelect: React.FC<Props> = (props) => {
         input={<OutlinedInput labelWidth={labelWidth} name="course" id="course-select" />}
       >
         {courses.map((course, index) => (
-          <MenuItem value={course.id} key={index}>{course.name}</MenuItem>
+          <MenuItem value={course.id} key={index}>
+            {sortBy === CourseSort.byCity ? `${course.city}, ${course.name}` : `${course.name}, ${course.city}`}
+          </MenuItem>
         ))}
       </Select>
     </FormControl>
@@ -200,8 +203,8 @@ const CourseSelect: React.FC<Props> = (props) => {
       <SortButton
         courses={courses}
         setCourses={setCourses}
-        sortByPopularity={sortByPopularity}
-        setSortByPopularity={setSortByPopularity}
+        sortBy={sortBy}
+        setSortBy={setSortBy}
       />
       <br />
       {showLayoutSelect ? layoutSelect : null}

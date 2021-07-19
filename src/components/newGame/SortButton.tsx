@@ -5,6 +5,7 @@ import FormControl from '@material-ui/core/FormControl'
 import FormHelperText from '@material-ui/core/FormHelperText'
 import { sortCourses } from '../../types/api/ModelMappers'
 import DisableableButton from '../DisableableButton'
+import { CourseSort } from '../../types/enums/CourseSort'
 
 const useStyles = makeStyles((theme) => ({
   formControl: {
@@ -20,19 +21,47 @@ const useStyles = makeStyles((theme) => ({
 interface Props {
   courses: Course[] | ListCourse[],
   setCourses: (courses: Course[] | ListCourse[]) => void,
-  sortByPopularity: boolean,
-  setSortByPopularity: (sortByPopularity: boolean) => void,
+  sortBy: CourseSort,
+  setSortBy: (sortBy: CourseSort) => void,
+  allowSortByNumberOfGames?: boolean,
 }
 
 const SortButton: React.FC<Props> = (props) => {
   const classes = useStyles()
 
-  const { courses, setCourses, sortByPopularity, setSortByPopularity } = props
+  const { courses, setCourses, sortBy, setSortBy, allowSortByNumberOfGames } = props
+
+  const cycleSortBy = (): CourseSort => {
+    switch (sortBy) {
+      case CourseSort.byName:
+        return CourseSort.byCity
+      case CourseSort.byCity:
+        return allowSortByNumberOfGames ? CourseSort.byNumberOfGames : CourseSort.byName
+      case CourseSort.byNumberOfGames:
+        return CourseSort.byName
+      default:
+        return CourseSort.byName
+    }
+  }
 
   const handleSortChange = () => {
-    const sorted = sortCourses(courses, !sortByPopularity)
+    const newSortBy = cycleSortBy()
+    const sorted = sortCourses(courses, newSortBy)
     setCourses(sorted)
-    setSortByPopularity(!sortByPopularity)
+    setSortBy(newSortBy)
+  }
+
+  let label
+  switch (sortBy) {
+    case CourseSort.byName:
+      label = 'Name'
+      break
+    case CourseSort.byCity:
+      label = 'City'
+      break
+    case CourseSort.byNumberOfGames:
+      label = 'Most played'
+      break
   }
 
   return (
@@ -46,7 +75,7 @@ const SortButton: React.FC<Props> = (props) => {
         disabled={courses.length <= 1}
       >
         <div className={classes.buttonText}>
-          {sortByPopularity ? 'Most played' : 'Name'}
+          {label}
         </div>
       </DisableableButton>
     </FormControl>

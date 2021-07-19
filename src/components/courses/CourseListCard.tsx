@@ -9,6 +9,7 @@ import { useEffect } from 'react'
 import { CancelTokenSource } from 'axios'
 import baseService from '../../services/baseService'
 import photosService from '../../services/photosService'
+import { CourseSort } from '../../types/enums/CourseSort'
 
 const useStyles = makeStyles((theme) => ({
   card: {
@@ -50,12 +51,13 @@ const useStyles = makeStyles((theme) => ({
 
 interface Props {
   course: ListCourse,
+  beingSortedBy: CourseSort,
 }
 
 const CourseListCard: React.FC<Props> = (props) => {
   const classes = useStyles()
 
-  const { course } = props
+  const { course, beingSortedBy } = props
   const [coverPictureURL, setCoverPictureUrl] = useState<string>()
   const [redirect, setRedirect] = useState(false)
 
@@ -100,7 +102,7 @@ const CourseListCard: React.FC<Props> = (props) => {
 
         <CardContent className={classes.cardContent}>
           <Typography variant="h5">
-            {course.name}, {course.city}
+            {beingSortedBy === CourseSort.byCity ? `${course.city}, ${course.name}` : `${course.name}, ${course.city}`}
           </Typography>
 
           <Typography variant="subtitle2" className={classes.gameCountText}>

@@ -6,6 +6,7 @@ import {
   apiBasicCourseToBasicCourse,
   sortCourses,
 } from "../types/api/ModelMappers"
+import { CourseSort } from "../types/enums/CourseSort"
 
 import baseService from './baseService'
 
@@ -14,7 +15,7 @@ const getListCourses = async (source: CancelTokenSource): Promise<ListCourse[]> 
     'list': true,
   })
   const courses = response.data.map((apiCourse: ApiListCourse) => apiListCourseToListCourse(apiCourse))
-  return sortCourses(courses, true) as ListCourse[]
+  return sortCourses(courses, CourseSort.byNumberOfGames) as ListCourse[]
 }
 
 const getBasicCourses = async (source: CancelTokenSource): Promise<BasicCourse[]> => {
@@ -22,7 +23,7 @@ const getBasicCourses = async (source: CancelTokenSource): Promise<BasicCourse[]
     'basic': true,
   })
   const courses = response.data.map((apiCourse: ApiBasicCourse) => apiBasicCourseToBasicCourse(apiCourse))
-  return sortCourses(courses, true) as BasicCourse[]
+  return sortCourses(courses, CourseSort.byName) as BasicCourse[]
 }
 
 const getCourse = async (courseId: string, source: CancelTokenSource): Promise<DetailedCourse> => {

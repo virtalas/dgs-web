@@ -7,6 +7,7 @@ import SortButton from '../newGame/SortButton'
 import baseService from '../../services/baseService'
 import LoadingView from '../LoadingView'
 import { pageMaxWidth } from '../BasePage'
+import { CourseSort } from '../../types/enums/CourseSort'
 
 const useStyles = makeStyles((theme) => ({
   page: {
@@ -29,7 +30,7 @@ const Courses: React.FC<{}> = () => {
   const classes = useStyles()
 
   const [courses, setCourses] = useState<ListCourse[]>([])
-  const [sortByPopularity, setSortByPopularity] = useState(true)
+  const [sortBy, setSortBy] = useState(CourseSort.byNumberOfGames)
   const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
@@ -46,6 +47,7 @@ const Courses: React.FC<{}> = () => {
     <CourseListCard
       key={'course-card-' + course.id}
       course={course}
+      beingSortedBy={sortBy}
     />
   ))
 
@@ -59,8 +61,9 @@ const Courses: React.FC<{}> = () => {
               setCourses(sortedCourses as ListCourse[])
             }
           }}
-          sortByPopularity={sortByPopularity}
-          setSortByPopularity={setSortByPopularity}
+          sortBy={sortBy}
+          setSortBy={setSortBy}
+          allowSortByNumberOfGames={true}
         />
       ) : null}
 

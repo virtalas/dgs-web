@@ -1,4 +1,5 @@
 import { calculateToPar, calculateTotalScore } from '../../utils/ScoreUtil'
+import { CourseSort } from '../enums/CourseSort'
 
 const playerScoresToPlayer = (playerScores: ApiPlayerScores): Player => {
   return {
@@ -186,14 +187,21 @@ export const apiDetailedLayoutToDetailedLayout = (apiDetailedLayout: ApiDetailed
   }
 }
 
-export function sortCourses(courses: Course[], sortByPopularity: boolean): Course[] {
+export function sortCourses(courses: Course[], sortBy: CourseSort): Course[] {
   return courses.sort((a, b) => {
-    if (sortByPopularity) {
-      const same = a.numberOfGames === b.numberOfGames
-      if (same) return a.name > b.name ? 1 : -1
-      return b.numberOfGames - a.numberOfGames
+    switch (sortBy) {
+      case CourseSort.byName:
+        return a.name > b.name ? 1 : -1
+      case CourseSort.byCity:
+        if (a.city === b.city) return a.name > b.name ? 1 : -1
+        return a.city > b.city ? 1 : -1
+      case CourseSort.byNumberOfGames:
+        const same = a.numberOfGames === b.numberOfGames
+        if (same) return a.name > b.name ? 1 : -1
+        return b.numberOfGames - a.numberOfGames
+      default:
+        return -1
     }
-    return a.name > b.name ? 1 : -1
   })
 }
 

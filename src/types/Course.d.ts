@@ -5,12 +5,12 @@ interface Course {
   city: string,
   lat: number | undefined,
   lon: number | undefined,
-  numberOfGames: number,
 }
 
 // Used for lists of courses
 interface ListCourse extends Course {
   photo: Photo | undefined,
+  numberOfGames: number,
 }
 
 // Used for lists of courses and their layouts (without holes)
@@ -21,6 +21,7 @@ interface BasicCourse extends Course {
 // Used for full info on a course and it's layouts (including holes)
 interface DetailedCourse extends Course {
   photo: Photo | undefined,
+  numberOfGames: number,
   layouts: DetailedLayout[],
   allowedToEdit: boolean,
 }
