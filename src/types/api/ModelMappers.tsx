@@ -155,7 +155,6 @@ export const apiBasicCourseToBasicCourse = (apiBasicCourse: ApiBasicCourse): Bas
     lat: apiBasicCourse.lat,
     lon: apiBasicCourse.lon,
     layouts: apiBasicCourse.layouts,
-    numberOfGames: apiBasicCourse.number_of_games,
   }
 }
 
@@ -196,9 +195,9 @@ export function sortCourses(courses: Course[], sortBy: CourseSort): Course[] {
         if (a.city === b.city) return a.name > b.name ? 1 : -1
         return a.city > b.city ? 1 : -1
       case CourseSort.byNumberOfGames:
-        const same = a.numberOfGames === b.numberOfGames
+        const same = (a as ListCourse).numberOfGames === (b as ListCourse).numberOfGames
         if (same) return a.name > b.name ? 1 : -1
-        return b.numberOfGames - a.numberOfGames
+        return (b as ListCourse).numberOfGames - (a as ListCourse).numberOfGames
       default:
         return -1
     }
