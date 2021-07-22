@@ -155,7 +155,8 @@ const CourseSelect: React.FC<Props> = (props) => {
         value={course?.id ?? ''}
         onChange={handleCourseChange}
         disabled={courses ? courses.length <= 1 : true}
-        input={<OutlinedInput labelWidth={labelWidth} name="course" id="course-select" />}
+        input={<OutlinedInput labelWidth={labelWidth} name="course" id="course-select" inputProps={{  }} />}
+        renderValue={option => course?.name ?? ''}
       >
         {courses.map((course, index) => (
           <MenuItem value={course.id} key={index}>
