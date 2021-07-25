@@ -8,6 +8,7 @@ import { makeStyles } from '@material-ui/core/styles'
 
 import AddIcon from '@material-ui/icons/Add'
 import SearchIcon from '@material-ui/icons/Search'
+import CloseIcon from '@material-ui/icons/Close'
 
 import PrivateRoute from '../PrivateRoute'
 import AppBar from './AppBar'
@@ -85,6 +86,7 @@ const BasePage: React.FC<Props> = (props) => {
   let shouldRenderSearchButton = false
   let searchPath = '/'
   let searchButtonClass = undefined
+  let searchButtonIcon = <SearchIcon />
 
   if (location.pathname === '/') {
     newButtonPath = '/games/new'
@@ -96,6 +98,14 @@ const BasePage: React.FC<Props> = (props) => {
   } else if (location.pathname.startsWith('/games/new')) {
     shouldRenderNewButton = false
     shouldRenderSearchButton = false
+  } else if (location.pathname.startsWith('/games/search')) {
+    newButtonPath = '/games/new'
+    newButtonClass = classes.gamesNewButtonFab
+    newButtonColor = 'primary'
+    shouldRenderSearchButton = true
+    searchPath = '/games'
+    searchButtonClass = classes.gamesSearchButtonFab
+    searchButtonIcon = <CloseIcon />
   } else if (location.pathname.startsWith('/games')) {
     newButtonPath = '/games/new'
     newButtonClass = classes.gamesNewButtonFab
@@ -153,7 +163,7 @@ const BasePage: React.FC<Props> = (props) => {
           {shouldRenderSearchButton ? (
             <NavLink to={searchPath} className={classes.navLink} id="searchButton">
               <Fab color="default" aria-label="Search" className={searchButtonClass}>
-                <SearchIcon />
+                {searchButtonIcon}
               </Fab>
             </NavLink>
           ) : null}
