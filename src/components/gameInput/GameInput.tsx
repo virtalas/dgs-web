@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react'
-import { CancelTokenSource } from 'axios'
+import axios, { CancelTokenSource } from 'axios'
 
 import { makeStyles } from '@material-ui/core/styles'
 import BottomNavigation from '@material-ui/core/BottomNavigation'
@@ -94,13 +94,18 @@ const GameInput: React.FC<{}> = (props: any) => {
     if (game === undefined) return
     setUpdating(true)
     setUpdateError(false)
+
+    // Cancel requests if they don't finish before the hole is changed again (user flicking through quikcly).
+    cancelTokenSourceRef.current?.cancel()
     cancelTokenSourceRef.current = baseService.cancelTokenSource()
 
     gamesService.updateGame(game, userId, cancelTokenSourceRef.current).then(() => {
       setUpdating(false)
     }).catch(error => {
       setUpdating(false)
-      setUpdateError(true)
+      if (!axios.isCancel(error)) {
+        setUpdateError(true)
+      }
     })
 
     setGame(game)
@@ -161,6 +166,7 @@ const GameInput: React.FC<{}> = (props: any) => {
     <ScoreInputView
       game={game}
       updateGame={updateGame}
+      setGame={setGame}
       swipeableViewStyle={classes.swipeableView}
       holeNum={holeNum}
       setHoleNum={setHoleNum}

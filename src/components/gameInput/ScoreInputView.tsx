@@ -18,7 +18,8 @@ const useStyles = makeStyles((theme) => ({
 
 interface Props {
   game: Game,
-  updateGame: (game: Game) => void,
+  updateGame: (game: Game) => void, // Sends the game to backend.
+  setGame: (game: Game) => void, // Sets the game locally.
   swipeableViewStyle: any,
   holeNum: number,
   setHoleNum: (holeNum: number) => void,
@@ -31,7 +32,7 @@ interface Props {
 const ScoreInputView: React.FC<Props> = (props) => {
   const classes = useStyles()
 
-  const { game, updateGame, swipeableViewStyle, holeNum, setHoleNum, goToPreviewAndFinish, updating } = props
+  const { game, updateGame, setGame, swipeableViewStyle, holeNum, setHoleNum, goToPreviewAndFinish, updating } = props
 
   const updateScores = (newScores: PlayerScores[]) => {
     newScores = calculateToParTotal(newScores, game.layout.holes.map(hole => hole.par))
@@ -39,12 +40,12 @@ const ScoreInputView: React.FC<Props> = (props) => {
       ...game,
       scores: newScores,
     }
-    updateGame(newGame as Game)
+    setGame(newGame as Game)
   }
 
   const handlePrevHoleClick = () => {
     if (holeNum > 1) {
-      setHoleNum(holeNum - 1)
+      handleHoleChange(holeNum - 1)
     }
   }
 
@@ -53,8 +54,13 @@ const ScoreInputView: React.FC<Props> = (props) => {
     if (holeNum === game.layout.holes.length) { // TODO: handle edited hole numbers, get holeNum from Hole.number
       goToPreviewAndFinish()
     } else {
-      setHoleNum(holeNum + 1)
+      handleHoleChange(holeNum + 1)
     }
+  }
+
+  const handleHoleChange = (newHoleNum: number) => {
+    updateGame(game)
+    setHoleNum(newHoleNum)
   }
 
   // Render hole navigation buttons for desktop.
@@ -71,7 +77,7 @@ const ScoreInputView: React.FC<Props> = (props) => {
         className={swipeableViewStyle}
         resistance
         index={holeNum - 1}
-        onChangeIndex={(index: number) => setHoleNum(index + 1)}
+        onChangeIndex={(index: number) => handleHoleChange(index + 1)}
       >
         {game.layout.holes.map((hole, index) => (
           <div key={index}>
@@ -93,7 +99,7 @@ const ScoreInputView: React.FC<Props> = (props) => {
   )
 }
 
-// TODO: !!! Would be more efficient to just calculate from the inputted strokes in PlayerStrokeInput
+// Would be more efficient to just calculate from the inputted strokes in PlayerStrokeInput
 function calculateToParTotal(playerScores: PlayerScores[], coursePars: number[]): PlayerScores[] {
   playerScores.forEach((scores, index, array) => {
     let toPar = 0
