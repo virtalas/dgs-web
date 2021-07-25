@@ -80,6 +80,8 @@ const GameInput: React.FC<{}> = (props: any) => {
 
     gamesService.getGame(gameId, cancelTokenSourceRef.current).then((fetchedGame) => {
       setGame(fetchedGame)
+      const firstZeroScoreHoleIndex = fetchedGame.scores[0].strokes.findIndex(score => score === 0)
+      setHoleIndex(firstZeroScoreHoleIndex)
     })
     
     gamesService.getAvailableConditions(cancelTokenSourceRef.current).then(conditions => {
