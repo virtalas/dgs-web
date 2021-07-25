@@ -21,8 +21,8 @@ interface Props {
   updateGame: (game: Game) => void, // Sends the game to backend.
   setGame: (game: Game) => void, // Sets the game locally.
   swipeableViewStyle: any,
-  holeNum: number,
-  setHoleNum: (holeNum: number) => void,
+  holeIndex: number,
+  setHoleIndex: (index: number) => void,
   goToPreviewAndFinish: () => void,
   updating: boolean,
 }
@@ -32,7 +32,7 @@ interface Props {
 const ScoreInputView: React.FC<Props> = (props) => {
   const classes = useStyles()
 
-  const { game, updateGame, setGame, swipeableViewStyle, holeNum, setHoleNum, goToPreviewAndFinish, updating } = props
+  const { game, updateGame, setGame, swipeableViewStyle, holeIndex, setHoleIndex, goToPreviewAndFinish, updating } = props
 
   const updateScores = (newScores: PlayerScores[]) => {
     newScores = calculateToParTotal(newScores, game.layout.holes.map(hole => hole.par))
@@ -44,23 +44,23 @@ const ScoreInputView: React.FC<Props> = (props) => {
   }
 
   const handlePrevHoleClick = () => {
-    if (holeNum > 1) {
-      handleHoleChange(holeNum - 1)
+    if (holeIndex > 0) {
+      handleHoleChange(holeIndex - 1)
     }
   }
 
   const handleNextHoleClick = () => {
     if (game === undefined) return
-    if (holeNum === game.layout.holes.length) { // TODO: handle edited hole numbers, get holeNum from Hole.number
+    if (holeIndex === game.layout.holes.length - 1) {
       goToPreviewAndFinish()
     } else {
-      handleHoleChange(holeNum + 1)
+      handleHoleChange(holeIndex + 1)
     }
   }
 
-  const handleHoleChange = (newHoleNum: number) => {
+  const handleHoleChange = (newHoleIndex: number) => {
     updateGame(game)
-    setHoleNum(newHoleNum)
+    setHoleIndex(newHoleIndex)
   }
 
   // Render hole navigation buttons for desktop.
@@ -76,8 +76,8 @@ const ScoreInputView: React.FC<Props> = (props) => {
       <SwipeableViews
         className={swipeableViewStyle}
         resistance
-        index={holeNum - 1}
-        onChangeIndex={(index: number) => handleHoleChange(index + 1)}
+        index={holeIndex}
+        onChangeIndex={(index: number) => handleHoleChange(index)}
       >
         {game.layout.holes.map((hole, index) => (
           <div key={index}>

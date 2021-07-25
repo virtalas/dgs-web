@@ -68,7 +68,7 @@ const GameInput: React.FC<{}> = (props: any) => {
   const [game, setGame] = useState<Game>()
   const [availableWeatherConditions, setAvailableWeatherConditions] = useState<Tag[]>([])
   const [availableConditions, setAvailableConditions] = useState<Tag[]>([])
-  const [holeNum, setHoleNum] = useState(1) // TODO: Use findIndex() to start from first 0 stroked hole
+  const [holeIndex, setHoleIndex] = useState(0)
   const [tab, setTab] = React.useState(scoreInputViewTab)
   const [updating, setUpdating] = useState(false)
   const [updateError, setUpdateError] = useState(false)
@@ -156,6 +156,10 @@ const GameInput: React.FC<{}> = (props: any) => {
     updateGameWeatherConditions()
   }
 
+  const holeNumFor = (index: number): number => {
+    return game?.layout.holes[index].number ?? -1
+  }
+
   if (game === undefined) {
     return (
       <LoadingView />
@@ -168,8 +172,8 @@ const GameInput: React.FC<{}> = (props: any) => {
       updateGame={updateGame}
       setGame={setGame}
       swipeableViewStyle={classes.swipeableView}
-      holeNum={holeNum}
-      setHoleNum={setHoleNum}
+      holeIndex={holeIndex}
+      setHoleIndex={setHoleIndex}
       goToPreviewAndFinish={handleGoToPreviewAndFinish}
       updating={updating}
     />
@@ -177,8 +181,8 @@ const GameInput: React.FC<{}> = (props: any) => {
 
   // const holeInfoView = (
   //   <HoleInfoView
-  //     holeNum={holeNum}
-  //     setHoleNum={setHoleNum}
+  //     holeIndex={holeIndex}
+  //     setHoleIndex={setHoleIndex}
   //     swipeableViewStyle={classes.swipeableView}
   //   />
   // )
@@ -220,9 +224,9 @@ const GameInput: React.FC<{}> = (props: any) => {
     <div id="gameInputPage">
       <HoleInfoBar
         showInfo={tab !== gameInfoViewTab}
-        holeNum={holeNum}
+        holeNum={holeNumFor(holeIndex)}
         game={game}
-        par={game ? game.layout.holes[holeNum - 1].par : 0}
+        par={game?.layout.holes[holeIndex].par ?? -1}
       />
       
       {activeView}
