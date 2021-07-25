@@ -7,6 +7,7 @@ import Fab from '@material-ui/core/Fab'
 import { makeStyles } from '@material-ui/core/styles'
 
 import AddIcon from '@material-ui/icons/Add'
+import SearchIcon from '@material-ui/icons/Search'
 
 import PrivateRoute from '../PrivateRoute'
 import AppBar from './AppBar'
@@ -39,13 +40,19 @@ const useStyles = makeStyles((theme) => ({
   navLink: {
     textDecoration: 'none',
   },
-  gamesFab: {
+  gamesNewButtonFab: {
     position: 'fixed',
-    bottom: theme.spacing(3),
-    right: theme.spacing(3),
+    bottom: theme.spacing(2),
+    right: theme.spacing(2),
     zIndex: 11,
   },
-  coursesFab: {
+  gamesSearchButtonFab: {
+    position: 'fixed',
+    bottom: theme.spacing(11),
+    right: theme.spacing(2),
+    zIndex: 11,
+  },
+  coursesNewButtonFab: {
     position: 'fixed',
     bottom: theme.spacing(3),
     right: theme.spacing(3),
@@ -75,28 +82,43 @@ const BasePage: React.FC<Props> = (props) => {
   let newButtonClass = undefined
   let newButtonColor: "inherit" | "default" | "primary" | "secondary" | undefined = 'default'
 
+  let shouldRenderSearchButton = false
+  let searchPath = '/'
+  let searchButtonClass = undefined
+
   if (location.pathname === '/') {
     newButtonPath = '/games/new'
-    newButtonClass = classes.gamesFab
+    newButtonClass = classes.gamesNewButtonFab
     newButtonColor = 'primary'
+    shouldRenderSearchButton = true
+    searchPath = '/games/search'
+    searchButtonClass = classes.gamesSearchButtonFab
   } else if (location.pathname.startsWith('/games/new')) {
     shouldRenderNewButton = false
+    shouldRenderSearchButton = false
   } else if (location.pathname.startsWith('/games')) {
     newButtonPath = '/games/new'
-    newButtonClass = classes.gamesFab
+    newButtonClass = classes.gamesNewButtonFab
     newButtonColor = 'primary'
+    shouldRenderSearchButton = true
+    searchPath = '/games/search'
+    searchButtonClass = classes.gamesSearchButtonFab
   } else if (location.pathname.startsWith('/courses/new')) {
     shouldRenderNewButton = false
+    shouldRenderSearchButton = false
   } else if (location.pathname.startsWith('/courses/view/')) {
     newButtonPath = '/courses/new/layout/' + location.pathname.substring('/courses/view/'.length)
-    newButtonClass = classes.coursesFab
+    newButtonClass = classes.coursesNewButtonFab
     newButtonColor = 'inherit'
+    // TODO: Search button for courses
   } else if (location.pathname.startsWith('/courses')) {
     newButtonPath = '/courses/new'
-    newButtonClass = classes.coursesFab
+    newButtonClass = classes.coursesNewButtonFab
     newButtonColor = 'inherit'
+    // TODO: Search button for courses
   } else {
     shouldRenderNewButton = false
+    shouldRenderSearchButton = false
   }
 
   return (
@@ -125,6 +147,13 @@ const BasePage: React.FC<Props> = (props) => {
               {/* Usage of 'any': https://material-ui.com/guides/typescript/#usage-of-component-property */}
               <Fab color={newButtonColor} aria-label="Add" className={newButtonClass}>
                 <AddIcon />
+              </Fab>
+            </NavLink>
+          ) : null}
+          {shouldRenderSearchButton ? (
+            <NavLink to={searchPath} className={classes.navLink} id="searchButton">
+              <Fab color="default" aria-label="Search" className={searchButtonClass}>
+                <SearchIcon />
               </Fab>
             </NavLink>
           ) : null}
