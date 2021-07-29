@@ -17,3 +17,7 @@ interface Game {
   illegalScorers: Player[],
   allowedToEdit: boolean,
 }
+
+interface GameSearchConditions {
+  course?: Course,
+}

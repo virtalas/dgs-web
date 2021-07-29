@@ -39,7 +39,7 @@ interface Props {
   players: Player[],
   setPlayers: (players: Player[]) => void,
   allPlayers: Player[],
-  setGameCreatable: (creatable: boolean) => void,
+  setGameCreatable?: (creatable: boolean) => void,
 }
 
 const PlayerSelect: React.FC<Props> = (props) => {
@@ -66,7 +66,9 @@ const PlayerSelect: React.FC<Props> = (props) => {
       updatedPlayers = [...players, selectedPlayer]
     }
     setPlayers(updatedPlayers)
-    setGameCreatable(updatedPlayers.length >= 1)
+    if (setGameCreatable) {
+      setGameCreatable(updatedPlayers.length >= 1)
+    }
   }
 
   const playerList = allPlayers.filter((player: Player) => !player.guest).map((player: Player) => (

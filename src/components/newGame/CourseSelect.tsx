@@ -20,6 +20,9 @@ const useStyles = makeStyles((theme) => ({
     margin: 5,
     minWidth: 120,
   },
+  noSelectionText: {
+    color: 'grey',
+  }
 }))
 
 interface Props {
@@ -27,6 +30,7 @@ interface Props {
   layout?: Layout,
   setLayout?: (layout: Layout | undefined) => void,
   setGameCreatable?: (creatable: boolean) => void,
+  isSearch?: boolean,
 }
 
 // TODO: Spread controls out if there is space. They are too packed together on desktop.
@@ -35,7 +39,7 @@ interface Props {
 const CourseSelect: React.FC<Props> = (props) => {
   const classes = useStyles()
 
-  const { onCourseChange, layout, setLayout, setGameCreatable } = props
+  const { onCourseChange, layout, setLayout, setGameCreatable, isSearch } = props
 
   const [course, setCourse] = useState<BasicCourse>()
   const [courses, setCourses] = useState<Course[]>([])
@@ -101,21 +105,8 @@ const CourseSelect: React.FC<Props> = (props) => {
         selectActiveLayout(sortedCourses[0] as BasicCourse)  
         return
       }
-  
-      // https://stackoverflow.com/a/21623206
-      const distance = (to: Course) => {
-        if (!to.lat || !to.lon) return Number.MAX_SAFE_INTEGER
-
-        const p = 0.017453292519943295 // Math.PI / 180
-        const c = Math.cos
-        const a = 0.5 - c((to.lat - userLat) * p)/2 +
-                c(userLat * p) * c(to.lat * p) *
-                (1 - c((to.lon - userLon) * p))/2
-
-        return 12742 * Math.asin(Math.sqrt(a)) // 2 * R; R = 6371 km
-      }
-    
-      const closestCourse = sortedCourses.reduce((a, b) => distance(a) < distance(b) ? a : b)
+      
+      const closestCourse = sortedCourses.reduce((a, b) => distance(a, userLat, userLon) < distance(b, userLat, userLon) ? a : b)
       changeCourseTo(closestCourse as BasicCourse)
       selectActiveLayout(closestCourse as BasicCourse)
     })
@@ -132,11 +123,15 @@ const CourseSelect: React.FC<Props> = (props) => {
       if (setGameCreatable) {
         setGameCreatable(true) // Even if the fetching of players fails, one player (user) and a course is enough.
       }
-      attemptToSelectClosestCourse(sortedFetchedCourses)
+      if (!isSearch) {
+        attemptToSelectClosestCourse(sortedFetchedCourses)
+      }
     })
 
-    // Ping the user to give their location first, then it can be accessed without a prompt once courses arrive.
-    attemptToGetUserLocation()
+    if (!isSearch) {
+      // Ping the user to give their location first, then it can be accessed without a prompt once courses arrive.
+      attemptToGetUserLocation()
+    }
 
     return () => cancelTokenSource.cancel()
   }, []) // eslint-disable-line react-hooks/exhaustive-deps
@@ -158,6 +153,12 @@ const CourseSelect: React.FC<Props> = (props) => {
         input={<OutlinedInput labelWidth={labelWidth} name="course" id="course-select" inputProps={{  }} />}
         renderValue={option => course?.name ?? ''}
       >
+        {isSearch ? (
+          <MenuItem value={undefined} className={classes.noSelectionText}>
+            — Any course —
+          </MenuItem>
+        ) : null}
+
         {courses.map((course, index) => (
           <MenuItem value={course.id} key={index}>
             {sortBy === CourseSort.byCity ? `${course.city}, ${course.name}` : `${course.name}, ${course.city}`}
@@ -211,6 +212,19 @@ const CourseSelect: React.FC<Props> = (props) => {
       {showLayoutSelect ? layoutSelect : null}
     </div>
   )
+}
+
+// https://stackoverflow.com/a/21623206
+function distance(to: Course, userLat: number, userLon: number) {
+  if (!to.lat || !to.lon) return Number.MAX_SAFE_INTEGER
+
+  const p = 0.017453292519943295 // Math.PI / 180
+  const c = Math.cos
+  const a = 0.5 - c((to.lat - userLat) * p)/2 +
+          c(userLat * p) * c(to.lat * p) *
+          (1 - c((to.lon - userLon) * p))/2
+
+  return 12742 * Math.asin(Math.sqrt(a)) // 2 * R; R = 6371 km
 }
 
 export default CourseSelect

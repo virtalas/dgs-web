@@ -26,10 +26,18 @@ const useStyles = makeStyles((theme) => ({
     margin: 0,
     position: 'absolute',
     top: '50%',
-    marginTop: -10, // Align with progress spinner
     left: '50%',
+    marginTop: -10, // Align with progress spinner
     marginLeft: -35, // Align with progress spinner
-    transform: 'translate(-50 %, -50 %)',
+  },
+  noSearch: {
+    color: 'grey',
+    margin: 0,
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    marginTop: -10, // Align with progress spinner
+    marginLeft: -110, // Align with progress spinner
   },
   errorText: {
     color: 'grey',
@@ -52,12 +60,23 @@ interface Props {
   isLoading: boolean,
   isError: boolean,
   onEditToggle: (isEditing: boolean) => void,
+  searchConditionsEmpty?: boolean,
 }
 
 const GameList: React.FC<Props> = (props) => {
   const classes = useStyles()
 
-  const { gamesToShow, setGame, onGameDeleted, availableWeatherConditions, availableConditions, isLoading, isError, onEditToggle } = props
+  const {
+    gamesToShow,
+    setGame,
+    onGameDeleted,
+    availableWeatherConditions,
+    availableConditions,
+    isLoading,
+    isError,
+    onEditToggle,
+    searchConditionsEmpty
+  } = props
   
   return (
     <div>
@@ -90,9 +109,19 @@ const GameList: React.FC<Props> = (props) => {
         </div>      
       ) : null}
 
-      {gamesToShow.length === 0 && !isLoading && !isError ? (
+      {gamesToShow.length === 0 && !isLoading && !isError && !searchConditionsEmpty ? (
         <div className={classes.centerContainer}>
-          <div className={classes.noGames}>No games</div>
+          <div className={classes.noGames}>
+            No games
+          </div>
+        </div>
+      ) : null}
+
+      {searchConditionsEmpty ? (
+        <div className={classes.centerContainer}>
+          <div className={classes.noSearch}>
+            Select conditions to search games
+          </div>
         </div>
       ) : null}
     </div>

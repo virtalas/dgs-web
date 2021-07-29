@@ -5,11 +5,19 @@ import baseService from './baseService'
 
 // frontend: January = 0, backend: January = 1
 
-const getGames = async (year: number, month: number, source: CancelTokenSource): Promise<Game[]> => {
-  const response = await baseService.get('/games', source, {
+const getGames = async (year: number, month: number | undefined, searchConditions: GameSearchConditions | undefined, source: CancelTokenSource): Promise<Game[]> => {
+  let params: any = {
     year: year,
-    month: month + 1,
-  })
+  }
+  if (month !== undefined) {
+    params.month = month + 1
+  }
+  if (searchConditions) {
+    if (searchConditions.course) {
+      params.course_id = searchConditions?.course.id
+    }
+  }
+  const response = await baseService.get('/games', source, params)
   return response.data.map((gameResponse: ApiGameResponse) => apiGameResponseToGame(gameResponse))
 }
 
@@ -24,6 +32,15 @@ const getMonthsThatHaveGames = async (source: CancelTokenSource): Promise<GameMo
     gameMonth.months = gameMonth.months.map(month => month - 1)
     return gameMonth
   })
+}
+
+const getYearsThatHaveGames = async (searchConditions: GameSearchConditions, source: CancelTokenSource): Promise<number[]> => {  
+  let params: any = { }
+  if (searchConditions.course) {
+    params.course_id = searchConditions?.course.id
+  }
+  const response = await baseService.get('/games/years', source, params)
+  return response.data
 }
 
 const createGame = async (layout: Layout, players: Player[], start_date: string, source: CancelTokenSource): Promise<{ id: string }> => {
@@ -79,13 +96,21 @@ const getUserTags = async (source: CancelTokenSource): Promise<Tag[]> => {
     .map((tag: ApiTag) => apiTagToTag(tag)))
 }
 
+const getAllTags = async (source: CancelTokenSource): Promise<Tag[]> => {
+  const response = await baseService.get('/games/tags', source)
+  return sortTags(response.data
+    .map((tag: ApiTag) => apiTagToTag(tag)))
+}
+
 export default {
   getGames,
   getMonthsThatHaveGames,
+  getYearsThatHaveGames,
   createGame,
   getGame,
   updateGame,
   getUserTags,
+  getAllTags,
   getAvailableConditions,
   deleteGame,
 }

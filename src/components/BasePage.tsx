@@ -25,6 +25,7 @@ import Competitions from './competitions/Competitions'
 import Info from './info/Info'
 
 import { appBarHeight } from './AppBar'
+import SearchPage from './games/SearchPage'
 
 export const drawerWidth = 240
 export const pageMaxWidth = 610
@@ -41,13 +42,13 @@ const useStyles = makeStyles((theme) => ({
   navLink: {
     textDecoration: 'none',
   },
-  gamesNewButtonFab: {
+  bottomFabButton: {
     position: 'fixed',
     bottom: theme.spacing(2),
     right: theme.spacing(2),
     zIndex: 11,
   },
-  gamesSearchButtonFab: {
+  topFabButton: {
     position: 'fixed',
     bottom: theme.spacing(11),
     right: theme.spacing(2),
@@ -83,45 +84,42 @@ const BasePage: React.FC<Props> = (props) => {
   let newButtonClass = undefined
   let newButtonColor: "inherit" | "default" | "primary" | "secondary" | undefined = 'default'
 
-  let shouldRenderSearchButton = false
+  let shouldRenderSearchButton = editingGameCount === 0
   let searchPath = '/'
   let searchButtonClass = undefined
   let searchButtonIcon = <SearchIcon />
 
   if (location.pathname === '/') {
     newButtonPath = '/games/new'
-    newButtonClass = classes.gamesNewButtonFab
+    newButtonClass = classes.bottomFabButton
     newButtonColor = 'primary'
-    shouldRenderSearchButton = true
     searchPath = '/games/search'
-    searchButtonClass = classes.gamesSearchButtonFab
+    searchButtonClass = classes.topFabButton
   } else if (location.pathname.startsWith('/games/new')) {
     shouldRenderNewButton = false
     shouldRenderSearchButton = false
   } else if (location.pathname.startsWith('/games/search')) {
-    newButtonPath = '/games/new'
-    newButtonClass = classes.gamesNewButtonFab
-    newButtonColor = 'primary'
-    shouldRenderSearchButton = true
+    shouldRenderNewButton = false
     searchPath = '/games'
-    searchButtonClass = classes.gamesSearchButtonFab
+    searchButtonClass = classes.bottomFabButton
     searchButtonIcon = <CloseIcon />
   } else if (location.pathname.startsWith('/games')) {
     newButtonPath = '/games/new'
-    newButtonClass = classes.gamesNewButtonFab
+    newButtonClass = classes.bottomFabButton
     newButtonColor = 'primary'
-    shouldRenderSearchButton = true
     searchPath = '/games/search'
-    searchButtonClass = classes.gamesSearchButtonFab
+    searchButtonClass = classes.topFabButton
   } else if (location.pathname.startsWith('/courses/new')) {
     shouldRenderNewButton = false
     shouldRenderSearchButton = false
   } else if (location.pathname.startsWith('/courses/view/')) {
+    shouldRenderSearchButton = false
     newButtonPath = '/courses/new/layout/' + location.pathname.substring('/courses/view/'.length)
     newButtonClass = classes.coursesNewButtonFab
     newButtonColor = 'inherit'
     // TODO: Search button for courses
   } else if (location.pathname.startsWith('/courses')) {
+    shouldRenderSearchButton = false
     newButtonPath = '/courses/new'
     newButtonClass = classes.coursesNewButtonFab
     newButtonColor = 'inherit'
@@ -141,6 +139,7 @@ const BasePage: React.FC<Props> = (props) => {
           <PrivateRoute exact path="/games" render={(props) => (<Games {...props} onEditToggle={onEditGameToggle} />)} />
           <PrivateRoute exact path="/games/view/:id" render={(props) => (<Games {...props} onEditToggle={onEditGameToggle} />)} />
           <PrivateRoute exact path="/games/new" component={NewGame} />
+          <PrivateRoute exact path="/games/search" render={(props) => (<SearchPage {...props} onEditToggle={onEditGameToggle} />)} />
           <PrivateRoute exact path="/players" component={Players} />
           <PrivateRoute exact path="/courses" component={Courses} />
           <PrivateRoute exact path="/courses/view/:id" component={Course} />

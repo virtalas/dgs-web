@@ -31,11 +31,11 @@ const MenuProps = {
 }
 
 interface Props {
-  selectedMonth: number,
-  setSelectedMonth: (month: number) => void,
+  selectedMonth?: number,
+  setSelectedMonth?: (month: number) => void,
   selectedYear: number,
   setSelectedYear: (year: number) => void,
-  clearFetchedGames: () => void,
+  clearFetchedGames?: () => void,
   monthsThatHaveGames: GameMonths[] | undefined,
 }
 
@@ -65,45 +65,62 @@ const MonthControls: React.FC<Props> = (props) => {
     oldestSelectableMonth = monthsThatHaveGames[monthsThatHaveGames.length - 1].months[0]
   }
 
-  const handlePrevMonth = () => {
-    if (monthsThatHaveGames && gameMonthsInSelectedYear) {
-      // First try to move to previous month (that has games) in the same year:
-      const indexOfSelectedMonth = gameMonthsInSelectedYear.months.indexOf(selectedMonth)
-      if (indexOfSelectedMonth > 0) {
-        setSelectedMonth(gameMonthsInSelectedYear.months[indexOfSelectedMonth - 1])
-        return
-      }
-      // Then try to move to the last month (that has games) of the previous year (that has games):
-      const indexOfSelectedYear = indexOfYear(monthsThatHaveGames, selectedYear)
-      if (indexOfSelectedYear < monthsThatHaveGames.length - 1 && indexOfSelectedYear !== -1) {
-        const toBeSelectedYear = monthsThatHaveGames[indexOfSelectedYear + 1]
-        setSelectedYear(toBeSelectedYear.year)
+  const selectPreviousYear = () => {
+    if (!monthsThatHaveGames) return
+    const indexOfSelectedYear = indexOfYear(monthsThatHaveGames, selectedYear)
+    if (indexOfSelectedYear < monthsThatHaveGames.length - 1 && indexOfSelectedYear !== -1) {
+      const toBeSelectedYear = monthsThatHaveGames[indexOfSelectedYear + 1]
+      setSelectedYear(toBeSelectedYear.year)
+      if (setSelectedMonth && clearFetchedGames) {
         setSelectedMonth(toBeSelectedYear.months[toBeSelectedYear.months.length - 1])
         clearFetchedGames()
       }
     }
   }
 
-  const handleNextMonth = () => {
-    if (monthsThatHaveGames && gameMonthsInSelectedYear) {
-      // First try to move to next month (that has games) in the same year:
-      const indexOfSelectedMonth = gameMonthsInSelectedYear.months.indexOf(selectedMonth)
-      if (indexOfSelectedMonth < gameMonthsInSelectedYear.months.length - 1) {
-        setSelectedMonth(gameMonthsInSelectedYear.months[indexOfSelectedMonth + 1])
-        return
-      }
-      // Then try to move to the first month (that has games) of the next year (that has games):
-      const indexOfSelectedYear = indexOfYear(monthsThatHaveGames, selectedYear)
-      if (indexOfSelectedYear > 0) {
-        const toBeSelectedYear = monthsThatHaveGames[indexOfSelectedYear - 1]
-        setSelectedYear(toBeSelectedYear.year)
+  const selectNextYear = () => {
+    if (!monthsThatHaveGames) return
+    const indexOfSelectedYear = indexOfYear(monthsThatHaveGames, selectedYear)
+    if (indexOfSelectedYear > 0) {
+      const toBeSelectedYear = monthsThatHaveGames[indexOfSelectedYear - 1]
+      setSelectedYear(toBeSelectedYear.year)
+      if (setSelectedMonth && clearFetchedGames) {
         setSelectedMonth(toBeSelectedYear.months[0])
         clearFetchedGames()
       }
     }
   }
 
+  const handlePreviousClicked = () => {
+    if (!gameMonthsInSelectedYear) return
+    // First try to move to previous month (that has games) in the same year:
+    if (selectedMonth !== undefined && setSelectedMonth) {
+      const indexOfSelectedMonth = gameMonthsInSelectedYear.months.indexOf(selectedMonth)
+      if (indexOfSelectedMonth > 0) {
+        setSelectedMonth(gameMonthsInSelectedYear.months[indexOfSelectedMonth - 1])
+        return
+      }
+    }
+    // Then try to move to the last month (that has games) of the previous year (that has games):
+    selectPreviousYear()
+  }
+
+  const handleNextClicked = () => {
+    if (!gameMonthsInSelectedYear) return
+    // First try to move to next month (that has games) in the same year:
+    if (selectedMonth !== undefined && setSelectedMonth) {
+      const indexOfSelectedMonth = gameMonthsInSelectedYear.months.indexOf(selectedMonth)
+      if (indexOfSelectedMonth < gameMonthsInSelectedYear.months.length - 1) {
+        setSelectedMonth(gameMonthsInSelectedYear.months[indexOfSelectedMonth + 1])
+        return
+      }
+    }
+    // Then try to move to the first month (that has games) of the next year (that has games):
+    selectNextYear()
+  }
+
   const handleMonthChange = (event: React.ChangeEvent<{ value: unknown }>) => {
+    if (!setSelectedMonth) return
     setSelectedMonth(event.target.value as number)
   }
 
@@ -114,8 +131,10 @@ const MonthControls: React.FC<Props> = (props) => {
     const monthsOfNewYear = monthsThatHaveGames ?
         monthsThatHaveGames[indexOfYear(monthsThatHaveGames, year)].months
         : [0]
-    setSelectedMonth(monthsOfNewYear[monthsOfNewYear.length - 1])
-    clearFetchedGames() // Clear fetched games.
+    if (setSelectedMonth && clearFetchedGames) {
+      setSelectedMonth(monthsOfNewYear[monthsOfNewYear.length - 1])
+      clearFetchedGames()
+    }
   }
 
   var monthOptions: JSX.Element[] = []
@@ -125,6 +144,8 @@ const MonthControls: React.FC<Props> = (props) => {
     const hasGames = arrayContainsMonth(gameMonthsInSelectedYear, i)
     monthOptions.push(<MenuItem disabled={!hasGames} value={i} key={i}>{monthName}</MenuItem>)
   }
+
+  const usesOnlyYears = selectedMonth === undefined || !setSelectedMonth
 
   return (
     <Grid
@@ -140,12 +161,13 @@ const MonthControls: React.FC<Props> = (props) => {
           variant="outlined"
           size="small"
           className={classes.monthNavigationButton}
-          onClick={handlePrevMonth}
-          disabled={selectedYear === oldestSelectableYear && selectedMonth === oldestSelectableMonth}
+          onClick={handlePreviousClicked}
+          disabled={selectedYear === oldestSelectableYear && (usesOnlyYears || selectedMonth === oldestSelectableMonth)}
         >
           ≪
         </Button>
       </Grid>
+
       <Grid item zeroMinWidth>
         <Select
           value={isLoading ? '' : selectedYear}
@@ -158,24 +180,28 @@ const MonthControls: React.FC<Props> = (props) => {
           )) : null}
         </Select>
       </Grid>
-      <Grid item zeroMinWidth>
-        <Select
-          value={isLoading ? '' : selectedMonth}
-          className={classes.selectMonth}
-          onChange={handleMonthChange}
-          input={<OutlinedInput labelWidth={0} />}
-          MenuProps={MenuProps}
-        >
-          {monthOptions}
-        </Select>
-      </Grid>
+
+      {(selectedMonth !== undefined && setSelectedMonth) ? (
+        <Grid item zeroMinWidth>
+          <Select
+            value={isLoading ? '' : selectedMonth}
+            className={classes.selectMonth}
+            onChange={handleMonthChange}
+            input={<OutlinedInput labelWidth={0} />}
+            MenuProps={MenuProps}
+          >
+            {monthOptions}
+          </Select>
+        </Grid>
+      ) : null}
+
       <Grid item zeroMinWidth>
         <Button
           variant="outlined"
           size="small"
           className={classes.monthNavigationButton}
-          onClick={handleNextMonth}
-          disabled={selectedYear === latestSelectableYear && selectedMonth === latestSelectableMonth}
+          onClick={handleNextClicked}
+          disabled={selectedYear === latestSelectableYear && (usesOnlyYears || selectedMonth === latestSelectableMonth)}
         >
           ≫
         </Button>

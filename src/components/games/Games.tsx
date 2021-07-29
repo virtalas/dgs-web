@@ -64,7 +64,7 @@ const Games: React.FC<Props> = (props) => {
   const fetchGames = () => {
     if (selectedYear !== undefined && selectedMonth !== undefined) {
       cancelTokenSourceRef.current = baseService.cancelTokenSource()
-      gamesService.getGames(selectedYear, selectedMonth, cancelTokenSourceRef.current).then(fetchedGames => {
+      gamesService.getGames(selectedYear, selectedMonth, undefined, cancelTokenSourceRef.current).then(fetchedGames => {
         setFetchedMonths(months => months.concat([selectedMonth])) // Mark games for this month as fetched.
         setGames(games => games.concat(fetchedGames))
         setIsLoading(false)
@@ -162,8 +162,8 @@ const Games: React.FC<Props> = (props) => {
       setSelectedMonth={setSelectedMonth}
       selectedYear={selectedYear}
       setSelectedYear={setSelectedYear}
-      clearFetchedGames={clearFetchedGames}
       monthsThatHaveGames={monthsThatHaveGames}
+      clearFetchedGames={clearFetchedGames}
     />
   ) : null
 
