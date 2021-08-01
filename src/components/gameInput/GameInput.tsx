@@ -27,7 +27,7 @@ const mapViewTab = 1
 const gameInfoViewTab = 2
 
 // TODO: change tab bar (& app bar) color to gameInputBlue
-// TODO: SwipeableViews: When swiping starts, show big transparent grey hole number in the middle of the page. When swiping stops fade with animation after ~0.5 seconds.
+// TODO(?): SwipeableViews: When swiping starts, show big transparent grey hole number in the middle of the page. When swiping stops fade with animation after ~0.5 seconds.
 
 const useStyles = makeStyles((theme) => ({
   swipeableView: {

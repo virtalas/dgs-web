@@ -61,6 +61,7 @@ const GameChips: React.FC<Props> = (props) => {
   const { game, setGame, isEditing, availableWeatherConditions, availableConditions, chosenUserTagHistory, setChosenUserTagHistory } = props
 
   const [playerRedirect, setPlayerRedirect] = useState(false)
+  const [gameSearchRedirectPath, setGameSearchRedirectPath] = useState<string>()
 
   const editableUserTagsToShow = [...game.tags, ...chosenUserTagHistory.filter(tag => !arrayContainsTag(game.tags, tag))]
 
@@ -73,6 +74,8 @@ const GameChips: React.FC<Props> = (props) => {
 
   if (playerRedirect) {
     return <Redirect push to={'/players'} />
+  } else if (gameSearchRedirectPath) {
+    return <Redirect push to={'/games/search?' + gameSearchRedirectPath} />
   }
 
   const handlePlayerChipClick = (event: React.MouseEvent) => {
@@ -93,9 +96,8 @@ const GameChips: React.FC<Props> = (props) => {
     }
   }
 
-  const handleTagChipClick = () => {
-    // TODO
-    alert('Coming soon(ish): Search games by clicked tag!')
+  const handleTagChipClick = (tag: Tag) => {
+    setGameSearchRedirectPath('tag=' + tag.id)
   }
 
   const handleTagToggle = (tag: Tag, arrayName: 'conditions' | 'weatherConditions' | 'tags') => {
@@ -126,16 +128,18 @@ const GameChips: React.FC<Props> = (props) => {
     setGame(game)
   }
 
-  const createColorChip = (styleClass: string, label: string, player: Player, color: 'primary' | 'secondary', index: number) => {
-    const variant = isEditing && game.illegalScorers.find(p => p.id === player.id) ? 'default' : 'outlined'
-    const classs = isEditing && game.illegalScorers.find(p => p.id === player.id) ? classes.illegalChip : styleClass
+  const createColorChip = (styleClass: string, label: string, player: Player, color: 'primary' | 'secondary' | 'default', index: number) => {
+    const isIllegal = game.illegalScorers.find(p => p.id === player.id)
+    const variant = isEditing && isIllegal ? 'default' : 'outlined'
+    const classs = isEditing && isIllegal ? classes.illegalChip : styleClass
+    const chipColor = isEditing && isIllegal ? 'secondary' : color
     return (
       <Chip
         classes={{ icon: classs } as any}
-        icon={<Chip color={color} variant={variant} label={label} />}
+        icon={<Chip color={chipColor} variant={variant} label={label} />}
         label={player.firstName}
         variant="outlined"
-        color={color}
+        color={chipColor}
         data-playerid={player.id}
         onClick={handlePlayerChipClick}
         className={classes.chip}
@@ -146,18 +150,18 @@ const GameChips: React.FC<Props> = (props) => {
 
   const tagChips = !isEditing ? (
     <div className={classes.chipRow}>
-      {game.temperature ? <Chip className={classes.chip} label={game.temperature + " °C"} onClick={handleTagChipClick} /> : null}
+      {game.temperature ? <Chip className={classes.chip} label={game.temperature + " °C"} /> : null}
       
       {game.weatherConditions.map((condition: Tag, index: number) => (
-        <Chip className={classes.chip} label={condition.name} onClick={handleTagChipClick} key={index} />
+        <Chip className={classes.chip} label={condition.name} onClick={() => handleTagChipClick(condition)} key={index} />
       ))}
       
       {game.conditions.map((condition: Tag, index: number) => (
-        <Chip className={classes.chip} label={condition.name} onClick={handleTagChipClick} key={index} />
+        <Chip className={classes.chip} label={condition.name} onClick={() => handleTagChipClick(condition)} key={index} />
       ))}
       
       {game.tags.map((tag: Tag, index: number) => (
-        <Chip className={classes.chip} label={tag.name} onClick={handleTagChipClick} key={index} />
+        <Chip className={classes.chip} label={tag.name} onClick={() => handleTagChipClick(tag)} key={index} />
       ))}
 
       {isEditing ? null : game.highScorers.map((player: Player, index: number) => {
@@ -212,7 +216,7 @@ const GameChips: React.FC<Props> = (props) => {
   const illegalScorerEdit = isEditing ? (
     <div className={classes.chipRow}>
       {game.scores.map((scores: PlayerScores, index: number) => {
-        return createColorChip(classes.illegalDisabledChip, 'Illegal game', scores.player, 'secondary', index)
+        return createColorChip(classes.illegalDisabledChip, 'Illegal game', scores.player, 'default', index)
       })}
     </div>
   ) : null

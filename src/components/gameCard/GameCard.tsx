@@ -253,7 +253,7 @@ const GameCard: React.FC<Props> = (props) => {
           value={game.startDate}
           onChange={handleStartDateChange}
         />
-      ) : null}
+      ) : <div>{/* MuiPickersUtilsProvider does not like null/undefined, so pass empty div here. */}</div>}
       <DatePicker
         margin="normal"
         id="gamedate-end-edit"

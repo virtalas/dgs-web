@@ -5,11 +5,9 @@ import baseService from './baseService'
 
 // frontend: January = 0, backend: January = 1
 
-const getGames = async (year: number, month: number, source: CancelTokenSource): Promise<Game[]> => {
-  const response = await baseService.get('/games', source, {
-    year: year,
-    month: month + 1,
-  })
+const getGames = async (year: number, month: number | undefined, searchConditions: GameSearchConditions | undefined, source: CancelTokenSource): Promise<Game[]> => {
+  const params = createSearchParameters(year, month, searchConditions)
+  const response = await baseService.get('/games', source, params)
   return response.data.map((gameResponse: ApiGameResponse) => apiGameResponseToGame(gameResponse))
 }
 
@@ -24,6 +22,12 @@ const getMonthsThatHaveGames = async (source: CancelTokenSource): Promise<GameMo
     gameMonth.months = gameMonth.months.map(month => month - 1)
     return gameMonth
   })
+}
+
+const getYearsThatHaveGames = async (searchConditions: GameSearchConditions, source: CancelTokenSource): Promise<number[]> => {  
+  const params = createSearchParameters(undefined, undefined, searchConditions)
+  const response = await baseService.get('/games/years', source, params)
+  return response.data
 }
 
 const createGame = async (layout: Layout, players: Player[], start_date: string, source: CancelTokenSource): Promise<{ id: string }> => {
@@ -79,13 +83,50 @@ const getUserTags = async (source: CancelTokenSource): Promise<Tag[]> => {
     .map((tag: ApiTag) => apiTagToTag(tag)))
 }
 
+const getAllTags = async (source: CancelTokenSource): Promise<Tag[]> => {
+  const response = await baseService.get('/games/tags', source)
+  return sortTags(response.data
+    .map((tag: ApiTag) => apiTagToTag(tag)))
+}
+
 export default {
   getGames,
   getMonthsThatHaveGames,
+  getYearsThatHaveGames,
   createGame,
   getGame,
   updateGame,
   getUserTags,
+  getAllTags,
   getAvailableConditions,
   deleteGame,
+}
+
+function createSearchParameters(year?: number, month?: number, searchParams?: GameSearchConditions): any {
+  let params: any = {}
+
+  if (year !== undefined) {
+    params.year = year
+  }
+
+  if (month !== undefined) {
+    params.month = month + 1
+  }
+
+  if (searchParams) {
+    if (searchParams.course) {
+      params.course_id = searchParams.course.id
+    }
+    if (searchParams.players) {
+      params.players = searchParams.players.map(player => player.id)
+    }
+    if (searchParams.tags) {
+      params.tags = searchParams.tags.map(tag => tag.id)
+    }
+    if (searchParams.comment) {
+      params.comment = searchParams.comment
+    }
+  }
+
+  return params
 }

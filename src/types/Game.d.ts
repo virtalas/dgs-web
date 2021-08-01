@@ -17,3 +17,10 @@ interface Game {
   illegalScorers: Player[],
   allowedToEdit: boolean,
 }
+
+interface GameSearchConditions {
+  course?: Course,
+  players?: Player[],
+  tags?: Tag[],
+  comment?: string,
+}
