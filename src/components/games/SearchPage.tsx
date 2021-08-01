@@ -1,5 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react'
-import { CancelTokenSource } from 'axios'
+import axios, { CancelTokenSource } from 'axios'
+import { useLocation } from 'react-router-dom' 
+import qs from 'qs'
 
 import { makeStyles } from '@material-ui/core/styles'
 
@@ -51,6 +53,9 @@ const SearchPage: React.FC<Props> = (props) => {
 
   const { onEditToggle } = props
 
+  const searchConditionQueryParams = qs.parse(useLocation().search, { ignoreQueryPrefix: true })
+  const queryParamTagId = searchConditionQueryParams.tag ?? undefined
+
   const [games, setGames] = useState<Game[]>([])
   const [fetchedYears, setFetchedYears] = useState<number[]>([])
   const [selectedPlayers, setSelectedPlayers] = useState<Player[]>([])
@@ -62,47 +67,118 @@ const SearchPage: React.FC<Props> = (props) => {
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const [isError, setIsError] = useState<boolean>(false)
   const [yearsThatHaveGames, setYearsThatHaveGames] = useState<number[]>()
+  const [textInput, setTextInput] = useState('')
 
   const cancelTokenSourceRef = useRef<CancelTokenSource | null>(null)
 
   const gamesToShow = games.filter(game => game.endDate.getFullYear() === selectedYear)
 
+  const createSearchConditions = (course?: Course, players?: Player[], tags?: Tag[], comment?: string): GameSearchConditions => {
+    return {
+      course: selectedCourse,
+      players: selectedPlayers,
+      tags: tags,
+      comment: comment,
+    }
+  }
+
   const fetchGames = () => {
     if (selectedYear !== undefined) {
       cancelTokenSourceRef.current = baseService.cancelTokenSource()
-      const searchConditions = { course: selectedCourse }
+      const searchConditions = createSearchConditions(selectedCourse, selectedPlayers, selectedTags, textInput)
+
       gamesService.getGames(selectedYear, undefined, searchConditions, cancelTokenSourceRef.current).then(fetchedGames => {
         setGames(games => games.concat(fetchedGames))
+        setFetchedYears([selectedYear, ...fetchedYears])
         setIsLoading(false)
-        fetchTagsIfEmpty()
       })
       .catch(e => {
         setIsLoading(false)
-        setIsError(true)
+        if (!axios.isCancel(e)) {
+          setIsError(true)
+          console.log('Search failed (GET /games):', e)
+        }
       })
     }
   }
 
-  const fetchTagsIfEmpty = () => {
+  const fetchGameYears = () => {
+    cancelTokenSourceRef.current = baseService.cancelTokenSource()
+    const searchConditions = createSearchConditions(selectedCourse, selectedPlayers, selectedTags, textInput)
+    gamesService.getYearsThatHaveGames(searchConditions, cancelTokenSourceRef.current).then(gameYears => {
+      setYearsThatHaveGames(gameYears)
+      if (gameYears && gameYears.length > 0) {
+        setSelectedYear(gameYears[0])
+      } else {
+        setIsLoading(false)
+      }
+      // Since selectedYear changed, component rerenders and fetchGames() happens.
+    }).catch(e => {
+      setIsLoading(false)
+      if (!axios.isCancel(e)) {
+        setIsError(true)
+        console.log('Search failed (GET /games/years):', e)
+      }
+    })
+  }
+
+  const initialFetchData = async () => {
+    if (allPlayers.length === 0) {
+      cancelTokenSourceRef.current = baseService.cancelTokenSource()
+      const fetchedPlayers = await playersService.getPlayers(cancelTokenSourceRef.current)
+      setAllPlayers(fetchedPlayers)
+    }
+
+    let fetchedTags: Tag[] = []
     if (allTags.length === 0) {
       cancelTokenSourceRef.current = baseService.cancelTokenSource()
-      gamesService.getAllTags(cancelTokenSourceRef.current)
-        .then(fetchedTags => {
-          setAllTags(fetchedTags)
-        })
-        .catch(e => console.log('fetching tags failed:', e))
+      fetchedTags = await gamesService.getAllTags(cancelTokenSourceRef.current)
+      setAllTags(fetchedTags)
+    }
+
+    if (Object.keys(searchConditionQueryParams).length !== 0) {
+      if (queryParamTagId !== undefined) {
+        const queryParamTag = fetchedTags.find(tag => tag.id === queryParamTagId)
+
+        if (queryParamTag !== undefined) {
+          setSelectedTags([queryParamTag])
+          await fetchGameYears()
+          fetchGames()
+        }
+      }
     }
   }
 
-  const fetchPlayersIfEmpty = () => {
-    if (allPlayers.length === 0) {
-      cancelTokenSourceRef.current = baseService.cancelTokenSource()
-      playersService.getPlayers(cancelTokenSourceRef.current)
-        .then(fetchedPlayers => {
-          setAllPlayers(fetchedPlayers)
-        })
-        .catch(e => console.log('fetching players failed:', e))  
+  useEffect(() => {
+    initialFetchData()
+
+    if (!selectedCourse && selectedPlayers.length === 0 && selectedTags.length === 0 && textInput.length === 0) return
+    if (fetchedYears.includes(selectedYear ?? -1)) return
+    setIsLoading(true)
+    setIsError(false)
+
+    if (!yearsThatHaveGames) {
+      fetchGameYears()
+    } else {
+      fetchGames()
     }
+
+    return () => cancelTokenSourceRef.current?.cancel()
+  }, [selectedYear, selectedCourse, selectedPlayers, selectedTags, textInput]) // eslint-disable-line react-hooks/exhaustive-deps
+
+  // Called after a child has updated a game.
+  // Copied from Games.tsx
+  const setGame = (game: Game) => {
+    let gameToUpdate = games.find(g => g.id === game.id) as Game
+    let updateIndex = games.indexOf(gameToUpdate)
+    const updatedGames = games.fill(game, updateIndex, updateIndex + 1)
+    setGames([...updatedGames])
+  }
+
+  // Copied from Games.tsx
+  const onGameDeleted = (game: Game) => {
+    const updatedGames = games.filter(g => g.id !== game.id)
+    setGames([...updatedGames])
   }
 
   const clearFetchedGames = () => {
@@ -122,46 +198,19 @@ const SearchPage: React.FC<Props> = (props) => {
     onSearchConditionChange()
   }
 
-  useEffect(() => {
-    if (!selectedCourse) return
-    if (fetchedYears.includes(selectedYear ?? -1)) return
-    setIsLoading(true)
-
-    if (!yearsThatHaveGames) {
-      cancelTokenSourceRef.current = baseService.cancelTokenSource()
-      const searchConditions = { course: selectedCourse }
-      gamesService.getYearsThatHaveGames(searchConditions, cancelTokenSourceRef.current).then(gameYears => {
-        setYearsThatHaveGames(gameYears)
-        if (gameYears && gameYears.length > 0) {
-          setSelectedYear(gameYears[0])
-        } else {
-          setIsLoading(false)
-        }
-        // Since selectedYear changed, component rerenders and fetchGames() happens.
-      }).catch(e => {
-        setIsLoading(false)
-        setIsError(true)
-      })
-    } else {
-      fetchGames()
-    }
-
-    return () => cancelTokenSourceRef.current?.cancel()
-  }, [selectedYear, selectedCourse]) // eslint-disable-line react-hooks/exhaustive-deps
-
-  // Called after a child has updated a game.
-  // Copied from Games.tsx
-  const setGame = (game: Game) => {
-    let gameToUpdate = games.find(g => g.id === game.id) as Game
-    let updateIndex = games.indexOf(gameToUpdate)
-    const updatedGames = games.fill(game, updateIndex, updateIndex + 1)
-    setGames([...updatedGames])
+  const handlePlayerSelect = (players: Player[]) => {
+    setSelectedPlayers([...players])
+    onSearchConditionChange()
   }
 
-  // Copied from Games.tsx
-  const onGameDeleted = (game: Game) => {
-    const updatedGames = games.filter(g => g.id !== game.id)
-    setGames([...updatedGames])
+  const handleTagSelect = (tags: Tag[]) => {
+    setSelectedTags(tags)
+    onSearchConditionChange()
+  }
+
+  const handleTextInputChange = (text: string) => {
+    setTextInput(text)
+    onSearchConditionChange()
   }
 
   const monthControls = selectedYear !== undefined && games.length > 0  ? (
@@ -172,7 +221,7 @@ const SearchPage: React.FC<Props> = (props) => {
     />
   ) : null
 
-  const searchConditionsEmpty = selectedCourse === undefined
+  const searchConditionsEmpty = !selectedCourse && selectedPlayers.length === 0 && selectedTags.length === 0 && textInput.length === 0
 
   return (
     <div className={classes.root}>
@@ -181,7 +230,7 @@ const SearchPage: React.FC<Props> = (props) => {
 
         <PlayerSelect
           players={selectedPlayers}
-          setPlayers={setSelectedPlayers}
+          setPlayers={handlePlayerSelect}
           allPlayers={allPlayers}
         />
 
@@ -190,7 +239,7 @@ const SearchPage: React.FC<Props> = (props) => {
         <TagSelect
           allTags={allTags}
           selectedTags={selectedTags}
-          setSelectedTags={setSelectedTags}
+          setSelectedTags={handleTagSelect}
         />
 
         <br />
@@ -198,8 +247,8 @@ const SearchPage: React.FC<Props> = (props) => {
         <TextField
           className={classes.formControl}
           label="Comment"
-          value={''}
-          onChange={() => {}}
+          value={textInput}
+          onChange={e => handleTextInputChange(e.target.value)}
         />
       </div>
 

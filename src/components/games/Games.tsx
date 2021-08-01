@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react'
-import { CancelTokenSource } from 'axios'
+import axios, { CancelTokenSource } from 'axios'
 
 import { makeStyles } from '@material-ui/core/styles'
 
@@ -77,6 +77,26 @@ const Games: React.FC<Props> = (props) => {
     }
   }
 
+  const fetchGameMonths = () => {
+    cancelTokenSourceRef.current = baseService.cancelTokenSource()
+    gamesService.getMonthsThatHaveGames(cancelTokenSourceRef.current).then((gameMonths: GameMonths[]) => {
+      setMonthsThatHaveGames(gameMonths)
+      // Select the latest month & year that have games:
+      if (gameMonths && gameMonths.length > 0) {
+        setSelectedYear(gameMonths[0].year)
+        setSelectedMonth(gameMonths[0].months[gameMonths[0].months.length - 1])
+      } else {
+        setIsLoading(false)
+      }
+      // Since selectedYear/Month changed, component rerenders and fetchGames() happens.
+    }).catch(e => {
+      setIsLoading(false)
+      if (!axios.isCancel(e)) {
+        setIsError(true)
+      }
+    })
+  }
+
   // Fetch available conditions (for editing & search)
   const fetchConditionsIfEmpty = () => {
     if (availableConditions.length === 0) {
@@ -89,14 +109,12 @@ const Games: React.FC<Props> = (props) => {
   }
 
   useEffect(() => {
-    cancelTokenSourceRef.current = baseService.cancelTokenSource()
-
     if (fetchedMonths.includes(selectedMonth ?? -1)) return // Don't refetch already fetched games.
     setIsLoading(true)
 
     // Page for a single game:
-
     if (singleGameView) {
+      cancelTokenSourceRef.current = baseService.cancelTokenSource()
       gamesService.getGame(gameId, cancelTokenSourceRef.current).then(game => {
         setGames([game])
         fetchConditionsIfEmpty()
@@ -105,23 +123,9 @@ const Games: React.FC<Props> = (props) => {
     }
 
     // Page for multiple games:
-
     if (!monthsThatHaveGames) {
       // First fetch a list of years and months that have games:
-      gamesService.getMonthsThatHaveGames(cancelTokenSourceRef.current).then((gameMonths: GameMonths[]) => {
-        setMonthsThatHaveGames(gameMonths)
-        // Select the latest month & year that have games:
-        if (gameMonths && gameMonths.length > 0) {
-          setSelectedYear(gameMonths[0].year)
-          setSelectedMonth(gameMonths[0].months[gameMonths[0].months.length - 1])
-        } else {
-          setIsLoading(false)
-        }
-        // Since selectedYear/Month changed, component rerenders and fetchGames() happens.
-      }).catch(e => {
-        setIsLoading(false)
-        setIsError(true)
-      })
+      fetchGameMonths()
     } else {
       // Fetch games for selectedMonth.
       fetchGames()

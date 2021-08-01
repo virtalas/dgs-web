@@ -1,5 +1,6 @@
 import axios, { CancelTokenSource } from 'axios'
 import jwt from 'jwt-decode'
+import qs from 'qs'
 
 import { API_ROOT } from '../apiConfig'
 
@@ -9,6 +10,9 @@ const get = (endpoint: string, source: CancelTokenSource, params?: any) => {
   return axios.get(API_ROOT + endpoint, {
     cancelToken: source.token,
     params: params,
+    paramsSerializer: params => {
+      return qs.stringify(params, { arrayFormat: "repeat" })
+    },
   })
 }
 

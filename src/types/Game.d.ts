@@ -20,4 +20,7 @@ interface Game {
 
 interface GameSearchConditions {
   course?: Course,
+  players?: Player[],
+  tags?: Tag[],
+  comment?: string,
 }

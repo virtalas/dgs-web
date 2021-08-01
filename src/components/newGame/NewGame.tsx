@@ -54,11 +54,17 @@ const NewGame: React.FC<{}> = () => {
   const handleStartButtonClick = async () => {
     const startDate = toISOStringWithTimezone(new Date())
     if (layout) {
+      setGameCreatable(false)
       cancelTokenSourceRef.current = baseService.cancelTokenSource()
-      gamesService.createGame(layout, players, startDate, cancelTokenSourceRef.current).then(newGameId => {
-        setNewGameId(newGameId.id)
-        setRedirect(true)
-      })
+      gamesService.createGame(layout, players, startDate, cancelTokenSourceRef.current)
+        .then(newGameId => {
+          setNewGameId(newGameId.id)
+          setRedirect(true)
+        })
+        .catch(e => {
+          window.alert('Error creating game: ' + e)
+          setGameCreatable(true)
+        })
     }
   }
 

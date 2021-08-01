@@ -6,17 +6,7 @@ import baseService from './baseService'
 // frontend: January = 0, backend: January = 1
 
 const getGames = async (year: number, month: number | undefined, searchConditions: GameSearchConditions | undefined, source: CancelTokenSource): Promise<Game[]> => {
-  let params: any = {
-    year: year,
-  }
-  if (month !== undefined) {
-    params.month = month + 1
-  }
-  if (searchConditions) {
-    if (searchConditions.course) {
-      params.course_id = searchConditions?.course.id
-    }
-  }
+  const params = createSearchParameters(year, month, searchConditions)
   const response = await baseService.get('/games', source, params)
   return response.data.map((gameResponse: ApiGameResponse) => apiGameResponseToGame(gameResponse))
 }
@@ -35,10 +25,7 @@ const getMonthsThatHaveGames = async (source: CancelTokenSource): Promise<GameMo
 }
 
 const getYearsThatHaveGames = async (searchConditions: GameSearchConditions, source: CancelTokenSource): Promise<number[]> => {  
-  let params: any = { }
-  if (searchConditions.course) {
-    params.course_id = searchConditions?.course.id
-  }
+  const params = createSearchParameters(undefined, undefined, searchConditions)
   const response = await baseService.get('/games/years', source, params)
   return response.data
 }
@@ -113,4 +100,33 @@ export default {
   getAllTags,
   getAvailableConditions,
   deleteGame,
+}
+
+function createSearchParameters(year?: number, month?: number, searchParams?: GameSearchConditions): any {
+  let params: any = {}
+
+  if (year !== undefined) {
+    params.year = year
+  }
+
+  if (month !== undefined) {
+    params.month = month + 1
+  }
+
+  if (searchParams) {
+    if (searchParams.course) {
+      params.course_id = searchParams.course.id
+    }
+    if (searchParams.players) {
+      params.players = searchParams.players.map(player => player.id)
+    }
+    if (searchParams.tags) {
+      params.tags = searchParams.tags.map(tag => tag.id)
+    }
+    if (searchParams.comment) {
+      params.comment = searchParams.comment
+    }
+  }
+
+  return params
 }
