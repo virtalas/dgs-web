@@ -8,6 +8,7 @@ import playersService from '../../services/playersService'
 import PlayerCard from './PlayerCard'
 import baseService from '../../services/baseService'
 import { pageMaxWidth } from '../BasePage'
+import LoadingView from '../LoadingView'
 
 const useStyles = makeStyles((theme) => ({
   page: {
@@ -30,6 +31,7 @@ const Players: React.FC<{}> = () => {
 
   const [players, setPlayers] = useState<Player[]>()
   const [currentUser, setCurrentUser] = useState<Player>()
+  const [isLoading, setIsLoading] = useState(true)
 
   const friends = players?.filter(player => !player.guest).filter(player => player.id !== currentUser?.id)
   const guests = players?.filter(player => player.guest)
@@ -40,6 +42,7 @@ const Players: React.FC<{}> = () => {
     playersService.getPlayers(cancelTokenSource).then(p => {
       setPlayers(p)
       setCurrentUser(p.find(player => player.id === userId))
+      setIsLoading(false)
     })
 
     return () => cancelTokenSource?.cancel()
@@ -63,6 +66,10 @@ const Players: React.FC<{}> = () => {
       ) : null}
 
       {guests?.map(player => generatePlayerCard(player, true))}
+
+      {players === undefined && isLoading ? (
+        <LoadingView />
+      ) : null}
     </div>
   )
 }
