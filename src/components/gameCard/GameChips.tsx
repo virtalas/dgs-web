@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from 'react'
+import { useLocation, Redirect } from 'react-router-dom' 
+
 import { makeStyles } from '@material-ui/core/styles'
 import Chip from '@material-ui/core/Chip'
 
 import { highScoreBlue, illegalRed } from '../../constants/Colors'
 import AddTagButton from './AddTagButton'
-import { Redirect } from 'react-router-dom'
+import qs from 'qs'
 
 export const chipHeight = 22
 
@@ -63,6 +65,8 @@ const GameChips: React.FC<Props> = (props) => {
   const [playerRedirect, setPlayerRedirect] = useState(false)
   const [gameSearchRedirectPath, setGameSearchRedirectPath] = useState<string>()
 
+  const searchConditionQueryParams = qs.parse(useLocation().search, { ignoreQueryPrefix: true })
+
   const editableUserTagsToShow = [...game.tags, ...chosenUserTagHistory.filter(tag => !arrayContainsTag(game.tags, tag))]
 
   useEffect(() => {
@@ -97,7 +101,9 @@ const GameChips: React.FC<Props> = (props) => {
   }
 
   const handleTagChipClick = (tag: Tag) => {
-    setGameSearchRedirectPath('tag=' + tag.id)
+    if (!searchConditionQueryParams.tag) {
+      setGameSearchRedirectPath('tag=' + tag.id)
+    }
   }
 
   const handleTagToggle = (tag: Tag, arrayName: 'conditions' | 'weatherConditions' | 'tags') => {
