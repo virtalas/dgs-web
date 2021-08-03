@@ -8,8 +8,15 @@ import DoneIcon from '@material-ui/icons/Done'
 import ClearIcon from '@material-ui/icons/Clear'
 import DeleteIcon from '@material-ui/icons/Delete'
 import CircularProgress from '@material-ui/core/CircularProgress'
+import Button from '@material-ui/core/Button'
 
 const useStyles = makeStyles((theme) => ({
+  actionAreaBottomLeft: {
+    position: 'absolute',
+    bottom: 10,
+    left: 8,
+    zIndex: 10,
+  },
   actionAreaBottomRight: {
     position: 'absolute',
     bottom: 10,
@@ -33,6 +40,9 @@ const useStyles = makeStyles((theme) => ({
     bottom: 10,
     right: 128,
   },
+  textButton: {
+    margin: 8,
+  },
   spinner: {
     padding: 5,
   },
@@ -43,10 +53,12 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 interface Props {
-  variant:  'ok' | 'edit' | 'cancel' | 'delete' | 'loadingOnly',
+  variant:  'ok' | 'edit' | 'cancel' | 'delete' | 'loadingOnly' | 'text',
   position: 'top' | 'bottom',
+  text?: string,
   secondary?: boolean,
   third?: boolean,
+  onLeft?: boolean,
   loading?: boolean,
   error?: boolean,
   onClick: () => void,
@@ -54,7 +66,7 @@ interface Props {
 
 const ActionButton: React.FC<Props> = (props) => {
   const classes = useStyles()
-  const { variant, position, secondary, third, loading, error, onClick } = props
+  const { variant, position, text, secondary, third, onLeft, loading, error, onClick } = props
 
   let className = position === 'top' ? classes.actionAreaTopRight : classes.actionAreaBottomRight
   
@@ -62,6 +74,8 @@ const ActionButton: React.FC<Props> = (props) => {
     className = classes.actionAreaBottomSecondary
   } else if (third) {
     className = classes.actionAreaBottomThird
+  } else if (onLeft) {
+    className = classes.actionAreaBottomLeft
   }
 
   const progressSpinner = (
@@ -93,6 +107,19 @@ const ActionButton: React.FC<Props> = (props) => {
       break
     default:
       icon = null
+  }
+
+  if (text !== undefined) {
+    return (
+      <Button
+        className={className + ' ' + classes.textButton}
+        variant="outlined"
+        size="small"
+        onClick={onClick}
+      >
+        {text}
+      </Button>
+    )
   }
 
   const button = variant !== 'loadingOnly' ? (

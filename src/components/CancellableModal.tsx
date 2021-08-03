@@ -45,6 +45,7 @@ const CancellableModal: React.FC<Props> = (props) => {
       BackdropProps={{
         timeout: 500,
       }}
+      disableEnforceFocus // Fixes "RangeError: Maximum maximum call stack size exceeded" when children include a Select.
     >
       <Fade in={modalOpen}>
         <div className={classes.container}>

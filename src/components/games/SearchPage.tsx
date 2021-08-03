@@ -226,7 +226,7 @@ const SearchPage: React.FC<Props> = (props) => {
   return (
     <div className={classes.root}>
       <div className={classes.searchControls}>
-        <CourseSelect onCourseChange={handleCourseSelect} isSearch={true} />
+        <CourseSelect onCourseChange={handleCourseSelect} chooseNearest={false} />
 
         <PlayerSelect
           players={selectedPlayers}

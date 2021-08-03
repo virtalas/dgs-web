@@ -17,6 +17,7 @@ import gamesService from '../../services/gamesService'
 import baseService from '../../services/baseService'
 import ActionButton from './ActionButton'
 import { areOnSameDay } from '../../utils/DateUtils'
+import ChangeLayoutModal from './ChangeLayoutModal'
 
 const useStyles = makeStyles((theme) => ({
   title: {
@@ -81,6 +82,7 @@ const GameCard: React.FC<Props> = (props) => {
 
   const [isEditing, setIsEditing] = useState(editOnly ? true : false) // to get rid of undefined
   const [isCommentPromptDirty, setIsCommentPromptDirty] = useState(false)
+  const [changeLayoutModalOpen, setChangeLayoutModalOpen] = useState(false)
   const [updating, setUpdating] = useState(false)
   const [updateError, setUpdateError] = useState(false)
   const [originalGame, setOriginalGame] = useState<Game>()
@@ -98,12 +100,12 @@ const GameCard: React.FC<Props> = (props) => {
 
   useEffect(() => () => cancelTokenSourceRef.current?.cancel(), [])
 
-  const sendUpdatedGame = (updatedGame?: Game) => {
+  const sendUpdatedGame = (updatedGame?: Game, newLayout?: Layout) => {
     cancelTokenSourceRef.current = baseService.cancelTokenSource()
 
     const gameToSend = updatedGame !== undefined ? updatedGame : game
 
-    gamesService.updateGame(gameToSend, userId ?? '', cancelTokenSourceRef.current)
+    gamesService.updateGame(gameToSend, userId, cancelTokenSourceRef.current, newLayout)
       .then((returnedGame: Game) => {
         setGame(returnedGame)
         setUpdating(false)
@@ -178,6 +180,14 @@ const GameCard: React.FC<Props> = (props) => {
         }
       })
   }
+
+  const handleChangeLayout = (layout: Layout) => {
+    sendUpdatedGame(game, layout)
+    if (onEditToggle) {
+      onEditToggle(!isEditing)
+    }
+    setIsEditing(!isEditing)
+}
   
   const showLoading = ((updating || autoUpdating) && !updateError) ?? false
 
@@ -218,6 +228,17 @@ const GameCard: React.FC<Props> = (props) => {
       third={true}
       loading={showLoading}
       onClick={handleDelete}
+    />
+  ) : null
+
+  const changeLayoutButton = isEditing && !editOnly ? (
+    <ActionButton
+      variant="text"
+      position="bottom"
+      text="Change layout"
+      onLeft={true}
+      loading={showLoading}
+      onClick={() => setChangeLayoutModalOpen(true)}
     />
   ) : null
 
@@ -272,6 +293,7 @@ const GameCard: React.FC<Props> = (props) => {
 
       {isEditing ? gameDateEditing : gameDate}
 
+      {changeLayoutButton}
       {deleteButton}
       {cancelButton}
       {actionButton}
@@ -289,6 +311,15 @@ const GameCard: React.FC<Props> = (props) => {
         userId={userId}
         setIsCommentPromptDirty={setIsCommentPromptDirty}
       />
+
+      {isEditing ? (
+        <ChangeLayoutModal
+          open={changeLayoutModalOpen}
+          setOpen={setChangeLayoutModalOpen}
+          game={game}
+          onLayoutChosen={handleChangeLayout}
+        />
+      ) : null}
     </BlueCard>
   )
 }

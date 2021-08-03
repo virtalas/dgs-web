@@ -43,7 +43,7 @@ const createGame = async (layout: Layout, players: Player[], start_date: string,
   return response.data
 }
 
-const updateGame = async (game: Game, userId: string | undefined, source: CancelTokenSource): Promise<Game> => {
+const updateGame = async (game: Game, userId: string | undefined, source: CancelTokenSource, newLayout?: Layout): Promise<Game> => {
   if (userId === undefined) {
     return Promise.reject()
   }
@@ -59,10 +59,20 @@ const updateGame = async (game: Game, userId: string | undefined, source: Cance
         legal: legal,
       }
     }),
+    new_layout_id: newLayout?.id,
   })
 
   return apiGameResponseToGame(response.data)
 }
+
+const changeGameLayout = async (game: Game, layout: Layout, source: CancelTokenSource): Promise<Game> => {
+  const response = await baseService.put('/games/layout', source, {
+    game_id: game.id,
+    layout_id: layout.id,
+  })
+  return apiGameResponseToGame(response.data)
+}
+
 
 const deleteGame = async (game: Game, source: CancelTokenSource): Promise<{}> => {
   const response = await baseService.delete_('/games', source, {
@@ -100,6 +110,7 @@ export default {
   getAllTags,
   getAvailableConditions,
   deleteGame,
+  changeGameLayout,
 }
 
 function createSearchParameters(year?: number, month?: number, searchParams?: GameSearchConditions): any {

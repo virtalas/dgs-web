@@ -30,7 +30,7 @@ interface Props {
   layout?: Layout,
   setLayout?: (layout: Layout | undefined) => void,
   setGameCreatable?: (creatable: boolean) => void,
-  isSearch?: boolean,
+  chooseNearest?: boolean,
 }
 
 // TODO: Spread controls out if there is space. They are too packed together on desktop.
@@ -39,7 +39,8 @@ interface Props {
 const CourseSelect: React.FC<Props> = (props) => {
   const classes = useStyles()
 
-  const { onCourseChange, layout, setLayout, setGameCreatable, isSearch } = props
+  const { onCourseChange, layout, setLayout, setGameCreatable, chooseNearest } = props
+  const useLocation = chooseNearest !== undefined ? chooseNearest : true
 
   const [course, setCourse] = useState<BasicCourse>()
   const [courses, setCourses] = useState<Course[]>([])
@@ -120,15 +121,15 @@ const CourseSelect: React.FC<Props> = (props) => {
       }
       const sortedFetchedCourses = sortCourses(fetchedCourses, sortBy)
       setCourses(sortedFetchedCourses)
-      if (setGameCreatable) {
+      if (useLocation && setGameCreatable) {
         setGameCreatable(true) // Even if the fetching of players fails, one player (user) and a course is enough.
       }
-      if (!isSearch) {
+      if (useLocation) {
         attemptToSelectClosestCourse(sortedFetchedCourses)
       }
     })
 
-    if (!isSearch) {
+    if (useLocation) {
       // Ping the user to give their location first, then it can be accessed without a prompt once courses arrive.
       attemptToGetUserLocation()
     }
@@ -153,7 +154,7 @@ const CourseSelect: React.FC<Props> = (props) => {
         input={<OutlinedInput labelWidth={labelWidth} name="course" id="course-select" inputProps={{  }} />}
         renderValue={option => course?.name ?? ''}
       >
-        {isSearch ? (
+        {!useLocation ? (
           <MenuItem value={undefined} className={classes.noSelectionText}>
             — Any course —
           </MenuItem>

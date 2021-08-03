@@ -18,7 +18,7 @@ interface Props {
   size?: 'small',
 }
 
-// This component exists to fix a Material UI bug (?) in Safari:
+// This component exists to circumvent a Material UI bug (?) in Safari:
 // When a button is disabled by a React hook and becomes enabled, the style does not update correctly.
 // Specifically, the text color does not change when going from disabled to enabled.
 

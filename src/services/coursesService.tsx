@@ -81,7 +81,6 @@ const updateLayout = async (layout: DetailedLayout, source: CancelTokenSource): 
   })
   return apiDetailedLayoutToDetailedLayout(response.data)
 }
-
 const deleteCourse = async (course: Course, source: CancelTokenSource): Promise<{}> => {
   const response = await baseService.delete_('/courses', source, {
     id: course.id,
