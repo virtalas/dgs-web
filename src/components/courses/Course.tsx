@@ -75,16 +75,17 @@ const useStyles = makeStyles((theme) => ({
   sectionTitle: {
     marginLeft: theme.spacing(2),
   },
+  gamesButton: {
+    margin: theme.spacing(2),
+  },
 }))
 
 interface Props {
   match: any,
 }
 
-// TODO: Current weather conditions?
 // TODO: Use ghosting after opening Accordion and fetching data
-// TODO: Upload cover picture
-// TODO: Use accordion, because more than 2 layouts already makes scrolling tedious for high scores etc.
+// TODO(?): Use accordion, because more than 2 layouts already makes scrolling tedious for high scores etc.
 
 const Course: React.FC<Props> = (props) => {
   const classes = useStyles()
@@ -96,7 +97,8 @@ const Course: React.FC<Props> = (props) => {
   const [editCourseOpen, setEditCourseOpen] = useState(false)
   const [imgError, setImgError] = useState(false)
   const [localWeather, setLocalWeather] = useState<LocalWeather>()
-  const [redirect, setRedirect] = useState(false)
+  const [coursesRedirect, setCoursesRedirect] = useState(false)
+  const [gamesRedirect, setGamesRedirect] = useState(false)
 
   const cancelTokenSourceRef = useRef<CancelTokenSource | null>(null)
 
@@ -118,8 +120,14 @@ const Course: React.FC<Props> = (props) => {
     return () => cancelTokenSourceRef.current?.cancel()
   }, [courseId, fetchLocalWeather])
 
-  if (redirect) {
-    return <Redirect push to={'/courses'} />
+  if (coursesRedirect) {
+    return <Redirect to={'/courses'} />
+  }
+
+  if (gamesRedirect) {
+    if (course) {
+      return <Redirect push to={'/games/search?course_id=' + course.id} />
+    }
   }
 
   const coverPictureURL = course?.photo?.url
@@ -152,7 +160,7 @@ const Course: React.FC<Props> = (props) => {
 
     if (course) {
       cancelTokenSourceRef.current = baseService.cancelTokenSource()
-      coursesService.deleteCourse(course, cancelTokenSourceRef.current).then(() => setRedirect(true))
+      coursesService.deleteCourse(course, cancelTokenSourceRef.current).then(() => setCoursesRedirect(true))
     }
   }
 
@@ -280,12 +288,11 @@ const Course: React.FC<Props> = (props) => {
       {/* TODO: */}
       {/* {statsTable} */}
 
-      {/* TODO: */}
-      {/* <Typography component="p">
-        On this course:
-        <Button disabled size="small">My games</Button>
-        <Button disabled size="small">All games</Button>
-      </Typography> */}
+      {course ? (
+        <Button className={classes.gamesButton} size="small" onClick={() => setGamesRedirect(true)}>
+          Show games
+        </Button>
+      ) : null}
 
       <br />
 

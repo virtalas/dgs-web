@@ -55,6 +55,7 @@ const SearchPage: React.FC<Props> = (props) => {
 
   const searchConditionQueryParams = qs.parse(useLocation().search, { ignoreQueryPrefix: true })
   const queryParamTagId = searchConditionQueryParams.tag ?? undefined
+  const queryParamCourseId = searchConditionQueryParams.course_id ? String(searchConditionQueryParams.course_id) : undefined
 
   const [games, setGames] = useState<Game[]>([])
   const [fetchedYears, setFetchedYears] = useState<number[]>([])
@@ -226,7 +227,11 @@ const SearchPage: React.FC<Props> = (props) => {
   return (
     <div className={classes.root}>
       <div className={classes.searchControls}>
-        <CourseSelect onCourseChange={handleCourseSelect} chooseNearest={false} />
+        <CourseSelect
+          onCourseChange={handleCourseSelect}
+          chooseNearest={false}
+          preselectedCourseId={queryParamCourseId}
+        />
 
         <PlayerSelect
           players={selectedPlayers}

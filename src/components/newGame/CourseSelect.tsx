@@ -31,6 +31,7 @@ interface Props {
   setLayout?: (layout: Layout | undefined) => void,
   setGameCreatable?: (creatable: boolean) => void,
   chooseNearest?: boolean,
+  preselectedCourseId?: string,
 }
 
 // TODO: Spread controls out if there is space. They are too packed together on desktop.
@@ -39,7 +40,7 @@ interface Props {
 const CourseSelect: React.FC<Props> = (props) => {
   const classes = useStyles()
 
-  const { onCourseChange, layout, setLayout, setGameCreatable, chooseNearest } = props
+  const { onCourseChange, layout, setLayout, setGameCreatable, chooseNearest, preselectedCourseId } = props
   const useLocation = chooseNearest !== undefined ? chooseNearest : true
 
   const [course, setCourse] = useState<BasicCourse>()
@@ -119,13 +120,25 @@ const CourseSelect: React.FC<Props> = (props) => {
       if (fetchedCourses.length === 0) {
         return
       }
+
       const sortedFetchedCourses = sortCourses(fetchedCourses, sortBy)
       setCourses(sortedFetchedCourses)
+
       if (useLocation && setGameCreatable) {
         setGameCreatable(true) // Even if the fetching of players fails, one player (user) and a course is enough.
       }
+
       if (useLocation) {
         attemptToSelectClosestCourse(sortedFetchedCourses)
+      }
+
+      if (preselectedCourseId) {
+        const preselectedCourse = fetchedCourses.find(c => c.id === preselectedCourseId)
+        
+        if (preselectedCourse && onCourseChange) {
+          setCourse(preselectedCourse)
+          onCourseChange(preselectedCourse)
+        }
       }
     })
 
