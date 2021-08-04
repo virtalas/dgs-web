@@ -8,6 +8,7 @@ import { withStyles } from '@material-ui/core'
 import DayjsUtils from '@date-io/dayjs'
 import { MuiPickersUtilsProvider, DateTimePicker } from '@material-ui/pickers'
 import { MaterialUiPickersDate } from '@material-ui/pickers/typings/date'
+import Link from '@material-ui/core/Link'
 
 import { useAuth } from '../../context/AuthContext'
 import ScoreCard from './ScoreCard'
@@ -289,7 +290,9 @@ const GameCard: React.FC<Props> = (props) => {
 
   return (
     <BlueCard>
-      <Typography variant="h6" className={classes.title}>{game.courseName + ', ' + game.layout.name}</Typography>
+      <Link href={'#/courses/view/' + game.courseId}>
+        <Typography variant="h6" className={classes.title}>{game.courseName + ', ' + game.layout.name}</Typography>
+      </Link>
 
       {isEditing ? gameDateEditing : gameDate}
 
