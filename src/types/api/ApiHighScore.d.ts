@@ -1,4 +1,5 @@
 interface ApiLayoutHighScore {
+  layout_id: string,
   layout_name: string,
   to_par: number,
   game_id: string,

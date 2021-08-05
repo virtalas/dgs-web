@@ -1,4 +1,5 @@
 interface LayoutHighScore {
+  layoutId: string,
   layoutName: string,
   toPar: number,
   gameId: string,

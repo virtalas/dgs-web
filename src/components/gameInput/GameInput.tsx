@@ -5,7 +5,7 @@ import { makeStyles } from '@material-ui/core/styles'
 import BottomNavigation from '@material-ui/core/BottomNavigation'
 import BottomNavigationAction from '@material-ui/core/BottomNavigationAction'
 import DescriptionIcon from '@material-ui/icons/Description'
-// import InfoIcon from '@material-ui/icons/Info'
+import InfoIcon from '@material-ui/icons/Info'
 import EditIcon from '@material-ui/icons/Edit'
 import LocationOnIcon from '@material-ui/icons/LocationOn'
 
@@ -13,7 +13,7 @@ import { useAuth } from '../../context/AuthContext'
 import HoleInfoBar from './HoleInfoBar'
 import gamesService from '../../services/gamesService'
 import ScoreInputView from './ScoreInputView'
-// import HoleInfoView from './HoleInfoView'
+import HoleInfoView, { CourseHighScore } from './HoleInfoView'
 import GameInfoView from './GameInfoView'
 import MapView from './MapView'
 import NotificationBar from '../NotificationBar'
@@ -22,7 +22,7 @@ import baseService from '../../services/baseService'
 import weatherService from '../../services/weatherService'
 
 const scoreInputViewTab = 0
-// const holeInfoViewTab = 1
+const holeInfoViewTab = 1
 const mapViewTab = 1
 const gameInfoViewTab = 2
 
@@ -72,6 +72,9 @@ const GameInput: React.FC<{}> = (props: any) => {
   const [tab, setTab] = React.useState(scoreInputViewTab)
   const [updating, setUpdating] = useState(false)
   const [updateError, setUpdateError] = useState(false)
+
+  // Stats view
+  const [highScores, setHighScores] = useState<CourseHighScore[]>()
 
   const cancelTokenSourceRef = useRef<CancelTokenSource | null>(null)
 
@@ -181,13 +184,16 @@ const GameInput: React.FC<{}> = (props: any) => {
     />
   )
 
-  // const holeInfoView = (
-  //   <HoleInfoView
-  //     holeIndex={holeIndex}
-  //     setHoleIndex={setHoleIndex}
-  //     swipeableViewStyle={classes.swipeableView}
-  //   />
-  // )
+  const holeInfoView = (
+    <HoleInfoView
+      holeIndex={holeIndex}
+      setHoleIndex={setHoleIndex}
+      swipeableViewStyle={classes.swipeableView}
+      game={game}
+      highScores={highScores}
+      setHighScores={setHighScores}
+    />
+  )
 
   const mapView = (
     <MapView mapURL={game ? game.layout.mapURL : ''} />
@@ -209,9 +215,9 @@ const GameInput: React.FC<{}> = (props: any) => {
     case scoreInputViewTab:
       activeView = scoreInputView
       break
-    // case holeInfoViewTab:
-    //   activeView = holeInfoView
-    //   break
+    case holeInfoViewTab:
+      activeView = holeInfoView
+      break
     case mapViewTab:
       activeView = mapView
       break
@@ -247,8 +253,7 @@ const GameInput: React.FC<{}> = (props: any) => {
           showLabels
         >
           <BottomNavigationAction label="Scores" icon={<EditIcon />} id="scoresTabButton" />
-          {/* TODO: */}
-          {/* <BottomNavigationAction label="Stats" icon={<InfoIcon />} id="statsTabButton" /> */}
+          <BottomNavigationAction label="Stats" icon={<InfoIcon />} id="statsTabButton" />
           <BottomNavigationAction label="Map" icon={<LocationOnIcon />} id="mapTabButton" />
           <BottomNavigationAction label="Game info" icon={<DescriptionIcon id="gameInfoTabButton" />} />
         </BottomNavigation>
