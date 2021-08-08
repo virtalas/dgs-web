@@ -36,7 +36,7 @@ const InviteGuestButton: React.FC<Props> = (props) => {
     setDialogOpen(true)
   }
 
-  const link = window.location.origin + '/#/register/' + player.id + '?name=' + player.firstName
+  const link = window.location.origin + '/dgs/#/register/' + player.id + '?name=' + player.firstName
 
   const dialogContent = (
     <DialogContent>
