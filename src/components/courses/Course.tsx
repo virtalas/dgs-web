@@ -31,6 +31,7 @@ const useStyles = makeStyles((theme) => ({
   page: {
     maxWidth: pageMaxWidth,
     margin: theme.spacing(1),
+    paddingBottom: theme.spacing(12),
     [theme.breakpoints.up('md')]: {
       marginLeft: 'auto',
       marginRight: 'auto',
@@ -216,7 +217,7 @@ const Course: React.FC<Props> = (props) => {
     <Grid
       container
       direction="row"
-      justify="flex-start"
+      justifyContent="flex-start"
       alignItems="center"
     >
       <Typography id="courseNameCity" className={classes.title} variant="h4">

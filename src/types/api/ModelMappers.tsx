@@ -167,7 +167,7 @@ export const apiDetailedCourseToDetailedCourse = (apiDetailedCourse: ApiDetailed
     city: apiDetailedCourse.city,
     lat: apiDetailedCourse.lat,
     lon: apiDetailedCourse.lon,
-    layouts: sortByName(layouts),
+    layouts: sortByNumberOfGames(layouts),
     allowedToEdit: apiDetailedCourse.allowed_to_edit,
     numberOfGames: apiDetailedCourse.number_of_games,
     photo: apiDetailedCourse.photo ? apiPhotoToPhoto(apiDetailedCourse.photo) : undefined,
@@ -183,7 +183,22 @@ export const apiDetailedLayoutToDetailedLayout = (apiDetailedLayout: ApiDetailed
     holes: apiDetailedLayout.holes,
     total: apiDetailedLayout.total,
     mapURL: apiDetailedLayout.mapURL,
-    allowedToEdit: apiDetailedLayout.allowed_to_edit,  
+    allowedToEdit: apiDetailedLayout.allowed_to_edit,
+    numberOfGamesUniversal: apiDetailedLayout.number_of_games_universal,
+  }
+}
+
+export const apiHoleScoreDistributionToHoleScoreDistribution = (apiHoleScoreDistribution: ApiHoleScoreDistribution): HoleScoreDistribution => {
+  return {
+    holeNum: apiHoleScoreDistribution.hole_num,
+    holeAvgScore: apiHoleScoreDistribution.hole_avg_score,
+    holeDifficultyPlacement: apiHoleScoreDistribution.difficulty_placement,
+    holeInOneCount: apiHoleScoreDistribution.hole_in_one_count,
+    eagleCount: apiHoleScoreDistribution.eagle_count,
+    birdieCount: apiHoleScoreDistribution.birdie_count,
+    parCount: apiHoleScoreDistribution.par_count,
+    bogeyCount: apiHoleScoreDistribution.bogey_count,
+    overBogeyCount: apiHoleScoreDistribution.over_bogey_count,
   }
 }
 
@@ -229,11 +244,20 @@ export function sortByToPar(scores: PlayerScores[]): PlayerScores[] {
   })
 }
 
-function sortByName(array: DetailedLayout[]): DetailedLayout[] {
+export function sortByName(array: BasicLayout[]): BasicLayout[] {
   return array.sort((a, b) => {
     let same = a.name === b.name
     if (same) return 0
-    if (a.name < b.name) return 1
+    if (a.name > b.name) return 1
+    return -1
+  })
+}
+
+function sortByNumberOfGames(array: DetailedLayout[]): DetailedLayout[] {
+  return array.sort((a, b) => {
+    let same = a.numberOfGamesUniversal === b.numberOfGamesUniversal
+    if (same) return (a.name > b.name) ? 1 : -1
+    if (a.numberOfGamesUniversal < b.numberOfGamesUniversal) return 1
     return -1
   })
 }

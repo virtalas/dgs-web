@@ -19,4 +19,5 @@ interface DetailedLayout extends Layout {
   total: number,
   mapURL: string,
   allowedToEdit: boolean,
+  numberOfGamesUniversal: number,
 }

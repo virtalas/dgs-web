@@ -1,4 +1,10 @@
 import React, { useEffect, useRef, useState } from 'react'
+import {
+  BarChart,
+  Bar,
+  XAxis,
+  ResponsiveContainer,
+} from 'recharts'
 
 import { makeStyles } from '@material-ui/core/styles'
 import EditIcon from '@material-ui/icons/Edit'
@@ -12,6 +18,7 @@ import coursesService from '../../services/coursesService'
 import CancellableModal from '../CancellableModal'
 import baseService from '../../services/baseService'
 import { CancelTokenSource } from 'axios'
+import { birdieGreen, bogeyOrange, eagleYellow, holeInOneRed, overBogeyPurple, parGreen } from '../../constants/Colors'
 
 const useStyles = makeStyles((theme) => ({
   layoutPaper: {
@@ -37,11 +44,22 @@ const LayoutPaper: React.FC<Props> = (props) => {
   const classes = useStyles()
 
   const { layout, course, handleLayoutUpdated, handleLayoutDeleted } = props
+
+  const [holeScoreDistribution, setHoleScoreDistribution] = useState<HoleScoreDistribution[]>()
   const [modalOpen, setModalOpen] = useState(false)
 
   const cancelTokenSourceRef = useRef<CancelTokenSource | null>(null)
 
-  useEffect(() => () => cancelTokenSourceRef.current?.cancel())
+  useEffect(() => {
+    const fetchHoleScoreDistribution = async () => {
+      cancelTokenSourceRef.current = baseService.cancelTokenSource()
+      const hsd = await coursesService.getLayoutScoreDistribution(layout.id, cancelTokenSourceRef.current)
+      setHoleScoreDistribution(hsd)
+    }
+  
+    fetchHoleScoreDistribution()
+    return () => cancelTokenSourceRef.current?.cancel()
+  }, [layout.id])
 
   const handleEditLayout = () => setModalOpen(true)
 
@@ -86,7 +104,7 @@ const LayoutPaper: React.FC<Props> = (props) => {
     <Grid
         container
         direction="row"
-        justify="flex-start"
+        justifyContent="flex-start"
         alignItems="center"
     >
       <Typography data-cy="layoutName" variant="h6">
@@ -105,7 +123,7 @@ const LayoutPaper: React.FC<Props> = (props) => {
     <Grid
         container
         direction="row"
-        justify="flex-start"
+        justifyContent="flex-start"
         alignItems="center"
     >
       {layout.holes.map((hole, index) => (
@@ -129,6 +147,43 @@ const LayoutPaper: React.FC<Props> = (props) => {
     </Grid>
   )
 
+  const data = holeScoreDistribution?.map(hsd => {
+    return {
+      holeNum: hsd.holeNum,
+      holeInOneCount: hsd.holeInOneCount,
+      eagleCount: hsd.eagleCount,
+      birdieCount: hsd.birdieCount,
+      parCount: hsd.parCount,
+      bogeyCount: hsd.bogeyCount,
+      overBogeyCount: hsd.overBogeyCount,
+    }
+  })
+
+  const scoreDistributionGraph = holeScoreDistribution && (
+    <div style={{ width: '100%', height: 300 }}>
+      <ResponsiveContainer width="100%" height="100%">
+        <BarChart
+          data={data}
+          stackOffset="expand"
+          margin={{
+            top: 10,
+            right: 5,
+            left: 5,
+            bottom: 5,
+          }}
+        >
+          <XAxis dataKey="holeNum" />
+          <Bar dataKey="holeInOneCount" stackId="a" fill={holeInOneRed} />
+          <Bar dataKey="eagleCount" stackId="a" fill={eagleYellow} />
+          <Bar dataKey="birdieCount" stackId="a" fill={birdieGreen} />
+          <Bar dataKey="parCount" stackId="a" fill={parGreen} />
+          <Bar dataKey="bogeyCount" stackId="a" fill={bogeyOrange} />
+          <Bar dataKey="overBogeyCount" stackId="a" fill={overBogeyPurple} />
+        </BarChart>
+      </ResponsiveContainer>
+    </div>
+  )
+
   return (
     <Paper data-cy="layoutPaper" className={classes.layoutPaper} key={'layout-' + layout.id}>
       {titleRow}
@@ -138,6 +193,17 @@ const LayoutPaper: React.FC<Props> = (props) => {
       <Typography data-cy="layoutDesc">
         {layout.description}
       </Typography>
+
+      <br />
+
+      <Typography variant="overline">
+        {scoreDistributionGraph ?
+          `Scores from all players (${layout.numberOfGamesUniversal} game${layout.numberOfGamesUniversal !== 1 ? 's' : ''}):`
+        :
+          'Loading...'}
+      </Typography>
+
+      {scoreDistributionGraph}
 
       {/* TODO */}
       {/* <Button size="small">Layout map</Button> */}

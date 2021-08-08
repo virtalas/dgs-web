@@ -36,6 +36,7 @@
     "react-scripts": "^3.4.4",
     "react-slick": "^0.28.1",
     "react-swipeable-views": "^0.13.9",
+    "recharts": "^2.0.10",
     "slick-carousel": "^1.8.1",
     "typeface-roboto": "0.0.54",
     "yup": "^0.32.8"

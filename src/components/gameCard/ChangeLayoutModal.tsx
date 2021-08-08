@@ -118,7 +118,7 @@ const ChangeLayoutModal: React.FC<Props> = (props) => {
     <Grid
       container
       direction="row"
-      justify="flex-start"
+      justifyContent="flex-start"
       alignItems="center"
     >
       <div>

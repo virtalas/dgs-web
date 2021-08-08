@@ -1,6 +1,7 @@
 import React, { useEffect, useRef } from 'react'
 import SwipeableViews from 'react-swipeable-views'
 import { CancelTokenSource } from 'axios'
+import { PieChart, Pie, Cell, ResponsiveContainer, Legend } from 'recharts'
 
 import { makeStyles } from '@material-ui/core/styles'
 import { Typography } from '@material-ui/core'
@@ -12,6 +13,8 @@ import TableBody from '@material-ui/core/TableBody'
 
 import playersService from '../../services/playersService'
 import baseService from '../../services/baseService'
+import coursesService from '../../services/coursesService'
+import { birdieGreen, bogeyOrange, eagleYellow, holeInOneRed, overBogeyPurple, parGreen } from '../../constants/Colors'
 
 const useStyles = makeStyles((theme) => ({
   page: {
@@ -31,16 +34,19 @@ interface Props {
   game: Game,
   highScores?: CourseHighScore[],
   setHighScores: (highScores: CourseHighScore[]) => void,
+  holeScoreDistribution?: HoleScoreDistribution[],
+  setHoleScoreDistribution: (hsd: HoleScoreDistribution[]) => void,
 }
 
 const HoleInfoView: React.FC<Props> = (props) => {
   const classes = useStyles()
-  const { holeIndex, setHoleIndex, swipeableViewStyle, game, highScores, setHighScores } = props
+  const { holeIndex, setHoleIndex, swipeableViewStyle, game, highScores, setHighScores, holeScoreDistribution, setHoleScoreDistribution } = props
 
   const cancelTokenSourceRef = useRef<CancelTokenSource | null>(null)
 
   useEffect(() => {
     const fetchHighScores = async () => {
+      if (highScores) return
       let fetchedHighScores: CourseHighScore[] = []
 
       for (let i = 0; i < game.scores.length; i++) {
@@ -57,10 +63,22 @@ const HoleInfoView: React.FC<Props> = (props) => {
       setHighScores(fetchedHighScores)
     }
 
-    if (highScores) return
-    fetchHighScores()
+    const fetchHoleScoreDistribution = async () => {
+      if (holeScoreDistribution) return
+      cancelTokenSourceRef.current = baseService.cancelTokenSource()
+      const hsd = await coursesService.getLayoutScoreDistribution(game.layout.id, cancelTokenSourceRef.current)
+      setHoleScoreDistribution(hsd)
+    }
+
+    const initialFetchData = async () => {
+      await fetchHighScores()
+      fetchHoleScoreDistribution()
+    }
+
+    initialFetchData()
+
     return () => cancelTokenSourceRef.current?.cancel()
-  }, [game.layout.id, game.scores, highScores, setHighScores])
+  }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
   const highScoresTable = highScores && (
     <Table size="small">
@@ -81,6 +99,67 @@ const HoleInfoView: React.FC<Props> = (props) => {
     </Table>
   )
 
+  const holeScoreData = holeScoreDistribution ? holeScoreDistribution[holeIndex] : undefined
+  const scoreChartData = holeScoreData ? [
+    { name: 'ace', value: holeScoreData.holeInOneCount },
+    { name: 'eagle', value: holeScoreData.eagleCount },
+    { name: 'birdie', value: holeScoreData.birdieCount },
+    { name: 'par', value: holeScoreData.parCount },
+    { name: 'bogey', value: holeScoreData.bogeyCount },
+    { name: 'over bogey', value: holeScoreData.overBogeyCount },
+  ] : []
+
+  const COLORS = [holeInOneRed, eagleYellow, birdieGreen, parGreen, bogeyOrange, overBogeyPurple]
+
+  // @ts-ignore
+  const renderCustomizedLabel = ({ cx, cy, midAngle, innerRadius, outerRadius, percent, index }) => {
+    if (percent === 0) return null
+
+    const RADIAN = Math.PI / 180
+    const radius = innerRadius + (outerRadius - innerRadius) * 0.5
+    const x = cx + radius * Math.cos(-midAngle * RADIAN)
+    const y = cy + radius * Math.sin(-midAngle * RADIAN)
+
+    return (
+      <text x={x} y={y} fill="white" textAnchor={x > cx ? 'start' : 'end'} dominantBaseline="central">
+        {`${(percent * 100).toFixed(0)}%`}
+      </text>
+    )
+  }
+
+  const scoreDistributionChart = holeScoreDistribution && (
+    <div style={{ width: '100%', height: 250 }}>
+      <ResponsiveContainer width="100%" height="100%">
+        <PieChart>
+          <Pie
+            data={scoreChartData}
+            cx="50%"
+            cy="50%"
+            labelLine={false}
+            label={renderCustomizedLabel}
+            outerRadius={90}
+            animationDuration={700}
+            fill="#8884d8"
+            dataKey="value"
+          >
+            {scoreChartData.map((entry, index) => (
+              <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+            ))}
+          </Pie>
+          <Legend />
+        </PieChart>
+      </ResponsiveContainer>
+    </div>
+  )
+
+  const avgScoreString = 'Average score: ' + holeScoreData?.holeAvgScore
+  let difficultyPlacementString = holeScoreData?.holeDifficultyPlacement + '. most difficult'
+  if (holeScoreData && holeScoreData.holeDifficultyPlacement === 1) {
+    difficultyPlacementString = 'Most difficult hole'
+  } else if (holeScoreData && holeScoreData.holeDifficultyPlacement === game.layout.holes.length) {
+    difficultyPlacementString = 'Easiest hole'
+  }
+
   return (
     <SwipeableViews
       id="holeInfoView"
@@ -90,11 +169,11 @@ const HoleInfoView: React.FC<Props> = (props) => {
       onChangeIndex={(index: number) => setHoleIndex(index)}
     >
       {game.layout.holes.map((hole, index) => (
-        <div className={classes.page}>
+        <div className={classes.page} key={index}>
           <br /><br /><br />
 
           <Typography variant="h6" gutterBottom>
-            High scores on {game.layout.name}
+            High scores
           </Typography>
           
           {highScoresTable}
@@ -102,12 +181,17 @@ const HoleInfoView: React.FC<Props> = (props) => {
           <br />
 
           <Typography variant="h6" gutterBottom>
-            Hole {hole.number} statistics
+            Hole statistics
           </Typography>
 
-          <Typography variant="body1" gutterBottom>
-            pars/birdies/bogies/etc graph
-          </Typography>
+          {scoreDistributionChart && (
+            <Typography gutterBottom>
+              {avgScoreString}<br />
+              {difficultyPlacementString}
+            </Typography>
+          )}
+
+          {scoreDistributionChart}
 
           {/* <Typography variant="h6" gutterBottom>
             Course statistics

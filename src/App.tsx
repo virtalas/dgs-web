@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import Router from './components/Router'
 
-import createMuiTheme from "@material-ui/core/styles/createMuiTheme"
+import createTheme from "@material-ui/core/styles/createTheme"
 import ThemeProvider from "@material-ui/styles/ThemeProvider"
 
 import { AuthContext } from "./context/AuthContext"
@@ -9,7 +9,7 @@ import baseService from './services/baseService'
 
 const DEBUG = false
 
-const theme = createMuiTheme({})
+const theme = createTheme({})
 
 const App: React.FC<{}> = () => {
   let localToken = localStorage.getItem("dgs-token")

@@ -23,8 +23,8 @@ import weatherService from '../../services/weatherService'
 
 const scoreInputViewTab = 0
 const holeInfoViewTab = 1
-const mapViewTab = 1
-const gameInfoViewTab = 2
+const mapViewTab = 2
+const gameInfoViewTab = 3
 
 // TODO: change tab bar (& app bar) color to gameInputBlue
 // TODO(?): SwipeableViews: When swiping starts, show big transparent grey hole number in the middle of the page. When swiping stops fade with animation after ~0.5 seconds.
@@ -75,6 +75,7 @@ const GameInput: React.FC<{}> = (props: any) => {
 
   // Stats view
   const [highScores, setHighScores] = useState<CourseHighScore[]>()
+  const [holeScoreDistribution, setHoleScoreDistribution] = useState<HoleScoreDistribution[]>()
 
   const cancelTokenSourceRef = useRef<CancelTokenSource | null>(null)
 
@@ -192,6 +193,8 @@ const GameInput: React.FC<{}> = (props: any) => {
       game={game}
       highScores={highScores}
       setHighScores={setHighScores}
+      holeScoreDistribution={holeScoreDistribution}
+      setHoleScoreDistribution={setHoleScoreDistribution}
     />
   )
 

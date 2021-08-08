@@ -86,7 +86,7 @@ const NotificationsButton: React.FC = () => {
 
   return (
     <div>
-      <Badge color="secondary" overlap="circle" badgeContent={count}>
+      <Badge color="secondary" overlap="circular" badgeContent={count}>
         <IconButton
           edge="end"
           color="inherit"

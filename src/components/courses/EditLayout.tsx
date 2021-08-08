@@ -146,6 +146,7 @@ const EditLayout: React.FC<Props> = (props) => {
       holes: holes,
       total: totalPar,
       allowedToEdit: layout?.allowedToEdit ?? false,
+      numberOfGamesUniversal: layout?.numberOfGamesUniversal ?? 0,
     }
     handleFinish(inputtedLayout)
   }
@@ -180,7 +181,7 @@ const EditLayout: React.FC<Props> = (props) => {
     <Grid
       container
       direction="row"
-      justify="center"
+      justifyContent="center"
       alignItems="center"
     >
       <Button
@@ -240,7 +241,7 @@ const EditLayout: React.FC<Props> = (props) => {
       <Grid
         container
         direction="column"
-        justify="flex-start"
+        justifyContent="flex-start"
         alignItems="center"
       >
         <Typography className={classes.formControl} variant="h5">
@@ -294,7 +295,7 @@ const EditLayout: React.FC<Props> = (props) => {
           className={classes.parInputGrid}
           container
           direction="row"
-          justify="center"
+          justifyContent="center"
           alignItems="center"
         >
           {parInputs}
@@ -307,7 +308,7 @@ const EditLayout: React.FC<Props> = (props) => {
         <Grid
           container
           direction="row"
-          justify="center"
+          justifyContent="center"
           alignItems="center"
         >
           {newLayout ? null : (
@@ -334,7 +335,7 @@ const EditLayout: React.FC<Props> = (props) => {
         <Grid
           container
           direction="row"
-          justify="center"
+          justifyContent="center"
           alignItems="center"
         >
           <Typography className={classes.explanation} component="p" variant="caption">
@@ -345,7 +346,7 @@ const EditLayout: React.FC<Props> = (props) => {
         <Grid
           container
           direction="row"
-          justify="center"
+          justifyContent="center"
           alignItems="center"
         >
           {deleteButton}

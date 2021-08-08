@@ -10,7 +10,7 @@ import ListSubheader from '@material-ui/core/ListSubheader'
 
 import coursesService from '../../services/coursesService'
 import SortButton from './SortButton'
-import { sortCourses } from '../../types/api/ModelMappers'
+import { sortByName, sortCourses } from '../../types/api/ModelMappers'
 import baseService from '../../services/baseService'
 import { getUserLocation } from '../../utils/Utils'
 import { CourseSort } from '../../types/enums/CourseSort'
@@ -50,6 +50,7 @@ const CourseSelect: React.FC<Props> = (props) => {
   const showLayoutSelect = setLayout !== undefined
 
   const changeCourseTo = (selectedCourse: BasicCourse) => {
+    selectedCourse.layouts = sortByName(selectedCourse.layouts)
     setCourse(selectedCourse)
     if (onCourseChange) {
       onCourseChange(selectedCourse)
@@ -136,6 +137,7 @@ const CourseSelect: React.FC<Props> = (props) => {
         const preselectedCourse = fetchedCourses.find(c => c.id === preselectedCourseId)
         
         if (preselectedCourse && onCourseChange) {
+          preselectedCourse.layouts = sortByName(preselectedCourse.layouts)
           setCourse(preselectedCourse)
           onCourseChange(preselectedCourse)
         }

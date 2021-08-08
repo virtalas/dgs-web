@@ -19,7 +19,7 @@ const useStyles = makeStyles((theme) => ({
     // No vertical scrolling even if views overflow:
     overflow: 'hidden',
     width: '100%',
-    paddingBottom: theme.spacing(12),
+    paddingBottom: theme.spacing(20),
   },
   topControls: {
     paddingTop: theme.spacing(2),
@@ -174,7 +174,7 @@ const Games: React.FC<Props> = (props) => {
   return (
     <div id="gamesPage" className={classes.root}>
       {singleGameView ? (
-        <Grid className={classes.topControls} container justify="center">
+        <Grid className={classes.topControls} container justifyContent="center">
           <Button variant="outlined" onClick={handleShowAllButton}>
             Show all games
           </Button>

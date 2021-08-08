@@ -161,7 +161,7 @@ const AddTagButton: React.FC<Props> = (props) => {
         onClick={handleOpen}
       />
 
-      <Dialog disableBackdropClick disableEscapeKeyDown open={dialogOpen} onClose={() => setDialogOpen(false)}>
+      <Dialog disableEscapeKeyDown open={dialogOpen} onClose={() => setDialogOpen(false)}>
         <DialogTitle>Add tag</DialogTitle>
         {dialogContent}
         {dialogActions}

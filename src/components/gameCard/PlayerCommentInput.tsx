@@ -92,7 +92,7 @@ const PlayerCommentInput: React.FC<Props> = (props) => {
         value={commentContent}
         className={classes.newPlayerCommentEdit}
         multiline={true}
-        rowsMax={100}  
+        maxRows={100}  
         placeholder="Add your comment"
         inputProps={{ 'aria-label': 'naked' }}
         onChange={handleNewPlayerCommentChange}

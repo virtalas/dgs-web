@@ -127,7 +127,7 @@ const GameInfo: React.FC<Props> = (props) => {
       className={classes.commentEdit}
       value={commentContent}
       multiline={true}
-      rowsMax={100}
+      maxRows={100}
       placeholder="Your comment"
       onChange={handleCommentChange}
       onBlur={handleCommentBlur}

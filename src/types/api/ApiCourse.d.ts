@@ -45,4 +45,5 @@ interface ApiDetailedLayout {
   total: number,
   mapURL: string,
   allowed_to_edit: boolean,
+  number_of_games_universal: number,
 }
