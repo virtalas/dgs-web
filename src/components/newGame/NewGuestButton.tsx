@@ -102,7 +102,7 @@ const NewGuestButton: React.FC<Props> = (props) => {
   return (
     <div>
       <Button onClick={handleOpen}>New guest</Button>
-      <Dialog disableBackdropClick disableEscapeKeyDown open={dialogOpen} onClose={() => setDialogOpen(false)}>
+      <Dialog disableEscapeKeyDown open={dialogOpen} onClose={() => setDialogOpen(false)}>
         <DialogTitle>New guest</DialogTitle>
         {dialogContent}
         {dialogActions}

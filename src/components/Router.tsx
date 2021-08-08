@@ -6,6 +6,7 @@ import BasePage from './BasePage'
 import GameInput from './gameInput/GameInput'
 import Login from './login/Login'
 import Register from './login/Register'
+import Migrations from './Migrations'
 
 const Router: React.FC<{}> = () => {
   return (
@@ -15,6 +16,7 @@ const Router: React.FC<{}> = () => {
         <Route path="/register/:guestid" component={Register} />
         <Route path="/register" component={Register} />
         <PrivateRoute path="/games/:gameid/input" component={GameInput} />
+        <PrivateRoute path="/migrations" component={Migrations} />
         <PrivateRoute component={BasePage} />
       </Switch>
     </HashRouter>

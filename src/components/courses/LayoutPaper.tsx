@@ -159,7 +159,7 @@ const LayoutPaper: React.FC<Props> = (props) => {
     }
   })
 
-  const scoreDistributionGraph = holeScoreDistribution && (
+  const scoreDistributionGraph = layout.numberOfGamesUniversal > 0 && holeScoreDistribution && (
     <div style={{ width: '100%', height: 300 }}>
       <ResponsiveContainer width="100%" height="100%">
         <BarChart
@@ -196,12 +196,14 @@ const LayoutPaper: React.FC<Props> = (props) => {
 
       <br />
 
-      <Typography variant="overline">
-        {scoreDistributionGraph ?
-          `Scores from all players (${layout.numberOfGamesUniversal} game${layout.numberOfGamesUniversal !== 1 ? 's' : ''}):`
-        :
-          'Loading...'}
-      </Typography>
+      {layout.numberOfGamesUniversal > 0 && (
+        <Typography variant="overline">
+          {scoreDistributionGraph ?
+            `Scores from all players (${layout.numberOfGamesUniversal} game${layout.numberOfGamesUniversal !== 1 ? 's' : ''}):`
+          :
+            'Loading...'}
+        </Typography>
+      )}
 
       {scoreDistributionGraph}
 

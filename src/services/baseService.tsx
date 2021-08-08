@@ -48,6 +48,10 @@ const cancelTokenSource = (): CancelTokenSource => {
   return axios.CancelToken.source()
 }
 
+const runMigrations = () => {
+  return post('/users/migrations', cancelTokenSource())
+}
+
 const extractUserId = (token: AuthToken) => {
   const tokenData: { sub: string } = jwt(token.access_token)
   return tokenData['sub']
@@ -103,4 +107,5 @@ export default {
   useAccessToken,
   useResponseJSONLogger,
   extractUserId,
+  runMigrations,
 }
