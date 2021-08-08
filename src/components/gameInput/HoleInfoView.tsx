@@ -109,6 +109,15 @@ const HoleInfoView: React.FC<Props> = (props) => {
     { name: 'over bogey', value: holeScoreData.overBogeyCount },
   ] : []
 
+  const holeHasScores = holeScoreData && (
+    holeScoreData.holeInOneCount > 0 ||
+    holeScoreData.eagleCount > 0 ||
+    holeScoreData.birdieCount > 0 ||
+    holeScoreData.parCount > 0 ||
+    holeScoreData.bogeyCount > 0 ||
+    holeScoreData.overBogeyCount > 0
+  )
+
   const COLORS = [holeInOneRed, eagleYellow, birdieGreen, parGreen, bogeyOrange, overBogeyPurple]
 
   // @ts-ignore
@@ -127,7 +136,7 @@ const HoleInfoView: React.FC<Props> = (props) => {
     )
   }
 
-  const scoreDistributionChart = holeScoreDistribution && (
+  const scoreDistributionChart = holeHasScores && holeScoreDistribution && (
     <div style={{ width: '100%', height: 250 }}>
       <ResponsiveContainer width="100%" height="100%">
         <PieChart>
@@ -168,7 +177,7 @@ const HoleInfoView: React.FC<Props> = (props) => {
       index={holeIndex}
       onChangeIndex={(index: number) => setHoleIndex(index)}
     >
-      {game.layout.holes.map((hole, index) => (
+      {holeHasScores && game.layout.holes.map((hole, index) => (
         <div className={classes.page} key={index}>
           <br /><br /><br />
 
