@@ -35,6 +35,9 @@ const useStyles = makeStyles((theme) => ({
   swipeableView: {
     height: '100%',
   },
+  activenessButton: {
+    marginLeft: theme.spacing(2),
+  },
 }))
 
 interface Props {
@@ -108,15 +111,15 @@ const LayoutPaper: React.FC<Props> = (props) => {
 
   const titleRow = (
     <Grid
-        container
-        direction="row"
-        justifyContent="flex-start"
-        alignItems="center"
+      container
+      direction="row"
+      justifyContent="flex-start"
+      alignItems="center"
     >
       <Typography data-cy="layoutName" variant="h6">
         {layout.name}
 
-        <Button onClick={handleToggleLayoutActiveness}>
+        <Button className={classes.activenessButton} size="small" onClick={handleToggleLayoutActiveness}>
           {layout.active ? 'set inactive' : 'set active'}
         </Button>
       </Typography>
@@ -127,10 +130,10 @@ const LayoutPaper: React.FC<Props> = (props) => {
 
   const holeInfoTable = (
     <Grid
-        container
-        direction="row"
-        justifyContent="flex-start"
-        alignItems="center"
+      container
+      direction="row"
+      justifyContent="flex-start"
+      alignItems="center"
     >
       {layout.holes.map((hole, index) => (
         <div key={'layout-par-' + index}>
@@ -166,7 +169,7 @@ const LayoutPaper: React.FC<Props> = (props) => {
   })
 
   const scoreDistributionGraph = layout.numberOfGamesUniversal > 0 && holeScoreDistribution && (
-    <div style={{ width: '100%', height: 300 }}>
+    <div style={{ width: '100%', height: 220 }}>
       <ResponsiveContainer width="100%" height="100%">
         <BarChart
           data={data}
@@ -216,7 +219,7 @@ const LayoutPaper: React.FC<Props> = (props) => {
       {/* TODO */}
       {/* <Button size="small">Layout map</Button> */}
 
-      <Button onClick={() => setScoreDistributionModalOpen(true)}>Slideshow</Button>
+      <Button variant="outlined" size="small" onClick={() => setScoreDistributionModalOpen(true)}>Slideshow</Button>
 
       <CancellableModal modalOpen={editModalOpen} onClose={() => setEditModalOpen(false)}>
         <EditLayout

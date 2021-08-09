@@ -290,7 +290,7 @@ const Course: React.FC<Props> = (props) => {
       {/* {statsTable} */}
 
       {course ? (
-        <Button className={classes.gamesButton} size="small" onClick={() => setGamesRedirect(true)}>
+        <Button className={classes.gamesButton} variant="outlined" onClick={() => setGamesRedirect(true)}>
           Show games
         </Button>
       ) : null}
