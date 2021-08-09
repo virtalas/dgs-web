@@ -43,6 +43,7 @@ interface ApiGame {
   tags: ApiTag[],
   photos: ApiPhoto[],
   allowed_to_edit: boolean,
+  finished: boolean,
 }
 
 interface ApiGameResponse {

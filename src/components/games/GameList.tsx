@@ -81,7 +81,7 @@ const GameList: React.FC<Props> = (props) => {
   return (
     <div>
       {gamesToShow.map((game, index) => (
-        <Grow key={'grow' + index} in={true} {...{ timeout: index * 300 + 100 }}>
+        <Grow key={'grow' + index} in={true} {...{ timeout: Math.min(1000, index * 300 + 100) }}>
           <div>
             <GameCard
               game={game}

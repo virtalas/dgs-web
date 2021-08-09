@@ -16,6 +16,7 @@ interface Game {
   highScorers: Player[],
   illegalScorers: Player[],
   allowedToEdit: boolean,
+  finished: boolean,
 }
 
 interface GameSearchConditions {

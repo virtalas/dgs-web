@@ -19,6 +19,7 @@ import CancellableModal from '../CancellableModal'
 import baseService from '../../services/baseService'
 import { CancelTokenSource } from 'axios'
 import { birdieGreen, bogeyOrange, eagleYellow, holeInOneRed, overBogeyPurple, parGreen } from '../../constants/Colors'
+import HoleInfoView from '../gameInput/HoleInfoView'
 
 const useStyles = makeStyles((theme) => ({
   layoutPaper: {
@@ -30,6 +31,9 @@ const useStyles = makeStyles((theme) => ({
   },
   editButton: {
     marginLeft: theme.spacing(1),
+  },
+  swipeableView: {
+    height: '100%',
   },
 }))
 
@@ -46,7 +50,9 @@ const LayoutPaper: React.FC<Props> = (props) => {
   const { layout, course, handleLayoutUpdated, handleLayoutDeleted } = props
 
   const [holeScoreDistribution, setHoleScoreDistribution] = useState<HoleScoreDistribution[]>()
-  const [modalOpen, setModalOpen] = useState(false)
+  const [holeIndex, setHoleIndex] = useState(0)
+  const [editModalOpen, setEditModalOpen] = useState(false)
+  const [scoreDistributionModalOpen, setScoreDistributionModalOpen] = useState(false)
 
   const cancelTokenSourceRef = useRef<CancelTokenSource | null>(null)
 
@@ -61,7 +67,7 @@ const LayoutPaper: React.FC<Props> = (props) => {
     return () => cancelTokenSourceRef.current?.cancel()
   }, [layout.id])
 
-  const handleEditLayout = () => setModalOpen(true)
+  const handleEditLayout = () => setEditModalOpen(true)
 
   const handleToggleLayoutActiveness = () => {
     layout.active = !layout.active
@@ -72,7 +78,7 @@ const LayoutPaper: React.FC<Props> = (props) => {
     cancelTokenSourceRef.current = baseService.cancelTokenSource()
     coursesService.updateLayoutActiveness(updatedLayout, cancelTokenSourceRef.current).then(l => {
       handleLayoutUpdated(updatedLayout)
-      setModalOpen(false)
+      setEditModalOpen(false)
     })
   }
 
@@ -80,7 +86,7 @@ const LayoutPaper: React.FC<Props> = (props) => {
     cancelTokenSourceRef.current = baseService.cancelTokenSource()
     coursesService.updateLayout(updatedLayout, cancelTokenSourceRef.current).then(returnedLayout => {
       handleLayoutUpdated(returnedLayout)
-      setModalOpen(false)
+      setEditModalOpen(false)
     })
   }
 
@@ -210,15 +216,29 @@ const LayoutPaper: React.FC<Props> = (props) => {
       {/* TODO */}
       {/* <Button size="small">Layout map</Button> */}
 
-      <CancellableModal modalOpen={modalOpen} onClose={() => setModalOpen(false)}>
+      <Button onClick={() => setScoreDistributionModalOpen(true)}>Slideshow</Button>
+
+      <CancellableModal modalOpen={editModalOpen} onClose={() => setEditModalOpen(false)}>
         <EditLayout
           layout={layout}
           course={course}
           handleFinish={handleUpdateLayout}
-          handleCancel={() => setModalOpen(false)}
+          handleCancel={() => setEditModalOpen(false)}
           handleDelete={handleDelete}
         />
       </CancellableModal>
+
+      <CancellableModal modalOpen={scoreDistributionModalOpen} onClose={() => setScoreDistributionModalOpen(false)}>
+        <HoleInfoView
+          layout={layout}
+          holeIndex={holeIndex}
+          setHoleIndex={setHoleIndex}
+          swipeableViewStyle={classes.swipeableView}
+          holeScoreDistribution={holeScoreDistribution}
+          setHoleScoreDistribution={setHoleScoreDistribution}
+        />
+      </CancellableModal>
+
     </Paper>
   )
 }

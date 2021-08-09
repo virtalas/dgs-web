@@ -3,10 +3,12 @@ import { useLocation, Redirect } from 'react-router-dom'
 
 import { makeStyles } from '@material-ui/core/styles'
 import Chip from '@material-ui/core/Chip'
+import Fade from '@material-ui/core/Fade'
 
-import { highScoreBlue, illegalRed } from '../../constants/Colors'
+import { birdieGreen, highScoreBlue, illegalRed } from '../../constants/Colors'
 import AddTagButton from './AddTagButton'
 import qs from 'qs'
+import { Typography } from '@material-ui/core'
 
 export const chipHeight = 22
 
@@ -46,6 +48,15 @@ const useStyles = makeStyles((theme) => ({
     position: 'relative',
     left: -5,
   },
+  liveChip: {
+    height: chipHeight,
+    backgroundColor: birdieGreen,
+    color: 'white',
+  },
+  liveText: {
+    color: 'grey',
+    fontSize: 13,
+  },
 }), { name: 'MuiHook' })
 
 interface Props {
@@ -64,6 +75,7 @@ const GameChips: React.FC<Props> = (props) => {
 
   const [playerRedirect, setPlayerRedirect] = useState(false)
   const [gameSearchRedirectPath, setGameSearchRedirectPath] = useState<string>()
+  const [highScoreChipIn, setHighScoreChipIn] = useState(true)
 
   const searchConditionQueryParams = qs.parse(useLocation().search, { ignoreQueryPrefix: true })
 
@@ -75,6 +87,12 @@ const GameChips: React.FC<Props> = (props) => {
       setChosenUserTagHistory([...userTagsNotInHistory, ...chosenUserTagHistory])
     }
   }, []) // eslint-disable-line react-hooks/exhaustive-deps
+
+  useEffect(() => {
+    if (game.finished) return
+    let myInterval = setInterval(() => setHighScoreChipIn(!highScoreChipIn), 1000)
+    return () => clearInterval(myInterval)
+  })
 
   if (playerRedirect) {
     return <Redirect push to={'/players'} />
@@ -156,6 +174,12 @@ const GameChips: React.FC<Props> = (props) => {
 
   const tagChips = !isEditing ? (
     <div className={classes.chipRow}>
+      {!game.finished && (
+        <Fade in={highScoreChipIn} {...{ timeout: 800 }}>
+          <Chip className={classes.liveChip} label="LIVE" />
+        </Fade>
+      )}
+
       {game.temperature ? <Chip className={classes.chip} label={game.temperature + " °C"} /> : null}
       
       {game.weatherConditions.map((condition: Tag, index: number) => (
@@ -230,8 +254,14 @@ const GameChips: React.FC<Props> = (props) => {
   return (
     <div>
       {tagChips}
+
       {editableTags}
+
       {illegalScorerEdit}
+
+      {!game.finished && (
+        <Typography className={classes.liveText}><i>Refreshes automatically</i></Typography>
+      )}
     </div>
   )
 }

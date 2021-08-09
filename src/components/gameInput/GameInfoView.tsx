@@ -64,6 +64,7 @@ const GameInfoView: React.FC<Props> = (props) => {
 
   const handleFinish = () => {
     cancelTokenSourceRef.current = baseService.cancelTokenSource()
+    game.finished = true
     gamesService.updateGame(game, userId, cancelTokenSourceRef.current)
       .then(() => setRedirect(true))
       .catch(() => alert('Failed to send game.'))

@@ -191,6 +191,7 @@ const GameInput: React.FC<{}> = (props: any) => {
       setHoleIndex={setHoleIndex}
       swipeableViewStyle={classes.swipeableView}
       game={game}
+      layout={game.layout}
       highScores={highScores}
       setHighScores={setHighScores}
       holeScoreDistribution={holeScoreDistribution}

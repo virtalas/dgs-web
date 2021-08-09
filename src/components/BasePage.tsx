@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useRef, useState } from 'react'
 import { NavLink, withRouter } from 'react-router-dom'
 import { LocationDescriptor } from 'history'
 
@@ -9,6 +9,8 @@ import { makeStyles } from '@material-ui/core/styles'
 import AddIcon from '@material-ui/icons/Add'
 import SearchIcon from '@material-ui/icons/Search'
 import CloseIcon from '@material-ui/icons/Close'
+import Grow from '@material-ui/core/Grow'
+import { Typography } from '@material-ui/core'
 
 import PrivateRoute from '../PrivateRoute'
 import AppBar from './AppBar'
@@ -23,9 +25,12 @@ import NewLayout from './courses/NewLayout'
 import Graphs from './graphs/Graphs'
 import Competitions from './competitions/Competitions'
 import Info from './info/Info'
-
 import { appBarHeight } from './AppBar'
 import SearchPage from './games/SearchPage'
+import { useEffect } from 'react'
+import { CancelTokenSource } from 'axios'
+import baseService from '../services/baseService'
+import gamesService from '../services/gamesService'
 
 export const drawerWidth = 240
 export const pageMaxWidth = 610
@@ -50,7 +55,7 @@ const useStyles = makeStyles((theme) => ({
   },
   topFabButton: {
     position: 'fixed',
-    bottom: theme.spacing(10.5),
+    bottom: theme.spacing(10),
     right: theme.spacing(1.5),
     zIndex: 11,
   },
@@ -65,6 +70,10 @@ const useStyles = makeStyles((theme) => ({
       backgroundColor: 'darkgreen',
     },
   },
+  continueGameText: {
+    fontSize: 9,
+    marginTop: 2,
+  },
 }))
 
 interface Props {
@@ -73,9 +82,29 @@ interface Props {
 
 const BasePage: React.FC<Props> = (props) => {
   const classes = useStyles()
+  const { location } = props
 
   const [editingGameCount, setEditingGameCount] = useState(0)
-  const { location } = props
+  const [unfinishedGameId, setUnfinishedGameId] = useState<string>()
+  const [gameCreationAllowed, setGameCreationAllowed] = useState<boolean>()
+
+  const cancelTokenSourceRef = useRef<CancelTokenSource | null>(null)
+
+  useEffect(() => {
+    const checkForUnfinishedGame = async () => {
+      cancelTokenSourceRef.current = baseService.cancelTokenSource()
+      const gameId = await gamesService.getUnfinishedGameId(cancelTokenSourceRef.current)
+
+      if (gameId === undefined || gameId === null) {
+        setGameCreationAllowed(true)
+      } else {
+        setUnfinishedGameId(gameId)
+        setGameCreationAllowed(false)
+      }
+    }
+
+    checkForUnfinishedGame()
+  }, [])
 
   const onEditGameToggle = (isEditing: boolean) => setEditingGameCount(prev => isEditing ? prev + 1 : prev - 1)
 
@@ -150,22 +179,36 @@ const BasePage: React.FC<Props> = (props) => {
           <PrivateRoute exact path="/competitions" component={Competitions} />
           <PrivateRoute exact path="/info" component={Info} />
 
-          {/* TODO: Add a Fab button to continue inputting ongoing game */}
-          {shouldRenderNewButton ? (
-            <NavLink to={newButtonPath} className={classes.navLink} id="newButton">
-              {/* Usage of 'any': https://material-ui.com/guides/typescript/#usage-of-component-property */}
-              <Fab color={newButtonColor} aria-label="Add" className={newButtonClass}>
-                <AddIcon />
-              </Fab>
-            </NavLink>
-          ) : null}
-          {shouldRenderSearchButton ? (
-            <NavLink to={searchPath} className={classes.navLink} id="searchButton">
-              <Fab color="default" aria-label="Search" className={searchButtonClass}>
-                {searchButtonIcon}
-              </Fab>
-            </NavLink>
-          ) : null}
+          {gameCreationAllowed && shouldRenderNewButton && (
+            <Grow in={gameCreationAllowed && shouldRenderNewButton} {...{ timeout: 300 }}>
+              <NavLink to={newButtonPath} className={classes.navLink} id="newButton">
+                {/* Usage of 'any': https://material-ui.com/guides/typescript/#usage-of-component-property */}
+                <Fab color={newButtonColor} aria-label="New game" className={newButtonClass}>
+                  <AddIcon />
+                </Fab>
+              </NavLink>
+            </Grow>
+          )}
+
+          {unfinishedGameId && shouldRenderNewButton && (
+            <Grow in={unfinishedGameId !== undefined} {...{ timeout: 300 }}>
+              <NavLink to={`/games/${unfinishedGameId}/input`} className={classes.navLink}>
+                <Fab color={newButtonColor} aria-label="Continue game" className={newButtonClass}>
+                  <Typography className={classes.continueGameText}>Continue game</Typography>
+                </Fab>
+              </NavLink>
+            </Grow>
+          )}
+
+          {gameCreationAllowed !== undefined && shouldRenderSearchButton && (
+            <Grow in={gameCreationAllowed !== undefined && shouldRenderSearchButton} {...{ timeout: 300 }}>
+              <NavLink to={searchPath} className={classes.navLink} id="searchButton">
+                <Fab color="default" aria-label="Search games" className={searchButtonClass}>
+                  {searchButtonIcon}
+                </Fab>
+              </NavLink>
+            </Grow>
+          )}
         </div>
       </main>
     </div>

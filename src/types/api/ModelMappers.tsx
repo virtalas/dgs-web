@@ -56,6 +56,7 @@ export const apiGameResponseToGame = (gameResponse: ApiGameResponse): Game => {
       .filter(s => !s.legal)
       .map(s => playerScoresToPlayer(s)),
     allowedToEdit: gameResponse.game.allowed_to_edit,
+    finished: gameResponse.game.finished,
   }
 }
 
@@ -106,6 +107,7 @@ export const gameToApiGameUpdate = (game: Game, userId: string): ApiGameUpdate =
     comment_content: game.comments.find(comment => comment.userId === userId)?.content ?? '',
     temperature: game.temperature,
     tags: game.tags.concat(game.conditions).concat(game.weatherConditions).map(tag => tagToApiTag(tag)),
+    finished: game.finished,
   }
 }
 
@@ -192,6 +194,7 @@ export const apiHoleScoreDistributionToHoleScoreDistribution = (apiHoleScoreDist
   return {
     holeNum: apiHoleScoreDistribution.hole_num,
     holeAvgScore: apiHoleScoreDistribution.hole_avg_score,
+    holeAvgToPar: apiHoleScoreDistribution.hole_avg_to_par,
     holeDifficultyPlacement: apiHoleScoreDistribution.difficulty_placement,
     holeInOneCount: apiHoleScoreDistribution.hole_in_one_count,
     eagleCount: apiHoleScoreDistribution.eagle_count,

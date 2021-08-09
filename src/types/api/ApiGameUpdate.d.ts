@@ -11,4 +11,5 @@ interface ApiGameUpdate {
   comment_content: string,
   temperature: double | undefined,
   tags: ApiTagUpdate[],
+  finished: boolean,
 }

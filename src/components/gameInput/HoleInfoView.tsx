@@ -2,6 +2,7 @@ import React, { useEffect, useRef } from 'react'
 import SwipeableViews from 'react-swipeable-views'
 import { CancelTokenSource } from 'axios'
 import { PieChart, Pie, Cell, ResponsiveContainer, Legend } from 'recharts'
+import { isMobile } from 'react-device-detect'
 
 import { makeStyles } from '@material-ui/core/styles'
 import { Typography } from '@material-ui/core'
@@ -15,6 +16,7 @@ import playersService from '../../services/playersService'
 import baseService from '../../services/baseService'
 import coursesService from '../../services/coursesService'
 import { birdieGreen, bogeyOrange, eagleYellow, holeInOneRed, overBogeyPurple, parGreen } from '../../constants/Colors'
+import HoleNavigation from './HoleNavigation'
 
 const useStyles = makeStyles((theme) => ({
   page: {
@@ -31,22 +33,24 @@ interface Props {
   holeIndex: number,
   setHoleIndex: (holeNum: number) => void,
   swipeableViewStyle: any,
-  game: Game,
+  game?: Game,
+  layout: GameLayout,
   highScores?: CourseHighScore[],
-  setHighScores: (highScores: CourseHighScore[]) => void,
+  setHighScores?: (highScores: CourseHighScore[]) => void,
   holeScoreDistribution?: HoleScoreDistribution[],
   setHoleScoreDistribution: (hsd: HoleScoreDistribution[]) => void,
 }
 
 const HoleInfoView: React.FC<Props> = (props) => {
   const classes = useStyles()
-  const { holeIndex, setHoleIndex, swipeableViewStyle, game, highScores, setHighScores, holeScoreDistribution, setHoleScoreDistribution } = props
+  const { holeIndex, setHoleIndex, swipeableViewStyle, game, layout, highScores, setHighScores, holeScoreDistribution, setHoleScoreDistribution } = props
+  const isGameInput = game !== undefined
 
   const cancelTokenSourceRef = useRef<CancelTokenSource | null>(null)
 
   useEffect(() => {
     const fetchHighScores = async () => {
-      if (highScores) return
+      if (highScores || !game || !setHighScores) return
       let fetchedHighScores: CourseHighScore[] = []
 
       for (let i = 0; i < game.scores.length; i++) {
@@ -64,7 +68,7 @@ const HoleInfoView: React.FC<Props> = (props) => {
     }
 
     const fetchHoleScoreDistribution = async () => {
-      if (holeScoreDistribution) return
+      if (holeScoreDistribution || !game) return
       cancelTokenSourceRef.current = baseService.cancelTokenSource()
       const hsd = await coursesService.getLayoutScoreDistribution(game.layout.id, cancelTokenSourceRef.current)
       setHoleScoreDistribution(hsd)
@@ -99,7 +103,12 @@ const HoleInfoView: React.FC<Props> = (props) => {
     </Table>
   )
 
-  const holeScoreData = holeScoreDistribution ? holeScoreDistribution[holeIndex] : undefined
+
+  const getHoleScoreData = (index: number): HoleScoreDistribution | undefined => {
+    return holeScoreDistribution ? holeScoreDistribution[index] : undefined
+  }
+
+  const holeScoreData = getHoleScoreData(holeIndex)
   const scoreChartData = holeScoreData ? [
     { name: 'ace', value: holeScoreData.holeInOneCount },
     { name: 'eagle', value: holeScoreData.eagleCount },
@@ -161,53 +170,102 @@ const HoleInfoView: React.FC<Props> = (props) => {
     </div>
   )
 
-  const avgScoreString = 'Average score: ' + holeScoreData?.holeAvgScore
-  let difficultyPlacementString = holeScoreData?.holeDifficultyPlacement + '. most difficult'
-  if (holeScoreData && holeScoreData.holeDifficultyPlacement === 1) {
-    difficultyPlacementString = 'Most difficult hole'
-  } else if (holeScoreData && holeScoreData.holeDifficultyPlacement === game.layout.holes.length) {
-    difficultyPlacementString = 'Easiest hole'
+  const createAvgScoreString = (hsd?: HoleScoreDistribution): string => {
+    let avgScoreString = 'Average score: ' + hsd?.holeAvgScore
+    if (hsd && hsd.holeAvgToPar >= 0) {
+      avgScoreString += ` (+${hsd.holeAvgToPar})`
+    } else if (hsd) {
+      avgScoreString += ` (${hsd.holeAvgToPar})`
+    }
+    return avgScoreString
   }
 
+  const createDifficultyPlacementString = (hsd?: HoleScoreDistribution): string => {
+    let difficultyPlacementString = hsd?.holeDifficultyPlacement + '. most difficult'
+    if (hsd && hsd.holeDifficultyPlacement === 1) {
+      difficultyPlacementString = 'Most difficult hole'
+    } else if (hsd && hsd.holeDifficultyPlacement === layout.holes.length) {
+      difficultyPlacementString = 'Easiest hole'
+    }
+    return difficultyPlacementString
+  }
+
+  const handlePrevHoleClick = () => {
+    if (holeIndex > 0) {
+      handleHoleChange(holeIndex - 1)
+    }
+  }
+
+  const handleNextHoleClick = () => {
+    if (game === undefined) return
+    if (holeIndex !== game.layout.holes.length - 1) {
+      handleHoleChange(holeIndex + 1)
+    }
+  }
+
+  const handleHoleChange = (newHoleIndex: number) => {
+    setHoleIndex(newHoleIndex)
+  }
+
+  // Render hole navigation buttons for desktop.
+  const holeNavigation = isMobile ? null : (
+    <HoleNavigation
+      onPrevHole={handlePrevHoleClick}
+      onNextHole={handleNextHoleClick}
+    />
+  )
+
   return (
-    <SwipeableViews
-      id="holeInfoView"
-      className={swipeableViewStyle}
-      resistance
-      index={holeIndex}
-      onChangeIndex={(index: number) => setHoleIndex(index)}
-    >
-      {holeHasScores && game.layout.holes.map((hole, index) => (
-        <div className={classes.page} key={index}>
-          <br /><br /><br />
+    <div>
+      <SwipeableViews
+        id="holeInfoView"
+        className={swipeableViewStyle}
+        resistance
+        index={holeIndex}
+        onChangeIndex={(index: number) => setHoleIndex(index)}
+      >
+        {holeHasScores && layout.holes.map((hole, index) => (
+          <div className={classes.page} key={index}>
+            {isGameInput && (
+              <div>
+                <br /><br /><br />
+              </div>
+            )}
 
-          <Typography variant="h6" gutterBottom>
-            High scores
-          </Typography>
-          
-          {highScoresTable}
+            {isGameInput && (
+              <Typography variant="h6" gutterBottom>
+                High scores
+              </Typography>
+            )}
+            
+            {highScoresTable}
 
-          <br />
+            <br />
 
-          <Typography variant="h6" gutterBottom>
-            Hole statistics
-          </Typography>
-
-          {scoreDistributionChart && (
-            <Typography gutterBottom>
-              {avgScoreString}<br />
-              {difficultyPlacementString}
+            <Typography variant="h6" gutterBottom>
+              Hole {!isGameInput && hole.number} statistics
             </Typography>
-          )}
 
-          {scoreDistributionChart}
+            {scoreDistributionChart && (
+              <Typography gutterBottom>
+                {createAvgScoreString(getHoleScoreData(index))}
+                <br />
+                {createDifficultyPlacementString(getHoleScoreData(index))}
+              </Typography>
+            )}
 
-          {/* <Typography variant="h6" gutterBottom>
-            Course statistics
-          </Typography> */}
-        </div>
-      ))}
-    </SwipeableViews>
+            {scoreDistributionChart}
+
+            {/* <Typography variant="h6" gutterBottom>
+              Course statistics
+            </Typography> */}
+
+          </div>
+        ))}
+      </SwipeableViews>
+
+      {holeNavigation}
+    </div>
   )
 }
 

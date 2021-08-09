@@ -30,6 +30,11 @@ const getYearsThatHaveGames = async (searchConditions: GameSearchConditions, sou
   return response.data
 }
 
+const getUnfinishedGameId = async (source: CancelTokenSource): Promise<string | undefined> => {  
+  const response = await baseService.get('/games/unfinished', source)
+  return response.data.game_id // TODO: if null, return undefined (now it returns null, fix places that use this)
+}
+
 const createGame = async (layout: Layout, players: Player[], start_date: string, source: CancelTokenSource): Promise<{ id: string }> => {
   const response = await baseService.post('/games', source, {
     layout_id: layout.id,
@@ -105,6 +110,7 @@ export default {
   getYearsThatHaveGames,
   createGame,
   getGame,
+  getUnfinishedGameId,
   updateGame,
   getUserTags,
   getAllTags,

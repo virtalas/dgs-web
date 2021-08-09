@@ -95,11 +95,25 @@ const GameCard: React.FC<Props> = (props) => {
                           game.illegalScorers.length ||
                           game.tags.length ||
                           game.comments.reduce((totalLength, comment) => totalLength + comment.content.length, 0) ||
-                          game.photos.length
+                          game.photos.length ||
+                          !game.finished
 
   const cancelTokenSourceRef = useRef<CancelTokenSource | null>(null)
+  const refreshGameCancelTokenSourceRef = useRef<CancelTokenSource | null>(null)
 
   useEffect(() => () => cancelTokenSourceRef.current?.cancel(), [])
+
+  useEffect(() => {
+    if (game.finished) return
+    
+    let myInterval = setInterval(async () => {
+      refreshGameCancelTokenSourceRef.current = baseService.cancelTokenSource()
+      const fetchedGame = await gamesService.getGame(game.id, refreshGameCancelTokenSourceRef.current)
+      setGame(fetchedGame)
+    }, 5000)
+
+    return () => clearInterval(myInterval)
+  })
 
   const sendUpdatedGame = (updatedGame?: Game, newLayout?: Layout) => {
     cancelTokenSourceRef.current = baseService.cancelTokenSource()
@@ -259,7 +273,7 @@ const GameCard: React.FC<Props> = (props) => {
   const startDateTime = game.startDate ? game.startDate.toLocaleString('en-FI', dateOptions) : null
   const startString = startDateTime ? startDateTime + ' - ' : ''
 
-  const dateTime = startString + endString
+  const dateTime = game.finished ? startString + endString : startString + 'now'
 
   const gameDate = (
     <Typography variant="subtitle1" className={classes.title}>{dateTime}</Typography>
