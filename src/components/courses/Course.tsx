@@ -26,6 +26,9 @@ import { coverPhotoMaxHeight } from './CoursePhotoButton'
 import { coverPhotoMaxWidth } from './CoursePhotoButton'
 import { courseThumbnailMaxHeight } from './CoursePhotoButton'
 import { pageMaxWidth } from '../BasePage'
+import LoadingView from '../LoadingView'
+import Thumbnail from '../photo/Thumbnail'
+import { thumbnailMaxDimension } from '../gameCard/GamePhotos'
 
 const useStyles = makeStyles((theme) => ({
   page: {
@@ -78,6 +81,19 @@ const useStyles = makeStyles((theme) => ({
   },
   gamesButton: {
     margin: theme.spacing(2),
+  },
+  thumbnailContainer: {
+    width: '100%',
+    marginTop: theme.spacing(1),
+    display: 'flex',
+    flexWrap: 'wrap',
+    flexDirection: 'row',
+    justifyContent: 'start',
+    alignItems: 'flex-start',
+  },
+  thumbnail: {
+    marginRight: theme.spacing(1),
+    marginBottom: theme.spacing(1),
   },
 }))
 
@@ -276,6 +292,40 @@ const Course: React.FC<Props> = (props) => {
   const activeLayouts = course?.layouts.filter(layout => layout.active)
   const inactiveLayouts = course?.layouts.filter(layout => !layout.active)
 
+  const photos = (
+    <div className={classes.thumbnailContainer}>
+      <div className={classes.thumbnail}>
+        <Thumbnail
+          isEditing={true}
+          isLoading={false}
+          thumbnailMaxHeight={thumbnailMaxDimension}
+        />
+      </div>
+      <div className={classes.thumbnail}>
+        <Thumbnail
+          isEditing={true}
+          isLoading={false}
+          thumbnailMaxHeight={thumbnailMaxDimension}
+        />
+      </div>
+      <div className={classes.thumbnail}>
+        <Thumbnail
+          isEditing={true}
+          isLoading={false}
+          thumbnailMaxHeight={thumbnailMaxDimension}
+        />
+      </div>
+    </div>
+  )
+
+  if (!course) {
+    return (
+      <div id="coursePage" className={classes.page}>
+        <LoadingView />
+      </div>
+    )
+  }
+
   return (
     <div id="coursePage" className={classes.page}>
       {imageContainer}
@@ -289,11 +339,9 @@ const Course: React.FC<Props> = (props) => {
       {/* TODO: */}
       {/* {statsTable} */}
 
-      {course ? (
-        <Button className={classes.gamesButton} variant="outlined" onClick={() => setGamesRedirect(true)}>
-          Show games
-        </Button>
-      ) : null}
+      <Button className={classes.gamesButton} variant="outlined" onClick={() => setGamesRedirect(true)}>
+        Show games
+      </Button>
 
       <br />
 
@@ -305,7 +353,7 @@ const Course: React.FC<Props> = (props) => {
         </div>
       ) : null}
 
-      {course ? activeLayouts?.map(layout => (
+      {activeLayouts?.map(layout => (
         <LayoutPaper
           key={'layout-paper-' + layout.id}
           layout={layout}
@@ -313,17 +361,17 @@ const Course: React.FC<Props> = (props) => {
           handleLayoutUpdated={handleLayoutUpdated}
           handleLayoutDeleted={handleLayoutDeleted}
         />
-      )) : null}
+      ))}
 
-      {inactiveLayouts && inactiveLayouts.length > 0 ? (
+      {inactiveLayouts && inactiveLayouts.length > 0 && (
         <div>
           <br />
           <Typography className={classes.sectionTitle} variant="h5">Inactive layouts</Typography>
           <br />
         </div>
-      ) : null}
+      )}
 
-      {course ? inactiveLayouts?.map(layout => (
+      {inactiveLayouts?.map(layout => (
         <LayoutPaper
           key={'layout-paper-' + layout.id}
           layout={layout}
@@ -331,14 +379,21 @@ const Course: React.FC<Props> = (props) => {
           handleLayoutUpdated={handleLayoutUpdated}
           handleLayoutDeleted={handleLayoutDeleted}
         />
-      )) : null}
+      ))}
+
+      {false /* TODO: course.photos.length > 0 */ && (
+        <div>
+          <br />
+          <Typography className={classes.sectionTitle} variant="h5">Course photos</Typography>
+          <br />
+        </div>
+      )}
+
+      {/* {photos} */}
 
       {/* TODO: */}
       {/* <Typography className={classes.sectionTitle} variant="h5">High scores</Typography>
       <Typography>[All scores] [My scores]</Typography> */}
-
-      {/* TODO: */}
-      {/* <Typography className={classes.sectionTitle} variant="h5">Scores per hole</Typography> */}
 
       {/* TODO: */}
       {/* <Typography className={classes.sectionTitle} variant="h5">Development of high scores</Typography> */}

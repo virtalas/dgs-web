@@ -104,7 +104,7 @@ const GameCard: React.FC<Props> = (props) => {
   useEffect(() => () => cancelTokenSourceRef.current?.cancel(), [])
 
   useEffect(() => {
-    if (game.finished) return
+    if (game.finished || isEditing) return
     
     let myInterval = setInterval(async () => {
       refreshGameCancelTokenSourceRef.current = baseService.cancelTokenSource()

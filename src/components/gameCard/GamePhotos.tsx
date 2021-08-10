@@ -12,7 +12,7 @@ import PhotoViewer from './PhotoViewer'
 import { resizeFile } from '../../utils/PhotoUtils'
 import Thumbnail from '../photo/Thumbnail'
 
-const thumbnailMaxDimension = 90
+export const thumbnailMaxDimension = 90
 const photoMaxDimension = 1200
 
 const useStyles = makeStyles((theme) => ({
