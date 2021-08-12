@@ -27,8 +27,7 @@ import { coverPhotoMaxWidth } from './CoursePhotoButton'
 import { courseThumbnailMaxHeight } from './CoursePhotoButton'
 import { pageMaxWidth } from '../BasePage'
 import LoadingView from '../LoadingView'
-import Thumbnail from '../photo/Thumbnail'
-import { thumbnailMaxDimension } from '../gameCard/GamePhotos'
+import GamePhotos from '../gameCard/GamePhotos'
 
 const useStyles = makeStyles((theme) => ({
   page: {
@@ -292,30 +291,15 @@ const Course: React.FC<Props> = (props) => {
   const activeLayouts = course?.layouts.filter(layout => layout.active)
   const inactiveLayouts = course?.layouts.filter(layout => !layout.active)
 
-  const photos = (
-    <div className={classes.thumbnailContainer}>
-      <div className={classes.thumbnail}>
-        <Thumbnail
-          isEditing={true}
-          isLoading={false}
-          thumbnailMaxHeight={thumbnailMaxDimension}
-        />
-      </div>
-      <div className={classes.thumbnail}>
-        <Thumbnail
-          isEditing={true}
-          isLoading={false}
-          thumbnailMaxHeight={thumbnailMaxDimension}
-        />
-      </div>
-      <div className={classes.thumbnail}>
-        <Thumbnail
-          isEditing={true}
-          isLoading={false}
-          thumbnailMaxHeight={thumbnailMaxDimension}
-        />
-      </div>
-    </div>
+  const coursePhotos = course && course.photos && (
+    <GamePhotos
+      photos={course.photos}
+      setPhotos={(photos) => {
+        course.photos = photos
+        setCourse({...course})
+      }}
+      isEditing={false}
+    />
   )
 
   if (!course) {
@@ -381,7 +365,7 @@ const Course: React.FC<Props> = (props) => {
         />
       ))}
 
-      {false /* TODO: course.photos.length > 0 */ && (
+      {course.photos.length > 0 && (
         <div>
           <br />
           <Typography className={classes.sectionTitle} variant="h5">Course photos</Typography>
@@ -389,7 +373,7 @@ const Course: React.FC<Props> = (props) => {
         </div>
       )}
 
-      {/* {photos} */}
+      {coursePhotos}
 
       {/* TODO: */}
       {/* <Typography className={classes.sectionTitle} variant="h5">High scores</Typography>

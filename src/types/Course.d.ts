@@ -21,6 +21,7 @@ interface BasicCourse extends Course {
 // Used for full info on a course and it's layouts (including holes)
 interface DetailedCourse extends Course {
   photo: Photo | undefined,
+  photos: Photo[],
   numberOfGames: number,
   layouts: DetailedLayout[],
   allowedToEdit: boolean,

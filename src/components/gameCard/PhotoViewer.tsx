@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+import { Redirect } from 'react-router-dom'
 // @ts-ignore
 import { MapInteractionCSS } from 'react-map-interaction'
 import Slider from 'react-slick'
@@ -8,6 +9,7 @@ import { makeStyles } from '@material-ui/core/styles'
 import "slick-carousel/slick/slick.css"
 import "slick-carousel/slick/slick-theme.css"
 import { useWindowDimensions } from '../../utils/Utils'
+import Button from '@material-ui/core/Button'
 
 const sliderTopMargin = 60
 
@@ -22,6 +24,12 @@ const useStyles = makeStyles((theme) => ({
   mapInteractionContainer: {
     textAlign: 'center',
     height: '80vh',
+  },
+  gameEndDateButton: {
+    marginLeft: 'auto',
+    marginRight: 'auto',
+    bottom: theme.spacing(8),
+    background: 'rgba(189, 189, 189, .6)',
   },
 }))
 
@@ -41,6 +49,7 @@ const PhotoViewer: React.FC<Props> = (props) => {
   const { photos, selected, handleClose } = props
 
   const { windowHeight } = useWindowDimensions()
+  const [redirectGameId, setRedirectGameId] = useState<string>()
   const [imageDimensions, setImageDimensions] = useState<any>({})
   const [currentSlidePhoto, setCurrentSlidePhoto] = useState<Photo>()
   const [value, setValue] = useState<MapInteractionValue>({
@@ -55,6 +64,10 @@ const PhotoViewer: React.FC<Props> = (props) => {
   useEffect(() => {
     setCurrentSlidePhoto(photos[initialSelectedIndex])
   }, [initialSelectedIndex, photos])
+
+  if (redirectGameId) {
+    return <Redirect push to={'/games/view/' + redirectGameId} />
+  }
 
   const syncCurrentPhoto = (direction: 'left' | 'right') => {
     let photoIndex = photos.findIndex(photo => photo.id === currentSlidePhoto?.id ?? '')
@@ -136,6 +149,12 @@ const PhotoViewer: React.FC<Props> = (props) => {
     }
   }
 
+  const dateOptions = {
+    year: 'numeric',
+    month: '2-digit',
+    day: 'numeric',
+  }
+
   return (
     <Slider {...sliderSettings}>
       {photos.map(photo => (
@@ -165,6 +184,16 @@ const PhotoViewer: React.FC<Props> = (props) => {
               }}
             />
           </MapInteractionCSS>
+
+          {photo.gameEndDate && (
+            <Button
+             className={classes.gameEndDateButton}
+             variant="contained"
+             onClick={() => setRedirectGameId(photo.gameId)}
+            >
+              {photo.gameEndDate.toLocaleString('fi-FI', dateOptions)}
+            </Button>
+          )}
         </div>
       ))}
     </Slider>

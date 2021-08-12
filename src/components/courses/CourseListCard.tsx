@@ -67,7 +67,6 @@ const CourseListCard: React.FC<Props> = (props) => {
     const fetchThumbnailUrls = async () => {
       if (!course.photo) return
       cancelTokenSourceRef.current = baseService.cancelTokenSource()
-      // TODO: Fetch only thumbnail photo.
       const urls = await photosService.getPhotoUrls([course.photo?.thumbnailKey], cancelTokenSourceRef.current)
       if (!urls || urls.length === 0) return
       setCoverPictureUrl(urls[0])

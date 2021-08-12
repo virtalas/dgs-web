@@ -62,7 +62,7 @@ const Thumbnail: React.FC<Props> = (props) => {
       <LoadingView />
     )
   }
-  
+
   const paper = (
     <Paper className={classes.addPhotoPaper} elevation={0}>
       {photo?.thumbnailUrl ? (

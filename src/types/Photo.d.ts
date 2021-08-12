@@ -5,4 +5,6 @@ interface Photo {
   thumbnailKey: string,
   thumbnailUrl: string | undefined,
   createdDate: Date,
+  gameId: string | undefined,
+  gameEndDate: Date | undefined,
 }

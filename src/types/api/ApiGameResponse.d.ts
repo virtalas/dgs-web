@@ -31,6 +31,8 @@ interface ApiPhoto {
   thumbnail_key: string,
   thumbnail_url: string | undefined,
   created_date: Date,
+  game_id: string | undefined,
+  game_end_date: Date | undefined,
 }
 
 interface ApiGame {

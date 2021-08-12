@@ -87,7 +87,7 @@ const apiCommentToComment = (apiComment: ApiComment): GameComment => {
   }
 }
 
-export const apiPhotoToPhoto =(apiPhoto: ApiPhoto): Photo => {
+export const apiPhotoToPhoto = (apiPhoto: ApiPhoto): Photo => {
   return {
     id: apiPhoto.id,
     key: apiPhoto.key,
@@ -95,6 +95,8 @@ export const apiPhotoToPhoto =(apiPhoto: ApiPhoto): Photo => {
     thumbnailKey: apiPhoto.thumbnail_key,
     thumbnailUrl: apiPhoto.thumbnail_url,
     createdDate: new Date(apiPhoto.created_date),
+    gameId: apiPhoto.game_id,
+    gameEndDate: apiPhoto.game_end_date ? new Date(apiPhoto.game_end_date) : undefined,
   }
 }
 
@@ -163,6 +165,8 @@ export const apiBasicCourseToBasicCourse = (apiBasicCourse: ApiBasicCourse): Bas
 
 export const apiDetailedCourseToDetailedCourse = (apiDetailedCourse: ApiDetailedCourse): DetailedCourse => {
   const layouts = apiDetailedCourse.layouts.map(apiDetailedLayout => apiDetailedLayoutToDetailedLayout(apiDetailedLayout))
+  const photos = apiDetailedCourse.photos.map(photo => apiPhotoToPhoto(photo))
+
   return {
     id: apiDetailedCourse.id,
     name: apiDetailedCourse.name,
@@ -173,6 +177,7 @@ export const apiDetailedCourseToDetailedCourse = (apiDetailedCourse: ApiDetailed
     allowedToEdit: apiDetailedCourse.allowed_to_edit,
     numberOfGames: apiDetailedCourse.number_of_games,
     photo: apiDetailedCourse.photo ? apiPhotoToPhoto(apiDetailedCourse.photo) : undefined,
+    photos: sortByCreatedDate(photos),
   }
 }
 

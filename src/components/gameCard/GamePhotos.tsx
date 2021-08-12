@@ -44,14 +44,15 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 interface Props {
-  game: Game,
-  setGame: (game: Game) => void,
+  game?: Game,
+  photos: Photo[],
+  setPhotos: (photos: Photo[]) => void,
   isEditing: boolean,
 }
 
 const GamePhotos: React.FC<Props> = (props) => {
   const classes = useStyles()
-  const { game, setGame, isEditing } = props
+  const { game, photos, setPhotos, isEditing } = props
 
   const [photoViewerOpen, setPhotoViewerOpen] = useState(false)
   const [clickedPhoto, setClickedPhoto] = useState<Photo>()
@@ -61,41 +62,39 @@ const GamePhotos: React.FC<Props> = (props) => {
   const cancelTokenSourceRef = useRef<CancelTokenSource | null>(null)
 
   const fetchPhotoUrls = () => {
-    if (game.photos.length === 0) return
+    if (photos.length === 0) return
     cancelTokenSourceRef.current = baseService.cancelTokenSource()
 
-    photosService.getPhotoUrls(game.photos.map(photo => photo.key), cancelTokenSourceRef.current)
+    photosService.getPhotoUrls(photos.map(photo => photo.key), cancelTokenSourceRef.current)
       .then(urls => {
         if (!urls) return
 
-        const modifiedPhotos = [...game.photos]
+        const modifiedPhotos = [...photos]
         for (let i = 0; i < modifiedPhotos.length; i++) {
           modifiedPhotos[i].url = urls[i]
         }
 
-        game.photos = modifiedPhotos
-        setGame(game)
+        setPhotos(modifiedPhotos)
         setPhotoUrlsFetched(true)
       })
   }
 
   useEffect(() => {
     const fetchThumbnailUrls = async () => {
-      if (game.photos.length === 0) return
-      if (game.photos[0].thumbnailUrl) return
+      if (photos.length === 0) return
+      if (photos[0].thumbnailUrl) return
 
       cancelTokenSourceRef.current = baseService.cancelTokenSource()
-      const urls = await photosService.getPhotoUrls(game.photos.map(photo => photo.thumbnailKey), cancelTokenSourceRef.current)
+      const urls = await photosService.getPhotoUrls(photos.map(photo => photo.thumbnailKey), cancelTokenSourceRef.current)
       
       if (!urls) return
 
-      const modifiedPhotos = [...game.photos]
+      const modifiedPhotos = [...photos]
       for (let i = 0; i < modifiedPhotos.length; i++) {
         modifiedPhotos[i].thumbnailUrl = urls[i]
       }
 
-      game.photos = modifiedPhotos
-      setGame(game)
+      setPhotos(modifiedPhotos)
     }
 
     fetchThumbnailUrls()
@@ -103,6 +102,7 @@ const GamePhotos: React.FC<Props> = (props) => {
   }, [])  // eslint-disable-line react-hooks/exhaustive-deps
 
   const handlePhotoSelection = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (!game) return
     let photoData: any
     let thumbnailData: any
 
@@ -121,8 +121,7 @@ const GamePhotos: React.FC<Props> = (props) => {
     const photo = await photosService.uploadGamePhoto(game.id, photoData, thumbnailData, cancelTokenSourceRef.current)
     setIsUploading(false)
 
-    game.photos = [...game.photos, photo]
-    setGame(game)
+    setPhotos([...photos, photo])
   }
 
   const handlePhotoClick = async (photo: Photo) => {
@@ -131,8 +130,9 @@ const GamePhotos: React.FC<Props> = (props) => {
         cancelTokenSourceRef.current = baseService.cancelTokenSource()
         photosService.deletePhoto(photo, cancelTokenSourceRef.current)
           .then(() => {
-            game.photos = game.photos.filter(p => p.id !== photo.id)
-            setGame(game)
+            if (!game) return
+            const modifiedPhotos = game.photos.filter(p => p.id !== photo.id)
+            setPhotos(modifiedPhotos)
           })
           .catch(error => {
             window.alert('Photo deletion failed: ' + error)
@@ -152,7 +152,7 @@ const GamePhotos: React.FC<Props> = (props) => {
     setClickedPhoto(undefined)
   }
 
-  const photos = game.photos.map((photo, index) => (
+  const photoThumbnails = photos.map((photo, index) => (
     <div className={classes.addPhotoButton} key={index}>
       <Thumbnail
         isEditing={isEditing}
@@ -174,9 +174,9 @@ const GamePhotos: React.FC<Props> = (props) => {
     </div>
   ) : null
 
-  const thumbnails = game.photos.length > 0 || isEditing ? (
+  const thumbnails = photos.length > 0 || isEditing ? (
     <div className={[classes.root, isEditing ? classes.extraTopPadding : null].join(' ')}>
-      {photos}
+      {photoThumbnails}
       {addPhotoButton}
     </div>
   ) : null
@@ -198,7 +198,7 @@ const GamePhotos: React.FC<Props> = (props) => {
         <Fade in={photoViewerOpen}>
           <div className={classes.container}>
             <PhotoViewer
-              photos={game.photos}
+              photos={photos}
               selected={clickedPhoto}
               handleClose={handlePhotoViewerClose}
               />

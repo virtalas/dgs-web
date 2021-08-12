@@ -28,6 +28,7 @@ interface ApiDetailedCourse {
   allowed_to_edit: boolean,
   number_of_games: number,
   photo: ApiPhoto | undefined,
+  photos: ApiPhoto[],
 }
 
 interface ApiBasicLayout {

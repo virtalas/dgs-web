@@ -177,7 +177,11 @@ const GameInfo: React.FC<Props> = (props) => {
   const gamePhotos = (
     <GamePhotos
       game={game}
-      setGame={setGame}
+      photos={game.photos}
+      setPhotos={(photos) => {
+        game.photos = photos
+        setGame(game)
+      }}
       isEditing={isEditing}
     />
   )
