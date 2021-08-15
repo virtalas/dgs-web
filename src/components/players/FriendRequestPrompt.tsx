@@ -100,7 +100,7 @@ const FriendRequestPrompt: React.FC<Props> = (props) => {
         {player.firstName}
       </Link>
 
-      <Dialog disableBackdropClick disableEscapeKeyDown open={dialogOpen} onClose={() => setDialogOpen(false)}>
+      <Dialog open={dialogOpen} onClose={() => setDialogOpen(false)}>
         <DialogTitle>{dialogTitleText}</DialogTitle>
         {dialogContent}
         {dialogActions}

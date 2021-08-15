@@ -177,7 +177,7 @@ export const apiDetailedCourseToDetailedCourse = (apiDetailedCourse: ApiDetailed
     allowedToEdit: apiDetailedCourse.allowed_to_edit,
     numberOfGames: apiDetailedCourse.number_of_games,
     photo: apiDetailedCourse.photo ? apiPhotoToPhoto(apiDetailedCourse.photo) : undefined,
-    photos: sortByCreatedDate(photos),
+    photos: sortByCreatedDate(photos, false),
   }
 }
 
@@ -234,12 +234,12 @@ export function sortTags(tags: Tag[]): Tag[] {
   })
 }
 
-export function sortByCreatedDate(array: { createdDate: Date }[]): any {
+export function sortByCreatedDate(array: { createdDate: Date }[], asc: boolean = true): any {
   return array.sort((a, b) => {
     let same = a.createdDate.getTime() === b.createdDate.getTime()
     if (same) return 0
-    if (a.createdDate > b.createdDate) return 1
-    return -1
+    if (a.createdDate > b.createdDate) return asc ? 1 : -1
+    return asc ? -1 : 1
   })
 }
 
