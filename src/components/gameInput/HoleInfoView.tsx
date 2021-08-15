@@ -197,8 +197,7 @@ const HoleInfoView: React.FC<Props> = (props) => {
   }
 
   const handleNextHoleClick = () => {
-    if (game === undefined) return
-    if (holeIndex !== game.layout.holes.length - 1) {
+    if (holeIndex !== layout.holes.length - 1) {
       handleHoleChange(holeIndex + 1)
     }
   }
@@ -245,6 +244,12 @@ const HoleInfoView: React.FC<Props> = (props) => {
             <Typography variant="h6" gutterBottom>
               Hole {!isGameInput && hole.number} statistics
             </Typography>
+
+            {!isGameInput && (
+              <Typography>
+                Par {hole.par}
+              </Typography>
+            )}
 
             {scoreDistributionChart && (
               <Typography gutterBottom>
