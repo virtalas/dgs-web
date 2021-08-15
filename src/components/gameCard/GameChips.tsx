@@ -259,7 +259,7 @@ const GameChips: React.FC<Props> = (props) => {
 
       {illegalScorerEdit}
 
-      {!game.finished && (
+      {!game.finished && !isEditing && (
         <Typography className={classes.liveText}><i>Refreshes automatically</i></Typography>
       )}
     </div>

@@ -107,7 +107,8 @@ const ChangeLayoutModal: React.FC<Props> = (props) => {
     handleCloseModal()
   }
 
-  const onCourseChange = (selectedCourse: Course) => {
+  const onCourseChange = (selectedCourse?: Course) => {
+    if (!selectedCourse) return
     setCourse(selectedCourse)
     setDetailedCourse(undefined)
     setProblemHoles(undefined)

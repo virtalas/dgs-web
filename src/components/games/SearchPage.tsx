@@ -194,7 +194,7 @@ const SearchPage: React.FC<Props> = (props) => {
     setSelectedYear(undefined)
   }
 
-  const handleCourseSelect = (course: Course) => {
+  const handleCourseSelect = (course?: Course) => {
     setSelectedCourse(course)
     onSearchConditionChange()
   }
@@ -231,6 +231,7 @@ const SearchPage: React.FC<Props> = (props) => {
           onCourseChange={handleCourseSelect}
           chooseNearest={false}
           preselectedCourseId={queryParamCourseId}
+          allowUndefinedCourse={true}
         />
 
         <PlayerSelect

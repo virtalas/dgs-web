@@ -26,12 +26,13 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 interface Props {
-  onCourseChange?: (course: Course) => void,
+  onCourseChange?: (course?: Course) => void,
   layout?: Layout,
   setLayout?: (layout: Layout | undefined) => void,
   setGameCreatable?: (creatable: boolean) => void,
   chooseNearest?: boolean,
   preselectedCourseId?: string,
+  allowUndefinedCourse?: boolean,
 }
 
 // TODO: Spread controls out if there is space. They are too packed together on desktop.
@@ -40,7 +41,7 @@ interface Props {
 const CourseSelect: React.FC<Props> = (props) => {
   const classes = useStyles()
 
-  const { onCourseChange, layout, setLayout, setGameCreatable, chooseNearest, preselectedCourseId } = props
+  const { onCourseChange, layout, setLayout, setGameCreatable, chooseNearest, preselectedCourseId, allowUndefinedCourse } = props
   const useLocation = chooseNearest !== undefined ? chooseNearest : true
 
   const [course, setCourse] = useState<BasicCourse>()
@@ -49,8 +50,12 @@ const CourseSelect: React.FC<Props> = (props) => {
 
   const showLayoutSelect = setLayout !== undefined
 
-  const changeCourseTo = (selectedCourse: BasicCourse) => {
-    selectedCourse.layouts = sortByName(selectedCourse.layouts)
+  const changeCourseTo = (selectedCourse?: BasicCourse) => {
+    if (selectedCourse !== undefined) {
+      selectedCourse.layouts = sortByName(selectedCourse.layouts)
+    } else if (allowUndefinedCourse !== undefined && !allowUndefinedCourse) {
+      return
+    }
     setCourse(selectedCourse)
     if (onCourseChange) {
       onCourseChange(selectedCourse)

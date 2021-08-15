@@ -63,7 +63,10 @@ const NewSelection: React.FC<{}> = () => {
       </Typography>
 
       <CourseSelect
-        onCourseChange={setCourse}
+        onCourseChange={(selectedCourse?: Course) => {
+          if (!selectedCourse) return
+          setCourse(selectedCourse)
+        }}
       />
 
       <br />
