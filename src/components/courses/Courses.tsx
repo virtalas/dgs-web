@@ -8,6 +8,7 @@ import baseService from '../../services/baseService'
 import LoadingView from '../LoadingView'
 import { pageMaxWidth } from '../BasePage'
 import { CourseSort } from '../../types/enums/CourseSort'
+import Grow from '@material-ui/core/Grow'
 
 const useStyles = makeStyles((theme) => ({
   page: {
@@ -43,12 +44,16 @@ const Courses: React.FC<{}> = () => {
     return () => cancelTokenSource?.cancel()
   }, [])
 
-  const courseCards = courses?.map(course => (
-    <CourseListCard
-      key={'course-card-' + course.id}
-      course={course}
-      beingSortedBy={sortBy}
-    />
+  const courseCards = courses?.map((course, index) => (
+    <Grow key={'grow' + index} in={true} {...{ timeout: Math.min(1000, index * 300 + 100) }}>
+      <div>
+        <CourseListCard
+          key={'course-card-' + course.id}
+          course={course}
+          beingSortedBy={sortBy}
+        />
+      </div>
+    </Grow>
   ))
 
   return (
