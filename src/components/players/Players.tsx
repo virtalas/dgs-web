@@ -10,6 +10,7 @@ import baseService from '../../services/baseService'
 import { pageMaxWidth } from '../BasePage'
 import LoadingView from '../LoadingView'
 import Grow from '@material-ui/core/Grow'
+import ErrorView from '../ErrorView'
 
 const useStyles = makeStyles((theme) => ({
   page: {
@@ -33,18 +34,22 @@ const Players: React.FC<{}> = () => {
   const [players, setPlayers] = useState<Player[]>()
   const [currentUser, setCurrentUser] = useState<Player>()
   const [isLoading, setIsLoading] = useState(true)
+  const [isError, setIsError] = useState(false)
 
   const friends = players?.filter(player => !player.guest).filter(player => player.id !== currentUser?.id)
   const guests = players?.filter(player => player.guest)
 
   useEffect(() => {
+    setIsError(false)
     const cancelTokenSource = baseService.cancelTokenSource()
 
-    playersService.getPlayers(cancelTokenSource).then(p => {
-      setPlayers(p)
-      setCurrentUser(p.find(player => player.id === userId))
-      setIsLoading(false)
-    })
+    playersService.getPlayers(cancelTokenSource)
+      .then(p => {
+        setPlayers(p)
+        setCurrentUser(p.find(player => player.id === userId))
+        setIsLoading(false)
+      })
+      .catch(() => setIsError(true))
 
     return () => cancelTokenSource?.cancel()
   }, [userId])
@@ -73,9 +78,13 @@ const Players: React.FC<{}> = () => {
 
       {guests?.map((player, index) => generatePlayerCard(player, true, index + (friends ?? []).length))}
 
-      {players === undefined && isLoading ? (
+      {players === undefined && isLoading && !isError && (
         <LoadingView />
-      ) : null}
+      )}
+
+      {isError && (
+        <ErrorView />
+      )}
     </div>
   )
 }

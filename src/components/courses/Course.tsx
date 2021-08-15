@@ -28,6 +28,7 @@ import { courseThumbnailMaxHeight } from './CoursePhotoButton'
 import { pageMaxWidth } from '../BasePage'
 import LoadingView from '../LoadingView'
 import GamePhotos from '../gameCard/GamePhotos'
+import ErrorView from '../ErrorView'
 
 const useStyles = makeStyles((theme) => ({
   page: {
@@ -115,6 +116,7 @@ const Course: React.FC<Props> = (props) => {
   const [localWeather, setLocalWeather] = useState<LocalWeather>()
   const [coursesRedirect, setCoursesRedirect] = useState(false)
   const [gamesRedirect, setGamesRedirect] = useState(false)
+  const [isError, setIsError] = useState(false)
 
   const cancelTokenSourceRef = useRef<CancelTokenSource | null>(null)
 
@@ -125,13 +127,15 @@ const Course: React.FC<Props> = (props) => {
       .then(lw => setLocalWeather(lw))
   }, [courseId])
 
-  useEffect(() => {    
+  useEffect(() => {
+    setIsError(false)
     cancelTokenSourceRef.current = baseService.cancelTokenSource()
     coursesService.getCourse(courseId, cancelTokenSourceRef.current)
       .then(fetchedCourse => {
         setCourse(fetchedCourse)
         fetchLocalWeather(fetchedCourse)
       })
+      .catch(() => setIsError(true))
 
     return () => cancelTokenSourceRef.current?.cancel()
   }, [courseId, fetchLocalWeather])
@@ -305,7 +309,11 @@ const Course: React.FC<Props> = (props) => {
   if (!course) {
     return (
       <div id="coursePage" className={classes.page}>
-        <LoadingView />
+        {isError ? (
+          <ErrorView />
+        ) : (
+          <LoadingView />
+        )}
       </div>
     )
   }

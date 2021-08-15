@@ -9,6 +9,7 @@ import LoadingView from '../LoadingView'
 import { pageMaxWidth } from '../BasePage'
 import { CourseSort } from '../../types/enums/CourseSort'
 import Grow from '@material-ui/core/Grow'
+import ErrorView from '../ErrorView'
 
 const useStyles = makeStyles((theme) => ({
   page: {
@@ -33,13 +34,17 @@ const Courses: React.FC<{}> = () => {
   const [courses, setCourses] = useState<ListCourse[]>([])
   const [sortBy, setSortBy] = useState(CourseSort.byNumberOfGames)
   const [isLoading, setIsLoading] = useState(true)
+  const [isError, setIsError] = useState(false)
 
   useEffect(() => {
+    setIsError(false)
     const cancelTokenSource = baseService.cancelTokenSource()
-    coursesService.getListCourses(cancelTokenSource).then(c => {
-      setCourses(c)
-      setIsLoading(false)
-    })
+    coursesService.getListCourses(cancelTokenSource)
+      .then(c => {
+        setCourses(c)
+        setIsLoading(false)
+      })
+      .catch(() => setIsError(true))
 
     return () => cancelTokenSource?.cancel()
   }, [])
@@ -76,9 +81,13 @@ const Courses: React.FC<{}> = () => {
         <div className={classes.noCourses}>No courses</div>
       ) : null}
 
-      {courses.length === 0 && isLoading ? (
+      {courses.length === 0 && isLoading && !isError && (
         <LoadingView />
-      ) : null}
+      )}
+
+      {isError && (
+        <ErrorView />
+      )}
 
       {courseCards}
     </div>
