@@ -180,14 +180,23 @@ const HoleInfoView: React.FC<Props> = (props) => {
     return avgScoreString
   }
 
-  const createDifficultyPlacementString = (hsd?: HoleScoreDistribution): string => {
-    let difficultyPlacementString = hsd?.holeDifficultyPlacement + '. most difficult'
-    if (hsd && hsd.holeDifficultyPlacement === 1) {
-      difficultyPlacementString = 'Most difficult hole'
-    } else if (hsd && hsd.holeDifficultyPlacement === layout.holes.length) {
-      difficultyPlacementString = 'Easiest hole'
+  const createDifficultyPlacementString = (hsd: HoleScoreDistribution | undefined): string => {
+    if (!hsd) return ''
+
+    if (hsd.holeDifficultyPlacement === 1) {
+      return 'Most difficult hole'
+    } else if (hsd.holeDifficultyPlacement === layout.holes.length) {
+      return 'Easiest hole'
     }
-    return difficultyPlacementString
+
+    const middleIndex = Math.round((layout.holes.length - 1) / 2)
+
+    if (hsd.holeDifficultyPlacement - 1 >= middleIndex) {
+      const holeEasinessPlacement = layout.holes.length - hsd.holeDifficultyPlacement + 1
+      return holeEasinessPlacement + '. easiest'
+    }
+
+    return hsd.holeDifficultyPlacement + '. most difficult'
   }
 
   const handlePrevHoleClick = () => {

@@ -177,7 +177,7 @@ export const apiDetailedCourseToDetailedCourse = (apiDetailedCourse: ApiDetailed
     allowedToEdit: apiDetailedCourse.allowed_to_edit,
     numberOfGames: apiDetailedCourse.number_of_games,
     photo: apiDetailedCourse.photo ? apiPhotoToPhoto(apiDetailedCourse.photo) : undefined,
-    photos: sortByCreatedDate(photos, false),
+    photos: sortByGameEndDate(photos, false),
   }
 }
 
@@ -239,6 +239,16 @@ export function sortByCreatedDate(array: { createdDate: Date }[], asc: boolean =
     let same = a.createdDate.getTime() === b.createdDate.getTime()
     if (same) return 0
     if (a.createdDate > b.createdDate) return asc ? 1 : -1
+    return asc ? -1 : 1
+  })
+}
+
+export function sortByGameEndDate(array: { gameEndDate: Date | undefined }[], asc: boolean = true): any {
+  return array.sort((a, b) => {
+    if (a.gameEndDate === undefined || b.gameEndDate === undefined) return 0
+    let same = a.gameEndDate.getTime() === b.gameEndDate.getTime()
+    if (same) return 0
+    if (a.gameEndDate > b.gameEndDate) return asc ? 1 : -1
     return asc ? -1 : 1
   })
 }
