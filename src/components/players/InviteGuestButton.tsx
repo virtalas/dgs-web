@@ -62,7 +62,7 @@ const InviteGuestButton: React.FC<Props> = (props) => {
     <div>
       <Button className={classes.inviteButton} variant="outlined" onClick={handleOpen}>Invite</Button>
 
-      <Dialog disableBackdropClick disableEscapeKeyDown open={dialogOpen} onClose={() => setDialogOpen(false)}>
+      <Dialog disableEscapeKeyDown open={dialogOpen} onClose={() => setDialogOpen(false)}>
         <DialogTitle>Invite {player.firstName} to use Disc Golf Stats!</DialogTitle>
         {dialogContent}
         {dialogActions}

@@ -9,6 +9,7 @@ import PlayerCard from './PlayerCard'
 import baseService from '../../services/baseService'
 import { pageMaxWidth } from '../BasePage'
 import LoadingView from '../LoadingView'
+import Grow from '@material-ui/core/Grow'
 
 const useStyles = makeStyles((theme) => ({
   page: {
@@ -48,8 +49,13 @@ const Players: React.FC<{}> = () => {
     return () => cancelTokenSource?.cancel()
   }, [userId])
 
-  const generatePlayerCard = (player: Player, showGuestButton: boolean) =>
-    <PlayerCard key={'player' + player.id} player={player} guest={showGuestButton} />
+  const generatePlayerCard = (player: Player, showGuestButton: boolean, index: number) => (
+    <Grow key={'grow' + index} in={true} {...{ timeout: Math.min(1000, index * 300 + 100) }}>
+      <div>
+        <PlayerCard key={'player' + player.id} player={player} guest={showGuestButton} />
+      </div>
+    </Grow>
+  )
 
   return (
     <div id="playersPage" className={classes.page}>
@@ -57,7 +63,7 @@ const Players: React.FC<{}> = () => {
         <PlayerCard player={currentUser} />
       ) : null}
 
-      {friends?.map(player => generatePlayerCard(player, false))}
+      {friends?.map((player, index) => generatePlayerCard(player, false, index))}
 
       {(guests && guests.length > 0) ? (
         <div className={classes.guestsTitle}>
@@ -65,7 +71,7 @@ const Players: React.FC<{}> = () => {
         </div>
       ) : null}
 
-      {guests?.map(player => generatePlayerCard(player, true))}
+      {guests?.map((player, index) => generatePlayerCard(player, true, index + (friends ?? []).length))}
 
       {players === undefined && isLoading ? (
         <LoadingView />
