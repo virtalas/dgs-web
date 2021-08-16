@@ -20,6 +20,16 @@ const useStyles = makeStyles((theme) => ({
   chipRow: {
     lineHeight: '31px', // Affects spacing between chips when wrapped to two rows.
   },
+  oldHighScoreChip: {
+    height: chipHeight,
+    width: 123,
+    fontSize: '97%',
+    cursor: 'pointer',
+    backgroundColor: highScoreBlue,
+    color: 'white',
+    position: 'relative',
+    left: -5,
+  },
   highScoreChip: {
     height: chipHeight,
     width: 90,
@@ -194,8 +204,14 @@ const GameChips: React.FC<Props> = (props) => {
         <Chip className={classes.chip} label={tag.name} onClick={() => handleTagChipClick(tag)} key={index} />
       ))}
 
-      {isEditing ? null : game.highScorers.map((player: Player, index: number) => {
-        return createColorChip(classes.highScoreChip, 'High score', player, 'primary', index)
+      {!isEditing && game.highScorers.map((gameHighScore: GameHighScore, index: number) => {
+        return createColorChip(
+          gameHighScore.isCurrentBest ? classes.highScoreChip : classes.oldHighScoreChip,
+          'High score' + (gameHighScore.isCurrentBest ? '' : ' (old)'),
+          gameHighScore.player,
+          'primary',
+          index,
+        )
       })}
 
       {game.illegalScorers.map((player: Player, index: number) => {

@@ -8,6 +8,7 @@ interface ApiPlayerScores {
   obs: number[],
   legal: bool,
   high_score: bool,
+  is_current_best: bool,
 }
 
 interface ApiComment {

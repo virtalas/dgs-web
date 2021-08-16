@@ -13,7 +13,7 @@ interface Game {
   weatherConditions: Tag[],
   conditions: Tag[],
   photos: Photo[],
-  highScorers: Player[],
+  highScorers: GameHighScore[],
   illegalScorers: Player[],
   allowedToEdit: boolean,
   finished: boolean,
@@ -24,4 +24,9 @@ interface GameSearchConditions {
   players?: Player[],
   tags?: Tag[],
   comment?: string,
+}
+
+interface GameHighScore {
+  player: Player,
+  isCurrentBest: boolean,
 }

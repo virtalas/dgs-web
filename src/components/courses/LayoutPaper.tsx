@@ -210,7 +210,7 @@ const LayoutPaper: React.FC<Props> = (props) => {
           {scoreDistributionGraph ?
             `Scores from all players (${layout.numberOfGamesUniversal} game${layout.numberOfGamesUniversal !== 1 ? 's' : ''}):`
           :
-            'Loading...'}
+            'Loading scores...'}
         </Typography>
       )}
 
@@ -219,7 +219,9 @@ const LayoutPaper: React.FC<Props> = (props) => {
       {/* TODO */}
       {/* <Button size="small">Layout map</Button> */}
 
-      <Button variant="outlined" size="small" onClick={() => setScoreDistributionModalOpen(true)}>Slideshow</Button>
+      {scoreDistributionGraph && (
+        <Button variant="outlined" size="small" onClick={() => setScoreDistributionModalOpen(true)}>Slideshow</Button>
+      )}
 
       <CancellableModal modalOpen={editModalOpen} onClose={() => setEditModalOpen(false)}>
         <EditLayout

@@ -13,6 +13,13 @@ const playerScoresToPlayer = (playerScores: ApiPlayerScores): Player => {
   }
 }
 
+const playerScoresToGameHighScore = (playerScores: ApiPlayerScores): GameHighScore => {
+  return {
+    player: playerScoresToPlayer(playerScores),
+    isCurrentBest: playerScores.is_current_best,
+  }
+}
+
 export const apiGameResponseToGame = (gameResponse: ApiGameResponse): Game => {
   const layoutTotalPar = gameResponse.layout.holes.map((hole: Hole) => hole.par).reduce((a: number, b: number) => a + b)
   const comments = gameResponse.game.comments.map(apiComment => apiCommentToComment(apiComment))
@@ -51,7 +58,7 @@ export const apiGameResponseToGame = (gameResponse: ApiGameResponse): Game => {
     photos: sortByCreatedDate(photos),
     highScorers: gameResponse.scores
       .filter(s => s.high_score)
-      .map(s => playerScoresToPlayer(s)),
+      .map(s => playerScoresToGameHighScore(s)),
     illegalScorers: gameResponse.scores
       .filter(s => !s.legal)
       .map(s => playerScoresToPlayer(s)),
