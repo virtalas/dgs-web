@@ -8,10 +8,10 @@ const getPlayers = async (source: CancelTokenSource): Promise<FriendList> => {
   const apiFriendList = response.data
   return {
     me: apiPlayerToPlayer(apiFriendList['me']),
-    myFriends: apiFriendList['my_friends'].map((apiPlayer: ApiPlayer) => apiPlayerToPlayer(apiPlayer)),
-    myGuests: apiFriendList['my_guests'].map((apiPlayer: ApiPlayer) => apiPlayerToPlayer(apiPlayer)),
-    friendsFriends: apiFriendList['friends_friends'].map((apiPlayer: ApiPlayer) => apiPlayerToPlayer(apiPlayer)),
-    friendsGuests: apiFriendList['friends_guests'].map((apiPlayer: ApiPlayer) => apiPlayerToPlayer(apiPlayer)),
+    myFriends: sortByFirstName(apiFriendList['my_friends'].map((apiPlayer: ApiPlayer) => apiPlayerToPlayer(apiPlayer))),
+    myGuests: sortByFirstName(apiFriendList['my_guests'].map((apiPlayer: ApiPlayer) => apiPlayerToPlayer(apiPlayer))),
+    friendsFriends: sortByFirstName(apiFriendList['friends_friends'].map((apiPlayer: ApiPlayer) => apiPlayerToPlayer(apiPlayer))),
+    friendsGuests: sortByFirstName(apiFriendList['friends_guests'].map((apiPlayer: ApiPlayer) => apiPlayerToPlayer(apiPlayer))),
   }
 }
 
@@ -73,6 +73,15 @@ const sendFriendRequest = async (friendId: string, source: CancelTokenSource): P
     friend_id: friendId,
   })
   return response.data
+}
+
+export function sortByFirstName(array: Player[]): Player[] {
+  return array.sort((a, b) => {
+    let same = a.firstName === b.firstName
+    if (same) return 0
+    if (a.firstName > b.firstName) return 1
+    return -1
+  })
 }
 
 export default {

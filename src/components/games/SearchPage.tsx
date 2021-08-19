@@ -246,6 +246,7 @@ const SearchPage: React.FC<Props> = (props) => {
           players={selectedPlayers}
           setPlayers={handlePlayerSelect}
           allPlayers={allPlayers}
+          friendList={friendList}
         />
 
         <br />

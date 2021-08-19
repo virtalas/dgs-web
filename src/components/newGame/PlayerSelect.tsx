@@ -43,7 +43,7 @@ interface Props {
   players: Player[],
   setPlayers: (players: Player[]) => void,
   allPlayers: Player[],
-  friendList?: FriendList,
+  friendList: FriendList | undefined,
   setGameCreatable?: (creatable: boolean) => void,
 }
 
