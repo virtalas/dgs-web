@@ -22,7 +22,7 @@ const useStyles = makeStyles((theme) => ({
   },
   oldHighScoreChip: {
     height: chipHeight,
-    width: 123,
+    width: 121,
     fontSize: '97%',
     cursor: 'pointer',
     backgroundColor: highScoreBlue,

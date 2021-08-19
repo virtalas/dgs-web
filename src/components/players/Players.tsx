@@ -31,13 +31,13 @@ const Players: React.FC<{}> = () => {
   const classes = useStyles()
   const { userId } = useAuth()
 
-  const [players, setPlayers] = useState<Player[]>()
+  const [friendList, setFriendList] = useState<FriendList>()
   const [currentUser, setCurrentUser] = useState<Player>()
   const [isLoading, setIsLoading] = useState(true)
   const [isError, setIsError] = useState(false)
 
-  const friends = players?.filter(player => !player.guest).filter(player => player.id !== currentUser?.id)
-  const guests = players?.filter(player => player.guest)
+  const friends = friendList?.myFriends
+  const guests = friendList?.myGuests
 
   useEffect(() => {
     setIsError(false)
@@ -45,8 +45,8 @@ const Players: React.FC<{}> = () => {
 
     playersService.getPlayers(cancelTokenSource)
       .then(p => {
-        setPlayers(p)
-        setCurrentUser(p.find(player => player.id === userId))
+        setFriendList(p)
+        setCurrentUser(p.me)
         setIsLoading(false)
       })
       .catch(() => setIsError(true))
@@ -78,7 +78,7 @@ const Players: React.FC<{}> = () => {
 
       {guests?.map((player, index) => generatePlayerCard(player, true, index + (friends ?? []).length))}
 
-      {players === undefined && isLoading && !isError && (
+      {friendList === undefined && isLoading && !isError && (
         <LoadingView />
       )}
 

@@ -60,7 +60,7 @@ const SearchPage: React.FC<Props> = (props) => {
   const [games, setGames] = useState<Game[]>([])
   const [fetchedYears, setFetchedYears] = useState<number[]>([])
   const [selectedPlayers, setSelectedPlayers] = useState<Player[]>([])
-  const [allPlayers, setAllPlayers] = useState<Player[]>([])
+  const [friendList, setFriendList] = useState<FriendList>()
   const [selectedTags, setSelectedTags] = useState<Tag[]>([])
   const [allTags, setAllTags] = useState<Tag[]>([])
   const [selectedCourse, setSelectedCourse] = useState<Course>()
@@ -124,10 +124,10 @@ const SearchPage: React.FC<Props> = (props) => {
   }
 
   const initialFetchData = async () => {
-    if (allPlayers.length === 0) {
+    if (!friendList) {
       cancelTokenSourceRef.current = baseService.cancelTokenSource()
-      const fetchedPlayers = await playersService.getPlayers(cancelTokenSourceRef.current)
-      setAllPlayers(fetchedPlayers)
+      const fetchedFriendList = await playersService.getPlayers(cancelTokenSourceRef.current)
+      setFriendList(fetchedFriendList)
     }
 
     let fetchedTags: Tag[] = []
@@ -223,6 +223,14 @@ const SearchPage: React.FC<Props> = (props) => {
   ) : null
 
   const searchConditionsEmpty = !selectedCourse && selectedPlayers.length === 0 && selectedTags.length === 0 && textInput.length === 0
+
+  const allPlayers = friendList ?
+    [friendList.me]
+    .concat(friendList.myFriends)
+    .concat(friendList.myGuests)
+    .concat(friendList.friendsFriends)
+    .concat(friendList.friendsGuests)
+  : []
 
   return (
     <div className={classes.root}>

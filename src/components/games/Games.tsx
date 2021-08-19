@@ -52,7 +52,7 @@ const Games: React.FC<Props> = (props) => {
   const [monthsThatHaveGames, setMonthsThatHaveGames] = useState<GameMonths[]>()
   const [availableWeatherConditions, setAvailableWeatherConditions] = useState<Tag[]>([])
   const [availableConditions, setAvailableConditions] = useState<Tag[]>([])
-  const [isLoading, setIsLoading] = useState<boolean>(false)
+  const [isLoading, setIsLoading] = useState<boolean>(true)
   const [isError, setIsError] = useState<boolean>(false)
   const [redirect, setRedirect] = useState(false)
 
@@ -71,8 +71,10 @@ const Games: React.FC<Props> = (props) => {
         fetchConditionsIfEmpty()
       })
       .catch(e => {
-        setIsLoading(false)
-        setIsError(true)
+        if (!axios.isCancel(e)) {
+          setIsLoading(false)
+          setIsError(true)
+        }
       })
     }
   }
@@ -92,6 +94,7 @@ const Games: React.FC<Props> = (props) => {
     }).catch(e => {
       setIsLoading(false)
       if (!axios.isCancel(e)) {
+        setIsLoading(false)
         setIsError(true)
       }
     })

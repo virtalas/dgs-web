@@ -24,6 +24,10 @@ const useStyles = makeStyles((theme) => ({
   chip: {
     margin: 2,
   },
+  listSubHeader: {
+    backgroundColor: 'white',
+    borderRadius: 10,
+  },
 }))
 
 const MenuProps = {
@@ -39,14 +43,13 @@ interface Props {
   players: Player[],
   setPlayers: (players: Player[]) => void,
   allPlayers: Player[],
+  friendList?: FriendList,
   setGameCreatable?: (creatable: boolean) => void,
 }
 
 const PlayerSelect: React.FC<Props> = (props) => {
   const classes = useStyles()
-  const { players, setPlayers, allPlayers, setGameCreatable } = props
-
-  const guests = allPlayers.filter(player => player.guest)
+  const { players, setPlayers, allPlayers, friendList, setGameCreatable } = props
 
   const handlePlayersChange = (event: React.ChangeEvent<{ value: unknown }>, value: any) => {
     const selectedPlayerId = value.props.value as string
@@ -71,17 +74,31 @@ const PlayerSelect: React.FC<Props> = (props) => {
     }
   }
 
-  const playerList = allPlayers.filter((player: Player) => !player.guest).map((player: Player) => (
+  const myFriendsList = friendList && [friendList.me].concat(friendList.myFriends).map((player: Player) => (
     <MenuItem key={player.id} value={player.id}>
       <Checkbox checked={arrayContains(players, player)} color="primary" />
       <ListItemText primary={player.firstName} />
     </MenuItem>
   ))
 
-  const guestList = guests.map((guest: Player) => (
+  const myGuestsList = friendList?.myGuests.map((guest: Player) => (
     <MenuItem key={guest.id} value={guest.id}>
       <Checkbox checked={arrayContains(players, guest)} color="primary" />
       <ListItemText primary={guest.firstName} />
+    </MenuItem>
+  ))
+
+  const friendsFriendsList = friendList?.friendsFriends.map((player: Player) => (
+    <MenuItem key={player.id} value={player.id}>
+      <Checkbox checked={arrayContains(players, player)} color="primary" />
+      <ListItemText primary={player.firstName} />
+    </MenuItem>
+  ))
+
+  const friendsGuests = friendList?.friendsGuests.map((player: Player) => (
+    <MenuItem key={player.id} value={player.id}>
+      <Checkbox checked={arrayContains(players, player)} color="primary" />
+      <ListItemText primary={player.firstName} />
     </MenuItem>
   ))
 
@@ -113,11 +130,22 @@ const PlayerSelect: React.FC<Props> = (props) => {
         )}
         MenuProps={MenuProps}
       >
-        {playerList}
-        {guests.length !== 0 ? (
-          <ListSubheader>Guests</ListSubheader>
-        ) : null}
-        {guestList}
+        {myFriendsList}
+
+        {myGuestsList && myGuestsList.length > 0 && (
+          <ListSubheader className={classes.listSubHeader}>My guests</ListSubheader>
+        )}
+        {myGuestsList}
+
+        {friendsFriendsList && friendsFriendsList.length > 0 && (
+          <ListSubheader className={classes.listSubHeader}>Friends' friends</ListSubheader>
+        )}
+        {friendsFriendsList}
+
+        {friendsGuests && friendsGuests.length > 0 && (
+          <ListSubheader className={classes.listSubHeader}>Friends' guests</ListSubheader>
+        )}
+        {friendsGuests}
       </Select>
       <FormHelperText>{error ? 'Choose at least one player' : ''}</FormHelperText>
     </FormControl>

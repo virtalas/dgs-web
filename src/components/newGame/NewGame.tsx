@@ -31,7 +31,7 @@ const NewGame: React.FC<{}> = () => {
   const [gameCreatable, setGameCreatable] = useState(false)
   const [layout, setLayout] = useState<Layout>()
   const [players, setPlayers] = useState<Player[]>([])
-  const [allPlayers, setAllPlayers] = useState<Player[]>([])
+  const [friendList, setFriendList] = useState<FriendList>()
 
   const cancelTokenSourceRef = useRef<CancelTokenSource | null>(null)
 
@@ -39,12 +39,12 @@ const NewGame: React.FC<{}> = () => {
     cancelTokenSourceRef.current = baseService.cancelTokenSource()
 
     playersService.getPlayers(cancelTokenSourceRef.current)
-      .then(fetchedPlayers => {
-        const user = fetchedPlayers.find(player => player.id === userId) as Player
+      .then(fetchedFriendList => {
+        const user = fetchedFriendList.me
         if (user) {
           setPlayers([user])
         }
-        setAllPlayers(fetchedPlayers)
+        setFriendList(fetchedFriendList)
       })
       .catch(e => console.log('fetching players failed:', e))
 
@@ -68,11 +68,25 @@ const NewGame: React.FC<{}> = () => {
     }
   }
 
+  const handleAddNewGuest = (newGuest: Player) => {
+    if (!friendList) return
+    friendList.myGuests = [newGuest, ...friendList.myGuests]
+    setFriendList(friendList)
+  }
+
   if (redirect) {
     return <Redirect to={'/games/' + newGameId + "/input"} />
   }
 
   const newGameButtonDisabled = !gameCreatable || layout === undefined
+
+  const allPlayers = friendList ?
+   [friendList.me]
+   .concat(friendList.myFriends)
+   .concat(friendList.myGuests)
+   .concat(friendList.friendsFriends)
+   .concat(friendList.friendsGuests)
+  : []
 
   return (
     <div id="newGamePage" className={classes.page}>
@@ -86,6 +100,7 @@ const NewGame: React.FC<{}> = () => {
         players={players}
         setPlayers={setPlayers}
         allPlayers={allPlayers}
+        friendList={friendList}
         setGameCreatable={setGameCreatable}
       />
       <br/>
@@ -93,7 +108,7 @@ const NewGame: React.FC<{}> = () => {
       <NewGuestButton
         setPlayers={setPlayers}
         players={players}
-        setAllPlayers={setAllPlayers}
+        handleAddNewGuest={handleAddNewGuest}
         allPlayers={allPlayers}
       />
       <br/>

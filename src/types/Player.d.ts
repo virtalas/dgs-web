@@ -7,3 +7,11 @@ interface Player {
   newGuest: boolean | undefined,
   admin: boolean | undefined,
 }
+
+interface FriendList {
+  me: Player,
+  myFriends: Player[],
+  myGuests: Player[],
+  friendsFriends: Player[],
+  friendsGuests: Player[],
+}

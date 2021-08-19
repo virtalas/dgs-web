@@ -3,10 +3,16 @@ import { CancelTokenSource } from 'axios'
 import baseService from './baseService'
 import { apiPlayerToPlayer, apiCourseHighScoresToCourseHighScores } from '../types/api/ModelMappers'
 
-const getPlayers = async (source: CancelTokenSource): Promise<Player[]> => {
-  // TODO: getFriends(user) ?
+const getPlayers = async (source: CancelTokenSource): Promise<FriendList> => {
   const response = await baseService.get('/users/friends', source)
-  return response.data.map((apiPlayer: ApiPlayer) => apiPlayerToPlayer(apiPlayer))
+  const apiFriendList = response.data
+  return {
+    me: apiPlayerToPlayer(apiFriendList['me']),
+    myFriends: apiFriendList['my_friends'].map((apiPlayer: ApiPlayer) => apiPlayerToPlayer(apiPlayer)),
+    myGuests: apiFriendList['my_guests'].map((apiPlayer: ApiPlayer) => apiPlayerToPlayer(apiPlayer)),
+    friendsFriends: apiFriendList['friends_friends'].map((apiPlayer: ApiPlayer) => apiPlayerToPlayer(apiPlayer)),
+    friendsGuests: apiFriendList['friends_guests'].map((apiPlayer: ApiPlayer) => apiPlayerToPlayer(apiPlayer)),
+  }
 }
 
 const playerNameAvailable = async (name: String): Promise<boolean> => {

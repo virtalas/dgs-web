@@ -22,13 +22,13 @@ const useStyles = makeStyles((theme) => ({
 interface Props {
   setPlayers: (players: Player[]) => void,
   players: Player[],
-  setAllPlayers: (players: Player[]) => void,
+  handleAddNewGuest: (players: Player) => void,
   allPlayers: Player[],
 }
 
 const NewGuestButton: React.FC<Props> = (props) => {
   const classes = useStyles()
-  const { setPlayers, players, setAllPlayers, allPlayers } = props
+  const { setPlayers, players, handleAddNewGuest, allPlayers } = props
 
   const [dialogOpen, setDialogOpen] = useState(false)
   const [guestNameError, setGuestNameError] = useState(false)
@@ -61,7 +61,7 @@ const NewGuestButton: React.FC<Props> = (props) => {
       admin: false,
     }
     setPlayers([...players, newGuest])
-    setAllPlayers([...allPlayers, newGuest])
+    handleAddNewGuest(newGuest)
   }
 
   // TODO: On mobile, popup size changes when error appears. Fix width?
