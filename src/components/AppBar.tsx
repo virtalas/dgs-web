@@ -23,6 +23,7 @@ const useStyles = makeStyles((theme) => ({
     background: grassGreen,
     height: appBarHeight,
     flexGrow: 1,
+    padding: 'env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left)',
   },
   menuButton: {
     marginLeft: 0,

@@ -38,6 +38,7 @@ export const pageMaxWidth = 610
 const useStyles = makeStyles((theme) => ({
   root: {
     display: 'flex',
+    padding: 'env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left)',
   },
   content: {
     marginTop: appBarHeight,
@@ -49,20 +50,20 @@ const useStyles = makeStyles((theme) => ({
   },
   bottomFabButton: {
     position: 'fixed',
-    bottom: theme.spacing(1.5),
-    right: theme.spacing(1.5),
+    bottom: '10px',
+    right: 'calc(10px + env(safe-area-inset-right))',
     zIndex: 11,
   },
   topFabButton: {
     position: 'fixed',
-    bottom: theme.spacing(10),
-    right: theme.spacing(1.5),
+    bottom: '76px',
+    right: 'calc(10px + env(safe-area-inset-right))',
     zIndex: 11,
   },
   coursesNewButtonFab: {
     position: 'fixed',
-    bottom: theme.spacing(1.5),
-    right: theme.spacing(1.5),
+    bottom: '10px',
+    right: 'calc(10px + env(safe-area-inset-right))',
     zIndex: 2,
     backgroundColor: 'green',
     color: 'white',
@@ -160,8 +161,12 @@ const BasePage: React.FC<Props> = (props) => {
 
   return (
     <div className={classes.root} id="basePage">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
+
       <CssBaseline />
+
       <AppBar />
+
       <main className={classes.content}>
         <div className="content">
           <PrivateRoute exact path="/" render={(props) => (<Games {...props} onEditToggle={onEditGameToggle} />)} />

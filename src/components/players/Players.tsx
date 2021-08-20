@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+import axios from 'axios'
 
 import { makeStyles } from '@material-ui/core/styles'
 import Typography from '@material-ui/core/Typography'
@@ -40,16 +41,20 @@ const Players: React.FC<{}> = () => {
   const guests = friendList?.myGuests
 
   useEffect(() => {
-    setIsError(false)
     const cancelTokenSource = baseService.cancelTokenSource()
-
+    setIsError(false)
     playersService.getPlayers(cancelTokenSource)
       .then(p => {
         setFriendList(p)
         setCurrentUser(p.me)
         setIsLoading(false)
       })
-      .catch(() => setIsError(true))
+      .catch(e => {
+        if (!axios.isCancel(e)) {
+          setIsLoading(false)
+          setIsError(true)
+        }
+      })
 
     return () => cancelTokenSource?.cancel()
   }, [userId])

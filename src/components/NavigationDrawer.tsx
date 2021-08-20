@@ -36,6 +36,7 @@ const useStyles = makeStyles((theme) => ({
   },
   drawerPaper: {
     width: drawerWidth,
+    paddingLeft: 'env(safe-area-inset-left)',
   },
 }))
 

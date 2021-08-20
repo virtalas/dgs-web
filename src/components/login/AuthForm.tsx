@@ -203,34 +203,33 @@ const AuthForm: React.FC<Props> = props => {
             <form onSubmit={handleSubmit}>
               {emailInput}
               {errors.email && touched.email && (
-                <div className={classes.inputFeedback}>{errors.email}</div>
+                <span className={classes.inputFeedback}>{errors.email}</span>
               )}
               {accountAlreadyExists && (
-                <div className={classes.inputFeedback}>
+                <span className={classes.inputFeedback}>
                   This email has already been registered with another account.
-                </div>
+                </span>
               )}
 
               {isLogin ? null : firstNameInput}
               {errors.firstName && touched.firstName && (
-                <div className={classes.inputFeedback}>{errors.firstName}</div>
+                <span className={classes.inputFeedback}>{errors.firstName}</span>
               )}
 
               {isLogin ? null : lastNameInput}
               {errors.lastName && touched.lastName && (
-                <div className={classes.inputFeedback}>{errors.lastName}</div>
+                <span className={classes.inputFeedback}>{errors.lastName}</span>
               )}
 
               {passwordInput}
               {errors.password && touched.password && (
-                <div className={classes.inputFeedback}>{errors.password}</div>
+                <span className={classes.inputFeedback}>{errors.password}</span>
               )}
               {credentialsAreWrong && (
-                <div className={classes.inputFeedback}>
+                <span className={classes.inputFeedback}>
                   You have entered an invalid email or password.
-                </div>
+                </span>
               )}
-
 
               <Button
                 type="submit"

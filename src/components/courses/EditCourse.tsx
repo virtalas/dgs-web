@@ -37,7 +37,7 @@ const useStyles = makeStyles((theme) => ({
   explanation: {
     marginTop: theme.spacing(2),
     width: '70%',
-    textAlign: 'left',
+    textAlign: 'center',
   },
 }))
 
@@ -129,92 +129,113 @@ const EditCourse: React.FC<Props> = (props) => {
 
   return (
     <div className={classes.page}>
-      <Typography variant="h5">
-        {newCourse ? 'New' : 'Edit'} Course
-      </Typography>
-
-      <TextField
-        className={classes.formControl}
-        label="Name"
-        data-cy="courseNameInput"
-        value={name}
-        required
-        onChange={e => setName(e.target.value)}
-      />
-
-      <TextField
-        className={classes.formControl}
-        label="City"
-        data-cy="courseCityInput"
-        value={city}
-        required
-        onChange={e => setCity(e.target.value)}
-      />
-
-      <TextField
-        className={classes.formControl}
-        label="Latitude"
-        data-cy="courseLatInput"
-        value={lat ? lat : ''}
-        error={latError}
-        onChange={handleLatitudeChange}
-      />
-
-      <TextField
-        className={classes.formControl}
-        label="Longitude"
-        data-cy="courseLonInput"
-        value={lon ? lon : ''}
-        error={lonError}
-        onChange={handleLongitudeChange}
-      />
-      
-      <Button
-        className={classes.locationButton}
-        variant="outlined"
-        size="small"
-        onClick={handleGetCurrentLocation}
-      >
-        Use my location
-      </Button>
-
-      <CoursePhotoButton
-        course={course}
-        photo={photo}
-        setPhoto={setPhoto}
-      />
-
       <Grid
         container
-        direction="row"
+        direction="column"
         justifyContent="flex-start"
         alignItems="center"
       >
-        {newCourse ? null : (
-          <Button
-            className={classes.createButton}
-            variant="contained"
-            onClick={handleCancel}
-          >
-            Cancel
-          </Button>
-        )}
+        <Typography variant="h5">
+          {newCourse ? 'New' : 'Edit'} Course
+        </Typography>
 
-        <div className={classes.createButton}>
-          <DisableableButton
-            onClick={handleFinishClicked}
-            disabled={name.length === 0 || city.length === 0 || latError || lonError}
-          >
-            {newCourse ? 'Create' : 'Update'}
-          </DisableableButton>
-        </div>
+        <TextField
+          className={classes.formControl}
+          label="Name"
+          data-cy="courseNameInput"
+          value={name}
+          required
+          onChange={e => setName(e.target.value)}
+        />
+
+        <TextField
+          className={classes.formControl}
+          label="City"
+          data-cy="courseCityInput"
+          value={city}
+          required
+          onChange={e => setCity(e.target.value)}
+        />
+
+        <TextField
+          className={classes.formControl}
+          label="Latitude"
+          data-cy="courseLatInput"
+          value={lat ? lat : ''}
+          error={latError}
+          onChange={handleLatitudeChange}
+        />
+
+        <TextField
+          className={classes.formControl}
+          label="Longitude"
+          data-cy="courseLonInput"
+          value={lon ? lon : ''}
+          error={lonError}
+          onChange={handleLongitudeChange}
+        />
+        
+        <Button
+          className={classes.locationButton}
+          variant="outlined"
+          size="small"
+          onClick={handleGetCurrentLocation}
+        >
+          Use my location
+        </Button>
+
+        <CoursePhotoButton
+          course={course}
+          photo={photo}
+          setPhoto={setPhoto}
+        />
+
+        <Grid
+          container
+          direction="row"
+          justifyContent="center"
+          alignItems="center"
+        >
+          {newCourse ? null : (
+            <Button
+              className={classes.createButton}
+              variant="contained"
+              onClick={handleCancel}
+            >
+              Cancel
+            </Button>
+          )}
+
+          <div className={classes.createButton}>
+            <DisableableButton
+              onClick={handleFinishClicked}
+              disabled={name.length === 0 || city.length === 0 || latError || lonError}
+            >
+              {newCourse ? 'Create' : 'Update'}
+            </DisableableButton>
+          </div>
+        </Grid>
+
+        <Grid
+          container
+          direction="row"
+          justifyContent="center"
+          alignItems="center"
+        >
+          <Typography className={classes.explanation} component="p" variant="caption">
+            {allowedToEditExplanation + 'course.'}
+          </Typography>
+        </Grid>
+
+        <Grid
+          container
+          direction="row"
+          justifyContent="center"
+          alignItems="center"
+        >
+          {deleteButton}
+        </Grid>
       </Grid>
-
-      <Typography className={classes.explanation} component="p" variant="caption">
-        {allowedToEditExplanation + 'course.'}
-      </Typography>
-
-      {deleteButton}
     </div>
   )
 }
