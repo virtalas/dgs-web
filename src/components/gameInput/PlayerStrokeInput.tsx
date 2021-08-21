@@ -171,21 +171,23 @@ const PlayerStrokeInput: React.FC<Props> = (props) => {
 
   const scoreInputRows = scores.map((scoreInfo, index) => {
     const throws = scoreInfo.strokes[holeNum - 1]
+    const obs = scoreInfo.obs[holeNum - 1]
+    const holeToPar = throws + obs - coursePars[holeNum - 1]
 
     let toParColor
     if (throws === 0) {
       toParColor = lightBlue
     } else if (throws === 1) {
       toParColor = holeInOneRed
-    } else if (scoreInfo.toPar <= -2) {
+    } else if (holeToPar <= -2) {
       toParColor = eagleYellow
-    } else if (scoreInfo.toPar === -1) {
+    } else if (holeToPar === -1) {
       toParColor = birdieGreen
-    } else if (scoreInfo.toPar === 0) {
+    } else if (holeToPar === 0) {
       toParColor = parGreen
-    } else if (scoreInfo.toPar === 1) {
+    } else if (holeToPar === 1) {
       toParColor = bogeyOrange
-    } else if (scoreInfo.toPar >= 2) {
+    } else if (holeToPar >= 2) {
       toParColor = overBogeyPurple
     }
 
