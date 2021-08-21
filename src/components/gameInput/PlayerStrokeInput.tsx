@@ -177,7 +177,7 @@ const PlayerStrokeInput: React.FC<Props> = (props) => {
       toParColor = lightBlue
     } else if (throws === 1) {
       toParColor = holeInOneRed
-    } else if (scoreInfo.toPar === -2) {
+    } else if (scoreInfo.toPar <= -2) {
       toParColor = eagleYellow
     } else if (scoreInfo.toPar === -1) {
       toParColor = birdieGreen
