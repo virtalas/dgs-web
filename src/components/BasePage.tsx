@@ -39,6 +39,7 @@ const useStyles = makeStyles((theme) => ({
   root: {
     display: 'flex',
     padding: 'env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left)',
+    WebkitTextSizeAdjust: '100%',
   },
   content: {
     marginTop: appBarHeight,
