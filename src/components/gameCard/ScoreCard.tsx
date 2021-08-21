@@ -78,7 +78,7 @@ const useStyles = makeStyles((theme) => ({
   },
   middleContainer: {
     flex: '0 1 700px',
-    overflow: 'scroll',
+    overflowX: 'scroll',
     zIndex: 0, /* Have the middle table 'slide under' the side tables. */
     marginBottom: -15, /* Get rid of extra space under the middle table. */
     '& table': {
@@ -87,11 +87,17 @@ const useStyles = makeStyles((theme) => ({
         minWidth: cellHeightNormal,
       }
     },
+    // Desktop scrollbar:
     '&::-webkit-scrollbar': {
-      width: 0,  /* Remove scrollbar space. */
-      height: 0,
+      height: 16,
     },
-    scrollbarWidth: 'none', /* Remove scrollbar space on FireFox */
+    '&::-webkit-scrollbar-thumb': {
+      border: '4px solid rgba(0, 0, 0, 0)',
+      backgroundClip: 'padding-box',
+      borderRadius: '9999px',
+      backgroundColor: 'lightgrey',
+    },
+    // scrollbarWidth: 'none', /* Remove scrollbar space on FireFox */
   },
   rightTable: {
     flex: '0 0 40px',
