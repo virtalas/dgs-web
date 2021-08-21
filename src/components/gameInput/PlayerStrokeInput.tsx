@@ -7,7 +7,17 @@ import ListItemText from '@material-ui/core/ListItemText'
 import Button from '@material-ui/core/Button'
 import Typography from '@material-ui/core/Typography'
 
-import { lightBlue, lightGrey, sneakyGrey } from '../../constants/Colors'
+import {
+  birdieGreen,
+  bogeyOrange,
+  eagleYellow,
+  holeInOneRed,
+  lightBlue,
+  lightGrey,
+  overBogeyPurple,
+  parGreen,
+  sneakyGrey
+} from '../../constants/Colors'
 
 const circleWidth = 50
 
@@ -19,7 +29,6 @@ const useStyles = makeStyles((theme) => ({
     width: circleWidth,
     height: circleWidth,
     borderRadius: '50%',
-    background: lightBlue,
     textAlign: 'center',
     margin: 'auto',
     marginLeft: theme.spacing(3),
@@ -160,53 +169,80 @@ const PlayerStrokeInput: React.FC<Props> = (props) => {
     </ListItem>
   )
 
-  const scoreInputRows = scores.map((scoreInfo, index) => (
-    <ListItem key={index}>
-      <ListItemText>
-        <span className={classes.playerNameText}>
-          {scoreInfo.player.firstName}
-        </span>
-      </ListItemText>
+  const scoreInputRows = scores.map((scoreInfo, index) => {
+    const throws = scoreInfo.strokes[holeNum - 1]
 
-      <div className={classes.rowRightSideContainer}>
+    let toParColor
+    if (throws === 0) {
+      toParColor = lightBlue
+    } else if (throws === 1) {
+      toParColor = holeInOneRed
+    } else if (scoreInfo.toPar === -2) {
+      toParColor = eagleYellow
+    } else if (scoreInfo.toPar === -1) {
+      toParColor = birdieGreen
+    } else if (scoreInfo.toPar === 0) {
+      toParColor = parGreen
+    } else if (scoreInfo.toPar === 1) {
+      toParColor = bogeyOrange
+    } else if (scoreInfo.toPar >= 2) {
+      toParColor = overBogeyPurple
+    }
+
+    return (
+      <ListItem key={index}>
         <ListItemText>
           <span className={classes.playerNameText}>
-            {scoreInfo.toPar > 0 ? '+' + scoreInfo.toPar : scoreInfo.toPar}
+            {scoreInfo.player.firstName}
           </span>
         </ListItemText>
-
-        <div className={classes.circle}>
-          <input
-            className={classes.strokeInput}
-            onChange={event => handleStrokeChange(scoreInfo.player.id, false, event)}
-            type="tel"
-            value={scoreInfo.obs[holeNum - 1]}
-            min="0"
-            max="99"
-            onFocus={e => e.target.value = '' /* Clear the field when it comes into focus. */}
-            onBlur={event => handleBlur(scoreInfo.player.id, false, event)}
-            inputMode="numeric"
-            pattern="[0-9]*">
-          </input>
+  
+        <div className={classes.rowRightSideContainer}>
+          <ListItemText>
+            <span className={classes.playerNameText}>
+              {scoreInfo.toPar > 0 ? '+' + scoreInfo.toPar : scoreInfo.toPar}
+            </span>
+          </ListItemText>
+  
+          <div
+            className={classes.circle}
+            style={{ background: lightBlue }}
+          >
+            <input
+              className={classes.strokeInput}
+              onChange={event => handleStrokeChange(scoreInfo.player.id, false, event)}
+              type="tel"
+              value={scoreInfo.obs[holeNum - 1]}
+              min="0"
+              max="99"
+              onFocus={e => e.target.value = '' /* Clear the field when it comes into focus. */}
+              onBlur={event => handleBlur(scoreInfo.player.id, false, event)}
+              inputMode="numeric"
+              pattern="[0-9]*">
+            </input>
+          </div>
+  
+          <div
+            className={classes.circle}
+            style={{ background: toParColor }}
+          >
+            <input
+              className={classes.strokeInput}
+              onChange={event => handleStrokeChange(scoreInfo.player.id, true, event)}
+              type="tel"
+              value={throws}
+              min="0"
+              max="99"
+              onFocus={e => e.target.value = '' /* Clear the field when it comes into focus. */}
+              onBlur={event => handleBlur(scoreInfo.player.id, true, event)}
+              inputMode="numeric"
+              pattern="[0-9]*">
+            </input>
+          </div>
         </div>
-
-        <div className={classes.circle}>
-          <input
-            className={classes.strokeInput}
-            onChange={event => handleStrokeChange(scoreInfo.player.id, true, event)}
-            type="tel"
-            value={scoreInfo.strokes[holeNum - 1]}
-            min="0"
-            max="99"
-            onFocus={e => e.target.value = '' /* Clear the field when it comes into focus. */}
-            onBlur={event => handleBlur(scoreInfo.player.id, true, event)}
-            inputMode="numeric"
-            pattern="[0-9]*">
-          </input>
-        </div>
-      </div>
-    </ListItem>
-  ))
+      </ListItem>
+    )
+  })
 
   const syncTextAndParButtonRow = (
     <ListItem>
