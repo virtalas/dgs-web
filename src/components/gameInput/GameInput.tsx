@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react'
 import axios, { CancelTokenSource } from 'axios'
+import { Redirect } from 'react-router'
 
 import { makeStyles } from '@material-ui/core/styles'
 import BottomNavigation from '@material-ui/core/BottomNavigation'
@@ -72,6 +73,7 @@ const GameInput: React.FC<{}> = (props: any) => {
   const [tab, setTab] = React.useState(scoreInputViewTab)
   const [updating, setUpdating] = useState(false)
   const [updateError, setUpdateError] = useState(false)
+  const [redirect, setRedirect] = useState(false)
 
   // Stats view
   const [highScores, setHighScores] = useState<CourseHighScore[]>()
@@ -96,7 +98,11 @@ const GameInput: React.FC<{}> = (props: any) => {
     return () => cancelTokenSourceRef.current?.cancel()
   }, [gameId])
 
-  const updateGame = (game: Game) => {
+  if (redirect) {
+    return <Redirect to={'/'} />
+  }
+
+  const updateGame = (game: Game, finished?: boolean) => {
     if (game === undefined) return
     setUpdating(true)
     setUpdateError(false)
@@ -105,14 +111,19 @@ const GameInput: React.FC<{}> = (props: any) => {
     cancelTokenSourceRef.current?.cancel()
     cancelTokenSourceRef.current = baseService.cancelTokenSource()
 
-    gamesService.updateGame(game, userId, cancelTokenSourceRef.current).then(() => {
-      setUpdating(false)
-    }).catch(error => {
-      setUpdating(false)
-      if (!axios.isCancel(error)) {
-        setUpdateError(true)
-      }
-    })
+
+    gamesService.updateGame(game, userId, cancelTokenSourceRef.current)
+      .then(() => {
+        setUpdating(false)
+        if (finished !== undefined && finished) {
+          setRedirect(true)
+        }
+      }).catch(error => {
+        setUpdating(false)
+        if (!axios.isCancel(error)) {
+          setUpdateError(true)
+        }
+      })
 
     setGame(game)
   }
@@ -154,12 +165,19 @@ const GameInput: React.FC<{}> = (props: any) => {
         game.temperature = localWeather.temperature
         setGame({...game})
       })
+      .catch(e => console.log('Failed to fetch weather: ' + e))
   }
 
   const handleGoToPreviewAndFinish = () => {
     setTab(gameInfoViewTab)
     checkGameLegalities()
     updateGameWeatherConditions()
+  }
+
+  const handleFinish = () => {
+    if (!game) return
+    game.finished = true
+    updateGame(game, true)
   }
 
   const holeNumFor = (index: number): number => {
@@ -207,10 +225,10 @@ const GameInput: React.FC<{}> = (props: any) => {
     <GameInfoView
       game={game}
       updateGame={updateGame}
+      handleFinish={handleFinish}
       availableWeatherConditions={availableWeatherConditions}
       availableConditions={availableConditions}
       updating={updating}
-      userId={userId}
     />
   )
 
