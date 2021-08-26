@@ -80,6 +80,7 @@ const GameInput: React.FC<{}> = (props: any) => {
   const [holeScoreDistribution, setHoleScoreDistribution] = useState<HoleScoreDistribution[]>()
 
   const cancelTokenSourceRef = useRef<CancelTokenSource | null>(null)
+  const weatherCancelTokenSourceRef = useRef<CancelTokenSource | null>(null)
 
   useEffect(() => {
     cancelTokenSourceRef.current = baseService.cancelTokenSource()
@@ -144,8 +145,8 @@ const GameInput: React.FC<{}> = (props: any) => {
 
   const updateGameWeatherConditions = () => {
     if (game === undefined) return
-    cancelTokenSourceRef.current = baseService.cancelTokenSource()
-    weatherService.getLocalWeather(game.courseId, cancelTokenSourceRef.current)
+    weatherCancelTokenSourceRef.current = baseService.cancelTokenSource()
+    weatherService.getLocalWeather(game.courseId, weatherCancelTokenSourceRef.current)
       .then(localWeather => {
         if (game === undefined) return
         console.log('Setting weather information with', localWeather)
