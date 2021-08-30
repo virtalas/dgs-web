@@ -62,6 +62,7 @@ const useStyles = makeStyles((theme) => ({
     height: chipHeight,
     backgroundColor: birdieGreen,
     color: 'white',
+    marginRight: 8,
   },
   liveText: {
     color: 'grey',
