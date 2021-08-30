@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react'
 import { Redirect } from 'react-router'
-import { CancelTokenSource } from 'axios'
+import axios, { CancelTokenSource } from 'axios'
 
 import { makeStyles } from '@material-ui/core/styles'
 
@@ -13,10 +13,14 @@ import gamesService from '../../services/gamesService'
 import playersService from '../../services/playersService'
 import baseService from '../../services/baseService'
 import DisableableButton from '../DisableableButton'
+import FormHelperText from '@material-ui/core/FormHelperText'
 
 const useStyles = makeStyles((theme) => ({
   page: {
     margin: 20,
+  },
+  errorText: {
+    color: 'red',
   },
 }))
 
@@ -32,6 +36,7 @@ const NewGame: React.FC<{}> = () => {
   const [layout, setLayout] = useState<Layout>()
   const [players, setPlayers] = useState<Player[]>([])
   const [friendList, setFriendList] = useState<FriendList>()
+  const [isError, setIsError] = useState(false)
 
   const cancelTokenSourceRef = useRef<CancelTokenSource | null>(null)
 
@@ -46,7 +51,12 @@ const NewGame: React.FC<{}> = () => {
         }
         setFriendList(fetchedFriendList)
       })
-      .catch(e => console.log('fetching players failed:', e))
+      .catch(e => {
+        if (!axios.isCancel(e)) {
+          setIsError(true)
+          console.log('fetching players failed:', e)  
+        }
+      })
 
     return () => cancelTokenSourceRef.current?.cancel()
   }, [userId])
@@ -104,6 +114,9 @@ const NewGame: React.FC<{}> = () => {
         setGameCreatable={setGameCreatable}
       />
       <br/>
+      {isError && (
+        <FormHelperText className={classes.errorText}>Failed to load</FormHelperText>
+      )}
 
       <NewGuestButton
         setPlayers={setPlayers}

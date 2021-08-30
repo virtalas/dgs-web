@@ -118,6 +118,7 @@ const PlayerSelect: React.FC<Props> = (props) => {
       <InputLabel ref={inputLabel} htmlFor="players-select">Players</InputLabel>
       <Select
         multiple
+        disabled={loading}
         value={players}
         onChange={handlePlayersChange}
         input={<OutlinedInput labelWidth={labelWidth} name="players" id="players-select" />}
