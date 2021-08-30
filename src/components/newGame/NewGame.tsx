@@ -3,6 +3,8 @@ import { Redirect } from 'react-router'
 import axios, { CancelTokenSource } from 'axios'
 
 import { makeStyles } from '@material-ui/core/styles'
+import FormHelperText from '@material-ui/core/FormHelperText'
+import CircularProgress from '@material-ui/core/CircularProgress'
 
 import { useAuth } from '../../context/AuthContext'
 import { toISOStringWithTimezone } from '../../utils/DateUtils'
@@ -13,7 +15,6 @@ import gamesService from '../../services/gamesService'
 import playersService from '../../services/playersService'
 import baseService from '../../services/baseService'
 import DisableableButton from '../DisableableButton'
-import FormHelperText from '@material-ui/core/FormHelperText'
 
 const useStyles = makeStyles((theme) => ({
   page: {
@@ -21,6 +22,9 @@ const useStyles = makeStyles((theme) => ({
   },
   errorText: {
     color: 'red',
+  },
+  loadingIndicator: {
+    marginLeft: theme.spacing(2),
   },
 }))
 
@@ -126,12 +130,18 @@ const NewGame: React.FC<{}> = () => {
       />
       <br/>
 
-      <DisableableButton
-        onClick={handleStartButtonClick}
-        disabled={newGameButtonDisabled}
-      >
-        Start game
-      </DisableableButton>
+      {friendList === undefined ? (
+        <div className={classes.loadingIndicator}>
+          <CircularProgress />
+        </div>
+      ) : (
+        <DisableableButton
+          onClick={handleStartButtonClick}
+          disabled={newGameButtonDisabled}
+        >
+          Start game
+        </DisableableButton>
+      )}
     </div>
   )
 }
