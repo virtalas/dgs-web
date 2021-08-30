@@ -122,8 +122,8 @@ const GameCard: React.FC<Props> = (props) => {
 
     gamesService.updateGame(gameToSend, userId, cancelTokenSourceRef.current, newLayout)
       .then((returnedGame: Game) => {
-        setGame(returnedGame)
         setUpdating(false)
+        setGame(returnedGame)
       })
       .catch((e) => {
         setUpdateError(true)
@@ -141,6 +141,8 @@ const GameCard: React.FC<Props> = (props) => {
       sendUpdatedGame()
     } else {
       setOriginalGame(_.cloneDeep(game))
+      game.isEditing = true
+      setGame(game)
     }
 
     if (onEditToggle) {

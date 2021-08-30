@@ -17,6 +17,7 @@ interface Game {
   illegalScorers: Player[],
   allowedToEdit: boolean,
   finished: boolean,
+  isEditing?: boolean, // Used by Games.tsx to not filter out games that are currently being edited.
 }
 
 interface GameSearchConditions {

@@ -56,8 +56,11 @@ const Games: React.FC<Props> = (props) => {
   const [isError, setIsError] = useState<boolean>(false)
   const [redirect, setRedirect] = useState(false)
 
-  const gamesToShow = singleGameView ? games : games.filter(game => game.endDate.getMonth() === selectedMonth
-                                                            && game.endDate.getFullYear() === selectedYear)
+  const gamesToShow = singleGameView ? games : games.filter(
+    game => (game.endDate.getMonth() === selectedMonth &&
+    game.endDate.getFullYear() === selectedYear) ||
+    game.isEditing
+  )
 
   const cancelTokenSourceRef = useRef<CancelTokenSource | null>(null)
 
