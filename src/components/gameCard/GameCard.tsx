@@ -252,7 +252,8 @@ const GameCard: React.FC<Props> = (props) => {
     <ActionButton
       variant="text"
       position="bottom"
-      text="Change layout"
+      fontSize={11}
+      text="Change course/layout"
       onLeft={true}
       loading={showLoading}
       onClick={() => setChangeLayoutModalOpen(true)}

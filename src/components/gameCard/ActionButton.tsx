@@ -62,11 +62,12 @@ interface Props {
   loading?: boolean,
   error?: boolean,
   onClick: () => void,
+  fontSize?: number,
 }
 
 const ActionButton: React.FC<Props> = (props) => {
   const classes = useStyles()
-  const { variant, position, text, secondary, third, onLeft, loading, error, onClick } = props
+  const { variant, position, text, secondary, third, onLeft, loading, error, onClick, fontSize } = props
 
   let className = position === 'top' ? classes.actionAreaTopRight : classes.actionAreaBottomRight
   
@@ -115,6 +116,7 @@ const ActionButton: React.FC<Props> = (props) => {
         className={className + ' ' + classes.textButton}
         variant="outlined"
         size="small"
+        style={{ fontSize: fontSize }}
         onClick={onClick}
       >
         {text}
