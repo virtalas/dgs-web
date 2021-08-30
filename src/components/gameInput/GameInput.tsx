@@ -73,6 +73,7 @@ const GameInput: React.FC<{}> = (props: any) => {
   const [tab, setTab] = React.useState(scoreInputViewTab)
   const [updating, setUpdating] = useState(false)
   const [updateError, setUpdateError] = useState(false)
+  const [gameLoadError, setGameLoadError] = useState(false)
   const [redirect, setRedirect] = useState(false)
 
   // Stats view
@@ -89,7 +90,7 @@ const GameInput: React.FC<{}> = (props: any) => {
       setGame(fetchedGame)
       const firstZeroScoreHoleIndex = fetchedGame.scores[0].strokes.findIndex(score => score === 0)
       setHoleIndex(firstZeroScoreHoleIndex)
-    })
+    }).catch(e => setGameLoadError(true))
     
     gamesService.getAvailableConditions(cancelTokenSourceRef.current).then(conditions => {
       setAvailableConditions(conditions.filter(tag => tag.condition))
@@ -185,7 +186,18 @@ const GameInput: React.FC<{}> = (props: any) => {
     return game?.layout.holes[index].number ?? -1
   }
 
+  if (game?.finished) {
+    return (
+      <div>This game has already finished. Try to edit it on the "games" page.</div>
+    )
+  }
+
   if (game === undefined) {
+    if (gameLoadError) {
+      return (
+        <div>Failed to load game. Check 1) your internet 2) is the URL correct 3) does this game even exist?</div>
+      )
+    }
     return (
       <LoadingView />
     )
