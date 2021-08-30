@@ -78,7 +78,7 @@ const NewGame: React.FC<{}> = () => {
     return <Redirect to={'/games/' + newGameId + "/input"} />
   }
 
-  const newGameButtonDisabled = !gameCreatable || layout === undefined
+  const newGameButtonDisabled = !gameCreatable || layout === undefined || players.length === 0
 
   const allPlayers = friendList ?
    [friendList.me]
