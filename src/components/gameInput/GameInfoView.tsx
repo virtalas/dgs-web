@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 
 import { Button, Typography } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
@@ -48,10 +48,17 @@ const GameInfoView: React.FC<Props> = (props) => {
 
   const { game, updateGame, handleFinish, availableWeatherConditions, availableConditions, updating } = props
 
+  const [finished, setFinished] = useState(false)
+
   useEffect(() => {
     game.endDate = new Date() // Update the game finish time automatically.
     updateGame(game)
   }, []) // eslint-disable-line react-hooks/exhaustive-deps
+
+  const handleFinishClicked = () => {
+    setFinished(true) // TODO: Error handling if finish request fails
+    handleFinish()
+  }
 
   return (
     <div id="gameInfoView">
@@ -71,7 +78,7 @@ const GameInfoView: React.FC<Props> = (props) => {
           <Typography className={classes.syncText}>
             {updating ? 'Syncing game...' : 'Game synced.'}
           </Typography>
-          <Button id="finishGameButton" variant="contained" color="primary" onClick={handleFinish}>
+          <Button variant="contained" color="primary" disabled={finished} onClick={handleFinishClicked}>
             Finish game
           </Button>
         </div>

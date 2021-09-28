@@ -89,7 +89,9 @@ const GameInput: React.FC<{}> = (props: any) => {
     gamesService.getGame(gameId, cancelTokenSourceRef.current).then((fetchedGame) => {
       setGame(fetchedGame)
       const firstZeroScoreHoleIndex = fetchedGame.scores[0].strokes.findIndex(score => score === 0)
-      setHoleIndex(firstZeroScoreHoleIndex)
+      if (firstZeroScoreHoleIndex >= 0) {
+        setHoleIndex(firstZeroScoreHoleIndex)
+      }
     }).catch(e => setGameLoadError(true))
     
     gamesService.getAvailableConditions(cancelTokenSourceRef.current).then(conditions => {
@@ -102,6 +104,23 @@ const GameInput: React.FC<{}> = (props: any) => {
 
   if (redirect) {
     return <Redirect to={'/'} />
+  }
+
+  if (game?.finished) {
+    return (
+      <div>This game has already finished. Try to edit it on the "games" page.</div>
+    )
+  }
+
+  if (game === undefined) {
+    if (gameLoadError) {
+      return (
+        <div>Failed to load game. Check 1) your internet 2) is the URL correct 3) does this game even exist?</div>
+      )
+    }
+    return (
+      <LoadingView />
+    )
   }
 
   const updateGame = (game: Game, finished?: boolean) => {
@@ -183,24 +202,8 @@ const GameInput: React.FC<{}> = (props: any) => {
   }
 
   const holeNumFor = (index: number): number => {
+    if (index < 0 || index >= (game?.layout.holes.length ?? 0)) return -1
     return game?.layout.holes[index].number ?? -1
-  }
-
-  if (game?.finished) {
-    return (
-      <div>This game has already finished. Try to edit it on the "games" page.</div>
-    )
-  }
-
-  if (game === undefined) {
-    if (gameLoadError) {
-      return (
-        <div>Failed to load game. Check 1) your internet 2) is the URL correct 3) does this game even exist?</div>
-      )
-    }
-    return (
-      <LoadingView />
-    )
   }
 
   const scoreInputView = (
