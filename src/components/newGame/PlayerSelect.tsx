@@ -45,11 +45,14 @@ interface Props {
   allPlayers: Player[],
   friendList: FriendList | undefined,
   setGameCreatable?: (creatable: boolean) => void,
+  isSearch?: boolean,
 }
 
 const PlayerSelect: React.FC<Props> = (props) => {
   const classes = useStyles()
-  const { players, setPlayers, allPlayers, friendList, setGameCreatable } = props
+  const { players, setPlayers, allPlayers, friendList, setGameCreatable, isSearch } = props
+
+  const shouldShowError = isSearch !== undefined ? !isSearch : true
 
   const handlePlayersChange = (event: React.ChangeEvent<{ value: unknown }>, value: any) => {
     const selectedPlayerId = value.props.value as string
@@ -109,8 +112,8 @@ const PlayerSelect: React.FC<Props> = (props) => {
     setLabelWidth(inputLabel.current!.offsetWidth)
   }, [])
 
-  const loading = players.length === 0 && allPlayers.length >= 0
-  const error = !loading && players.length === 0
+  const loading = allPlayers.length === 0
+  const error = shouldShowError && !loading && players.length === 0
 
   // TODO: Bigger max list height so no need for scrolling.
   return (

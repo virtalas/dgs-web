@@ -76,8 +76,8 @@ const SearchPage: React.FC<Props> = (props) => {
 
   const createSearchConditions = (course?: Course, players?: Player[], tags?: Tag[], comment?: string): GameSearchConditions => {
     return {
-      course: selectedCourse,
-      players: selectedPlayers,
+      course: course,
+      players: players,
       tags: tags,
       comment: comment,
     }
@@ -247,6 +247,7 @@ const SearchPage: React.FC<Props> = (props) => {
           setPlayers={handlePlayerSelect}
           allPlayers={allPlayers}
           friendList={friendList}
+          isSearch={true}
         />
 
         <br />
