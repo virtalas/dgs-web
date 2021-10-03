@@ -1,6 +1,6 @@
 // BlueCard (i.e. score card)
 export const deepBlue = '#3087C1'
-// Top bar
+// Top bar (also update to index.html theme-color)
 export const grassGreen = '#5cb85c'
 // High score chip
 export const highScoreBlue = '#4353b3'
