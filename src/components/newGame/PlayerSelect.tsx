@@ -91,14 +91,14 @@ const PlayerSelect: React.FC<Props> = (props) => {
     </MenuItem>
   ))
 
-  const friendsFriendsList = friendList?.friendsFriends.map((player: Player) => (
+  const friendsFriendsList = !isSearch && friendList?.friendsFriends.map((player: Player) => (
     <MenuItem key={player.id} value={player.id}>
       <Checkbox checked={arrayContains(players, player)} color="primary" />
       <ListItemText primary={player.firstName} />
     </MenuItem>
   ))
 
-  const friendsGuests = friendList?.friendsGuests.map((player: Player) => (
+  const friendsGuests = !isSearch && friendList?.friendsGuests.map((player: Player) => (
     <MenuItem key={player.id} value={player.id}>
       <Checkbox checked={arrayContains(players, player)} color="primary" />
       <ListItemText primary={player.firstName} />
