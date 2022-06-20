@@ -48,6 +48,10 @@ const cancelTokenSource = (): CancelTokenSource => {
   return axios.CancelToken.source()
 }
 
+const wakeServer = () => {
+  get('/users/ping', cancelTokenSource())
+}
+
 const runMigrations = () => {
   return post('/users/migrations', cancelTokenSource())
 }
@@ -108,4 +112,5 @@ export default {
   useResponseJSONLogger,
   extractUserId,
   runMigrations,
+  wakeServer,
 }

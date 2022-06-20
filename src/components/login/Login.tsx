@@ -1,10 +1,11 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import Link from '@material-ui/core/Link'
 import Grid from '@material-ui/core/Grid'
 import { makeStyles } from '@material-ui/core/styles'
 
 import AuthForm from './AuthForm'
 import authService from '../../services/authService'
+import baseService from '../../services/baseService'
 import { useAuth } from '../../context/AuthContext'
 import { Redirect } from 'react-router'
 
@@ -27,6 +28,10 @@ const SignIn: React.FC<{}> = () => {
   const { authenticated, handleLogin } = useAuth()
 
   const [wrongCredentialsError, setWrongCredentialsError] = useState(false)
+
+  useEffect(() => {
+    baseService.wakeServer()
+  }, [])
 
   if (authenticated) {
     return (<Redirect to='/' />)
