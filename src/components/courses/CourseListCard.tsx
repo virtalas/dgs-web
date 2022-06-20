@@ -52,12 +52,13 @@ const useStyles = makeStyles((theme) => ({
 interface Props {
   course: ListCourse,
   beingSortedBy: CourseSort,
+  onClick: () => void,
 }
 
 const CourseListCard: React.FC<Props> = (props) => {
   const classes = useStyles()
 
-  const { course, beingSortedBy } = props
+  const { course, beingSortedBy, onClick } = props
   const [coverPictureURL, setCoverPictureUrl] = useState<string>()
   const [redirect, setRedirect] = useState(false)
 
@@ -80,7 +81,10 @@ const CourseListCard: React.FC<Props> = (props) => {
     return <Redirect push to={'/courses/view/' + course.id} />
   }
 
-  const handleClick = () => setRedirect(true)
+  const handleClick = () => {
+    onClick()
+    setRedirect(true)
+  }
 
   const gameCountText = course.numberOfGames > 0 ?
     `You have played here ${course.numberOfGames} ${course.numberOfGames === 1 ? 'time' : 'times'}` :

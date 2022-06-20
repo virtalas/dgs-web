@@ -11,6 +11,8 @@ import { CourseSort } from '../../types/enums/CourseSort'
 import Grow from '@material-ui/core/Grow'
 import ErrorView from '../ErrorView'
 
+export const coursesScrollPositionItem = "coursesScrollPositionItem"
+
 const useStyles = makeStyles((theme) => ({
   page: {
     maxWidth: pageMaxWidth,
@@ -43,19 +45,35 @@ const Courses: React.FC<{}> = () => {
       .then(c => {
         setCourses(c)
         setIsLoading(false)
+        handleScrollPosition()
       })
       .catch(() => setIsError(true))
 
     return () => cancelTokenSource?.cancel()
   }, [])
 
+  const handleScrollPosition = () => {
+    const scrollPosition = sessionStorage.getItem(coursesScrollPositionItem)
+    if (scrollPosition) {
+      window.scrollTo(0, parseInt(scrollPosition))
+      sessionStorage.removeItem(coursesScrollPositionItem)
+      // TODO: Disable animation, eg:
+      // setDidSetScrollPosition(true)
+    }
+  };
+
+  const handleClick = () => {
+    sessionStorage.setItem(coursesScrollPositionItem, '' + window.pageYOffset)
+  }
+
   const courseCards = courses?.map((course, index) => (
-    <Grow key={'grow' + index} in={true} {...{ timeout: Math.min(1000, index * 300 + 100) }}>
+    <Grow key={'grow' + index} in={true} {...{ timeout: Math.min(700, index * 300 + 100) }}>
       <div>
         <CourseListCard
           key={'course-card-' + course.id}
           course={course}
           beingSortedBy={sortBy}
+          onClick={handleClick}
         />
       </div>
     </Grow>

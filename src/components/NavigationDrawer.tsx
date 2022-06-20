@@ -21,6 +21,7 @@ import DiscGolfBasket from './DiscGolfBasket'
 import { drawerWidth } from './BasePage'
 
 import { useAuth } from "../context/AuthContext"
+import { coursesScrollPositionItem } from './courses/Courses'
 
 const useStyles = makeStyles((theme) => ({
   toolbar: theme.mixins.toolbar,
@@ -54,6 +55,10 @@ const NavigationDrawer: React.FC<Props> = (props) => {
     if (handleLogout) handleLogout()
   }
 
+  const handleCoursesClick = () => {
+    sessionStorage.removeItem(coursesScrollPositionItem)
+  }
+
   const navButtonList = (
     <div>
       <div className={classes.toolbar} />
@@ -70,7 +75,7 @@ const NavigationDrawer: React.FC<Props> = (props) => {
             <ListItemText primary="Friends" />
           </ListItem>
         </NavLink>
-        <NavLink to="/courses" className={classes.navLink}>
+        <NavLink to="/courses" className={classes.navLink} onClick={handleCoursesClick}>
           <ListItem button>
             <ListItemIcon><PlaceIcon /></ListItemIcon>
             <ListItemText primary="Courses" />
