@@ -9,6 +9,7 @@ import DescriptionIcon from '@material-ui/icons/Description'
 import InfoIcon from '@material-ui/icons/Info'
 import EditIcon from '@material-ui/icons/Edit'
 import LocationOnIcon from '@material-ui/icons/LocationOn'
+import Fade from '@material-ui/core/Fade'
 
 import { useAuth } from '../../context/AuthContext'
 import HoleInfoBar from './HoleInfoBar'
@@ -108,7 +109,17 @@ const GameInput: React.FC<{}> = (props: any) => {
 
   if (game?.finished) {
     return (
-      <div>This game has already finished. Try to edit it on the "games" page.</div>
+      <Fade
+        in={true}
+        style={{
+          transitionDelay: '2000ms',
+        }}
+        unmountOnExit
+      >
+        <div>
+          This game has already finished. Try to edit it on the "games" page.
+        </div>
+      </Fade>
     )
   }
 
