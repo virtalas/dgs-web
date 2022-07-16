@@ -5,6 +5,7 @@ import { makeStyles } from '@material-ui/core/styles'
 
 import GameCard from '../gameCard/GameCard'
 import { sneakyGrey } from '../../constants/Colors'
+import { gameVisibilityExplanation } from '../../constants/Strings'
 
 const useStyles = makeStyles((theme) => ({
   gameContainer: {
@@ -23,6 +24,17 @@ const useStyles = makeStyles((theme) => ({
     right: 0,
     width: 150,
     height: 40,
+    textAlign: 'center',
+  },
+  footerContainer: {
+    margin: 'auto',
+    position: 'absolute',
+    top: 100,
+    left: 0,
+    right: 0,
+    width: '80%',
+    height: 200,
+    textAlign: 'center',
   },
   syncText: {
     color: sneakyGrey,
@@ -81,6 +93,13 @@ const GameInfoView: React.FC<Props> = (props) => {
           <Button variant="contained" color="primary" disabled={finished} onClick={handleFinishClicked}>
             Finish game
           </Button>
+        </div>
+
+        <div className={classes.footerContainer}>
+        <Typography className={classes.syncText}>
+            {gameVisibilityExplanation}
+          </Typography>
+
         </div>
       </div>
     </div>
