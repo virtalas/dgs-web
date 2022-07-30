@@ -7,6 +7,7 @@ import { InputAdornment, TextField } from '@material-ui/core'
 import PlayerCommentInput from './PlayerCommentInput'
 import GameChips from './GameChips'
 import GamePhotos from './GamePhotos'
+import EditWeatherIconButton from './EditWeatherIconButton'
 
 export const chipHeight = 22
 
@@ -26,10 +27,6 @@ const useStyles = makeStyles((theme) => ({
   temperatureEdit: {
     width: 130,
     marginBottom: theme.spacing(2),
-  },
-  weatherImage: {
-    width: 50,
-    height: 50,
   },
   commentEdit: {
     width: '100%',
@@ -114,6 +111,11 @@ const GameInfo: React.FC<Props> = (props) => {
     }
   }
 
+  const handleWeatherIconChange = (icon: WeatherIcon | undefined) => {
+    game.weatherIconId = icon?.id
+    setGame(game)
+  }
+
   const temperatureEdit = (
     <TextField
       className={classes.temperatureEdit}
@@ -129,13 +131,12 @@ const GameInfo: React.FC<Props> = (props) => {
     />
   )
 
-  const weatherIcon = game.weatherIconId ? (
-    <img
-      className={classes.weatherImage}
-      src={`https://openweathermap.org/img/wn/${game.weatherIconId}.png`}
-      alt="Current weather on the course"
+  const weatherIcon = (
+    <EditWeatherIconButton
+      chosenIconId={game.weatherIconId}
+      onIconChosen={handleWeatherIconChange}
     />
-  ) : null
+  )
 
   const weatherView = isEditing ? (
     <div className={classes.weatherFlexbox}>
