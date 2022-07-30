@@ -9,7 +9,8 @@ interface ApiGameUpdate {
   start_date: datetime | undefined,
   end_date: datetime,
   comment_content: string,
-  temperature: double | undefined,
+  temperature: double | undefined,
+  weather_icon_id: string | undefined,
   tags: ApiTagUpdate[],
   finished: boolean,
 }

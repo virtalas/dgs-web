@@ -19,9 +19,17 @@ const useStyles = makeStyles((theme) => ({
   comment: {
     marginTop: 5,
   },
+  weatherFlexbox: {
+    display: 'flex',
+    alignItems: 'center',
+  },
   temperatureEdit: {
     width: 130,
     marginBottom: theme.spacing(2),
+  },
+  weatherImage: {
+    width: 50,
+    height: 50,
   },
   commentEdit: {
     width: '100%',
@@ -106,7 +114,7 @@ const GameInfo: React.FC<Props> = (props) => {
     }
   }
 
-  const temperatureEdit = isEditing ? (
+  const temperatureEdit = (
     <TextField
       className={classes.temperatureEdit}
       label="Temperature"
@@ -119,6 +127,25 @@ const GameInfo: React.FC<Props> = (props) => {
         endAdornment: <InputAdornment position="end">°C</InputAdornment>,
       }}
     />
+  )
+
+  const weatherIcon = game.weatherIconId ? (
+    <img
+      className={classes.weatherImage}
+      src={`https://openweathermap.org/img/wn/${game.weatherIconId}.png`}
+      alt="Current weather on the course"
+    />
+  ) : null
+
+  const weatherView = isEditing ? (
+    <div className={classes.weatherFlexbox}>
+      <div>
+        {temperatureEdit}
+      </div>
+      <div>
+        {weatherIcon}
+      </div>
+    </div>
   ) : null
 
   const commentEdit = isEditing ? (
@@ -207,7 +234,7 @@ const GameInfo: React.FC<Props> = (props) => {
 
   const editingView = isEditing ? (
     <Paper className={classes.infoPaper} elevation={0}>
-      {temperatureEdit}
+      {weatherView}
       
       {gameChips}
 
