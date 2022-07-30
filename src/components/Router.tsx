@@ -6,6 +6,7 @@ import BasePage from './BasePage'
 import GameInput from './gameInput/GameInput'
 import Login from './login/Login'
 import Register from './login/Register'
+import Migrations from './Migrations'
 
 const Router: React.FC<{}> = () => {
   return (
