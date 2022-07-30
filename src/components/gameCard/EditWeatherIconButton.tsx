@@ -83,7 +83,7 @@ const EditWeatherIconButton: React.FC<Props> = (props) => {
             <ListItemIcon>
               <img
                 className={classes.weatherImage}
-                src={`https://openweathermap.org/img/wn/${icon.id}.png`}
+                src={`https://openweathermap.org/img/wn/${icon.id}@2x.png`}
                 alt="Current weather on the course"
               />
             </ListItemIcon>
@@ -128,7 +128,7 @@ const EditWeatherIconButton: React.FC<Props> = (props) => {
         {chosenIconId ? (
           <img
             className={classes.weatherImage}
-            src={`https://openweathermap.org/img/wn/${chosenIconId}.png`}
+            src={`https://openweathermap.org/img/wn/${chosenIconId}@2x.png`}
             alt="Weather icon"
           />
         ) : (
