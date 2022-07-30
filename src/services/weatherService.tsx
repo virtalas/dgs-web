@@ -10,7 +10,7 @@ const getLocalWeather = async (courseId: string, source: CancelTokenSource): Pro
     rain: response.data.rain,
     snow: response.data.snow,
     sunsetTime: response.data.sunset_time,
-    iconURL: response.data.icon_url,
+    iconId: response.data.icon_id,
   }
 }
 

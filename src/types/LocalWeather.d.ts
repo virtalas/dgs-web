@@ -5,5 +5,5 @@ interface LocalWeather {
     rain: boolean,
     snow: boolean,
     sunsetTime: number,
-    iconURL: string,
+    iconId: string,
 }
