@@ -44,6 +44,7 @@ export const apiGameResponseToGame = (gameResponse: ApiGameResponse): Game => {
     startDate: gameResponse.game.start_date ? new Date(gameResponse.game.start_date) : undefined,
     endDate: new Date(gameResponse.game.end_date),
     temperature: gameResponse.game.temperature,
+    weatherIconId: gameResponse.game.weather_icon_id,
     comments: sortByCreatedDate(comments),
     scores: sortByToPar(scores),
     tags: sortTags(gameResponse.game.tags
@@ -115,6 +116,7 @@ export const gameToApiGameUpdate = (game: Game, userId: string): ApiGameUpdate =
     end_date: game.endDate,
     comment_content: game.comments.find(comment => comment.userId === userId)?.content ?? '',
     temperature: game.temperature,
+    weather_icon_id: game.weatherIconId,
     tags: game.tags.concat(game.conditions).concat(game.weatherConditions).map(tag => tagToApiTag(tag)),
     finished: game.finished,
   }

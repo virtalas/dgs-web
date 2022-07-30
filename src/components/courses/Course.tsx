@@ -251,7 +251,7 @@ const Course: React.FC<Props> = (props) => {
         <div className={classes.weatherFlexbox}>
           <img
             className={classes.weatherImage}
-            src={localWeather?.iconURL}
+            src={`https://openweathermap.org/img/wn/${localWeather.iconId}.png`}
             alt="Current weather on the course"
           />
 
