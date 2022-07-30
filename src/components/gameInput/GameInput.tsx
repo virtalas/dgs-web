@@ -195,6 +195,7 @@ const GameInput: React.FC<{}> = (props: any) => {
           game.weatherConditions = addTagIfExists('windy', game.weatherConditions, availableWeatherConditions)
         }
         game.temperature = localWeather.temperature
+        game.weatherIconId = localWeather.iconId
         setGame({...game})
       })
       .catch(e => console.log('Failed to fetch weather: ' + e))

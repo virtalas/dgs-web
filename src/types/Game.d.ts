@@ -7,6 +7,7 @@ interface Game {
   startDate: Date | undefined,
   endDate: Date,
   temperature: number | undefined,
+  weatherIconId: string | undefined,
   comments: GameComment[],
   scores: PlayerScores[],
   tags: Tag[],
