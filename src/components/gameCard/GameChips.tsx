@@ -17,6 +17,19 @@ const useStyles = makeStyles((theme) => ({
     height: chipHeight,
     marginRight: 8,
   },
+  weatherChip: {
+    height: chipHeight,
+    marginRight: 8,
+    '& .MuiChip-icon': {
+      width: 32,
+      height: 32,
+      marginRight: -10,
+      '& img': {
+        width: '100%',
+        height: '100%',
+      }
+    }
+  },
   chipRow: {
     lineHeight: '31px', // Affects spacing between chips when wrapped to two rows.
   },
@@ -191,7 +204,18 @@ const GameChips: React.FC<Props> = (props) => {
         </Fade>
       )}
 
-      {game.temperature ? <Chip className={classes.chip} label={game.temperature + " °C"} /> : null}
+      {game.temperature && game.weatherIconId ? <Chip
+        className={classes.weatherChip}
+        label={game.temperature + " °C"}
+        icon={
+          <img
+            src={`https://openweathermap.org/img/wn/${game.weatherIconId}.png`}
+            alt="Current weather on the course"
+          />
+        }
+      /> : null}
+
+      {game.temperature && !game.weatherIconId ? <Chip className={classes.chip} label={game.temperature + " °C"} /> : null}
       
       {game.weatherConditions.map((condition: Tag, index: number) => (
         <Chip className={classes.chip} label={condition.name} onClick={() => handleTagChipClick(condition)} key={index} />
