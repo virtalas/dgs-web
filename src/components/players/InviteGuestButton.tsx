@@ -41,11 +41,13 @@ const InviteGuestButton: React.FC<Props> = (props) => {
   const dialogContent = (
     <DialogContent>
       <form className={classes.dialogContainer}>
-        <Typography component="p" gutterBottom>Send {player.firstName} the following link to allow them sign up as your friend:</Typography>
+        <Typography component="p" gutterBottom>Send {player.firstName} the following link to allow them sign up as a normal user:</Typography>
         <Typography gutterBottom>
           <Link href={link}>{link}</Link>
         </Typography>
-        <Typography gutterBottom>{friendRequestExplanation}</Typography>
+        <Typography gutterBottom>
+          After they have signed up, you are able to send each other friend requests. {friendRequestExplanation}
+          </Typography>
       </form>
     </DialogContent>
   )
