@@ -37,6 +37,9 @@ const useStyles = makeStyles((theme) => ({
   gameLinkButton: {
     width: 92,
   },
+  detailsRoot: {
+    width: '100%',
+  },
 }))
 
 interface Props {
@@ -112,7 +115,7 @@ const LayoutTopScores: React.FC<Props> = props => {
     )
   })
 
-  return (
+  return (topScores === undefined || topScores.length > 0) ? (
     <Accordion className={classes.accordion} elevation={0} expanded={expanded}>
       
       <AccordionSummary
@@ -128,7 +131,7 @@ const LayoutTopScores: React.FC<Props> = props => {
       </AccordionSummary>
 
       <AccordionDetails>
-        <div>
+        <div className={classes.detailsRoot}>
           <Table className={classes.table} size="small">
             <TableBody>
               {tableBody}
@@ -142,7 +145,7 @@ const LayoutTopScores: React.FC<Props> = props => {
       </AccordionDetails>
 
     </Accordion>
-  )
+  ) : null
 }
 
 export default LayoutTopScores
