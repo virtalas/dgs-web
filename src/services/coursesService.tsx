@@ -6,6 +6,7 @@ import {
   apiBasicCourseToBasicCourse,
   sortCourses,
   apiHoleScoreDistributionToHoleScoreDistribution,
+  apiLayoutTopScoreToLayoutTopScore,
 } from "../types/api/ModelMappers"
 import { CourseSort } from "../types/enums/CourseSort"
 
@@ -35,6 +36,11 @@ const getCourse = async (courseId: string, source: CancelTokenSource): Promise<D
 const getLayoutScoreDistribution = async (layoutId: string, source: CancelTokenSource): Promise<HoleScoreDistribution[]> => {
   const response = await baseService.get(`/courses/layouts/scoredistribution/${layoutId}`, source)
   return response.data.map((hsd: ApiHoleScoreDistribution) => apiHoleScoreDistributionToHoleScoreDistribution(hsd))
+}
+
+const getLayoutTopScores = async (layoutId: string, source: CancelTokenSource): Promise<LayoutTopScore[]> => {
+  const response = await baseService.get(`/courses/layouts/topscores/${layoutId}`, source)
+  return response.data.map((topScore: ApiLayoutTopScore) => apiLayoutTopScoreToLayoutTopScore(topScore))
 }
 
 const createLayout = async (courseId: string, layout: DetailedLayout, source: CancelTokenSource): Promise<DetailedLayout> => {
@@ -106,6 +112,7 @@ export default {
   getBasicCourses,
   getCourse,
   getLayoutScoreDistribution,
+  getLayoutTopScores,
   createLayout,
   createCourse,
   updateLayoutActiveness,

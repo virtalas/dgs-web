@@ -20,6 +20,7 @@ import baseService from '../../services/baseService'
 import { CancelTokenSource } from 'axios'
 import { birdieGreen, bogeyOrange, eagleYellow, holeInOneRed, overBogeyPurple, parGreen } from '../../constants/Colors'
 import HoleInfoView from '../gameInput/HoleInfoView'
+import LayoutTopScores from './LayoutTopScores'
 
 const useStyles = makeStyles((theme) => ({
   layoutPaper: {
@@ -37,6 +38,9 @@ const useStyles = makeStyles((theme) => ({
   },
   activenessButton: {
     marginLeft: theme.spacing(2),
+  },
+  topScores: {
+    marginTop: theme.spacing(1),
   },
 }))
 
@@ -222,6 +226,10 @@ const LayoutPaper: React.FC<Props> = (props) => {
       {scoreDistributionGraph && (
         <Button variant="outlined" size="small" onClick={() => setScoreDistributionModalOpen(true)}>Slideshow</Button>
       )}
+
+      <div className={classes.topScores}>
+        <LayoutTopScores layoutId={layout.id} />
+      </div>
 
       <CancellableModal modalOpen={editModalOpen} onClose={() => setEditModalOpen(false)}>
         <EditLayout

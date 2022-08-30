@@ -118,7 +118,7 @@ const Course: React.FC<Props> = (props) => {
   const [gamesRedirect, setGamesRedirect] = useState(false)
   const [isError, setIsError] = useState(false)
 
-  const cancelTokenSourceRef = useRef<CancelTokenSource | null>(null)
+  const cancelTokenSourceRef = useRef<CancelTokenSource | null>(null)
 
   const fetchLocalWeather = useCallback((forCourse: DetailedCourse) => {
     if (!forCourse.lat || !forCourse.lon) return

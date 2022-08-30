@@ -260,7 +260,7 @@ const GameCard: React.FC<Props> = (props) => {
     />
   ) : null
 
-  const dateOptions = {
+  const dateOptions: Intl.DateTimeFormatOptions = {
     weekday: 'short',
     year: 'numeric',
     month: '2-digit',

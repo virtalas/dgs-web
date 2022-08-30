@@ -24,7 +24,10 @@ const useStyles = makeStyles((theme) => ({
   },
   indentedText: {
     paddingLeft: theme.spacing(3),
-  }
+  },
+  gameLinkButton: {
+    width: 92,
+  },
 }))
 
 interface Props {
@@ -70,7 +73,7 @@ const HighScores: React.FC<Props> = (props) => {
     setRedirect(true)
   }
 
-  const dateOptions = {
+  const dateOptions: Intl.DateTimeFormatOptions = {
     year: 'numeric',
     month: '2-digit',
     day: 'numeric',
@@ -100,6 +103,7 @@ const HighScores: React.FC<Props> = (props) => {
 
       <TableCell align="right">
         <Button
+          className={classes.gameLinkButton}
           data-cy="highScoreGameButton"
           variant="outlined"
           size="small"

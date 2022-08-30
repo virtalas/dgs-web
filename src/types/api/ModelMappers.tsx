@@ -219,6 +219,18 @@ export const apiHoleScoreDistributionToHoleScoreDistribution = (apiHoleScoreDist
   }
 }
 
+export const apiLayoutTopScoreToLayoutTopScore = (apiLayoutTopScore: ApiLayoutTopScore): LayoutTopScore => {
+  return {
+    gameId: apiLayoutTopScore.game_id,
+    gameEndDate: new Date(apiLayoutTopScore.game_end_date),
+    playerId: apiLayoutTopScore.player_id,
+    playerFirstName: apiLayoutTopScore.player_first_name,
+    playerLastName: apiLayoutTopScore.player_last_name,
+    toPar: apiLayoutTopScore.to_par,
+    totalScore: apiLayoutTopScore.total_score,
+  }
+}
+
 export function sortCourses(courses: Course[], sortBy: CourseSort): Course[] {
   return courses.sort((a, b) => {
     switch (sortBy) {
