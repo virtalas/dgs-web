@@ -55,9 +55,17 @@ const HoleInfoView: React.FC<Props> = (props) => {
 
       for (let i = 0; i < game.scores.length; i++) {
         cancelTokenSourceRef.current = baseService.cancelTokenSource()
-        const playerHighScores = await playersService.getHighScores(game.scores[i].player.id, cancelTokenSourceRef.current)
-        const layoutHighScore = playerHighScores.flatMap(phs => phs.layoutHighScores).find(phs => phs.layoutId === game.layout.id)?.toPar
+        let playerHighScores = undefined
+
+        try {
+          playerHighScores = await playersService.getHighScores(game.scores[i].player.id, cancelTokenSourceRef.current)
+        } catch (error) {
+          console.log('Failed to fetch high score for a player: ' + error)
+        }
+
+        const layoutHighScore = playerHighScores?.flatMap(phs => phs.layoutHighScores).find(phs => phs.layoutId === game.layout.id)?.toPar
         if (!layoutHighScore) continue
+
         fetchedHighScores.push({
           player: game.scores[i].player,
           highScore: layoutHighScore,
