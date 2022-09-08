@@ -116,8 +116,9 @@ const GameInput: React.FC<{}> = (props: any) => {
         }}
         unmountOnExit
       >
-        <div>
-          This game has already finished. Try to edit it on the "games" page.
+        <div style={{width: '100%', textAlign: 'center', marginTop: '20%'}}>
+          Game finished! <br /><br />
+          ✔️
         </div>
       </Fade>
     )
