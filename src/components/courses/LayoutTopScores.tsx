@@ -15,6 +15,9 @@ import Typography from '@material-ui/core/Typography'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
 import CircularProgress from '@material-ui/core/CircularProgress'
 import Button from '@material-ui/core/Button'
+import {
+  Grid,
+} from '@material-ui/core'
 
 import baseService from '../../services/baseService'
 import coursesService from '../../services/coursesService'
@@ -51,7 +54,7 @@ const LayoutTopScores: React.FC<Props> = props => {
 
   const { layoutId } = props
 
-  const [topScores, setTopScores] = useState<LayoutTopScore[]>()
+  const [topScores, setTopScores] = useState<LayoutTopScores>()
   const [expanded, setExpanded] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const [redirect, setRedirect] = useState(false)
@@ -93,12 +96,12 @@ const LayoutTopScores: React.FC<Props> = props => {
 
   const presentableToPar = (toPar: number) => toPar > 0 ? '+' + toPar : '' + toPar
 
-  const tableBody = topScores?.map((topScore, index) => {
-    const className = index === topScores.length - 1 ? classes.lastRowCell : ''
+  const makeTable = (score: LayoutTopScore, index: number, scoresLength: number) => {
+    const className = index === scoresLength - 1 ? classes.lastRowCell : ''
     return (
       <TableRow key={index}>
-        <TableCell className={className} align="left">{index + 1}. {topScore.playerFirstName}</TableCell>
-        <TableCell className={className} align="right">{presentableToPar(topScore.toPar)}</TableCell>
+        <TableCell className={className} align="left">{index + 1}. {score.playerFirstName}</TableCell>
+        <TableCell className={className} align="right">{presentableToPar(score.toPar)}</TableCell>
         <TableCell className={className} align="right">
           <Button
             className={classes.gameLinkButton}
@@ -106,44 +109,80 @@ const LayoutTopScores: React.FC<Props> = props => {
             variant="outlined"
             size="small"
             onClick={handleGameClick}
-            value={topScore.gameId}
+            value={score.gameId}
           >
-            {topScore.gameEndDate.toLocaleString('en-FI', dateOptions)}
+            {score.gameEndDate.toLocaleString('en-FI', dateOptions)}
           </Button>
         </TableCell>
       </TableRow>
     )
+  }
+
+  const summary = (
+    <AccordionSummary
+      expandIcon={isLoading ? <CircularProgress size={20} /> : <ExpandMoreIcon />}
+      id="panel1a-header"
+      onClick={toggleExpand}
+    >
+      <Typography className={classes.heading}>
+        {topScores && topScores.meAndFriendsTop.length > 0 ? (
+          'Top score: ' + topScores.meAndFriendsTop[0].playerFirstName + ' (' + presentableToPar(topScores.meAndFriendsTop[0].toPar) + ')'
+        ) : 'Top score:'}
+      </Typography>
+    </AccordionSummary>
+  )
+
+  const meAndFriendsTableBody = topScores?.meAndFriendsTop.map((topScore, index) => {
+    return makeTable(topScore, index, topScores.meAndFriendsTop.length)
   })
 
-  return (topScores === undefined || topScores.length > 0) ? (
-    <Accordion className={classes.accordion} elevation={0} expanded={expanded}>
-      
-      <AccordionSummary
-        expandIcon={isLoading ? <CircularProgress size={20} /> : <ExpandMoreIcon />}
-        id="panel1a-header"
-        onClick={toggleExpand}
-      >
-        <Typography className={classes.heading}>
-          {topScores && topScores.length > 0 ? (
-            'Top score: ' + topScores[0].playerFirstName + ' (' + presentableToPar(topScores[0].toPar) + ')'
-          ) : 'Top score:'}
-        </Typography>
-      </AccordionSummary>
-
-      <AccordionDetails>
-        <div className={classes.detailsRoot}>
-          <Table className={classes.table} size="small">
-            <TableBody>
-              {tableBody}
-            </TableBody>
-          </Table>
-
-          <Typography variant="caption">
-            Top 5 scores from you and your friends.
+  const meAndFriendsTopDetails = (
+    <AccordionDetails>
+      <div className={classes.detailsRoot}>
+        <Grid container justify="space-between">  
+          <Typography variant="caption" align="left">
+            Top 5 scores from you and your friends:
           </Typography>
-        </div>
-      </AccordionDetails>
+        </Grid>
 
+        <Table className={classes.table} size="small">
+          <TableBody>
+            {meAndFriendsTableBody}
+          </TableBody>
+        </Table>
+      </div>
+    </AccordionDetails>
+  )
+
+  const myTopTableBody = topScores?.myTop.map((topScore, index) => {
+    return makeTable(topScore, index, topScores.myTop.length)
+  })
+
+  const myTopDetails = (
+    <AccordionDetails>
+      <div className={classes.detailsRoot}>
+        <Grid container justify="space-between">  
+          <Typography variant="caption" align="left">
+            Your top 5 scores:
+          </Typography>
+        </Grid>
+
+        <Table className={classes.table} size="small">
+          <TableBody>
+            {myTopTableBody}
+          </TableBody>
+        </Table>
+      </div>
+    </AccordionDetails>
+  )
+
+  return (topScores === undefined || topScores.meAndFriendsTop.length > 0) ? (
+    <Accordion className={classes.accordion} elevation={0} expanded={expanded}>
+      {summary}
+
+      {meAndFriendsTopDetails}
+
+      {topScores && topScores.myTop.length > 0 ? myTopDetails : null}
     </Accordion>
   ) : null
 }

@@ -7,3 +7,8 @@ interface LayoutTopScore {
     toPar: number,
     totalScore: number,
 }
+
+interface LayoutTopScores {
+    meAndFriendsTop: LayoutTopScore[],
+    myTop: LayoutTopScore[],
+}

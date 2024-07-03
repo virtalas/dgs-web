@@ -7,3 +7,8 @@ interface ApiLayoutTopScore {
     to_par: number,
     total_score: number,
 }
+
+interface ApiLayoutTopScores {
+    me_and_friends_top: ApiLayoutTopScore[],
+    my_top: ApiLayoutTopScore[],
+}

@@ -219,6 +219,13 @@ export const apiHoleScoreDistributionToHoleScoreDistribution = (apiHoleScoreDist
   }
 }
 
+export const apiLayoutTopScoresToLayoutTopScores = (apiLayoutTopScores: ApiLayoutTopScores): LayoutTopScores => {
+  return {
+    meAndFriendsTop: apiLayoutTopScores.me_and_friends_top.map((topScore: ApiLayoutTopScore) => apiLayoutTopScoreToLayoutTopScore(topScore)),
+    myTop: apiLayoutTopScores.my_top.map((topScore: ApiLayoutTopScore) => apiLayoutTopScoreToLayoutTopScore(topScore)),
+  }
+}
+
 export const apiLayoutTopScoreToLayoutTopScore = (apiLayoutTopScore: ApiLayoutTopScore): LayoutTopScore => {
   return {
     gameId: apiLayoutTopScore.game_id,
